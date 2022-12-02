@@ -77,7 +77,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -228,6 +232,77 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2022/12/02/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/" target="_self">
+          <img src="/img/fluid1.png" srcset="/img/loading.gif" lazyload alt="信息安全基础实验知识点">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/12/02/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/" target="_self">
+          信息安全基础实验知识点
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2022/12/02/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/" target="_self">
+        <div>
+          # 信息安全基础实验  ## 1. 数论基础  ### 1.1 模指数运算  ​	在`unsigned int`情形下，计算模指数幂很难用`pow`函数直接求解；这里使用平方乘的思想进行求解。 $$ m^{10} = m^{2^{3}+2} $$  $$ = ((((m^{2})*m^{0})^{2}*m^{0})*m)^{2} $$  #### 伪代码：  12345int ans = 1;指
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-12-02 19:06" pubdate>
+              2022-12-02
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/" class="category-chain-item">信息安全</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%95%B0%E8%AE%BA/">#数论</a>
+            
+              <a href="/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">#信息安全</a>
+            
+              <a href="/tags/C-C/">#C & C++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2022/12/01/%E7%B4%A0%E6%80%A7%E6%B5%8B%E8%AF%95/" target="_self">
           <img src="/img/fluid1.png" srcset="/img/loading.gif" lazyload alt="素性测试">
         </a>
@@ -244,7 +319,7 @@
       
       <a class="index-excerpt " href="/2022/12/01/%E7%B4%A0%E6%80%A7%E6%B5%8B%E8%AF%95/" target="_self">
         <div>
-          素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解； 12345for(int i=
+          # 素性测试  ## 确定性素数测试 1. 从1到n^1/2开始判定 2. 找到{2，3，···，n^1/2}中所有的素数	Eratosthenes筛选法 3. 让输入去整除这些素数 ***  ## Miller-Rabin素性测试（不确定性） 使用快速乘法和快速幂，使用位运算方式判断q的存在 判断奇数（t&1）,最后一位为1一定为奇数 **对a^(2^i\*q)进行处理，使用快速乘法来求解；*
         </div>
       </a>
 
@@ -285,44 +360,11 @@
             
               <a href="/tags/%E6%95%B0%E8%AE%BA/">#数论</a>
             
-              <a href="/tags/%E5%B7%A5%E5%85%B7%E5%87%BD%E6%95%B0/">#工具函数</a>
-            
               <a href="/tags/C-C/">#C & C++</a>
             
+              <a href="/tags/%E5%B7%A5%E5%85%B7%E5%87%BD%E6%95%B0/">#工具函数</a>
+            
           </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2022/12/01/hello-world/" target="_self">
-          Hello World
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/12/01/hello-world/" target="_self">
-        <div>
-          Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2022-12-01 20:21" pubdate>
-              2022-12-01
-            </time>
-          </div>
-        
-        
         
       </div>
     </article>

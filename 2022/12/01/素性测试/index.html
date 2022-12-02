@@ -16,20 +16,20 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解； 12345for(int i&#x3D;">
+    <meta name="description" content="# 素性测试  ## 确定性素数测试 1. 从1到n^1&#x2F;2开始判定 2. 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 3. 让输入去整除这些素数 ***  ## Miller-Rabin素性测试（不确定性） 使用快速乘法和快速幂，使用位运算方式判断q的存在 判断奇数（t&amp;1）,最后一位为1一定为奇数 **对a^(2^i\*q)进行处理，使用快速乘法来求解；*">
 <meta property="og:type" content="article">
 <meta property="og:title" content="素性测试">
 <meta property="og:url" content="http://example.com/2022/12/01/%E7%B4%A0%E6%80%A7%E6%B5%8B%E8%AF%95/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解； 12345for(int i&#x3D;">
+<meta property="og:description" content="# 素性测试  ## 确定性素数测试 1. 从1到n^1&#x2F;2开始判定 2. 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 3. 让输入去整除这些素数 ***  ## Miller-Rabin素性测试（不确定性） 使用快速乘法和快速幂，使用位运算方式判断q的存在 判断奇数（t&amp;1）,最后一位为1一定为奇数 **对a^(2^i\*q)进行处理，使用快速乘法来求解；*">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/fluid1.png">
 <meta property="article:published_time" content="2022-12-01T12:48:55.796Z">
-<meta property="article:modified_time" content="2022-12-02T07:36:17.776Z">
+<meta property="article:modified_time" content="2022-12-02T11:15:25.723Z">
 <meta property="article:author" content="LZY">
 <meta property="article:tag" content="数论">
-<meta property="article:tag" content="工具函数">
 <meta property="article:tag" content="C &amp; C++">
+<meta property="article:tag" content="工具函数">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://example.com/img/fluid1.png">
   
@@ -92,7 +92,11 @@
 
 
   
-<meta name="generator" content="Hexo 6.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
 
 
 <body>
@@ -230,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          582 字
         
       </span>
     
@@ -241,7 +245,7 @@
         
         
         
-          11 分钟
+          5 分钟
         
       </span>
     
@@ -284,7 +288,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月2日 下午
+                    本文最后更新于：2022年12月2日 晚上
                   
                 
               </p>
@@ -292,39 +296,62 @@
             
               <div class="markdown-body">
                 
-                <h1 id="素性测试"><a href="#素性测试" class="headerlink" title="素性测试"></a>素性测试</h1><h2 id="确定性素数测试"><a href="#确定性素数测试" class="headerlink" title="确定性素数测试"></a>确定性素数测试</h2><ol>
-<li>从1到n^1&#x2F;2开始判定</li>
-<li>找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法</li>
-<li>让输入去整除这些素数</li>
-</ol>
-<hr>
-<h2 id="Miller-Rabin素性测试（不确定性）"><a href="#Miller-Rabin素性测试（不确定性）" class="headerlink" title="Miller-Rabin素性测试（不确定性）"></a>Miller-Rabin素性测试（不确定性）</h2><p>使用快速乘法和快速幂，使用位运算方式判断q的存在<br>判断奇数（t&amp;1）,最后一位为1一定为奇数<br><strong>对a^(2^i*q)进行处理，使用快速乘法来求解；</strong></p>
+                
+# 素性测试
+
+## 确定性素数测试
+1. 从1到n^1/2开始判定
+2. 找到{2，3，···，n^1/2}中所有的素数	Eratosthenes筛选法
+3. 让输入去整除这些素数
+***
+
+## Miller-Rabin素性测试（不确定性）
+使用快速乘法和快速幂，使用位运算方式判断q的存在
+判断奇数（t&1）,最后一位为1一定为奇数
+**对a^(2^i\*q)进行处理，使用快速乘法来求解；**
+$$
+\left.
+\begin{aligned}
+n &= 2^{k}\cdot q +1\\
+a^{n-1}&=1\quad mod\quad n
+\end{aligned} \right\} \implies
+(a^{q}-1)\prod_{i=0}^{k-1}(a^{i}+1) =0\quad mod\quad n
+$$
+
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;k;i++)<br>&#123;<br>	temp2=<span class="hljs-built_in">Quick_mul</span>(temp1,temp1,n);<br>	temp1=temp2;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h3 id="依据：素数性质"><a href="#依据：素数性质" class="headerlink" title="依据：素数性质"></a>依据：素数性质</h3><ol>
-<li><pre><code class="hljs">任意素数n都可以表示为*2^k\*q+1*；除n=2外，其余素数均为奇数	**（反之不一定成立、程序中必须对该性质进行检验：2^k\*q=n-1）**
-</code></pre>
-<ol start="2">
-<li><pre><code class="hljs">欧拉定理：n为素数时，a^(n-1)=1 mod n
-</code></pre>
-</li>
-</ol>
-</li>
-</ol>
-<h3 id="判断依据"><a href="#判断依据" class="headerlink" title="判断依据"></a>判断依据</h3><pre><code class="hljs">已知n=2^k*q+1，若为n为素数，下面两个公式至少有一个成立
-1. a^q=1 mod n
-2. 存在一个i(0&lt;=i&lt;=q-1)，使得 a^(2^i*q)=-1 mod n 或者 a^(2^i*q)=n-1 mod n
-</code></pre>
-<hr>
-<h2 id="乘法逆元"><a href="#乘法逆元" class="headerlink" title="乘法逆元"></a>乘法逆元</h2><p>存在乘法逆元的充要条件：两个数的最大公约数为1</p>
-<h3 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a>扩展欧几里得算法</h3><p>欧几里得算法：</p>
+### 依据：素数性质
+1.	任意素数n都可以表示为*2^k\*q+1*；除n=2外，其余素数均为奇数	**（反之不一定成立、程序中必须对该性质进行检验：2^k\*q=n-1）**
+2.	欧拉定理：n为素数时，a^(n-1)=1 mod n
+### 判断依据
+	已知n=2^k*q+1，若为n为素数，下面两个公式至少有一个成立
+	1. a^q=1 mod n
+	2. 存在一个i(0<=i<=q-1)，使得 a^(2^i*q)=-1 mod n 或者 a^(2^i*q)=n-1 mod n
+***
+
+## 乘法逆元
+存在乘法逆元的充要条件：两个数的最大公约数为1
+### 扩展欧几里得算法
+欧几里得算法：
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">gcd</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">return</span> b ? <span class="hljs-built_in">gcd</span>(b, a % b) : a;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h4 id="递归方法"><a href="#递归方法" class="headerlink" title="递归方法"></a>递归方法</h4><p>扩展欧几里得算法（递归）：</p>
+#### 递归方法
+扩展欧几里得算法（递归）：
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">ll <span class="hljs-title">gcdEx</span><span class="hljs-params">(ll a,ll b,ll &amp;x,<span class="hljs-type">int</span> &amp;y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span>(b==<span class="hljs-number">0</span>)<br>    &#123;<br>        x=<span class="hljs-number">1</span>,y=<span class="hljs-number">0</span> ;<br>        <span class="hljs-keyword">return</span> a ;<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        <span class="hljs-type">int</span> r=<span class="hljs-built_in">gcdEx</span>(b,a%b,x,y);<br>        <span class="hljs-comment">/* r = GCD(a, b) = GCD(b, a%b) */</span><br>        <span class="hljs-type">int</span> t=x ;<br>        x=y ;<br>        y=t-a/b*y ;<br>        <span class="hljs-keyword">return</span> r ;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h4 id="迭代算法"><a href="#迭代算法" class="headerlink" title="迭代算法"></a>迭代算法</h4><p>可以使用迭代的方法进行乘法逆元的求解：<br>通过对公式的推导，得到递推式，正向进行迭代；</p>
-<p>有几个r&#x3D;a%m，在a不等于1时，进行几次迭代</p>
+#### 迭代算法
+可以使用迭代的方法进行乘法逆元的求解：
+通过对公式的推导，得到递推式，正向进行迭代；
+
+有几个r=a%m，在a不等于1时，进行几次迭代
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">long</span> <span class="hljs-title">mod_reverse</span><span class="hljs-params">(<span class="hljs-type">long</span> a,<span class="hljs-type">long</span> m)</span> <span class="hljs-comment">// 若返回-1，则表示整数a关于模m的乘法逆元不存在</span></span><br><span class="hljs-function"></span>&#123;<br> 	<span class="hljs-type">long</span> y=<span class="hljs-number">0</span>,x=<span class="hljs-number">1</span>,r=a%m,q,temp,mInit=m;<br> 	<span class="hljs-keyword">if</span>(r&lt;<span class="hljs-number">0</span>)r=r+m;<br> 	<span class="hljs-keyword">while</span>((m%r)!=<span class="hljs-number">0</span>) <span class="hljs-comment">//有几个r=a%m，在a不等于1时，进行几次迭代</span><br> 	&#123;<br> 		 a=m;m=r;<br>  		 q=a/m,r=a%m;<br> 		 temp=x;x=y-x*q;y=temp;<br> 	&#125;<br> 	<span class="hljs-keyword">if</span>(r!=<span class="hljs-number">1</span>)<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;	<span class="hljs-comment">//若存在逆元，r一定为1，否则不存在</span><br> 	<span class="hljs-keyword">if</span>(x&lt;<span class="hljs-number">0</span>)x=x+mInit;<br> 	<span class="hljs-keyword">return</span> x;<br>&#125;<br></code></pre></td></tr></table></figure>
-<hr>
-<h2 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h2><p>计算2^q：使用快速幂算法<br>计算a^(2^i * q)：求出2^q后，使用快速乘法算法<br>在ubuntu下的程序，对0求同余会导致Floating Exception</p>
+***
+
+## 技巧
+计算2^q：使用快速幂算法
+计算a^(2^i * q)：求出2^q后，使用快速乘法算法
+在ubuntu下的程序，对0求同余会导致Floating Exception
+
+
+
+
 
                 
               </div>
@@ -360,9 +387,9 @@
       
         <a href="/tags/%E6%95%B0%E8%AE%BA/">#数论</a>
       
-        <a href="/tags/%E5%B7%A5%E5%85%B7%E5%87%BD%E6%95%B0/">#工具函数</a>
-      
         <a href="/tags/C-C/">#C & C++</a>
+      
+        <a href="/tags/%E5%B7%A5%E5%85%B7%E5%87%BD%E6%95%B0/">#工具函数</a>
       
     </div>
   
@@ -419,15 +446,15 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2022/12/02/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/" title="信息安全基础实验知识点">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">信息安全基础实验知识点</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
-                    
-                      <a href="/2022/12/01/hello-world/" title="Hello World">
-                        <span class="hidden-mobile">Hello World</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
                     
                   </article>
                 </div>
@@ -512,6 +539,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -705,6 +738,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 
