@@ -18,22 +18,24 @@
   
     <meta name="description" content="素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解； 12345for(int i&#x3D;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="素性测试）">
+<meta property="og:title" content="素性测试">
 <meta property="og:url" content="http://example.com/2022/12/01/%E7%B4%A0%E6%80%A7%E6%B5%8B%E8%AF%95/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
 <meta property="og:description" content="素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解； 12345for(int i&#x3D;">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/fluid1.png">
 <meta property="article:published_time" content="2022-12-01T12:48:55.796Z">
-<meta property="article:modified_time" content="2022-12-01T12:52:38.615Z">
+<meta property="article:modified_time" content="2022-12-02T07:36:17.776Z">
 <meta property="article:author" content="LZY">
 <meta property="article:tag" content="数论">
 <meta property="article:tag" content="工具函数">
 <meta property="article:tag" content="C &amp; C++">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/fluid1.png">
   
   
   
-  <title>素性测试） - tom-jerr的个人博客</title>
+  <title>素性测试 - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -67,11 +69,17 @@
 
 
 
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/daziyanse.css# 头部打字机颜色.css">
+
+
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -97,7 +105,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>tom-jerr的博客</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -193,13 +201,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/banner/default.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="素性测试）"></span>
+            <span id="subtitle" data-typed-text="素性测试"></span>
           
         </div>
 
@@ -271,12 +279,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">素性测试）</h1>
+            <h1 style="display: none">素性测试</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月1日 晚上
+                    本文最后更新于：2022年12月2日 下午
                   
                 
               </p>
@@ -366,7 +374,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>素性测试）</div>
+      <div>素性测试</div>
       <div>http://example.com/2022/12/01/素性测试/</div>
     </div>
     <div class="license-meta">
@@ -427,6 +435,37 @@
             </div>
 
             
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com"},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
           </article>
         </div>
       </div>
@@ -670,6 +709,14 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/qipao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
 
 
 
