@@ -16,14 +16,14 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="# 信息安全基础实验  ## 1. 数论基础  ### 1.1 模指数运算  ​	在&#96;unsigned int&#96;情形下，计算模指数幂很难用&#96;pow&#96;函数直接求解；这里使用平方乘的思想进行求解。 $$ m^{10} &#x3D; m^{2^{3}+2} $$  $$ &#x3D; ((((m^{2})*m^{0})^{2}*m^{0})*m)^{2} $$  #### 伪代码：  12345int ans &#x3D; 1;指">
+    <meta name="description" content="信息安全基础实验1. 数论基础1.1 模指数运算​	在unsigned int情形下，计算模指数幂很难用pow函数直接求解；这里使用平方乘的思想进行求解。$$m^{10} &#x3D; m^{2^{3}+2}$$ $$&#x3D; ((((m^{2})*m^{0})^{2}*m^{0})*m)^{2}$$ 伪代码：12345int ans &#x3D; 1;指数求解为二进制串for 每个element：	a">
 <meta property="og:type" content="article">
 <meta property="og:title" content="信息安全基础实验知识点">
-<meta property="og:url" content="http://example.com/2022/12/02/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/index.html">
+<meta property="og:url" content="http://tom-jerr.github.io/2022/12/02/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="# 信息安全基础实验  ## 1. 数论基础  ### 1.1 模指数运算  ​	在&#96;unsigned int&#96;情形下，计算模指数幂很难用&#96;pow&#96;函数直接求解；这里使用平方乘的思想进行求解。 $$ m^{10} &#x3D; m^{2^{3}+2} $$  $$ &#x3D; ((((m^{2})*m^{0})^{2}*m^{0})*m)^{2} $$  #### 伪代码：  12345int ans &#x3D; 1;指">
+<meta property="og:description" content="信息安全基础实验1. 数论基础1.1 模指数运算​	在unsigned int情形下，计算模指数幂很难用pow函数直接求解；这里使用平方乘的思想进行求解。$$m^{10} &#x3D; m^{2^{3}+2}$$ $$&#x3D; ((((m^{2})*m^{0})^{2}*m^{0})*m)^{2}$$ 伪代码：12345int ans &#x3D; 1;指数求解为二进制串for 每个element：	a">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/img/fluid1.png">
+<meta property="og:image" content="http://tom-jerr.github.io/img/fluid1.png">
 <meta property="article:published_time" content="2022-12-02T11:06:10.666Z">
 <meta property="article:modified_time" content="2022-12-02T11:16:36.042Z">
 <meta property="article:author" content="LZY">
@@ -31,7 +31,7 @@
 <meta property="article:tag" content="信息安全">
 <meta property="article:tag" content="C &amp; C++">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/img/fluid1.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/fluid1.png">
   
   
   
@@ -72,14 +72,13 @@
   
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
-<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/daziyanse.css# 头部打字机颜色.css">
 
 
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -129,7 +128,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
-                <span>首页</span>
+                首页
               </a>
             </li>
           
@@ -141,7 +140,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
-                <span>归档</span>
+                归档
               </a>
             </li>
           
@@ -153,7 +152,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
-                <span>分类</span>
+                分类
               </a>
             </li>
           
@@ -165,7 +164,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
-                <span>标签</span>
+                标签
               </a>
             </li>
           
@@ -177,7 +176,7 @@
             <li class="nav-item">
               <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
-                <span>关于</span>
+                关于
               </a>
             </li>
           
@@ -185,16 +184,15 @@
         
           <li class="nav-item" id="search-btn">
             <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              <i class="iconfont icon-search"></i>
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
             </a>
           </li>
           
         
         
           <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
-              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
-            </a>
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
           </li>
         
       </ul>
@@ -234,7 +232,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.8k 字
+          5.7k 字
         
       </span>
     
@@ -245,7 +243,7 @@
         
         
         
-          49 分钟
+          48 分钟
         
       </span>
     
@@ -296,172 +294,50 @@
             
               <div class="markdown-body">
                 
-                
-# 信息安全基础实验
+                <h1 id="信息安全基础实验"><a href="#信息安全基础实验" class="headerlink" title="信息安全基础实验"></a>信息安全基础实验</h1><h2 id="1-数论基础"><a href="#1-数论基础" class="headerlink" title="1. 数论基础"></a>1. 数论基础</h2><h3 id="1-1-模指数运算"><a href="#1-1-模指数运算" class="headerlink" title="1.1 模指数运算"></a>1.1 模指数运算</h3><p>​	在<code>unsigned int</code>情形下，计算模指数幂很难用<code>pow</code>函数直接求解；这里使用平方乘的思想进行求解。<br>$$<br>m^{10} &#x3D; m^{2^{3}+2}<br>$$</p>
+<p>$$<br>&#x3D; ((((m^{2})*m^{0})^{2}*m^{0})*m)^{2}<br>$$</p>
+<h4 id="伪代码："><a href="#伪代码：" class="headerlink" title="伪代码："></a>伪代码：</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> ans = <span class="hljs-number">1</span>;<br>指数求解为二进制串<br><span class="hljs-keyword">for</span> 每个element：<br>	ans = ans * ans % m;<br>	<span class="hljs-keyword">if</span> (element == <span class="hljs-number">1</span>) ans = ans * a % m;<br></code></pre></td></tr></table></figure>
 
-## 1. 数论基础
+<h4 id="实验代码"><a href="#实验代码" class="headerlink" title="实验代码"></a>实验代码</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> <span class="hljs-title">mod_exp</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> e, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> m)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> result = <span class="hljs-number">1</span>;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> power = a % m;<br>	<span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">binary</span><span class="hljs-params">(<span class="hljs-number">100</span>)</span></span>; <br>	<span class="hljs-type">long</span> <span class="hljs-type">long</span> i = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span> (e &gt; <span class="hljs-number">0</span>) &#123;<br>		<span class="hljs-keyword">if</span> (e % <span class="hljs-number">2</span> == <span class="hljs-number">1</span>) &#123;<br>			binary[i] = <span class="hljs-number">1</span>;<br>		&#125;<br>		<span class="hljs-keyword">if</span> (e % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>) &#123;<br>			binary[i] = <span class="hljs-number">0</span>;<br>		&#125;<br>		i++;<br>		e /= <span class="hljs-number">2</span>;<br>	&#125;<br>	i--;<br>	<span class="hljs-keyword">for</span> (; i &gt;= <span class="hljs-number">0</span>; i--) &#123;<br>		result = (result * result) % m; <br>		<span class="hljs-keyword">if</span> (binary[i] == <span class="hljs-number">1</span>) &#123;<br>			result = (result * power) % m;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-### 1.1 模指数运算
-
-​	在`unsigned int`情形下，计算模指数幂很难用`pow`函数直接求解；这里使用平方乘的思想进行求解。
-$$
-m^{10} = m^{2^{3}+2}
-$$
-
-$$
-= ((((m^{2})*m^{0})^{2}*m^{0})*m)^{2}
-$$
-
-#### 伪代码：
-
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> ans = <span class="hljs-number">1</span>;<br>指数求解为二进制串<br><span class="hljs-keyword">for</span> 每个element：<br>	ans = ans * ans % m;<br>	<span class="hljs-keyword">if</span> (element == <span class="hljs-number">1</span>) ans = ans * a % m;<br></code></pre></td></tr></table></figure>
-
-#### 实验代码
-
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> <span class="hljs-title">mod_exp</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> e, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> m)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> result = <span class="hljs-number">1</span>;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> power = a % m;<br>	<span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">binary</span><span class="hljs-params">(<span class="hljs-number">100</span>)</span></span>; <br>	<span class="hljs-type">long</span> <span class="hljs-type">long</span> i = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span> (e &gt; <span class="hljs-number">0</span>) &#123;<br>		<span class="hljs-keyword">if</span> (e % <span class="hljs-number">2</span> == <span class="hljs-number">1</span>) &#123;<br>			binary[i] = <span class="hljs-number">1</span>;<br>		&#125;<br>		<span class="hljs-keyword">if</span> (e % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>) &#123;<br>			binary[i] = <span class="hljs-number">0</span>;<br>		&#125;<br>		i++;<br>		e /= <span class="hljs-number">2</span>;<br>	&#125;<br>	i--;<br>	<span class="hljs-keyword">for</span> (; i &gt;= <span class="hljs-number">0</span>; i--) &#123;<br>		result = (result * result) % m; <br>		<span class="hljs-keyword">if</span> (binary[i] == <span class="hljs-number">1</span>) &#123;<br>			result = (result * power) % m;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
-
-***
-
-### 1.2 素性检测
-
-#### 1.2.1 确定性素性检测
-
-##### Eratosthenes素数筛选法
-
-埃式筛法；如果一个数是素数，将它本身所有的倍数都删去；
-
-每个数最大的素因子都$\sqrt{n}$，所以从2枚举到$\sqrt{n}$。
-
-**代码**
-
+<hr>
+<h3 id="1-2-素性检测"><a href="#1-2-素性检测" class="headerlink" title="1.2 素性检测"></a>1.2 素性检测</h3><h4 id="1-2-1-确定性素性检测"><a href="#1-2-1-确定性素性检测" class="headerlink" title="1.2.1 确定性素性检测"></a>1.2.1 确定性素性检测</h4><h5 id="Eratosthenes素数筛选法"><a href="#Eratosthenes素数筛选法" class="headerlink" title="Eratosthenes素数筛选法"></a>Eratosthenes素数筛选法</h5><p>埃式筛法；如果一个数是素数，将它本身所有的倍数都删去；</p>
+<p>每个数最大的素因子都$\sqrt{n}$，所以从2枚举到$\sqrt{n}$。</p>
+<p><strong>代码</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">prime_test</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">0</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">1</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">2</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; &#125;<br>	<span class="hljs-type">double</span> n_sqr = <span class="hljs-built_in">sqrt</span>(a);<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> n_sqr_ceil =(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>) (n_sqr)+<span class="hljs-number">1</span>;<br>	<span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">flag</span><span class="hljs-params">(<span class="hljs-number">70000</span>)</span></span>;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i, j, detect;<br>	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">2</span>; i &lt;= n_sqr_ceil; i++) &#123;<br>		j = i*i;<br>		<span class="hljs-keyword">while</span> (j&lt;=n_sqr_ceil)&#123;<br>			flag[j] = <span class="hljs-number">1</span>;<br>			j += i;<br>		&#125;<br>	&#125;<br>	i = <span class="hljs-number">2</span>;<br>	<span class="hljs-keyword">while</span> (flag[i] == <span class="hljs-number">0</span> &amp;&amp; i &lt;= n_sqr_ceil) &#123;<br>		detect = a % i;<br>		<span class="hljs-keyword">if</span> (detect == <span class="hljs-number">0</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>		i++;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
-##### 欧拉筛法（线性筛法）
-
-让每个合数只被最小的素数筛掉
-
-**代码**
-
+<h5 id="欧拉筛法（线性筛法）"><a href="#欧拉筛法（线性筛法）" class="headerlink" title="欧拉筛法（线性筛法）"></a>欧拉筛法（线性筛法）</h5><p>让每个合数只被最小的素数筛掉</p>
+<p><strong>代码</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">prime_test</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">0</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">1</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">2</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; &#125;<br>	<span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">flag</span><span class="hljs-params">(<span class="hljs-number">70000</span>)</span></span>;<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">primes</span><span class="hljs-params">(<span class="hljs-number">70000</span>)</span></span>;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i, j, detect, cnt = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;<br>        <span class="hljs-keyword">if</span> (flag[i] == <span class="hljs-number">0</span>)&#123;<br>            primes[cnt] = i;<br>            cnt ++;<br>        &#125;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt;= cnt &amp;&amp; primes[j] &lt;= a / i; j++)&#123;<br>            flag[primes[j] * i] = <span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">if</span> (i % primes[j] == <span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;<br>        &#125;<br>	&#125;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">0</span> ;k &lt;= cnt ; k++)<br>        <span class="hljs-keyword">if</span> (a % primes[k] == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
-#### 1.2.2 非确定性检测算法（Miller-Rabin）
-
-基于素数的必要条件及欧拉定理可推出如下式子：
-$$
-\left.
-\begin{aligned}
-n &= 2^{k}\cdot q +1\\
-a^{n-1}&=1\quad mod\quad n
-\end{aligned} \right\} \implies
-(a^{q}-1)\prod_{i=0}^{k-1}(a^{i}+1) =0\quad mod\quad n
-$$
-
-所以得到非确定性的结论：随机挑选满足`gcd(a, n) = 1 `的数a
-
-如果数n满足上述条件，n不一定是素数；
-
-如果数n不满足上述条件，n一定是合数。
-
-**代码**
-
+<h4 id="1-2-2-非确定性检测算法（Miller-Rabin）"><a href="#1-2-2-非确定性检测算法（Miller-Rabin）" class="headerlink" title="1.2.2 非确定性检测算法（Miller-Rabin）"></a>1.2.2 非确定性检测算法（Miller-Rabin）</h4><p>基于素数的必要条件及欧拉定理可推出如下式子：<br>$$<br>\left.<br>\begin{aligned}<br>n &amp;&#x3D; 2^{k}\cdot q +1\<br>a^{n-1}&amp;&#x3D;1\quad mod\quad n<br>\end{aligned} \right} \implies<br>(a^{q}-1)\prod_{i&#x3D;0}^{k-1}(a^{i}+1) &#x3D;0\quad mod\quad n<br>$$</p>
+<p>所以得到非确定性的结论：随机挑选满足<code>gcd(a, n) = 1 </code>的数a</p>
+<p>如果数n满足上述条件，n不一定是素数；</p>
+<p>如果数n不满足上述条件，n一定是合数。</p>
+<p><strong>代码</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">std::string <span class="hljs-title">miller_rabin_prime_test</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> n, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a)</span> </span>&#123;<br>	<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">2</span>||n%<span class="hljs-number">2</span>==<span class="hljs-number">0</span>)<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;not_prime&quot;</span>;<br>	<span class="hljs-keyword">if</span>(a&lt;<span class="hljs-number">2</span>||a&gt;=n<span class="hljs-number">-1</span>)<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;error&quot;</span>;<br>	<span class="hljs-type">int</span> q=n<span class="hljs-number">-1</span>;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> temp1;<br>    <span class="hljs-comment">//求出q值</span><br>	<span class="hljs-keyword">while</span>(!(q&amp;<span class="hljs-number">1</span>))<br>	&#123;<br>		q&gt;&gt;=<span class="hljs-number">1</span>;<br>	&#125;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;q;i++)&#123;<br>		temp1 = (<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span>) (temp1*a) % n;<br>	&#125;<br>	<span class="hljs-keyword">if</span> (temp1==<span class="hljs-number">1</span> || temp1==n<span class="hljs-number">-1</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;uncertain&quot;</span>;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;i&lt;k&amp;&amp;temp1!=(n<span class="hljs-number">-1</span>);i++)&#123;<br>		temp1 = (<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span>)(temp1*temp1)%n<br>		<span class="hljs-keyword">if</span> (temp1==n<span class="hljs-number">-1</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;uncertain&quot;</span>;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;not_prime&quot;</span>;	<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
-**基于大数库的版本**
-
+<p><strong>基于大数库的版本</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">BIGNUM* <span class="hljs-title">gcd_exp</span><span class="hljs-params">(BIGNUM* a,BIGNUM* b,BIGNUM* x,BIGNUM* y,BN_CTX* ctx)</span></span>&#123;<br>	<span class="hljs-keyword">if</span> (<span class="hljs-built_in">BN_is_zero</span>(b))&#123;<br>		<span class="hljs-built_in">BN_zero</span>(y);<span class="hljs-built_in">BN_one</span>(x);<br>		<span class="hljs-keyword">return</span> a;<br>	&#125;<br>	BIGNUM* mod_;BIGNUM* dv;BIGNUM* rem;BIGNUM* mult;<br>	mod_=<span class="hljs-built_in">BN_new</span>();dv=<span class="hljs-built_in">BN_new</span>();rem=<span class="hljs-built_in">BN_new</span>();mult=<span class="hljs-built_in">BN_new</span>();<br>	<span class="hljs-built_in">BN_mod</span>(mod_,a,b,ctx);<br>	BIGNUM* temp = <span class="hljs-built_in">BN_new</span>();<br>	temp = <span class="hljs-built_in">gcd_exp</span>(b,mod_,y,x,ctx);<br>	<span class="hljs-built_in">BN_div</span>(dv,rem,a,b,ctx);<br>	<span class="hljs-built_in">BN_mul</span>(mult,dv,x,ctx);<br>	<span class="hljs-built_in">BN_sub</span>(y,mult);<br>	<br>	<span class="hljs-built_in">BN_CTX_end</span>(ctx);<br>	<span class="hljs-built_in">BN_CTX_free</span>(ctx);<br>	<span class="hljs-built_in">BN_free</span>(mod_);<span class="hljs-built_in">BN_free</span>(dv);<span class="hljs-built_in">BN_free</span>(rem);<span class="hljs-built_in">BN_free</span>(mult);<span class="hljs-built_in">BN_free</span>(temp);<br>	<span class="hljs-keyword">return</span> temp<br>&#125;<br><br>string <span class="hljs-built_in">mod_inverse</span>(string a, string m) &#123;<br>	BIGNUM* a1;BIGNUM* m1;BIGNUM* x;BIGNUM* y;BIGNUM* r1;<br>	<span class="hljs-type">const</span> <span class="hljs-type">char</span>* a_=a.<span class="hljs-built_in">data</span>();<br>	<span class="hljs-type">const</span> <span class="hljs-type">char</span>* m_=m.<span class="hljs-built_in">data</span>();<br>	string res=<span class="hljs-string">&quot;&quot;</span>;<br>	a1=<span class="hljs-built_in">BN_new</span>();m1=<span class="hljs-built_in">BN_new</span>();x=<span class="hljs-built_in">BN_new</span>();y=<span class="hljs-built_in">BN_new</span>();r1=<span class="hljs-built_in">BN_new</span>();<br>	BN_CTX *ctx=<span class="hljs-literal">NULL</span>;<br>	ctx=<span class="hljs-built_in">BN_CTX_new</span>();<br>	<span class="hljs-built_in">BN_CTX_start</span>(ctx);<br>	<span class="hljs-built_in">BN_dec2bn</span>(&amp;a1,a_);<span class="hljs-built_in">BN_dec2bn</span>(&amp;m1,m_);<br>	r1 = <span class="hljs-built_in">gcd_exp</span>(a1,m1,x,y,ctx);	<br>		<br>	<span class="hljs-keyword">if</span>(<span class="hljs-built_in">BN_is_one</span>(r1)) res=<span class="hljs-built_in">BN_bn2dec</span>(x);<br>	<span class="hljs-built_in">BN_CTX_end</span>(ctx);<br>	<span class="hljs-built_in">BN_CTX_free</span>(ctx);<br>	<span class="hljs-built_in">BN_free</span>(a1);<span class="hljs-built_in">BN_free</span>(m1);<span class="hljs-built_in">BN_free</span>(r1);<span class="hljs-built_in">BN_free</span>(x);<span class="hljs-built_in">BN_free</span>(y);<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-***
-
-### 1.3 乘法逆元
-
-使用扩展欧几里得算法求解；
-
-欧几里得算法用于求两个数的最大公因数；
-$$
-\left.
-\begin{aligned}
-gcd(a, b)&=1\\
-ax+by&=1
-\end{aligned}
-\right\} \implies b\cdot y = 1 \quad mod\quad x
-$$
-**代码**
-
+<hr>
+<h3 id="1-3-乘法逆元"><a href="#1-3-乘法逆元" class="headerlink" title="1.3 乘法逆元"></a>1.3 乘法逆元</h3><p>使用扩展欧几里得算法求解；</p>
+<p>欧几里得算法用于求两个数的最大公因数；<br>$$<br>\left.<br>\begin{aligned}<br>gcd(a, b)&amp;&#x3D;1\<br>ax+by&amp;&#x3D;1<br>\end{aligned}<br>\right} \implies b\cdot y &#x3D; 1 \quad mod\quad x<br>$$<br><strong>代码</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">euclid_mod_reverse</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> m)</span> </span>&#123;<br>  <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> a * x = 1(mod m)，求a的逆元x并返回x</span><br>  	<span class="hljs-keyword">if</span>(a&lt;<span class="hljs-number">0</span>||m&lt;=<span class="hljs-number">0</span>)<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>  	<span class="hljs-type">int</span> y=<span class="hljs-number">0</span>,x=<span class="hljs-number">1</span>,r=a%m;<br>  	<span class="hljs-type">int</span> q,temp;<br>  	<span class="hljs-type">int</span> m1=m;<br> 	<span class="hljs-keyword">if</span>(r&lt;<span class="hljs-number">0</span>)r=r+m;<br> 	<span class="hljs-keyword">while</span>((m%r)!=<span class="hljs-number">0</span>) <span class="hljs-comment">//已计算完第i步，如果还需要计算第i+1步</span><br> 	&#123;<br> 		 a=m;m=r;<br>  		 q=a/m,r=a%m;<br> 		 temp=x;<br>		 x=y-x*q;<br>		 y=temp;<br> 	&#125;<br> 	<span class="hljs-keyword">if</span>(r!=<span class="hljs-number">1</span>)<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br> 	<span class="hljs-keyword">if</span>(x&lt;<span class="hljs-number">0</span>)x=x+m1;<br> 	<span class="hljs-keyword">return</span> x;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
 
-**大数库版本**
-
+<p><strong>大数库版本</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//大数库自带的函数</span><br><span class="hljs-comment">/* string mod_inverse(string a, string m) &#123;</span><br><span class="hljs-comment">	BIGNUM* a1;BIGNUM* m1;BIGNUM* r1;</span><br><span class="hljs-comment">	const char* a_=a.data();</span><br><span class="hljs-comment">	const char* m_=m.data();</span><br><span class="hljs-comment">	string res=&quot;&quot;;</span><br><span class="hljs-comment">	a1=BN_new();m1=BN_new();r1=BN_new();</span><br><span class="hljs-comment">	BN_CTX *ctx=NULL;</span><br><span class="hljs-comment">	ctx=BN_CTX_new();</span><br><span class="hljs-comment">	BN_CTX_start(ctx);</span><br><span class="hljs-comment">	if(BN_dec2bn(&amp;a1,a_)&amp;&amp;BN_dec2bn(&amp;m1,m_))&#123;</span><br><span class="hljs-comment">		</span><br><span class="hljs-comment">		r1=BN_mod_inverse(r1,a1,m1,ctx);</span><br><span class="hljs-comment">	&#125;</span><br><span class="hljs-comment">	if(r1!=NULL)res=BN_bn2dec(r1);</span><br><span class="hljs-comment">	BN_CTX_end(ctx);</span><br><span class="hljs-comment">	BN_CTX_free(ctx);</span><br><span class="hljs-comment">	BN_free(a1);BN_free(m1);BN_free(r1);</span><br><span class="hljs-comment">	return res;</span><br><span class="hljs-comment">&#125; */</span><br><br><span class="hljs-comment">//基于大数基本函数进行的改写</span><br><span class="hljs-function">BIGNUM* <span class="hljs-title">gcd_exp</span><span class="hljs-params">(BIGNUM* a,BIGNUM* b,BIGNUM* x,BIGNUM* y,BN_CTX* ctx)</span></span>&#123;<br>	<span class="hljs-keyword">if</span> (<span class="hljs-built_in">BN_is_zero</span>(b))&#123;<br>		<span class="hljs-built_in">BN_zero</span>(y);<span class="hljs-built_in">BN_one</span>(x);<br>		<span class="hljs-keyword">return</span> a;<br>	&#125;<br>	BIGNUM* mod_;BIGNUM* dv;BIGNUM* rem;BIGNUM* mult;<br>	mod_=<span class="hljs-built_in">BN_new</span>();dv=<span class="hljs-built_in">BN_new</span>();rem=<span class="hljs-built_in">BN_new</span>();mult=<span class="hljs-built_in">BN_new</span>();<br>	<span class="hljs-built_in">BN_mod</span>(mod_,a,b,ctx);<br>	BIGNUM* temp = <span class="hljs-built_in">BN_new</span>();<br>	temp = <span class="hljs-built_in">gcd_exp</span>(b,mod_,y,x,ctx);<br>	<span class="hljs-built_in">BN_div</span>(dv,rem,a,b,ctx);<br>	<span class="hljs-built_in">BN_mul</span>(mult,dv,x,ctx);<br>	<span class="hljs-built_in">BN_sub</span>(y,mult);<br>	<br>	<span class="hljs-built_in">BN_CTX_end</span>(ctx);<br>	<span class="hljs-built_in">BN_CTX_free</span>(ctx);<br>	<span class="hljs-built_in">BN_free</span>(mod_);<span class="hljs-built_in">BN_free</span>(dv);<span class="hljs-built_in">BN_free</span>(rem);<span class="hljs-built_in">BN_free</span>(mult);<span class="hljs-built_in">BN_free</span>(temp);<br>	<span class="hljs-keyword">return</span> temp<br>&#125;<br><br>string <span class="hljs-built_in">mod_inverse</span>(string a, string m) &#123;<br>	BIGNUM* a1;BIGNUM* m1;BIGNUM* x;BIGNUM* y;BIGNUM* r1;<br>	<span class="hljs-type">const</span> <span class="hljs-type">char</span>* a_=a.<span class="hljs-built_in">data</span>();<br>	<span class="hljs-type">const</span> <span class="hljs-type">char</span>* m_=m.<span class="hljs-built_in">data</span>();<br>	string res=<span class="hljs-string">&quot;&quot;</span>;<br>	a1=<span class="hljs-built_in">BN_new</span>();m1=<span class="hljs-built_in">BN_new</span>();x=<span class="hljs-built_in">BN_new</span>();y=<span class="hljs-built_in">BN_new</span>();r1=<span class="hljs-built_in">BN_new</span>();<br>	BN_CTX *ctx=<span class="hljs-literal">NULL</span>;<br>	ctx=<span class="hljs-built_in">BN_CTX_new</span>();<br>	<span class="hljs-built_in">BN_CTX_start</span>(ctx);<br>	<span class="hljs-built_in">BN_dec2bn</span>(&amp;a1,a_);<span class="hljs-built_in">BN_dec2bn</span>(&amp;m1,m_);<br>	r1 = <span class="hljs-built_in">gcd_exp</span>(a1,m1,x,y,ctx);	<br>		<br>	<span class="hljs-keyword">if</span>(<span class="hljs-built_in">BN_is_one</span>(r1)) res=<span class="hljs-built_in">BN_bn2dec</span>(x);<br>	<span class="hljs-built_in">BN_CTX_end</span>(ctx);<br>	<span class="hljs-built_in">BN_CTX_free</span>(ctx);<br>	<span class="hljs-built_in">BN_free</span>(a1);<span class="hljs-built_in">BN_free</span>(m1);<span class="hljs-built_in">BN_free</span>(r1);<span class="hljs-built_in">BN_free</span>(x);<span class="hljs-built_in">BN_free</span>(y);<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-***
-
-
-
-## 2. 伪随机数生成器
-
-### 2.1 LCG（线性同余生成器）
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 3. 对称密码
-
-
-
-
-
-
-
-## 4. 非对称密码
-
-
-
-
-
-
+<hr>
+<h2 id="2-伪随机数生成器"><a href="#2-伪随机数生成器" class="headerlink" title="2. 伪随机数生成器"></a>2. 伪随机数生成器</h2><h3 id="2-1-LCG（线性同余生成器）"><a href="#2-1-LCG（线性同余生成器）" class="headerlink" title="2.1 LCG（线性同余生成器）"></a>2.1 LCG（线性同余生成器）</h3><h2 id="3-对称密码"><a href="#3-对称密码" class="headerlink" title="3. 对称密码"></a>3. 对称密码</h2><h2 id="4-非对称密码"><a href="#4-非对称密码" class="headerlink" title="4. 非对称密码"></a>4. 非对称密码</h2>
                 
               </div>
             
@@ -511,7 +387,7 @@ $$
   <div class="license-box my-3">
     <div class="license-title">
       <div>信息安全基础实验知识点</div>
-      <div>http://example.com/2022/12/02/信息安全基础实验/</div>
+      <div>http://tom-jerr.github.io/2022/12/02/信息安全基础实验/</div>
     </div>
     <div class="license-meta">
       
@@ -555,6 +431,12 @@ $$
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2022/12/03/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/" title="贪心算法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">贪心算法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
@@ -571,16 +453,14 @@ $$
             </div>
 
             
-  
-  
-    <article id="comments" lazyload>
-      
+  <article id="comments" lazyload>
+    
   <div id="valine"></div>
   <script type="text/javascript">
     Fluid.utils.loadComments('#valine', function() {
       Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
         var options = Object.assign(
-          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com"},
+          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
           {
             el: "#valine",
             path: window.location.pathname
@@ -598,8 +478,7 @@ $$
   <noscript>Please enable JavaScript to view the comments</noscript>
 
 
-    </article>
-  
+  </article>
 
 
           </article>
@@ -611,10 +490,7 @@ $$
       
   <aside class="sidebar" style="margin-left: -1rem">
     <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
   <div class="toc-body" id="toc-body"></div>
 </div>
 
@@ -900,7 +776,6 @@ $$
 <script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 <script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
 <script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
-<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/qipao.js"></script>
 <script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
 
 

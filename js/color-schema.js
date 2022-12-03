@@ -176,10 +176,6 @@
           }
         });
       }
-      if (document.documentElement.getAttribute('data-user-color-scheme')) {
-        var color = getComputedStyle(document.documentElement).getPropertyValue('--navbar-bg-color').trim()
-        document.querySelector('meta[name="theme-color"]').setAttribute('content', color)
-      }
     }
   }
 
