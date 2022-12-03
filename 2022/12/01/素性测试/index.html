@@ -16,16 +16,16 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解；$$\left.\begin{a">
+    <meta name="description" content="素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解；$$\begin{aligned">
 <meta property="og:type" content="article">
 <meta property="og:title" content="素性测试">
 <meta property="og:url" content="http://tom-jerr.github.io/2022/12/01/%E7%B4%A0%E6%80%A7%E6%B5%8B%E8%AF%95/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解；$$\left.\begin{a">
+<meta property="og:description" content="素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解；$$\begin{aligned">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://tom-jerr.github.io/img/fluid1.png">
 <meta property="article:published_time" content="2022-12-01T12:48:55.796Z">
-<meta property="article:modified_time" content="2022-12-02T11:15:25.723Z">
+<meta property="article:modified_time" content="2022-12-03T15:10:23.499Z">
 <meta property="article:author" content="LZY">
 <meta property="article:tag" content="数论">
 <meta property="article:tag" content="C &amp; C++">
@@ -72,6 +72,7 @@
   
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
 
 
 
@@ -286,7 +287,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月2日 晚上
+                    本文最后更新于：2022年12月3日 晚上
                   
                 
               </p>
@@ -300,7 +301,7 @@
 <li>让输入去整除这些素数</li>
 </ol>
 <hr>
-<h2 id="Miller-Rabin素性测试（不确定性）"><a href="#Miller-Rabin素性测试（不确定性）" class="headerlink" title="Miller-Rabin素性测试（不确定性）"></a>Miller-Rabin素性测试（不确定性）</h2><p>使用快速乘法和快速幂，使用位运算方式判断q的存在<br>判断奇数（t&amp;1）,最后一位为1一定为奇数<br><strong>对a^(2^i*q)进行处理，使用快速乘法来求解；</strong><br>$$<br>\left.<br>\begin{aligned}<br>n &amp;&#x3D; 2^{k}\cdot q +1\<br>a^{n-1}&amp;&#x3D;1\quad mod\quad n<br>\end{aligned} \right} \implies<br>(a^{q}-1)\prod_{i&#x3D;0}^{k-1}(a^{i}+1) &#x3D;0\quad mod\quad n<br>$$</p>
+<h2 id="Miller-Rabin素性测试（不确定性）"><a href="#Miller-Rabin素性测试（不确定性）" class="headerlink" title="Miller-Rabin素性测试（不确定性）"></a>Miller-Rabin素性测试（不确定性）</h2><p>使用快速乘法和快速幂，使用位运算方式判断q的存在<br>判断奇数（t&amp;1）,最后一位为1一定为奇数<br><strong>对a^(2^i*q)进行处理，使用快速乘法来求解；</strong><br>$$<br>\begin{aligned}<br>n &#x3D; 2^{k}\cdot q +1,\quad<br>a^{n-1}&#x3D;1 mod\quad n<br>\end{aligned}<br>\implies<br>(a^{q}-1)\prod_{i&#x3D;0}^{k-1}(a^{i}+1) &#x3D;0\quad mod\quad n<br>$$</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;k;i++)<br>&#123;<br>	temp2=<span class="hljs-built_in">Quick_mul</span>(temp1,temp1,n);<br>	temp1=temp2;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h3 id="依据：素数性质"><a href="#依据：素数性质" class="headerlink" title="依据：素数性质"></a>依据：素数性质</h3><ol>
 <li><pre><code class="hljs">任意素数n都可以表示为*2^k\*q+1*；除n=2外，其余素数均为奇数	**（反之不一定成立、程序中必须对该性质进行检验：2^k\*q=n-1）**
@@ -554,6 +555,12 @@
     
 
     
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
+        </div>
+      </div>
+    
   </main>
 
   <footer>
@@ -761,6 +768,7 @@
 <script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
 <script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
 <script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="/js/useaplayer.js"></script>
 
 
 

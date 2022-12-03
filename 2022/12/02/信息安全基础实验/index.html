@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://tom-jerr.github.io/img/fluid1.png">
 <meta property="article:published_time" content="2022-12-02T11:06:10.666Z">
-<meta property="article:modified_time" content="2022-12-02T11:16:36.042Z">
+<meta property="article:modified_time" content="2022-12-03T15:25:36.004Z">
 <meta property="article:author" content="LZY">
 <meta property="article:tag" content="数论">
 <meta property="article:tag" content="信息安全">
@@ -72,6 +72,7 @@
   
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
 
 
 
@@ -286,7 +287,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月2日 晚上
+                    本文最后更新于：2022年12月3日 晚上
                   
                 
               </p>
@@ -314,7 +315,7 @@
 
 
 
-<h4 id="1-2-2-非确定性检测算法（Miller-Rabin）"><a href="#1-2-2-非确定性检测算法（Miller-Rabin）" class="headerlink" title="1.2.2 非确定性检测算法（Miller-Rabin）"></a>1.2.2 非确定性检测算法（Miller-Rabin）</h4><p>基于素数的必要条件及欧拉定理可推出如下式子：<br>$$<br>\left.<br>\begin{aligned}<br>n &amp;&#x3D; 2^{k}\cdot q +1\<br>a^{n-1}&amp;&#x3D;1\quad mod\quad n<br>\end{aligned} \right} \implies<br>(a^{q}-1)\prod_{i&#x3D;0}^{k-1}(a^{i}+1) &#x3D;0\quad mod\quad n<br>$$</p>
+<h4 id="1-2-2-非确定性检测算法（Miller-Rabin）"><a href="#1-2-2-非确定性检测算法（Miller-Rabin）" class="headerlink" title="1.2.2 非确定性检测算法（Miller-Rabin）"></a>1.2.2 非确定性检测算法（Miller-Rabin）</h4><p>基于素数的必要条件及欧拉定理可推出如下式子：<br>$$<br>\begin{aligned}<br>n &#x3D; 2^{k}\cdot q +1,\quad<br>a^{n-1}&#x3D;1 mod\quad n<br>\end{aligned}<br>\implies<br>(a^{q}-1)\prod_{i&#x3D;0}^{k-1}(a^{i}+1) &#x3D;0\quad mod\quad n<br>$$</p>
 <p>所以得到非确定性的结论：随机挑选满足<code>gcd(a, n) = 1 </code>的数a</p>
 <p>如果数n满足上述条件，n不一定是素数；</p>
 <p>如果数n不满足上述条件，n一定是合数。</p>
@@ -328,7 +329,9 @@
 
 <hr>
 <h3 id="1-3-乘法逆元"><a href="#1-3-乘法逆元" class="headerlink" title="1.3 乘法逆元"></a>1.3 乘法逆元</h3><p>使用扩展欧几里得算法求解；</p>
-<p>欧几里得算法用于求两个数的最大公因数；<br>$$<br>\left.<br>\begin{aligned}<br>gcd(a, b)&amp;&#x3D;1\<br>ax+by&amp;&#x3D;1<br>\end{aligned}<br>\right} \implies b\cdot y &#x3D; 1 \quad mod\quad x<br>$$<br><strong>代码</strong></p>
+<p>欧几里得算法用于求两个数的最大公因数；<br>$$</p>
+<p>gcd(a, b)&#x3D;1,\quad ax+by&#x3D;1</p>
+<p> \implies b\cdot y &#x3D; 1 \quad mod\quad x<br>$$<br><strong>代码</strong></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">euclid_mod_reverse</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> m)</span> </span>&#123;<br>  <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> a * x = 1(mod m)，求a的逆元x并返回x</span><br>  	<span class="hljs-keyword">if</span>(a&lt;<span class="hljs-number">0</span>||m&lt;=<span class="hljs-number">0</span>)<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>  	<span class="hljs-type">int</span> y=<span class="hljs-number">0</span>,x=<span class="hljs-number">1</span>,r=a%m;<br>  	<span class="hljs-type">int</span> q,temp;<br>  	<span class="hljs-type">int</span> m1=m;<br> 	<span class="hljs-keyword">if</span>(r&lt;<span class="hljs-number">0</span>)r=r+m;<br> 	<span class="hljs-keyword">while</span>((m%r)!=<span class="hljs-number">0</span>) <span class="hljs-comment">//已计算完第i步，如果还需要计算第i+1步</span><br> 	&#123;<br> 		 a=m;m=r;<br>  		 q=a/m,r=a%m;<br> 		 temp=x;<br>		 x=y-x*q;<br>		 y=temp;<br> 	&#125;<br> 	<span class="hljs-keyword">if</span>(r!=<span class="hljs-number">1</span>)<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br> 	<span class="hljs-keyword">if</span>(x&lt;<span class="hljs-number">0</span>)x=x+m1;<br> 	<span class="hljs-keyword">return</span> x;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
@@ -570,6 +573,12 @@
     
 
     
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
+        </div>
+      </div>
+    
   </main>
 
   <footer>
@@ -777,6 +786,7 @@
 <script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
 <script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
 <script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="/js/useaplayer.js"></script>
 
 
 

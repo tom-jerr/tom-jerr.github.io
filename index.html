@@ -57,6 +57,7 @@
   
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
 
 
 
@@ -393,7 +394,7 @@
       
       <a class="index-excerpt " href="/2022/12/03/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/" target="_self">
         <div>
-          贪心算法区间问题1. 区间选点问题题目给定 N 个闭区间  [$a_{i}$,$b_{i}$]，请你在数轴上选择尽量少的点，使得每个区间内至少包含一个选出的点。输出选择的点的最小数量。位于区间端点上的点也算作区间内。 解析1. 将所有区间按右端点排序 2. 扫描所有区间；如果此时区间内不包含上一个点，将此区间右端点加入；如果此时包含上一个点，则跳过此区间  代码123456789101112131
+          前言本文是选取了一些贪心算法的典型问题和一些蓝桥杯真题对贪心算法进行总结
         </div>
       </a>
 
@@ -535,7 +536,7 @@
       
       <a class="index-excerpt " href="/2022/12/01/%E7%B4%A0%E6%80%A7%E6%B5%8B%E8%AF%95/" target="_self">
         <div>
-          素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解；$$\left.\begin{a
+          素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解；$$\begin{aligned
         </div>
       </a>
 
@@ -628,6 +629,12 @@
     
 
     
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
+        </div>
+      </div>
+    
   </main>
 
   <footer>
@@ -699,6 +706,7 @@
 <script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
 <script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
 <script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="/js/useaplayer.js"></script>
 
 
 
