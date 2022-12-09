@@ -16,26 +16,26 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解；$$\begin{aligned">
+    <meta name="description" content="1. RCNN1.0 RCNN结构两过程模型（two stage）：1.区域检测	2.目标分类 使用候选区域方法（region proposal method） 1.1 选择型搜索（Selective Search, SS）将像素作为一组，计算每一组纹理，将两个最接近的组合起来；搜索2000个左右的候选框（大小相同，CNN需要大小相同的输入） 1.各向异性缩放	2.同性缩放，延伸正方形进行裁剪；扩">
 <meta property="og:type" content="article">
-<meta property="og:title" content="素性测试">
-<meta property="og:url" content="http://tom-jerr.github.io/2022/12/01/%E7%B4%A0%E6%80%A7%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:title" content="RCNN">
+<meta property="og:url" content="http://tom-jerr.github.io/2022/12/09/RCNN/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="素性测试确定性素数测试 从1到n^1&#x2F;2开始判定 找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法 让输入去整除这些素数   Miller-Rabin素性测试（不确定性）使用快速乘法和快速幂，使用位运算方式判断q的存在判断奇数（t&amp;1）,最后一位为1一定为奇数对a^(2^i*q)进行处理，使用快速乘法来求解；$$\begin{aligned">
+<meta property="og:description" content="1. RCNN1.0 RCNN结构两过程模型（two stage）：1.区域检测	2.目标分类 使用候选区域方法（region proposal method） 1.1 选择型搜索（Selective Search, SS）将像素作为一组，计算每一组纹理，将两个最接近的组合起来；搜索2000个左右的候选框（大小相同，CNN需要大小相同的输入） 1.各向异性缩放	2.同性缩放，延伸正方形进行裁剪；扩">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://tom-jerr.github.io/img/fluid1.png">
-<meta property="article:published_time" content="2022-12-01T12:48:55.796Z">
-<meta property="article:modified_time" content="2022-12-03T15:10:23.499Z">
+<meta property="article:published_time" content="2022-12-09T07:22:12.173Z">
+<meta property="article:modified_time" content="2022-12-09T07:35:14.325Z">
 <meta property="article:author" content="LZY">
-<meta property="article:tag" content="数论">
-<meta property="article:tag" content="C &amp; C++">
-<meta property="article:tag" content="工具函数">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="目标检测">
+<meta property="article:tag" content="pytorch">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://tom-jerr.github.io/img/fluid1.png">
   
   
   
-  <title>素性测试 - tom-jerr的个人博客</title>
+  <title>RCNN - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -208,7 +208,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="素性测试"></span>
+            <span id="subtitle" data-typed-text="RCNN"></span>
           
         </div>
 
@@ -219,8 +219,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-12-01 20:48" pubdate>
-          2022年12月1日 晚上
+        <time datetime="2022-12-09 15:22" pubdate>
+          2022年12月9日 下午
         </time>
       </span>
     
@@ -231,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          1.5k 字
         
       </span>
     
@@ -242,7 +242,7 @@
         
         
         
-          12 分钟
+          13 分钟
         
       </span>
     
@@ -280,12 +280,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">素性测试</h1>
+            <h1 style="display: none">RCNN</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月3日 晚上
+                    本文最后更新于：2022年12月9日 下午
                   
                 
               </p>
@@ -293,39 +293,33 @@
             
               <div class="markdown-body">
                 
-                <h1 id="素性测试"><a href="#素性测试" class="headerlink" title="素性测试"></a>素性测试</h1><h2 id="确定性素数测试"><a href="#确定性素数测试" class="headerlink" title="确定性素数测试"></a>确定性素数测试</h2><ol>
-<li>从1到n^1&#x2F;2开始判定</li>
-<li>找到{2，3，···，n^1&#x2F;2}中所有的素数	Eratosthenes筛选法</li>
-<li>让输入去整除这些素数</li>
+                <h2 id="1-RCNN"><a href="#1-RCNN" class="headerlink" title="1. RCNN"></a>1. RCNN</h2><h3 id="1-0-RCNN结构"><a href="#1-0-RCNN结构" class="headerlink" title="1.0 RCNN结构"></a>1.0 RCNN结构</h3><p>两过程模型（two stage）：1.区域检测	2.目标分类</p>
+<p>使用候选区域方法（region proposal method）<br><img src="/..%5Cimg%5Csrc%5Crcnn1.jpg" srcset="/img/loading.gif" lazyload></p>
+<h3 id="1-1-选择型搜索（Selective-Search-SS）"><a href="#1-1-选择型搜索（Selective-Search-SS）" class="headerlink" title="1.1 选择型搜索（Selective Search, SS）"></a>1.1 选择型搜索（Selective Search, SS）</h3><p>将像素作为一组，计算每一组纹理，将两个最接近的组合起来；搜索2000个左右的候选框（大小相同，CNN需要大小相同的输入）</p>
+<p>1.各向异性缩放	2.同性缩放，延伸正方形进行裁剪；扩展延伸，裁剪出来有背景固定色填充正方形图片</p>
+<p>openCV库中实现了SS算法。</p>
+<h4 id="示例图片"><a href="#示例图片" class="headerlink" title="示例图片"></a>示例图片</h4><p><img src="/..%5Cimg%5Csrc%5CSS.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="1-2-SVM"><a href="#1-2-SVM" class="headerlink" title="1.2 SVM"></a>1.2 SVM</h3><p>RCNN中默认CNN输出了4096特征分量；有2000个候选区域；</p>
+<p>分类需要20个SVM；$[2000,20]$：得分矩阵大小</p>
+<h3 id="1-3-非极大值抑制算法（NMS）"><a href="#1-3-非极大值抑制算法（NMS）" class="headerlink" title="1.3 非极大值抑制算法（NMS）"></a>1.3 非极大值抑制算法（NMS）</h3><p>按照搜索局部极大值，抑制非极大值元素的思想来实现的，具体的实现步骤如下：</p>
+<p>（1）设定目标框的置信度阈值，常用的阈值是0.5左右</p>
+<p>（2）根据置信度降序排列候选框列表</p>
+<p>（3）选取置信度最高的框A添加到输出列表，并将其从候选框列表中删除</p>
+<p>（4）计算A与候选框列表中的所有框的IoU值，删除大于阈值的候选框</p>
+<p>（5）重复上述过程，直到候选框列表为空，返回输出列表</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#极大值抑制算法——剔除过多的搜索框</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">NMS</span>(<span class="hljs-params">dets, thresh</span>):<br><br>    x1 = dets[:, <span class="hljs-number">0</span>]<br>    y1 = dets[:, <span class="hljs-number">1</span>]<br>    x2 = dets[:, <span class="hljs-number">2</span>]<br>    y2 = dets[:, <span class="hljs-number">3</span>]<br><br>    areas = (y2-y1+<span class="hljs-number">1</span>)*(x2-x1+<span class="hljs-number">1</span>)<br>    scores = dets[:, <span class="hljs-number">4</span>]<br>    keep = []<br>    index = scores.argsort()[::-<span class="hljs-number">1</span>]<br><br>    <span class="hljs-keyword">while</span> index.size &gt; <span class="hljs-number">0</span>:<br>        i = index[<span class="hljs-number">0</span>]<br>        keep.append(i)<br><br>        x11 = np.maximum(x1[i], x1[index[<span class="hljs-number">1</span>:]])<br>        y11 = np.maximum(y1[i], y1[index[<span class="hljs-number">1</span>:]])<br>        x22 = np.minimum(x2[i], x2[index[<span class="hljs-number">1</span>:]])<br>        y22 = np.minimum(y2[i], y2[index[<span class="hljs-number">1</span>:]])<br><br>        w = np.maximum(<span class="hljs-number">0</span>, x22-x11+<span class="hljs-number">1</span>)<br>        h = np.maximum(<span class="hljs-number">0</span>, y22-y11+<span class="hljs-number">1</span>)<br>        overlaps = w*h<br>        IOU = overlaps/(areas[i] + areas[index[<span class="hljs-number">1</span>:]] - overlaps)<br><br>        <span class="hljs-built_in">print</span>(np.where(IOU &lt;= thresh))<br>        idx = np.where(IOU &lt;= thresh)[<span class="hljs-number">0</span>]    <span class="hljs-comment">#获取保留下来的索引</span><br>        index = index[idx + <span class="hljs-number">1</span>]<br><br>    <span class="hljs-keyword">return</span> keep<br><br><span class="hljs-comment">#显示搜索框</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">plot_bbox</span>(<span class="hljs-params">dets, c=<span class="hljs-string">&#x27;k&#x27;</span>, title_name=<span class="hljs-string">&quot;title&quot;</span></span>):<br>    x1 = dets[:, <span class="hljs-number">0</span>]<br>    y1 = dets[:, <span class="hljs-number">1</span>]<br>    x2 = dets[:, <span class="hljs-number">2</span>]<br>    y2 = dets[:, <span class="hljs-number">3</span>]<br><br>    plt.plot([x1, x2], [y1, y1], c)<br>    plt.plot([x1, x1], [y1, y2], c)<br>    plt.plot([x1, x2], [y2, y2], c)<br>    plt.plot([x2, x2], [y1, y2], c)<br>    plt.title(title_name)<br></code></pre></td></tr></table></figure>
+
+<h5 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h5><p>before_nms</p>
+<p><img src="/..%5Cimg%5Csrc%5Cnms_original.png" srcset="/img/loading.gif" lazyload></p>
+<p>after_nms</p>
+<p><img src="/..%5Cimg%5Csrc%5Cafter_nms.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="1-4-修正候选区域"><a href="#1-4-修正候选区域" class="headerlink" title="1.4 修正候选区域"></a>1.4 修正候选区域</h3><p>建立一个boundingbox regressor；使用线性回归，对候选框进行修正</p>
+<h3 id="1-5-缺点"><a href="#1-5-缺点" class="headerlink" title="1.5 缺点"></a>1.5 缺点</h3><ol>
+<li>训练阶段多：微调网络 + SVM + 边框回归</li>
+<li>消耗时间</li>
+<li>处理速度慢，处理一张图片需要几十秒</li>
+<li>图片形状在进行SS候选框搜索时发生改变；在经过crop进行图片固定大小改变时，无法保证图像不失真</li>
 </ol>
-<hr>
-<h2 id="Miller-Rabin素性测试（不确定性）"><a href="#Miller-Rabin素性测试（不确定性）" class="headerlink" title="Miller-Rabin素性测试（不确定性）"></a>Miller-Rabin素性测试（不确定性）</h2><p>使用快速乘法和快速幂，使用位运算方式判断q的存在<br>判断奇数（t&amp;1）,最后一位为1一定为奇数<br><strong>对a^(2^i*q)进行处理，使用快速乘法来求解；</strong><br>$$<br>\begin{aligned}<br>n &#x3D; 2^{k}\cdot q +1,\quad<br>a^{n-1}&#x3D;1 mod\quad n<br>\end{aligned}<br>\implies<br>(a^{q}-1)\prod_{i&#x3D;0}^{k-1}(a^{i}+1) &#x3D;0\quad mod\quad n<br>$$</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;k;i++)<br>&#123;<br>	temp2=<span class="hljs-built_in">Quick_mul</span>(temp1,temp1,n);<br>	temp1=temp2;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h3 id="依据：素数性质"><a href="#依据：素数性质" class="headerlink" title="依据：素数性质"></a>依据：素数性质</h3><ol>
-<li><pre><code class="hljs">任意素数n都可以表示为*2^k\*q+1*；除n=2外，其余素数均为奇数	**（反之不一定成立、程序中必须对该性质进行检验：2^k\*q=n-1）**
-</code></pre>
-<ol start="2">
-<li><pre><code class="hljs">欧拉定理：n为素数时，a^(n-1)=1 mod n
-</code></pre>
-</li>
-</ol>
-</li>
-</ol>
-<h3 id="判断依据"><a href="#判断依据" class="headerlink" title="判断依据"></a>判断依据</h3><pre><code class="hljs">已知n=2^k*q+1，若为n为素数，下面两个公式至少有一个成立
-1. a^q=1 mod n
-2. 存在一个i(0&lt;=i&lt;=q-1)，使得 a^(2^i*q)=-1 mod n 或者 a^(2^i*q)=n-1 mod n
-</code></pre>
-<hr>
-<h2 id="乘法逆元"><a href="#乘法逆元" class="headerlink" title="乘法逆元"></a>乘法逆元</h2><p>存在乘法逆元的充要条件：两个数的最大公约数为1</p>
-<h3 id="扩展欧几里得算法"><a href="#扩展欧几里得算法" class="headerlink" title="扩展欧几里得算法"></a>扩展欧几里得算法</h3><p>欧几里得算法：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">gcd</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> b)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">return</span> b ? <span class="hljs-built_in">gcd</span>(b, a % b) : a;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h4 id="递归方法"><a href="#递归方法" class="headerlink" title="递归方法"></a>递归方法</h4><p>扩展欧几里得算法（递归）：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">ll <span class="hljs-title">gcdEx</span><span class="hljs-params">(ll a,ll b,ll &amp;x,<span class="hljs-type">int</span> &amp;y)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span>(b==<span class="hljs-number">0</span>)<br>    &#123;<br>        x=<span class="hljs-number">1</span>,y=<span class="hljs-number">0</span> ;<br>        <span class="hljs-keyword">return</span> a ;<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123;<br>        <span class="hljs-type">int</span> r=<span class="hljs-built_in">gcdEx</span>(b,a%b,x,y);<br>        <span class="hljs-comment">/* r = GCD(a, b) = GCD(b, a%b) */</span><br>        <span class="hljs-type">int</span> t=x ;<br>        x=y ;<br>        y=t-a/b*y ;<br>        <span class="hljs-keyword">return</span> r ;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h4 id="迭代算法"><a href="#迭代算法" class="headerlink" title="迭代算法"></a>迭代算法</h4><p>可以使用迭代的方法进行乘法逆元的求解：<br>通过对公式的推导，得到递推式，正向进行迭代；</p>
-<p>有几个r&#x3D;a%m，在a不等于1时，进行几次迭代</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">long</span> <span class="hljs-title">mod_reverse</span><span class="hljs-params">(<span class="hljs-type">long</span> a,<span class="hljs-type">long</span> m)</span> <span class="hljs-comment">// 若返回-1，则表示整数a关于模m的乘法逆元不存在</span></span><br><span class="hljs-function"></span>&#123;<br> 	<span class="hljs-type">long</span> y=<span class="hljs-number">0</span>,x=<span class="hljs-number">1</span>,r=a%m,q,temp,mInit=m;<br> 	<span class="hljs-keyword">if</span>(r&lt;<span class="hljs-number">0</span>)r=r+m;<br> 	<span class="hljs-keyword">while</span>((m%r)!=<span class="hljs-number">0</span>) <span class="hljs-comment">//有几个r=a%m，在a不等于1时，进行几次迭代</span><br> 	&#123;<br> 		 a=m;m=r;<br>  		 q=a/m,r=a%m;<br> 		 temp=x;x=y-x*q;y=temp;<br> 	&#125;<br> 	<span class="hljs-keyword">if</span>(r!=<span class="hljs-number">1</span>)<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;	<span class="hljs-comment">//若存在逆元，r一定为1，否则不存在</span><br> 	<span class="hljs-keyword">if</span>(x&lt;<span class="hljs-number">0</span>)x=x+mInit;<br> 	<span class="hljs-keyword">return</span> x;<br>&#125;<br></code></pre></td></tr></table></figure>
-<hr>
-<h2 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h2><p>计算2^q：使用快速幂算法<br>计算a^(2^i * q)：求出2^q后，使用快速乘法算法<br>在ubuntu下的程序，对0求同余会导致Floating Exception</p>
 
                 
               </div>
@@ -344,7 +338,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%95%B0%E8%AE%BA/" class="category-chain-item">数论</a>
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
   
   
 
@@ -359,11 +353,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%95%B0%E8%AE%BA/">#数论</a>
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
       
-        <a href="/tags/C-C/">#C & C++</a>
+        <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">#目标检测</a>
       
-        <a href="/tags/%E5%B7%A5%E5%85%B7%E5%87%BD%E6%95%B0/">#工具函数</a>
+        <a href="/tags/pytorch/">#pytorch</a>
       
     </div>
   
@@ -375,8 +369,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>素性测试</div>
-      <div>http://tom-jerr.github.io/2022/12/01/素性测试/</div>
+      <div>RCNN</div>
+      <div>http://tom-jerr.github.io/2022/12/09/RCNN/</div>
     </div>
     <div class="license-meta">
       
@@ -388,7 +382,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年12月1日</div>
+          <div>2022年12月9日</div>
         </div>
       
       
@@ -420,15 +414,21 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/12/02/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/" title="信息安全基础实验知识点">
+                      <a href="/2022/12/09/Fast-RCNN/" title="Fast-RCNN">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">信息安全基础实验知识点</span>
+                        <span class="hidden-mobile">Fast-RCNN</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2022/12/03/DP%E9%97%AE%E9%A2%98/" title="DP算法">
+                        <span class="hidden-mobile">DP算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
