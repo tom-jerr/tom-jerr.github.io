@@ -16,16 +16,16 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="3. Faster-RCNN3.0 原理概述faster-rcnn结构：使用卷积网络提取特征图；将特征图和anchors放入RPN网络中进行训练，同时ROI pooling即负责图片的分类又负责预选框的回归；二者都使用卷积网络，可以实现反向传播更改参数     RPN过程通过softmax判断anchors的正负性；利用bounding box regression修正anchors，获得精确的p">
+    <meta name="description" content="3. Faster-RCNN3.0 原理概述faster-rcnn结构：使用卷积网络提取特征图；将特征图和anchors放入RPN网络中进行训练，同时ROI pooling即负责图片的分类又负责预选框的回归；二者都使用卷积网络，可以实现反向传播更改参数  RPN过程通过softmax判断anchors的正负性；利用bounding box regression修正anchors，获得精确的prop">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Faster-RCNN">
 <meta property="og:url" content="http://tom-jerr.github.io/2022/12/09/Faster-RCNN/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="3. Faster-RCNN3.0 原理概述faster-rcnn结构：使用卷积网络提取特征图；将特征图和anchors放入RPN网络中进行训练，同时ROI pooling即负责图片的分类又负责预选框的回归；二者都使用卷积网络，可以实现反向传播更改参数     RPN过程通过softmax判断anchors的正负性；利用bounding box regression修正anchors，获得精确的p">
+<meta property="og:description" content="3. Faster-RCNN3.0 原理概述faster-rcnn结构：使用卷积网络提取特征图；将特征图和anchors放入RPN网络中进行训练，同时ROI pooling即负责图片的分类又负责预选框的回归；二者都使用卷积网络，可以实现反向传播更改参数  RPN过程通过softmax判断anchors的正负性；利用bounding box regression修正anchors，获得精确的prop">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://tom-jerr.github.io/img/fluid1.png">
 <meta property="article:published_time" content="2022-12-09T07:24:34.543Z">
-<meta property="article:modified_time" content="2022-12-09T07:56:43.182Z">
+<meta property="article:modified_time" content="2022-12-09T15:09:25.208Z">
 <meta property="article:author" content="LZY">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="目标检测">
@@ -285,7 +285,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月9日 下午
+                    本文最后更新于：2022年12月9日 晚上
                   
                 
               </p>
@@ -294,28 +294,21 @@
               <div class="markdown-body">
                 
                 <h2 id="3-Faster-RCNN"><a href="#3-Faster-RCNN" class="headerlink" title="3. Faster-RCNN"></a>3. Faster-RCNN</h2><h3 id="3-0-原理概述"><a href="#3-0-原理概述" class="headerlink" title="3.0 原理概述"></a>3.0 原理概述</h3><h5 id="faster-rcnn结构："><a href="#faster-rcnn结构：" class="headerlink" title="faster-rcnn结构："></a>faster-rcnn结构：</h5><p>使用卷积网络提取特征图；将特征图和anchors放入RPN网络中进行训练，同时ROI pooling即负责图片的分类又负责预选框的回归；二者都使用卷积网络，可以实现反向传播更改参数</p>
-<img src="../img/src/faster-rcnn-3.jpg" srcset="/img/loading.gif" lazyload/>
-
-
-
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/faster-rcnn-3.jpg" srcset="/img/loading.gif" lazyload></p>
 <h5 id="RPN过程"><a href="#RPN过程" class="headerlink" title="RPN过程"></a>RPN过程</h5><p>通过softmax判断anchors的正负性；利用bounding box regression修正anchors，获得精确的proposals</p>
 <p>在特征图的每一个点上（对应原图$16*16$大小），都放置base anchors</p>
-<img src="../img/src/faster-rcnn-2.jpg" srcset="/img/loading.gif" lazyload/>
-
-
-<h5 id="ROI-pooling层"><a href="#ROI-pooling层" class="headerlink" title="ROI pooling层"></a>ROI pooling层</h5><img src="../img/src/faster-rcnn-structure.jpg" srcset="/img/loading.gif" lazyload/>
-##### 目标框回归方程
-
-<p>positive anchor与ground truth的偏移量$(t_{x},t_{y})$和尺度因子$(t_{w},t_{h})$<br>$$<br>t_{x} &#x3D; (x-x_{a})&#x2F;w_{a},t_{y} &#x3D; (y-y_{a})&#x2F;h_{a}<br>$$</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/faster-rcnn-2.jpg" srcset="/img/loading.gif" lazyload></p>
+<h5 id="ROI-pooling层"><a href="#ROI-pooling层" class="headerlink" title="ROI pooling层"></a>ROI pooling层</h5><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/faster-rcnn-structure.jpg" srcset="/img/loading.gif" lazyload></p>
+<h5 id="目标框回归方程"><a href="#目标框回归方程" class="headerlink" title="目标框回归方程"></a>目标框回归方程</h5><p>positive anchor与ground truth的偏移量$(t_{x},t_{y})$和尺度因子$(t_{w},t_{h})$<br>$$<br>t_{x} &#x3D; (x-x_{a})&#x2F;w_{a},t_{y} &#x3D; (y-y_{a})&#x2F;h_{a}<br>$$</p>
 <p>$$<br>t_{w} &#x3D; log(w&#x2F;w_{a}),t_{h} &#x3D; log(h&#x2F;h_{a})<br>$$</p>
-<h5 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h5><p><code>cls</code>为分类损失<br><code>reg</code>为目标框误差损失<br>$$<br>L({p_{i}},{t_{i}}) &#x3D; \dfrac{1}{N_{cls}}\sum\limits_{i} L_{cls}(p_{i},p_{i}^{<em>}) + \lambda\dfrac{1}{N_{reg}}\sum\limits_{i} p_{i}^{</em>} L_{reg}(t_{i},t_{i}^{*})<br>$$</p>
+<h5 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h5><p><code>cls</code>为分类损失<br><code>reg</code>为目标框误差损失<br>$$<br>L({p_{i}},{t_{i}}) &#x3D; \dfrac{1}{N_{cls}}\sum\limits_{i} L_{cls}(p_{i},p_{i}^{‘}) +<br>$$<br>$$<br>\lambda \dfrac{1}{N_{reg}} \sum \limits_{i} p_{i}^{‘} L_{reg}(t_{i},t_{i}^{‘})<br>$$</p>
 <hr>
 <h3 id="3-1-RPN网络"><a href="#3-1-RPN网络" class="headerlink" title="3.1 RPN网络"></a>3.1 RPN网络</h3><h4 id="3-1-0-目标框的绘制（在feature-map上）"><a href="#3-1-0-目标框的绘制（在feature-map上）" class="headerlink" title="3.1.0 目标框的绘制（在feature map上）"></a>3.1.0 目标框的绘制（在feature map上）</h4><p>返回的是base_anchor，其中每个anchor是$[y_{min},x_{min},y_{max},x_{max}]$；</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">generate_anchor_base</span>(<span class="hljs-params">base_size=<span class="hljs-number">16</span>, ratios=[<span class="hljs-number">0.5</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>],</span><br><span class="hljs-params">                         anchor_scales=[<span class="hljs-number">8</span>, <span class="hljs-number">16</span>, <span class="hljs-number">32</span>]</span>):<br>   <span class="hljs-string">&quot;&quot;&quot;&quot;</span><br><span class="hljs-string">    Returns:</span><br><span class="hljs-string">        An array of shape :math:`(R, 4)`.</span><br><span class="hljs-string">        Each element is a set of coordinates of a bounding box.</span><br><span class="hljs-string">        The second axis corresponds to</span><br><span class="hljs-string">        :math:`(y_&#123;min&#125;, x_&#123;min&#125;, y_&#123;max&#125;, x_&#123;max&#125;)` of a bounding box.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    py = base_size / <span class="hljs-number">2.</span><br>    px = base_size / <span class="hljs-number">2.</span><br><br>    anchor_base = np.zeros((<span class="hljs-built_in">len</span>(ratios) * <span class="hljs-built_in">len</span>(anchor_scales), <span class="hljs-number">4</span>),<br>                           dtype=np.float32)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> six.moves.<span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(ratios)):<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> six.moves.<span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(anchor_scales)):<br>            h = base_size * anchor_scales[j] * np.sqrt(ratios[i])<br>            w = base_size * anchor_scales[j] * np.sqrt(<span class="hljs-number">1.</span> / ratios[i])<br><br>            index = i * <span class="hljs-built_in">len</span>(anchor_scales) + j<br>            anchor_base[index, <span class="hljs-number">0</span>] = py - h / <span class="hljs-number">2.</span><br>            anchor_base[index, <span class="hljs-number">1</span>] = px - w / <span class="hljs-number">2.</span><br>            anchor_base[index, <span class="hljs-number">2</span>] = py + h / <span class="hljs-number">2.</span><br>            anchor_base[index, <span class="hljs-number">3</span>] = px + w / <span class="hljs-number">2.</span><br>    <span class="hljs-keyword">return</span> anchor_base<br></code></pre></td></tr></table></figure>
 
 <h5 id="目标框-x-y-w-h-的回归方程："><a href="#目标框-x-y-w-h-的回归方程：" class="headerlink" title="目标框 (x, y, w, h) 的回归方程："></a>目标框 <code>(x, y, w, h) </code>的回归方程：</h5><p>$$<br>t_{x} &#x3D; (x-x_{a})&#x2F;w_{a}, t_{y} &#x3D; (y-y_{a})&#x2F;h_{a}<br>$$</p>
 <p>$$<br>t_{w} &#x3D; log(w&#x2F;w_{a}),t_{h} &#x3D; log(h&#x2F;h_{a})<br>$$</p>
-<h5 id="损失函数-1"><a href="#损失函数-1" class="headerlink" title="损失函数:"></a>损失函数:</h5><p><code>cls</code>为分类损失<br><code>reg</code>为目标框误差损失<br>$$<br>L({p_{i}},{t_{i}}) &#x3D; \dfrac{1}{N_{cls}}\sum\limits_{i} L_{cls}(p_{i},p_{i}^{<em>}) + \lambda\dfrac{1}{N_{reg}}\sum\limits_{i} p_{i}^{</em>} L_{reg}(t_{i},t_{i}^{*})<br>$$</p>
+<h5 id="损失函数-1"><a href="#损失函数-1" class="headerlink" title="损失函数:"></a>损失函数:</h5><p><code>cls</code>为分类损失<br><code>reg</code>为目标框误差损失<br>$$<br>L({p_{i}},{t_{i}}) &#x3D; \dfrac{1}{N_{cls}}\sum\limits_{i} L_{cls}(p_{i},p_{i}^{‘}) +<br>$$<br>$$<br>\lambda \dfrac{1}{N_{reg}} \sum \limits_{i} p_{i}^{‘} L_{reg}(t_{i},t_{i}^{‘})<br>$$</p>
 <h4 id="3-1-1-enumerate-shifted-anchor-产生整个特征图的所有anchor"><a href="#3-1-1-enumerate-shifted-anchor-产生整个特征图的所有anchor" class="headerlink" title="3.1.1 _enumerate_shifted_anchor(产生整个特征图的所有anchor)"></a>3.1.1 _enumerate_shifted_anchor(产生整个特征图的所有anchor)</h4><p>feature map的每一个点产生anchor的思想，首先是将特征图放大16倍对应回原图;</p>
 <p>原图是经过4次pooling得到的特征图，所以缩小了16倍，</p>
 <p><code>shift_y /shift_x = xp.arange(0, height * feat_stride, feat_stride) </code></p>
@@ -366,7 +359,8 @@
 
 <hr>
 <h3 id="3-4-Trainer"><a href="#3-4-Trainer" class="headerlink" title="3.4 Trainer"></a>3.4 Trainer</h3><p>然后在计算过程中<strong>只计算非背景类的回归损失</strong></p>
-<h1 id=""><a href="#" class="headerlink" title=""></a><img src="../img/src/1.png" srcset="/img/loading.gif" lazyload/></h1><h5 id="计算smooth-l1损失"><a href="#计算smooth-l1损失" class="headerlink" title="计算smooth_l1损失"></a>计算<code>smooth_l1</code>损失</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">_smooth_l1_loss</span>(<span class="hljs-params">x, t, in_weight, sigma</span>):  <span class="hljs-comment"># x代表预测,t代表真值，in_weight代表权重</span><br>    sigma2 = sigma ** <span class="hljs-number">2</span><br>    diff = in_weight * (x - t)  <span class="hljs-comment"># 被标定为背景的类的权重设置为0（忽略背景类），这也就是为什么计算位置的损失函数还要传入真实label作为参数的原因</span><br>    abs_diff = diff.<span class="hljs-built_in">abs</span>()<br>    flag = (abs_diff.data &lt; (<span class="hljs-number">1.</span> / sigma2)).<span class="hljs-built_in">float</span>()<br>    y = (flag * (sigma2 / <span class="hljs-number">2.</span>) * (diff ** <span class="hljs-number">2</span>) +<br>         (<span class="hljs-number">1</span> - flag) * (abs_diff - <span class="hljs-number">0.5</span> / sigma2))<br>    <span class="hljs-keyword">return</span> y.<span class="hljs-built_in">sum</span>()<br></code></pre></td></tr></table></figure>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/1.png" srcset="/img/loading.gif" lazyload></p>
+<h5 id="计算smooth-l1损失"><a href="#计算smooth-l1损失" class="headerlink" title="计算smooth_l1损失"></a>计算<code>smooth_l1</code>损失</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">_smooth_l1_loss</span>(<span class="hljs-params">x, t, in_weight, sigma</span>):  <span class="hljs-comment"># x代表预测,t代表真值，in_weight代表权重</span><br>    sigma2 = sigma ** <span class="hljs-number">2</span><br>    diff = in_weight * (x - t)  <span class="hljs-comment"># 被标定为背景的类的权重设置为0（忽略背景类），这也就是为什么计算位置的损失函数还要传入真实label作为参数的原因</span><br>    abs_diff = diff.<span class="hljs-built_in">abs</span>()<br>    flag = (abs_diff.data &lt; (<span class="hljs-number">1.</span> / sigma2)).<span class="hljs-built_in">float</span>()<br>    y = (flag * (sigma2 / <span class="hljs-number">2.</span>) * (diff ** <span class="hljs-number">2</span>) +<br>         (<span class="hljs-number">1</span> - flag) * (abs_diff - <span class="hljs-number">0.5</span> / sigma2))<br>    <span class="hljs-keyword">return</span> y.<span class="hljs-built_in">sum</span>()<br></code></pre></td></tr></table></figure>
 
 
 

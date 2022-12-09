@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://tom-jerr.github.io/img/fluid1.png">
 <meta property="article:published_time" content="2022-12-09T07:23:45.223Z">
-<meta property="article:modified_time" content="2022-12-09T07:32:37.327Z">
+<meta property="article:modified_time" content="2022-12-09T15:11:06.030Z">
 <meta property="article:author" content="LZY">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="目标检测">
@@ -285,7 +285,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月9日 下午
+                    本文最后更新于：2022年12月9日 晚上
                   
                 
               </p>
@@ -294,14 +294,14 @@
               <div class="markdown-body">
                 
                 <h2 id="2-Fast-RCNN"><a href="#2-Fast-RCNN" class="headerlink" title="2. Fast-RCNN"></a>2. Fast-RCNN</h2><h3 id="2-0-Fast-R-CNN结构和原理"><a href="#2-0-Fast-R-CNN结构和原理" class="headerlink" title="2.0 Fast-R-CNN结构和原理"></a>2.0 Fast-R-CNN结构和原理</h3><p>将整张图片和候选框（SS算法生成）直接输入到卷积网络Conv中，在得到的特征图上设置一个ROI pooling层，这个层将候选框变成一致大小进入两个全连接层；得到总的损失函数；可以进行反向传播</p>
-<p><img src="C:\Users\我\Pictures\图片\fast-rcnn3.jpg" srcset="/img/loading.gif" lazyload></p>
-<h4 id="ROI-pooling层的对应关系："><a href="#ROI-pooling层的对应关系：" class="headerlink" title="ROI pooling层的对应关系："></a>ROI pooling层的对应关系：</h4><p><img src="/..%5Cimg%5Csrc%5Cfast-rcnn2.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/fast-rcnn3.jpg" srcset="/img/loading.gif" lazyload></p>
+<h4 id="ROI-pooling层的对应关系："><a href="#ROI-pooling层的对应关系：" class="headerlink" title="ROI pooling层的对应关系："></a>ROI pooling层的对应关系：</h4><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/fast-rcnn2.jpg" srcset="/img/loading.gif" lazyload></p>
 <h4 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h4><p>$$<br>L(p,u,t^{u},v) &#x3D; L_{cls}(p,u) + \lambda L_{loc}(t^{u},v)<br>$$</p>
 <p>$$<br>L_{cls} &#x3D; -logp_{u}<br>$$</p>
 <p>$$<br>L_{loc} &#x3D; \sum \limits_i smooth_{L1}(t^{u},v)(i\in(w,x,y,h))<br>$$</p>
 <h4 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h4><p>$$<br>\frac{\partial L}{\partial x{i}}&#x3D;\sum \limits_r \sum \limits_j[i &#x3D; i^{*}(r,j)] \frac{\partial L}{\partial y_{r,j}}<br>$$</p>
 <h4 id="输入可以使用SVD分解加快速度"><a href="#输入可以使用SVD分解加快速度" class="headerlink" title="输入可以使用SVD分解加快速度"></a>输入可以使用SVD分解加快速度</h4><p>$$<br>Input &#x3D; W\sum U^{T}<br>$$</p>
-<p><img src="/..%5Cimg%5Csrc%5Cfast-rcnn1.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/fast-rcnn1.jpg" srcset="/img/loading.gif" lazyload></p>
 <hr>
 <h3 id="2-1-ROI-pooling层"><a href="#2-1-ROI-pooling层" class="headerlink" title="2.1 ROI pooling层"></a>2.1 ROI pooling层</h3><p>将输入向量大小转变为一致大小</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">ROI_Pool</span>(nn.Module):<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, size</span>):<br>        <span class="hljs-built_in">super</span>(ROI_Pool, self).__init__()<br>        <span class="hljs-keyword">assert</span> <span class="hljs-built_in">len</span>(size) == <span class="hljs-number">2</span>, <span class="hljs-string">&#x27;size参数输入(长, 宽)&#x27;</span><br>        pool_func = nn.AdaptiveMaxPool2d<br><br>        self.roi_pool = pool_func(size)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, feature_maps</span>):<br>        <span class="hljs-keyword">assert</span> feature_maps.dim() == <span class="hljs-number">4</span>, <span class="hljs-string">&#x27;Expected 4D input of (N, C, H, W)&#x27;</span><br>        <span class="hljs-keyword">return</span> self.roi_pool(feature_maps)<br></code></pre></td></tr></table></figure>

@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://tom-jerr.github.io/img/fluid1.png">
 <meta property="article:published_time" content="2022-12-09T07:22:12.173Z">
-<meta property="article:modified_time" content="2022-12-09T07:35:14.325Z">
+<meta property="article:modified_time" content="2022-12-09T15:10:59.160Z">
 <meta property="article:author" content="LZY">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="目标检测">
@@ -285,7 +285,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月9日 下午
+                    本文最后更新于：2022年12月9日 晚上
                   
                 
               </p>
@@ -294,11 +294,11 @@
               <div class="markdown-body">
                 
                 <h2 id="1-RCNN"><a href="#1-RCNN" class="headerlink" title="1. RCNN"></a>1. RCNN</h2><h3 id="1-0-RCNN结构"><a href="#1-0-RCNN结构" class="headerlink" title="1.0 RCNN结构"></a>1.0 RCNN结构</h3><p>两过程模型（two stage）：1.区域检测	2.目标分类</p>
-<p>使用候选区域方法（region proposal method）<br><img src="/..%5Cimg%5Csrc%5Crcnn1.jpg" srcset="/img/loading.gif" lazyload></p>
+<p>使用候选区域方法（region proposal method）<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/rcnn1.jpg" srcset="/img/loading.gif" lazyload></p>
 <h3 id="1-1-选择型搜索（Selective-Search-SS）"><a href="#1-1-选择型搜索（Selective-Search-SS）" class="headerlink" title="1.1 选择型搜索（Selective Search, SS）"></a>1.1 选择型搜索（Selective Search, SS）</h3><p>将像素作为一组，计算每一组纹理，将两个最接近的组合起来；搜索2000个左右的候选框（大小相同，CNN需要大小相同的输入）</p>
 <p>1.各向异性缩放	2.同性缩放，延伸正方形进行裁剪；扩展延伸，裁剪出来有背景固定色填充正方形图片</p>
 <p>openCV库中实现了SS算法。</p>
-<h4 id="示例图片"><a href="#示例图片" class="headerlink" title="示例图片"></a>示例图片</h4><p><img src="/..%5Cimg%5Csrc%5CSS.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="示例图片"><a href="#示例图片" class="headerlink" title="示例图片"></a>示例图片</h4><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/SS.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="1-2-SVM"><a href="#1-2-SVM" class="headerlink" title="1.2 SVM"></a>1.2 SVM</h3><p>RCNN中默认CNN输出了4096特征分量；有2000个候选区域；</p>
 <p>分类需要20个SVM；$[2000,20]$：得分矩阵大小</p>
 <h3 id="1-3-非极大值抑制算法（NMS）"><a href="#1-3-非极大值抑制算法（NMS）" class="headerlink" title="1.3 非极大值抑制算法（NMS）"></a>1.3 非极大值抑制算法（NMS）</h3><p>按照搜索局部极大值，抑制非极大值元素的思想来实现的，具体的实现步骤如下：</p>
@@ -310,9 +310,9 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment">#极大值抑制算法——剔除过多的搜索框</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">NMS</span>(<span class="hljs-params">dets, thresh</span>):<br><br>    x1 = dets[:, <span class="hljs-number">0</span>]<br>    y1 = dets[:, <span class="hljs-number">1</span>]<br>    x2 = dets[:, <span class="hljs-number">2</span>]<br>    y2 = dets[:, <span class="hljs-number">3</span>]<br><br>    areas = (y2-y1+<span class="hljs-number">1</span>)*(x2-x1+<span class="hljs-number">1</span>)<br>    scores = dets[:, <span class="hljs-number">4</span>]<br>    keep = []<br>    index = scores.argsort()[::-<span class="hljs-number">1</span>]<br><br>    <span class="hljs-keyword">while</span> index.size &gt; <span class="hljs-number">0</span>:<br>        i = index[<span class="hljs-number">0</span>]<br>        keep.append(i)<br><br>        x11 = np.maximum(x1[i], x1[index[<span class="hljs-number">1</span>:]])<br>        y11 = np.maximum(y1[i], y1[index[<span class="hljs-number">1</span>:]])<br>        x22 = np.minimum(x2[i], x2[index[<span class="hljs-number">1</span>:]])<br>        y22 = np.minimum(y2[i], y2[index[<span class="hljs-number">1</span>:]])<br><br>        w = np.maximum(<span class="hljs-number">0</span>, x22-x11+<span class="hljs-number">1</span>)<br>        h = np.maximum(<span class="hljs-number">0</span>, y22-y11+<span class="hljs-number">1</span>)<br>        overlaps = w*h<br>        IOU = overlaps/(areas[i] + areas[index[<span class="hljs-number">1</span>:]] - overlaps)<br><br>        <span class="hljs-built_in">print</span>(np.where(IOU &lt;= thresh))<br>        idx = np.where(IOU &lt;= thresh)[<span class="hljs-number">0</span>]    <span class="hljs-comment">#获取保留下来的索引</span><br>        index = index[idx + <span class="hljs-number">1</span>]<br><br>    <span class="hljs-keyword">return</span> keep<br><br><span class="hljs-comment">#显示搜索框</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">plot_bbox</span>(<span class="hljs-params">dets, c=<span class="hljs-string">&#x27;k&#x27;</span>, title_name=<span class="hljs-string">&quot;title&quot;</span></span>):<br>    x1 = dets[:, <span class="hljs-number">0</span>]<br>    y1 = dets[:, <span class="hljs-number">1</span>]<br>    x2 = dets[:, <span class="hljs-number">2</span>]<br>    y2 = dets[:, <span class="hljs-number">3</span>]<br><br>    plt.plot([x1, x2], [y1, y1], c)<br>    plt.plot([x1, x1], [y1, y2], c)<br>    plt.plot([x1, x2], [y2, y2], c)<br>    plt.plot([x2, x2], [y1, y2], c)<br>    plt.title(title_name)<br></code></pre></td></tr></table></figure>
 
 <h5 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h5><p>before_nms</p>
-<p><img src="/..%5Cimg%5Csrc%5Cnms_original.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/nms_original.png" srcset="/img/loading.gif" lazyload></p>
 <p>after_nms</p>
-<p><img src="/..%5Cimg%5Csrc%5Cafter_nms.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/after_nms.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="1-4-修正候选区域"><a href="#1-4-修正候选区域" class="headerlink" title="1.4 修正候选区域"></a>1.4 修正候选区域</h3><p>建立一个boundingbox regressor；使用线性回归，对候选框进行修正</p>
 <h3 id="1-5-缺点"><a href="#1-5-缺点" class="headerlink" title="1.5 缺点"></a>1.5 缺点</h3><ol>
 <li>训练阶段多：微调网络 + SVM + 边框回归</li>
