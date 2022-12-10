@@ -16,21 +16,21 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="计算机组成原理相关知识RTL语言寄存器传送语言    一条指令可能对应多条RTL语句 CPU相关元器件CPU组成部分(重要)    数据通路(Datapath):指令执行过程中,数据经过的路径,包括经过的部件;是指令的执行部件    控制器(Control):指令译码,生成对应的控制信号,控制数据通路的动作;是指令的控制部件 电脑的五部分:    CPU(控制器和数据通路),内存,输入,输出">
+    <meta name="description" content="前言本文是计算机系统中有关计算机组成原理的先导知识，在这里总结一下">
 <meta property="og:type" content="article">
 <meta property="og:title" content="计算机组成原理相关知识">
 <meta property="og:url" content="http://tom-jerr.github.io/2022/12/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F00_%E8%AE%A1%E7%BB%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="计算机组成原理相关知识RTL语言寄存器传送语言    一条指令可能对应多条RTL语句 CPU相关元器件CPU组成部分(重要)    数据通路(Datapath):指令执行过程中,数据经过的路径,包括经过的部件;是指令的执行部件    控制器(Control):指令译码,生成对应的控制信号,控制数据通路的动作;是指令的控制部件 电脑的五部分:    CPU(控制器和数据通路),内存,输入,输出">
+<meta property="og:description" content="前言本文是计算机系统中有关计算机组成原理的先导知识，在这里总结一下">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://tom-jerr.github.io/img/fluid1.png">
+<meta property="og:image" content="http://tom-jerr.github.io/img/OS.png">
 <meta property="article:published_time" content="2022-12-09T15:15:34.398Z">
-<meta property="article:modified_time" content="2022-12-09T16:20:17.920Z">
+<meta property="article:modified_time" content="2022-12-10T16:39:33.516Z">
 <meta property="article:author" content="LZY">
 <meta property="article:tag" content="操作系统">
 <meta property="article:tag" content="计算机组成原理">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://tom-jerr.github.io/img/fluid1.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/OS.png">
   
   
   
@@ -43,6 +43,8 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
 
@@ -76,7 +78,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -230,7 +232,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          1.5k 字
         
       </span>
     
@@ -241,7 +243,7 @@
         
         
         
-          12 分钟
+          13 分钟
         
       </span>
     
@@ -284,7 +286,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月10日 凌晨
+                    本文最后更新于：2022年12月11日 凌晨
                   
                 
               </p>
@@ -292,7 +294,10 @@
             
               <div class="markdown-body">
                 
-                <h1 id="计算机组成原理相关知识"><a href="#计算机组成原理相关知识" class="headerlink" title="计算机组成原理相关知识"></a>计算机组成原理相关知识</h1><h2 id="RTL语言"><a href="#RTL语言" class="headerlink" title="RTL语言"></a>RTL语言</h2><p>寄存器传送语言<br>    一条指令可能对应多条RTL语句</p>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文是计算机系统中有关计算机组成原理的先导知识，在这里总结一下</p>
+<span id="more"></span>
+
+<h1 id="计算机组成原理相关知识"><a href="#计算机组成原理相关知识" class="headerlink" title="计算机组成原理相关知识"></a>计算机组成原理相关知识</h1><h2 id="RTL语言"><a href="#RTL语言" class="headerlink" title="RTL语言"></a>RTL语言</h2><p>寄存器传送语言<br>    一条指令可能对应多条RTL语句</p>
 <h2 id="CPU相关元器件"><a href="#CPU相关元器件" class="headerlink" title="CPU相关元器件"></a>CPU相关元器件</h2><p>CPU组成部分(重要)<br>    数据通路(Datapath):指令执行过程中,数据经过的路径,包括经过的部件;是指令的执行部件<br>    控制器(Control):指令译码,生成对应的控制信号,控制数据通路的动作;是指令的控制部件</p>
 <p>电脑的五部分:<br>    CPU(控制器和数据通路),内存,输入,输出<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/Snipaste_2022-10-08_22-12-02.png" srcset="/img/loading.gif" lazyload></p>
 <p>数据通路:<br>    组合逻辑:操作部件<br>    时序逻辑:状态部件,存储部件</p>
@@ -505,6 +510,9 @@
 
 
 
+  
+
+
 
   
 
@@ -701,6 +709,14 @@
         anchors.add(res.join(', '));
       }
     });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
   });
 </script>
 

@@ -16,21 +16,21 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="微型计算机基础概论计算机工作原理1. 指令执行过程取指令 –&gt; 指令译码 –&gt; 读操作数 –&gt; 执行指令 –&gt; 存放结果 –&gt; 取下一条指令地址  指令的顺序工作方式&gt; 各个功能部件交替工作，按顺序完成指令的执行过程&gt; CPU一直忙碌，但BUS总线经常空闲 并行流水线工作方式&gt; 将CPU划分为访问存储器、分析指令和执行指令等多个功能部件，各个功能部件">
+    <meta name="description" content="前言本文是汇编语言第一章内容总结">
 <meta property="og:type" content="article">
 <meta property="og:title" content="微处理器">
 <meta property="og:url" content="http://tom-jerr.github.io/2022/12/10/%E7%AC%AC%E4%B8%80%E7%AB%A0_%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E6%A6%82%E8%AE%BA/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="微型计算机基础概论计算机工作原理1. 指令执行过程取指令 –&gt; 指令译码 –&gt; 读操作数 –&gt; 执行指令 –&gt; 存放结果 –&gt; 取下一条指令地址  指令的顺序工作方式&gt; 各个功能部件交替工作，按顺序完成指令的执行过程&gt; CPU一直忙碌，但BUS总线经常空闲 并行流水线工作方式&gt; 将CPU划分为访问存储器、分析指令和执行指令等多个功能部件，各个功能部件">
+<meta property="og:description" content="前言本文是汇编语言第一章内容总结">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://tom-jerr.github.io/img/fluid1.png">
+<meta property="og:image" content="http://tom-jerr.github.io/img/assembly.png">
 <meta property="article:published_time" content="2022-12-10T14:23:03.031Z">
-<meta property="article:modified_time" content="2022-12-10T14:30:16.559Z">
+<meta property="article:modified_time" content="2022-12-10T16:38:15.508Z">
 <meta property="article:author" content="LZY">
-<meta property="article:tag" content="汇编">
 <meta property="article:tag" content="C&amp;C++">
+<meta property="article:tag" content="汇编">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://tom-jerr.github.io/img/fluid1.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/assembly.png">
   
   
   
@@ -43,6 +43,8 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
 
 
@@ -76,7 +78,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":false,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -230,7 +232,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          705 字
+          721 字
         
       </span>
     
@@ -241,7 +243,7 @@
         
         
         
-          6 分钟
+          7 分钟
         
       </span>
     
@@ -284,7 +286,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月10日 晚上
+                    本文最后更新于：2022年12月11日 凌晨
                   
                 
               </p>
@@ -292,11 +294,23 @@
             
               <div class="markdown-body">
                 
-                <h1 id="微型计算机基础概论"><a href="#微型计算机基础概论" class="headerlink" title="微型计算机基础概论"></a>微型计算机基础概论</h1><h2 id="计算机工作原理"><a href="#计算机工作原理" class="headerlink" title="计算机工作原理"></a>计算机工作原理</h2><h3 id="1-指令执行过程"><a href="#1-指令执行过程" class="headerlink" title="1. 指令执行过程"></a>1. 指令执行过程</h3><p>取指令 –&gt; 指令译码 –&gt; 读操作数 –&gt; 执行指令 –&gt; 存放结果 –&gt; 取下一条指令地址<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload></p>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文是汇编语言第一章内容总结</p>
+<span id="more"></span>
+
+<h1 id="微型计算机基础概论"><a href="#微型计算机基础概论" class="headerlink" title="微型计算机基础概论"></a>微型计算机基础概论</h1><h2 id="计算机工作原理"><a href="#计算机工作原理" class="headerlink" title="计算机工作原理"></a>计算机工作原理</h2><h3 id="1-指令执行过程"><a href="#1-指令执行过程" class="headerlink" title="1. 指令执行过程"></a>1. 指令执行过程</h3><p>取指令 –&gt; 指令译码 –&gt; 读操作数 –&gt; 执行指令 –&gt; 存放结果 –&gt; 取下一条指令地址<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
-<li>指令的顺序工作方式<br>&gt; 各个功能部件交替工作，按顺序完成指令的执行过程<br>&gt; CPU一直忙碌，但BUS总线经常空闲<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/CPU%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C.png" srcset="/img/loading.gif" lazyload></li>
-<li>并行流水线工作方式<br>&gt; 将CPU划分为访问存储器、分析指令和执行指令等多个功能部件，各个功能部件并行工作<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/CPU%E5%B9%B6%E8%A1%8C%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%B7%A5%E4%BD%9C.png" srcset="/img/loading.gif" lazyload></li>
+<li>指令的顺序工作方式</li>
 </ul>
+<pre><code class="hljs">&gt; 各个功能部件交替工作，按顺序完成指令的执行过程
+&gt; CPU一直忙碌，但BUS总线经常空闲
+</code></pre>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/CPU%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>并行流水线工作方式</li>
+</ul>
+<pre><code class="hljs">&gt; 将CPU划分为访问存储器、分析指令和执行指令等多个功能部件，各个功能部件并行工作
+</code></pre>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/CPU%E5%B9%B6%E8%A1%8C%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%B7%A5%E4%BD%9C.png" srcset="/img/loading.gif" lazyload></p>
 <hr>
 <h3 id="2-冯-•-诺依曼计算机"><a href="#2-冯-•-诺依曼计算机" class="headerlink" title="2. 冯 • 诺依曼计算机"></a>2. 冯 • 诺依曼计算机</h3><ol>
 <li>存储程序工作方式</li>
@@ -315,12 +329,21 @@
 <h3 id="4-微机系统"><a href="#4-微机系统" class="headerlink" title="4. 微机系统"></a>4. 微机系统</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%BE%AE%E6%9C%BA%E7%B3%BB%E7%BB%9F.png" srcset="/img/loading.gif" lazyload></p>
 <h4 id="单片机"><a href="#单片机" class="headerlink" title="单片机"></a>单片机</h4><p>集成了CPU、部分内存、部分I&#x2F;O接口以及总线等单元，具有微机基本功能的超大规模集成电路芯片</p>
 <ul>
-<li>特点<br>&gt; 体积小<br>&gt; 可靠性高<br>&gt; 成本低</li>
+<li>特点</li>
 </ul>
+<pre><code class="hljs">&gt; 体积小
+&gt; 可靠性高
+&gt; 成本低
+</code></pre>
 <h4 id="台式微机（PC微机）"><a href="#台式微机（PC微机）" class="headerlink" title="台式微机（PC微机）"></a>台式微机（PC微机）</h4><p>由系统主板、I&#x2F;O接口卡、磁盘、光驱、电源等组装在主机箱内<br>外接键盘、显示器、鼠标等</p>
 <ul>
-<li>特点<br>&gt; 功能强<br>&gt; 配置灵活<br>&gt; 软件丰富<br>&gt; 操作方便</li>
+<li>特点</li>
 </ul>
+<pre><code class="hljs">&gt; 功能强
+&gt; 配置灵活
+&gt; 软件丰富
+&gt; 操作方便
+</code></pre>
 <h3 id="5-基本逻辑门及译码器"><a href="#5-基本逻辑门及译码器" class="headerlink" title="5. 基本逻辑门及译码器"></a>5. 基本逻辑门及译码器</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%9F%BA%E6%9C%AC%E9%80%BB%E8%BE%91%E9%97%A8.png" srcset="/img/loading.gif" lazyload></p>
 
                 
@@ -355,9 +378,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%B1%87%E7%BC%96/">#汇编</a>
-      
         <a href="/tags/C-C/">#C&C++</a>
+      
+        <a href="/tags/%E6%B1%87%E7%BC%96/">#汇编</a>
       
     </div>
   
@@ -500,6 +523,9 @@
 
   
 
+
+
+  
 
 
 
@@ -698,6 +724,14 @@
         anchors.add(res.join(', '));
       }
     });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
   });
 </script>
 

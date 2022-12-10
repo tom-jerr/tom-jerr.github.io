@@ -1,0 +1,821 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid1.png">
+  <link rel="icon" href="/img/fluid1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="LZY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言本文是对MIT6.S081中lab2 system calls的实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MIT6.S081-System Calls">
+<meta property="og:url" content="http://tom-jerr.github.io/2022/12/11/lab2_system_calls/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="前言本文是对MIT6.S081中lab2 system calls的实现">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/mit.png">
+<meta property="article:published_time" content="2022-12-10T16:12:51.174Z">
+<meta property="article:modified_time" content="2022-12-10T16:36:36.347Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="labs">
+<meta property="article:tag" content="C&amp;C++">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/mit.png">
+  
+  
+  
+  <title>MIT6.S081-System Calls - tom-jerr的个人博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>tom-jerr的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="MIT6.S081-System Calls"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-12-11 00:12" pubdate>
+          2022年12月11日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          55 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MIT6.S081-System Calls</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2022年12月11日 凌晨
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文是对MIT6.S081中lab2 system calls的实现</p>
+<span id="more"></span>
+
+<h1 id="System-Calls"><a href="#System-Calls" class="headerlink" title="System Calls"></a>System Calls</h1><h2 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h2><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/system_call.png" srcset="/img/loading.gif" lazyload></p>
+<p>initcode.S调用exec系统调用结束（user&#x2F;initcode.S:11）。让我们来看看用户调用是如何在内核中实现exec系统调用的。</p>
+<p>用户代码将<strong>exec</strong>的参数放在寄存器<strong>a0</strong>和<strong>a1</strong>中，并将系统调用号放在<strong>a7</strong>中。系统调用号与函数指针表<strong>syscalls</strong>数组(kernel&#x2F;syscall.c:108)中的项匹配。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C">... <br>  <span class="hljs-number">3</span> .global fork<br>  <span class="hljs-number">4</span> fork:<br>  <span class="hljs-number">5</span> 	li a7, SYS_fork<br>  <span class="hljs-number">6</span> 	ecall<br>  <span class="hljs-number">7</span> 	ret<br>  <span class="hljs-number">8</span> .global <span class="hljs-built_in">exit</span><br>  <span class="hljs-number">9</span> <span class="hljs-built_in">exit</span>:<br> <span class="hljs-number">10</span> 	li a7, SYS_exit<br> <span class="hljs-number">11</span> 	ecall<br> <span class="hljs-number">12</span> 	ret<br>...<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li>陷入陷阱（trap）时，<code>uservec(kernel/trampoline.S:16)</code> 被调用，用户寄存器被保存至<code>trapframe</code>中，由于在函数调用时，调用参数被存放在在寄存器中，因此使得内核对用户系统调用的参数是可见的。</li>
+<li>在<code>uservec</code>的结尾处，<code>usertrap (kernel/trap.c:37)</code>被调用。在该函数中，内核检测产生陷阱的原因（硬件中断、系统调用或异常），当陷阱原因为系统调用时，<code>syscall (kernel/syscall.c:133)</code>被调用以处理系统调用，最后内核通过<code>usertrapret (kernel/trap.c:90)</code>返回至用户态。</li>
+</ol>
+<p>在<code>syscall</code>中，系统调用号通过存放在<code>trapframe</code>中的寄存器<code>a7</code>被取出，并被作为系统调用表<code>syscalls</code>的索引，以寻找所需的系统调用函数，并对其进行调用。其中，系统调用表<code>syscalls</code>是一个函数指针数组，其定义如下：</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs inform7"><br>​```C<br>110 static uint64 (*syscalls<span class="hljs-comment">[]</span>)(void) = &#123;<br>111 <span class="hljs-comment">[SYS_fork]</span>    sys_fork,<br>112 <span class="hljs-comment">[SYS_exit]</span>    sys_exit,<br>113 <span class="hljs-comment">[SYS_wait]</span>    sys_wait,<br>114 <span class="hljs-comment">[SYS_pipe]</span>    sys_pipe,<br>115 <span class="hljs-comment">[SYS_read]</span>    sys_read,<br>116 <span class="hljs-comment">[SYS_kill]</span>    sys_kill,<br>117 <span class="hljs-comment">[SYS_exec]</span>    sys_exec,<br>118 <span class="hljs-comment">[SYS_fstat]</span>   sys_fstat,<br>119 <span class="hljs-comment">[SYS_chdir]</span>   sys_chdir,<br>120 <span class="hljs-comment">[SYS_dup]</span>     sys_dup,<br>121 <span class="hljs-comment">[SYS_getpid]</span>  sys_getpid,<br>122 <span class="hljs-comment">[SYS_sbrk]</span>    sys_sbrk,<br>123 <span class="hljs-comment">[SYS_sleep]</span>   sys_sleep,<br>...<br>134&#125;<br></code></pre></td></tr></table></figure>
+
+<p>在<code>sysproc.c</code>中，实际的系统调用行为被完成，值得注意的是，用户传入系统调用函数的参数通过 <code>argraw</code> 被从 <code>trapframe</code> 中提取：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-number">34</span> <span class="hljs-type">static</span> uint64<br><span class="hljs-number">35</span> argraw(<span class="hljs-type">int</span> n)<br><span class="hljs-number">36</span> &#123;<br><span class="hljs-number">37</span>   <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">p</span> =</span> myproc();<br><span class="hljs-number">38</span>   <span class="hljs-keyword">switch</span> (n) &#123;<br><span class="hljs-number">39</span>   <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br><span class="hljs-number">40</span>     <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a0;<br><span class="hljs-number">41</span>   <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br><span class="hljs-number">42</span>     <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a1;<br><span class="hljs-number">43</span>   <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br><span class="hljs-number">44</span>     <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a2;<br><span class="hljs-number">45</span>   <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br><span class="hljs-number">46</span>     <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a3;<br><span class="hljs-number">47</span>   <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:<br><span class="hljs-number">48</span>     <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a4;<br><span class="hljs-number">49</span>   <span class="hljs-keyword">case</span> <span class="hljs-number">5</span>:<br><span class="hljs-number">50</span>     <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a5;<br><span class="hljs-number">51</span>   &#125;<br><span class="hljs-number">52</span>   panic(<span class="hljs-string">&quot;argraw&quot;</span>);<br><span class="hljs-number">53</span>   <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br><span class="hljs-number">54</span> &#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>syscall</strong> (kernel&#x2F;syscall.c:133)从<strong>trapframe</strong>中的a7中得到系统调用号，并其作为索引在<strong>syscalls</strong>查找相应函数。对于第一个系统调用<strong>exec</strong>，a7将为<strong>SYS_exec(kernel&#x2F;syscall.h:8)<strong>，这会让</strong>syscall</strong>调用<strong>exec</strong>的实现函数<strong>sys_exec</strong>。</p>
+<p>当系统调用函数返回时，<strong>syscall</strong>将其返回值记录在<strong>p-&gt;trapframe-&gt;a0</strong>中。用户空间的<strong>exec()<strong>将会返回该值，因为RISC-V上的C调用通常将返回值放在</strong>a0</strong>中。系统调用返回负数表示错误，0或正数表示成功。如果系统调用号无效，<strong>syscall</strong>会打印错误并返回1。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span><br><span class="hljs-title function_">syscall</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>  <span class="hljs-type">int</span> num;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">p</span> =</span> myproc();<br><br>  num = p-&gt;trapframe-&gt;a7;<br>  <span class="hljs-keyword">if</span>(num &gt; <span class="hljs-number">0</span> &amp;&amp; num &lt; NELEM(syscalls) &amp;&amp; syscalls[num]) &#123;<br>    <span class="hljs-comment">// Use num to lookup the system call function for num, call it,</span><br>    <span class="hljs-comment">// and store its return value in p-&gt;trapframe-&gt;a0</span><br>    p-&gt;trapframe-&gt;a0 = syscalls[num]();<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d %s: unknown sys call %d\n&quot;</span>,<br>            p-&gt;pid, p-&gt;name, num);<br>    p-&gt;trapframe-&gt;a0 = <span class="hljs-number">-1</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<hr>
+<h2 id="系统调用传递参数"><a href="#系统调用传递参数" class="headerlink" title="系统调用传递参数"></a>系统调用传递参数</h2><p>内核的系统调用实现需要找到用户代码传递的参数。因为用户代码调用系统调用的包装函数，参数首先会存放在寄存器中，这是C语言存放参数的惯例位置。内核trap代码将用户寄存器保存到当前进程的<strong>trapframe</strong>中，内核代码可以在那里找到它们。函数<strong>argint</strong>、<strong>argaddr</strong>和<strong>argfd</strong>从<strong>trapframe</strong>中以整数、指针或文件描述符的形式检索第n个系统调用参数。它们都调用<strong>argraw</strong>在<strong>trapframe</strong>中检索相应的数据(kernel&#x2F;syscall.c:35)。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">static</span> uint64<br><span class="hljs-title function_">argraw</span><span class="hljs-params">(<span class="hljs-type">int</span> n)</span><br>&#123;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">p</span> =</span> myproc();<br>  <span class="hljs-keyword">switch</span> (n) &#123;<br>  <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:<br>    <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a0;<br>  <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>    <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a1;<br>  <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>    <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a2;<br>  <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>    <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a3;<br>  <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:<br>    <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a4;<br>  <span class="hljs-keyword">case</span> <span class="hljs-number">5</span>:<br>    <span class="hljs-keyword">return</span> p-&gt;trapframe-&gt;a5;<br>  &#125;<br>  panic(<span class="hljs-string">&quot;argraw&quot;</span>);<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>一些系统调用传递指针作为参数，而内核必须使用这些指针来读取或写入用户内存。例如，<strong>exec</strong>系统调用会向内核传递一个指向用户空间中的字符串的指针数组。这些指针带来了两个挑战。首先，用户程序可能是错误的或恶意的，可能会传递给内核一个无效的指针或一个旨在欺骗内核访问内核内存而不是用户内存的指针。第二，xv6内核页表映射与用户页表映射不一样，所以内核不能使用普通指令从用户提供的地址加载或存储。</p>
+<p>内核实现了安全地将<strong>数据复制到用户提供的地址或从用户提供的地址复制数据</strong>的函数。例如<strong>fetchstr(kernel&#x2F;syscall.c:25)<strong>。文件系统调用，如exec，使用</strong>fetchstr</strong>从用户空间中检索字符串文件名参数，<strong>fetchstr</strong>调用<strong>copyinstr</strong>来做这些困难的工作。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// Fetch the nul-terminated string at addr from the current process.</span><br><span class="hljs-comment">// Returns length of string, not including nul, or -1 for error.</span><br><span class="hljs-type">int</span><br><span class="hljs-title function_">fetchstr</span><span class="hljs-params">(uint64 addr, <span class="hljs-type">char</span> *buf, <span class="hljs-type">int</span> max)</span><br>&#123;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">p</span> =</span> myproc();<br>  <span class="hljs-keyword">if</span>(copyinstr(p-&gt;pagetable, buf, addr, max) &lt; <span class="hljs-number">0</span>)<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>  <span class="hljs-keyword">return</span> <span class="hljs-built_in">strlen</span>(buf);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><strong>copyinstr</strong> (kernel&#x2F;vm.c:406) 将用户页表 <strong>pagetable</strong> 中的虚拟地址 <strong>srcva</strong> 复制到 <strong>dst</strong>，需指定最大复制字节数。它使用<strong>walkaddr</strong>（调用<strong>walk</strong>函数）在软件中模拟分页硬件的操作，以确定<strong>srcva</strong>的物理地址<strong>pa0</strong>。<strong>walkaddr</strong> (kernel&#x2F;vm.c:95)检查用户提供的虚拟地址是否是进程用户地址空间的一部分，所以程序不能欺骗内核读取其他内存。类似的函数<strong>copyout</strong>，可以将数据从内核复制到用户提供的地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// Copy a null-terminated string from user to kernel.</span><br><span class="hljs-comment">// Copy bytes to dst from virtual address srcva in a given page table,</span><br><span class="hljs-comment">// until a &#x27;\0&#x27;, or max.</span><br><span class="hljs-comment">// Return 0 on success, -1 on error.</span><br><span class="hljs-type">int</span><br><span class="hljs-title function_">copyinstr</span><span class="hljs-params">(<span class="hljs-type">pagetable_t</span> pagetable, <span class="hljs-type">char</span> *dst, uint64 srcva, uint64 max)</span><br>&#123;<br>  uint64 n, va0, pa0;<br>  <span class="hljs-type">int</span> got_null = <span class="hljs-number">0</span>;<br><br>  <span class="hljs-keyword">while</span>(got_null == <span class="hljs-number">0</span> &amp;&amp; max &gt; <span class="hljs-number">0</span>)&#123;<br>    va0 = PGROUNDDOWN(srcva);<br>    pa0 = walkaddr(pagetable, va0);<br>    <span class="hljs-keyword">if</span>(pa0 == <span class="hljs-number">0</span>)<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    n = PGSIZE - (srcva - va0);<br>    <span class="hljs-keyword">if</span>(n &gt; max)<br>      n = max;<br><br>    <span class="hljs-type">char</span> *p = (<span class="hljs-type">char</span> *) (pa0 + (srcva - va0));<br>    <span class="hljs-keyword">while</span>(n &gt; <span class="hljs-number">0</span>)&#123;<br>      <span class="hljs-keyword">if</span>(*p == <span class="hljs-string">&#x27;\0&#x27;</span>)&#123;<br>        *dst = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>        got_null = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">break</span>;<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        *dst = *p;<br>      &#125;<br>      --n;<br>      --max;<br>      p++;<br>      dst++;<br>    &#125;<br><br>    srcva = va0 + PGSIZE;<br>  &#125;<br>  <span class="hljs-keyword">if</span>(got_null)&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>  &#125;<br>&#125;<br><br><br><span class="hljs-comment">// Return the address of the PTE in page table pagetable</span><br><span class="hljs-comment">// that corresponds to virtual address va.  If alloc!=0,</span><br><span class="hljs-comment">// create any required page-table pages.</span><br><span class="hljs-comment">//</span><br><span class="hljs-comment">// The risc-v Sv39 scheme has three levels of page-table</span><br><span class="hljs-comment">// pages. A page-table page contains 512 64-bit PTEs.</span><br><span class="hljs-comment">// A 64-bit virtual address is split into five fields:</span><br><span class="hljs-comment">//   39..63 -- must be zero.</span><br><span class="hljs-comment">//   30..38 -- 9 bits of level-2 index.</span><br><span class="hljs-comment">//   21..29 -- 9 bits of level-1 index.</span><br><span class="hljs-comment">//   12..20 -- 9 bits of level-0 index.</span><br><span class="hljs-comment">//    0..11 -- 12 bits of byte offset within the page.</span><br><span class="hljs-type">pte_t</span> *<br><span class="hljs-title function_">walk</span><span class="hljs-params">(<span class="hljs-type">pagetable_t</span> pagetable, uint64 va, <span class="hljs-type">int</span> alloc)</span><br>&#123;<br>  <span class="hljs-keyword">if</span>(va &gt;= MAXVA)<br>    panic(<span class="hljs-string">&quot;walk&quot;</span>);<br><br>  <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> level = <span class="hljs-number">2</span>; level &gt; <span class="hljs-number">0</span>; level--) &#123;<br>    <span class="hljs-type">pte_t</span> *pte = &amp;pagetable[PX(level, va)];<br>    <span class="hljs-keyword">if</span>(*pte &amp; PTE_V) &#123;<br>      pagetable = (<span class="hljs-type">pagetable_t</span>)PTE2PA(*pte);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-keyword">if</span>(!alloc || (pagetable = (<span class="hljs-type">pde_t</span>*)kalloc()) == <span class="hljs-number">0</span>)<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>      <span class="hljs-built_in">memset</span>(pagetable, <span class="hljs-number">0</span>, PGSIZE);<br>      *pte = PA2PTE(pagetable) | PTE_V;<br>    &#125;<br>  &#125;<br>  <span class="hljs-keyword">return</span> &amp;pagetable[PX(<span class="hljs-number">0</span>, va)];<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="xv6系统调用函数"><a href="#xv6系统调用函数" class="headerlink" title="xv6系统调用函数"></a>xv6系统调用函数</h2><h3 id="fstat"><a href="#fstat" class="headerlink" title="fstat"></a>fstat</h3><p><strong>int</strong> fstat(<strong>int</strong> fd, <strong>struct</strong> stat*****)：通过文件描述符获取文件状态；</p>
+<h3 id="sbrk"><a href="#sbrk" class="headerlink" title="sbrk"></a>sbrk</h3><p><strong>char*</strong> sbrk(<strong>int</strong>)：实现虚拟内存到内存的映射；</p>
+<h3 id="dup"><a href="#dup" class="headerlink" title="dup"></a>dup</h3><p><strong>int</strong> dup(<strong>int</strong>)：复制一个文件描述符，二者指向同一个文件；</p>
+<h3 id="uptime"><a href="#uptime" class="headerlink" title="uptime"></a>uptime</h3><p><strong>int</strong> uptime(<strong>void</strong>)：显示系统总共运行了多长时间和系统的平均负载</p>
+<hr>
+<h2 id="System-call-tracing"><a href="#System-call-tracing" class="headerlink" title="System call tracing"></a>System call tracing</h2><p><code>sysproc</code>中函数的外来值均是标准输入；命令传入</p>
+<h2 id="Sysinfo"><a href="#Sysinfo" class="headerlink" title="Sysinfo"></a>Sysinfo</h2><p>从标准输入传入一个<code>sysinfo</code>类型的指针；</p>
+<p>为了提取系统进程数和系统空闲内存数，我们需要在负责遍历进程列表的 <code>proc.c</code> 和空闲内存页链表的 <code>kalloc.c</code> 文件中增加新的功能函数。</p>
+<p>在xv6中，进程的信息是被<code>proc.c</code>中的进程列表所保存的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-number">11</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> <span class="hljs-title">proc</span>[<span class="hljs-title">NPROC</span>];</span><br></code></pre></td></tr></table></figure>
+
+<p>为了提取系统进程数，我们仅需遍历该进程列表，寻找状态 <code>state</code> 不为 <code>UNUSERD</code> 的进程即可：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-number">701</span> <span class="hljs-comment">// lab2 syscall : get the nproc</span><br><span class="hljs-number">702</span> uint64<br><span class="hljs-number">703</span> getnproc(<span class="hljs-type">void</span>)&#123;<br><span class="hljs-number">704</span>     <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span>* <span class="hljs-title">p</span>;</span><br><span class="hljs-number">705</span>     uint64 ret = <span class="hljs-number">0</span>;<br><span class="hljs-number">706</span>     <span class="hljs-keyword">for</span>(p = proc; p &lt; &amp;proc[NPROC]; p++) <br><span class="hljs-number">707</span>         <span class="hljs-keyword">if</span>(p-&gt;state != UNUSED)<br><span class="hljs-number">708</span>             ret++;<br><span class="hljs-number">709</span>     <span class="hljs-keyword">return</span> ret;<br><span class="hljs-number">710</span> &#125;<br></code></pre></td></tr></table></figure>
+
+<p>在xv6中，空闲的内存块被组织成空闲内存页链表，其中的每个内存块的大小均为<code>PGSIZE</code>字节，即为页大小。在这里，我们遍历链表，记录结点个数即可，需要注意遍历前后对链表加删锁：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-number">84</span> <span class="hljs-comment">//lab2 syscall : get the freemem</span><br><span class="hljs-number">85</span> uint64<br><span class="hljs-number">86</span> getfreemem(<span class="hljs-type">void</span>)&#123;<br><span class="hljs-number">87</span>     <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">run</span> *<span class="hljs-title">r</span>;</span><br><span class="hljs-number">88</span>     uint64 ret = <span class="hljs-number">0</span>;<br><span class="hljs-number">89</span>     acquire(&amp;kmem.lock);<br><span class="hljs-number">90</span>     r = kmem.freelist;<br><span class="hljs-number">91</span>     <span class="hljs-keyword">while</span>(r)&#123;<br><span class="hljs-number">92</span>         ret += PGSIZE;<br><span class="hljs-number">93</span>         r = r-&gt;next;<br><span class="hljs-number">94</span>     &#125;<br><span class="hljs-number">95</span>     release(&amp;kmem.lock);<br><span class="hljs-number">96</span>     <span class="hljs-keyword">return</span> ret;<br><span class="hljs-number">97</span> &#125;<br></code></pre></td></tr></table></figure>
+
+<p>有了这两个功能函数，我们仅需实现 <code>sysproc.c</code> 中的实际系统调用函数即可，<strong>注意需要导入 <code>sysinfo.h</code> 头文件</strong>，并且在<code>kernel/def.h</code> 中声明<code>struct sysinfo</code> 以及<code>getnproc</code>、<code>getfreemem</code>：</p>
+<hr>
+<h2 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h2><p><code>gdb-multiarch</code>进行调试；在kernel.asm处寻找需要打断点的函数；一般为函数名；执行程序(continue)可以进行调试。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/labs/">#labs</a>
+      
+        <a href="/tags/C-C/">#C&C++</a>
+      
+        <a href="/tags/linux/">#linux</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>MIT6.S081-System Calls</div>
+      <div>http://tom-jerr.github.io/2022/12/11/lab2_system_calls/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>LZY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年12月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/12/11/lab1_util/" title="MIT6.S081-util">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">MIT6.S081-util</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/12/10/%E6%B1%87%E7%BC%96%E5%B8%B8%E7%94%A8/" title="常用汇编">
+                        <span class="hidden-mobile">常用汇编</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments">
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div>tom-jerr的个人博客 | 记录美好生活</div> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="/js/useaplayer.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
