@@ -16,25 +16,25 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="计算机组成原理相关知识RTL语言寄存器传送语言    一条指令可能对应多条RTL语句 CPU相关元器件CPU组成部分(重要)    数据通路(Datapath):指令执行过程中,数据经过的路径,包括经过的部件;是指令的执行部件    控制器(Control):指令译码,生成对应的控制信号,控制数据通路的动作;是指令的控制部件 电脑的五部分:    CPU(控制器和数据通路),内存,输入,输出">
+    <meta name="description" content="汇编程序伪指令segment和ends是一对成对的伪指令 segment说明一个段开始 ends说明一个段结束 12name segmentname ends  程序结束标记end为汇编程序的结束标记 assume：假设某一段寄存器和程序中的某个段相关联 程序返回12mov ax,4c00Hint 21H   [Bx]和LOOP[bx]与内存单元[bx]也是内存，bx的偏移存放在bx寄存器中 12">
 <meta property="og:type" content="article">
-<meta property="og:title" content="计算机组成原理相关知识">
-<meta property="og:url" content="http://tom-jerr.github.io/2022/12/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F00_%E8%AE%A1%E7%BB%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:title" content="汇编程序">
+<meta property="og:url" content="http://tom-jerr.github.io/2022/12/10/%E7%AC%AC%E5%9B%9B%E7%AB%A0_%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="计算机组成原理相关知识RTL语言寄存器传送语言    一条指令可能对应多条RTL语句 CPU相关元器件CPU组成部分(重要)    数据通路(Datapath):指令执行过程中,数据经过的路径,包括经过的部件;是指令的执行部件    控制器(Control):指令译码,生成对应的控制信号,控制数据通路的动作;是指令的控制部件 电脑的五部分:    CPU(控制器和数据通路),内存,输入,输出">
+<meta property="og:description" content="汇编程序伪指令segment和ends是一对成对的伪指令 segment说明一个段开始 ends说明一个段结束 12name segmentname ends  程序结束标记end为汇编程序的结束标记 assume：假设某一段寄存器和程序中的某个段相关联 程序返回12mov ax,4c00Hint 21H   [Bx]和LOOP[bx]与内存单元[bx]也是内存，bx的偏移存放在bx寄存器中 12">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://tom-jerr.github.io/img/fluid1.png">
-<meta property="article:published_time" content="2022-12-09T15:15:34.398Z">
-<meta property="article:modified_time" content="2022-12-09T16:20:17.920Z">
+<meta property="article:published_time" content="2022-12-10T14:23:03.028Z">
+<meta property="article:modified_time" content="2022-12-10T14:30:22.076Z">
 <meta property="article:author" content="LZY">
-<meta property="article:tag" content="操作系统">
-<meta property="article:tag" content="计算机组成原理">
+<meta property="article:tag" content="汇编">
+<meta property="article:tag" content="C&amp;C++">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://tom-jerr.github.io/img/fluid1.png">
   
   
   
-  <title>计算机组成原理相关知识 - tom-jerr的个人博客</title>
+  <title>汇编程序 - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -207,7 +207,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="计算机组成原理相关知识"></span>
+            <span id="subtitle" data-typed-text="汇编程序"></span>
           
         </div>
 
@@ -218,8 +218,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-12-09 23:15" pubdate>
-          2022年12月9日 晚上
+        <time datetime="2022-12-10 22:23" pubdate>
+          2022年12月10日 晚上
         </time>
       </span>
     
@@ -279,12 +279,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">计算机组成原理相关知识</h1>
+            <h1 style="display: none">汇编程序</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月10日 凌晨
+                    本文最后更新于：2022年12月10日 晚上
                   
                 
               </p>
@@ -292,39 +292,90 @@
             
               <div class="markdown-body">
                 
-                <h1 id="计算机组成原理相关知识"><a href="#计算机组成原理相关知识" class="headerlink" title="计算机组成原理相关知识"></a>计算机组成原理相关知识</h1><h2 id="RTL语言"><a href="#RTL语言" class="headerlink" title="RTL语言"></a>RTL语言</h2><p>寄存器传送语言<br>    一条指令可能对应多条RTL语句</p>
-<h2 id="CPU相关元器件"><a href="#CPU相关元器件" class="headerlink" title="CPU相关元器件"></a>CPU相关元器件</h2><p>CPU组成部分(重要)<br>    数据通路(Datapath):指令执行过程中,数据经过的路径,包括经过的部件;是指令的执行部件<br>    控制器(Control):指令译码,生成对应的控制信号,控制数据通路的动作;是指令的控制部件</p>
-<p>电脑的五部分:<br>    CPU(控制器和数据通路),内存,输入,输出<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/Snipaste_2022-10-08_22-12-02.png" srcset="/img/loading.gif" lazyload></p>
-<p>数据通路:<br>    组合逻辑:操作部件<br>    时序逻辑:状态部件,存储部件</p>
-<h2 id="相关寄存器"><a href="#相关寄存器" class="headerlink" title="相关寄存器"></a>相关寄存器</h2><p>数据寄存器(内存缓冲寄存器): Memory Data Register &#x2F; Memory Buffer Register</p>
-<p>随机存储寄存器(RAM):<br>    静态:SRAM,常用作高速缓存(cache)<br>    动态:DRAM,常用作主存(Main Memory)</p>
-<p>只读存储器(ROM):<br>    闪存(Flash ROM),电擦除或者紫外线照射擦除</p>
-<h2 id="cache相关概念"><a href="#cache相关概念" class="headerlink" title="cache相关概念"></a>cache相关概念</h2><p><strong>cache的位数是计算机字长	cache块与主存块大小相同</strong></p>
-<h3 id="cache与主存映射规则"><a href="#cache与主存映射规则" class="headerlink" title="cache与主存映射规则:"></a>cache与主存映射规则:</h3><pre><code class="hljs">1. 直接映射(Direct):将主存映射到cache的固定行,所以不需要淘汰策略
-2. 全相联映射(Full Associate):每个内存块映射到任一行
-3. 组相联映射:每个内存块映射到组内的任一行(N-路组相联则,N为组内可以全相联的个数)
-</code></pre>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/Snipaste_2022-10-08_22-32-24.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="cache淘汰替换算法"><a href="#cache淘汰替换算法" class="headerlink" title="cache淘汰替换算法"></a>cache淘汰替换算法</h3><p><strong>只有一个主存块映射多个cache行时,才需要进行淘汰替换策略 (直接映射不需要替换)</strong></p>
-<p>LRU(最近最少用):每次将最近一段时间最少使用的cache块替换:<br>    是栈算法,命中率随着组的个数增加而增加<br>    实现时,通过对cache行设定一个计数器,没出现就加1,命中就归0(计数值为LRU位)</p>
-<p>FIFO(先进先出):<br>    不是栈算法,命中率不随着组的个数增加而增加</p>
-<h3 id="写cache策略"><a href="#写cache策略" class="headerlink" title="写cache策略"></a>写cache策略</h3><p>写命中(Write Hit):写单元在cache中<br>    1. 直写(Write Through):同时写cache和主存<br>    2. 回写(Write Back):只写cache,不写主存,缺失时一次写回,每行有一个修改位(dirty bit)</p>
-<p>写不命中(Write Miss):<br>    1. 写分配(Write Allocate):主存块装入cache中,更新单元<br>    2. 非写分配(Not Write Allocate):直接写主存单元,不把主存块装入cache</p>
-<p><strong>写回与写分配搭配,只写一次主存(缺失时写),不断更改cache</strong></p>
-<h2 id="虚存相关概念"><a href="#虚存相关概念" class="headerlink" title="虚存相关概念"></a>虚存相关概念</h2><p>主存与辅存之间的存储映射技术</p>
-<p>逻辑上提供比物理存储区更大的虚存空间(虚拟地址&#x2F;逻辑地址)</p>
-<p>方式:分页式, 分段式, 段页式</p>
-<h3 id="分页式"><a href="#分页式" class="headerlink" title="分页式"></a>分页式</h3><p>虚页号对应实页号(将虚页号(高几位)替换为实页号, 逻辑地址转化为物理地址)</p>
-<p>经常使用的页表位于主存中,其它页表存在磁盘;<br>    采用按需调页的方式(Demanding Paging)</p>
-<p>使用快表(TLB):	<br>    高速存储器(可能在cpu中)</p>
-<h2 id="外设相关知识"><a href="#外设相关知识" class="headerlink" title="外设相关知识"></a>外设相关知识</h2><h3 id="外设通用模型"><a href="#外设通用模型" class="headerlink" title="外设通用模型"></a>外设通用模型</h3><p>外设中存在三种信号:控制信号, 状态信号, 数据信号<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/Snipaste_2022-10-08_22-58-51.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h3><p>总线裁决: 共享传输, 决定哪个设备使用总线; 点对点传输无需总线裁决</p>
-<p>总线定时:<br>    同步(Synchronous):时钟信号进行同步<br>    异步(Asynchronous):握手信号,前一个信号结束,后一个信号开始</p>
-<p>并行&#x2F;串行:<br>    并行:一个方向同时传多位数据,位与位需要同步<br>    串行:一个方向只传一位数,无需同步</p>
-<h3 id="I-x2F-O设备相关"><a href="#I-x2F-O设备相关" class="headerlink" title="I&#x2F;O设备相关"></a>I&#x2F;O设备相关</h3><p>I&#x2F;O设备寻址方式:<br>    统一编址方式:内存映射,I&#x2F;O地址占据主存地址空间<br>    独立编址:有自己的命令和存储空间</p>
-<p>I&#x2F;O传输方式:</p>
-<pre><code class="hljs">1. 程序直接控制
-</code></pre>
+                <h1 id="汇编程序"><a href="#汇编程序" class="headerlink" title="汇编程序"></a>汇编程序</h1><h2 id="伪指令"><a href="#伪指令" class="headerlink" title="伪指令"></a>伪指令</h2><p>segment和ends是一对成对的伪指令</p>
+<p>segment说明一个段开始</p>
+<p>ends说明一个段结束</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">name segment<br>name ends<br></code></pre></td></tr></table></figure>
+
+<h3 id="程序结束标记"><a href="#程序结束标记" class="headerlink" title="程序结束标记"></a>程序结束标记</h3><p>end为汇编程序的结束标记</p>
+<p>assume：假设某一段寄存器和程序中的某个段相关联</p>
+<h3 id="程序返回"><a href="#程序返回" class="headerlink" title="程序返回"></a>程序返回</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov ax,4c00H<br>int 21H<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Bx-和LOOP"><a href="#Bx-和LOOP" class="headerlink" title="[Bx]和LOOP"></a>[Bx]和LOOP</h2><h3 id="bx-与内存单元"><a href="#bx-与内存单元" class="headerlink" title="[bx]与内存单元"></a>[bx]与内存单元</h3><p>[bx]也是内存，bx的偏移存放在bx寄存器中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov ax,[bx] ds:bx 1000:20 2字节<br>mov al,[bx] ds:bx 1000:20 1字节<br></code></pre></td></tr></table></figure>
+
+<p>[bx] 中值 &#x3D; [[ds]*16 + bx]</p>
+<h3 id="Loop指令"><a href="#Loop指令" class="headerlink" title="Loop指令"></a>Loop指令</h3><p>loop指令执行，进行两步操作：</p>
+<ol>
+<li>(cx) &#x3D; (cx) - 1</li>
+<li>判断cx中的值，不为零转至标号处；否则向下执行</li>
+</ol>
+<hr>
+<h2 id="寻址方式"><a href="#寻址方式" class="headerlink" title="寻址方式"></a>寻址方式</h2><p><img src="C:\Github_io\source\img\MyblogImg\src\寻址方式.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h2 id="jmp跳转指令"><a href="#jmp跳转指令" class="headerlink" title="jmp跳转指令"></a>jmp跳转指令</h2><p>jmp指令机器码是EB 03；</p>
+<p>读取到jmp指令时；IP &#x3D; IP + 指令长度；</p>
+<p>cpu执行EB 03时，修改IP，（IP）值加3</p>
+<p><strong>机器码中不包含转移的目的地址，包含的是转移的位移（由编译器计算）</strong></p>
+<h3 id="jmp-short-标号"><a href="#jmp-short-标号" class="headerlink" title="jmp short 标号"></a>jmp short 标号</h3><p>8位位移</p>
+<p>段内短转移；对IP的修改范围为-128~127</p>
+<p>编译时算出</p>
+<h3 id="jmp-near-ptr-标号"><a href="#jmp-near-ptr-标号" class="headerlink" title="jmp near ptr 标号"></a>jmp near ptr 标号</h3><p>16位位移</p>
+<p>段内近转移；对IP修改范围-32768~32767</p>
+<p>编译时算出</p>
+<h3 id="jmp-far-ptr-标号"><a href="#jmp-far-ptr-标号" class="headerlink" title="jmp far ptr 标号"></a>jmp far ptr 标号</h3><p>实现的是段间转移，又成为远转移</p>
+<p>(CS) &#x3D; 标号所在段的段地址</p>
+<p>(IP) &#x3D; 标号所在段中的偏移地址</p>
+<p>far ptr使用标号的段地址和偏移地址修改CS和IP</p>
+<h3 id="jmp-16位寄存器"><a href="#jmp-16位寄存器" class="headerlink" title="jmp 16位寄存器"></a>jmp 16位寄存器</h3><p>直接跳转到该地址(CS:IP)</p>
+<h3 id="jmp-word-ptr-内存地址单元（段内转移）"><a href="#jmp-word-ptr-内存地址单元（段内转移）" class="headerlink" title="jmp word ptr 内存地址单元（段内转移）"></a>jmp word ptr 内存地址单元（段内转移）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov ax,0123h<br>mov ds:[0],ax<br>jmp word ptr ds:[0]<br></code></pre></td></tr></table></figure>
+
+<p>执行后，(IP) &#x3D; 0123H</p>
+<hr>
+<h2 id="call-amp-ret"><a href="#call-amp-ret" class="headerlink" title="call &amp; ret"></a>call &amp; ret</h2><h3 id="ret"><a href="#ret" class="headerlink" title="ret"></a>ret</h3><p>ret指令用栈中的数据，修改IP的内容，实现近转移</p>
+<ol>
+<li>(IP) &#x3D; ((ss)*16 + (sp))</li>
+<li>(sp) &#x3D; (sp) + 2</li>
+</ol>
+<h3 id="retf"><a href="#retf" class="headerlink" title="retf"></a>retf</h3><p>ret指令用栈中的数据，修改IP的内容，实现远转移</p>
+<ol>
+<li>(IP) &#x3D; ((ss)*16 + (sp))</li>
+<li>(sp) &#x3D; (sp) + 2</li>
+<li>(CS) &#x3D; ((ss)*16 + (sp))</li>
+<li>(sp) &#x3D; (sp) + 2</li>
+</ol>
+<h3 id="call指令"><a href="#call指令" class="headerlink" title="call指令"></a>call指令</h3><ol>
+<li>将当前的IP或者CS &amp; IP压入栈中</li>
+<li>转移</li>
+</ol>
+<p>call不能实现短转移</p>
+<h4 id="call-标号"><a href="#call-标号" class="headerlink" title="call 标号"></a>call 标号</h4><p>相当于</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">push IP<br>jmp near ptr 标号<br></code></pre></td></tr></table></figure>
+
+<ol>
+<li><p>(sp) &#x3D; (sp) - 2</p>
+<p>((ss)*16 + (sp)) &#x3D; (IP)</p>
+</li>
+<li><p>(IP) &#x3D; (IP) + 16位位移</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov ax,0	;ax = 0, ip point to 1000:3<br>call s		;ax = 0, ip point to 1000:6<br>			;push ip, ip point to 1000:7<br>int ax<br>s:pop ax	;ax = 6<br></code></pre></td></tr></table></figure>
+
+<h3 id="call-far-ptr-标号"><a href="#call-far-ptr-标号" class="headerlink" title="call far ptr 标号"></a>call far ptr 标号</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">push CS<br>push IP<br>jmp far ptr 标号<br></code></pre></td></tr></table></figure>
+
+<h3 id="call-word-ptr-内存单元地址"><a href="#call-word-ptr-内存单元地址" class="headerlink" title="call word ptr 内存单元地址"></a>call word ptr 内存单元地址</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">push IP<br>jmp word ptr 标号<br></code></pre></td></tr></table></figure>
+
+<p>入栈 (sp) &#x3D; (sp) - 2</p>
+<h3 id="call-dword-ptr-内存单元地址"><a href="#call-dword-ptr-内存单元地址" class="headerlink" title="call dword ptr 内存单元地址"></a>call dword ptr 内存单元地址</h3><p>传递双字</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">push CS<br>push IP<br>jmp dword ptr 标号<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="子程序和标志寄存器"><a href="#子程序和标志寄存器" class="headerlink" title="子程序和标志寄存器"></a>子程序和标志寄存器</h2><p>寄存器冲突可能造成程序错误</p>
+<p>SF、OF、CF、SF</p>
+<p>PF：奇偶标志位，bit位中1的个数是否为偶数</p>
+<h3 id="cmp指令"><a href="#cmp指令" class="headerlink" title="cmp指令"></a>cmp指令</h3><p>只比较，相当于进行sub指令，但是不保存结果，只改变结果寄存器</p>
+<p>cmp a,b</p>
 
                 
               </div>
@@ -343,7 +394,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" class="category-chain-item">汇编语言</a>
   
   
 
@@ -358,9 +409,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>
+        <a href="/tags/%E6%B1%87%E7%BC%96/">#汇编</a>
       
-        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">#计算机组成原理</a>
+        <a href="/tags/C-C/">#C&C++</a>
       
     </div>
   
@@ -372,8 +423,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>计算机组成原理相关知识</div>
-      <div>http://tom-jerr.github.io/2022/12/09/计算机操作系统00_计组相关知识/</div>
+      <div>汇编程序</div>
+      <div>http://tom-jerr.github.io/2022/12/10/第四章_汇编程序/</div>
     </div>
     <div class="license-meta">
       
@@ -385,7 +436,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年12月9日</div>
+          <div>2022年12月10日</div>
         </div>
       
       
@@ -417,7 +468,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/12/10/%E7%AC%AC%E4%BA%8C%E7%AB%A0_%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8/" title="微处理器">
+                      <a href="/2022/12/10/%E7%AC%AC%E4%B8%80%E7%AB%A0_%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E6%A6%82%E8%AE%BA/" title="微处理器">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">微处理器</span>
                         <span class="visible-mobile">上一篇</span>
@@ -427,8 +478,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/12/09/Faster-RCNN/" title="Faster-RCNN">
-                        <span class="hidden-mobile">Faster-RCNN</span>
+                      <a href="/2022/12/10/%E7%AC%AC%E4%B8%89%E7%AB%A0_%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/" title="指令系统">
+                        <span class="hidden-mobile">指令系统</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

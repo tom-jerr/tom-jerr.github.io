@@ -4,6 +4,141 @@
   
   
   <entry>
+    <title>常用汇编</title>
+    <link href="/2022/12/10/%E6%B1%87%E7%BC%96%E5%B8%B8%E7%94%A8/"/>
+    <url>/2022/12/10/%E6%B1%87%E7%BC%96%E5%B8%B8%E7%94%A8/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="常用汇编"><a href="#常用汇编" class="headerlink" title="常用汇编"></a>常用汇编</h1><h2 id="指令指向"><a href="#指令指向" class="headerlink" title="指令指向"></a>指令指向</h2><p>8086CPU开机后，CPU从内存<code>FFFF0H</code>单元中读取指令（第一条指令）执行；由CS:IP指向当前要读取指令的地址；</p><p>CS：代码段寄存器</p><p>IP：指令指针寄存器</p><h3 id="改变CS、IP的值"><a href="#改变CS、IP的值" class="headerlink" title="改变CS、IP的值"></a>改变CS、IP的值</h3><p>通过jmp段地址:偏移地址进行修改</p><p>jmp 2AE3:32AE3H * 16 + 3 &#x3D; 2AE33H（跳转到的位置）</p><h3 id="仅改变IP"><a href="#仅改变IP" class="headerlink" title="仅改变IP"></a>仅改变IP</h3><p>jmp某一个合法寄存器</p><p>jmp ax（类似于mov IP, ax）</p><hr><h2 id="栈的指向"><a href="#栈的指向" class="headerlink" title="栈的指向"></a>栈的指向</h2><p>任意时刻，SS:SP指向栈顶元素</p><p>SS：段寄存器</p><p>SP：寄存器，存放栈顶的偏移地址</p><p>push ax</p><p>SP &#x3D; SP - 2</p><p>栈为空时，栈中无元素指向栈最底部下面的单元；该单元偏移地址为栈最底部字单元的偏移地址 + 2</p><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%A0%88.png" srcset="/img/loading.gif" lazyload></p><hr><h2 id="Debug使用"><a href="#Debug使用" class="headerlink" title="Debug使用"></a>Debug使用</h2><p>Windows64位系统需要使用DOSBox进行debug实验</p><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/debug.png" srcset="/img/loading.gif" lazyload></p><p>段地址赋值必须先赋值给寄存器，之后在赋值给段地址</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>汇编语言</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>汇编</tag>
+      
+      <tag>C&amp;C++</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>微处理器</title>
+    <link href="/2022/12/10/%E7%AC%AC%E4%B8%80%E7%AB%A0_%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E6%A6%82%E8%AE%BA/"/>
+    <url>/2022/12/10/%E7%AC%AC%E4%B8%80%E7%AB%A0_%E5%BE%AE%E5%9E%8B%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80%E6%A6%82%E8%AE%BA/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="微型计算机基础概论"><a href="#微型计算机基础概论" class="headerlink" title="微型计算机基础概论"></a>微型计算机基础概论</h1><h2 id="计算机工作原理"><a href="#计算机工作原理" class="headerlink" title="计算机工作原理"></a>计算机工作原理</h2><h3 id="1-指令执行过程"><a href="#1-指令执行过程" class="headerlink" title="1. 指令执行过程"></a>1. 指令执行过程</h3><p>取指令 –&gt; 指令译码 –&gt; 读操作数 –&gt; 执行指令 –&gt; 存放结果 –&gt; 取下一条指令地址<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E6%9C%AC%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload></p><ul><li>指令的顺序工作方式<br>&gt; 各个功能部件交替工作，按顺序完成指令的执行过程<br>&gt; CPU一直忙碌，但BUS总线经常空闲<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/CPU%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C.png" srcset="/img/loading.gif" lazyload></li><li>并行流水线工作方式<br>&gt; 将CPU划分为访问存储器、分析指令和执行指令等多个功能部件，各个功能部件并行工作<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/CPU%E5%B9%B6%E8%A1%8C%E6%B5%81%E6%B0%B4%E7%BA%BF%E5%B7%A5%E4%BD%9C.png" srcset="/img/loading.gif" lazyload></li></ul><hr><h3 id="2-冯-•-诺依曼计算机"><a href="#2-冯-•-诺依曼计算机" class="headerlink" title="2. 冯 • 诺依曼计算机"></a>2. 冯 • 诺依曼计算机</h3><ol><li>存储程序工作方式</li><li>运算器为核心的结构特点</li></ol><h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><p>存储程序、共享数据、顺序执行；<br>适用确定的算法和数值处理</p><h4 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h4><p>与<strong>存储器有大量数据交互</strong>，对总线要求高；<br>执行顺序由程序决定，对大型复杂任务较难处理；<br>以运算器为核心，处理效率较低；<br>由PC控制执行顺序，难以进行真正的并行处理</p><hr><h3 id="3-非冯-•-诺依曼计算机"><a href="#3-非冯-•-诺依曼计算机" class="headerlink" title="3. 非冯 • 诺依曼计算机"></a>3. 非冯 • 诺依曼计算机</h3><p><strong>特点：并行性</strong></p><p><strong>典型类型</strong>：</p><ol><li>数据流计算机结构（Dataflow Image Processing System）<br> <strong>采用数据驱动，是一种并行处理技术<br> 程序的执行顺序不由PC控制，而由指令间的数据流控制</strong><br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%95%B0%E6%8D%AE%E6%B5%81%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload></li><li>哈佛结构（Harvard Architecture）<br> <strong>指令和数据分别存在两个独立的存储器模块中<br> CPU与存储器的指令和数据的传送分别采用两组独立的总线<br> 可以在一个机器周期内同时获得指令操作码和操作数</strong><br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%93%88%E4%BD%9B%E7%BB%93%E6%9E%84.png" srcset="/img/loading.gif" lazyload></li></ol><hr><h3 id="4-微机系统"><a href="#4-微机系统" class="headerlink" title="4. 微机系统"></a>4. 微机系统</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%BE%AE%E6%9C%BA%E7%B3%BB%E7%BB%9F.png" srcset="/img/loading.gif" lazyload></p><h4 id="单片机"><a href="#单片机" class="headerlink" title="单片机"></a>单片机</h4><p>集成了CPU、部分内存、部分I&#x2F;O接口以及总线等单元，具有微机基本功能的超大规模集成电路芯片</p><ul><li>特点<br>&gt; 体积小<br>&gt; 可靠性高<br>&gt; 成本低</li></ul><h4 id="台式微机（PC微机）"><a href="#台式微机（PC微机）" class="headerlink" title="台式微机（PC微机）"></a>台式微机（PC微机）</h4><p>由系统主板、I&#x2F;O接口卡、磁盘、光驱、电源等组装在主机箱内<br>外接键盘、显示器、鼠标等</p><ul><li>特点<br>&gt; 功能强<br>&gt; 配置灵活<br>&gt; 软件丰富<br>&gt; 操作方便</li></ul><h3 id="5-基本逻辑门及译码器"><a href="#5-基本逻辑门及译码器" class="headerlink" title="5. 基本逻辑门及译码器"></a>5. 基本逻辑门及译码器</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%9F%BA%E6%9C%AC%E9%80%BB%E8%BE%91%E9%97%A8.png" srcset="/img/loading.gif" lazyload></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>汇编语言</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>汇编</tag>
+      
+      <tag>C&amp;C++</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>汇编程序</title>
+    <link href="/2022/12/10/%E7%AC%AC%E5%9B%9B%E7%AB%A0_%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/"/>
+    <url>/2022/12/10/%E7%AC%AC%E5%9B%9B%E7%AB%A0_%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="汇编程序"><a href="#汇编程序" class="headerlink" title="汇编程序"></a>汇编程序</h1><h2 id="伪指令"><a href="#伪指令" class="headerlink" title="伪指令"></a>伪指令</h2><p>segment和ends是一对成对的伪指令</p><p>segment说明一个段开始</p><p>ends说明一个段结束</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs asm">name segment<br>name ends<br></code></pre></td></tr></table></figure><h3 id="程序结束标记"><a href="#程序结束标记" class="headerlink" title="程序结束标记"></a>程序结束标记</h3><p>end为汇编程序的结束标记</p><p>assume：假设某一段寄存器和程序中的某个段相关联</p><h3 id="程序返回"><a href="#程序返回" class="headerlink" title="程序返回"></a>程序返回</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov ax,4c00H<br>int 21H<br></code></pre></td></tr></table></figure><hr><h2 id="Bx-和LOOP"><a href="#Bx-和LOOP" class="headerlink" title="[Bx]和LOOP"></a>[Bx]和LOOP</h2><h3 id="bx-与内存单元"><a href="#bx-与内存单元" class="headerlink" title="[bx]与内存单元"></a>[bx]与内存单元</h3><p>[bx]也是内存，bx的偏移存放在bx寄存器中</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov ax,[bx] ds:bx 1000:20 2字节<br>mov al,[bx] ds:bx 1000:20 1字节<br></code></pre></td></tr></table></figure><p>[bx] 中值 &#x3D; [[ds]*16 + bx]</p><h3 id="Loop指令"><a href="#Loop指令" class="headerlink" title="Loop指令"></a>Loop指令</h3><p>loop指令执行，进行两步操作：</p><ol><li>(cx) &#x3D; (cx) - 1</li><li>判断cx中的值，不为零转至标号处；否则向下执行</li></ol><hr><h2 id="寻址方式"><a href="#寻址方式" class="headerlink" title="寻址方式"></a>寻址方式</h2><p><img src="C:\Github_io\source\img\MyblogImg\src\寻址方式.png" srcset="/img/loading.gif" lazyload></p><hr><h2 id="jmp跳转指令"><a href="#jmp跳转指令" class="headerlink" title="jmp跳转指令"></a>jmp跳转指令</h2><p>jmp指令机器码是EB 03；</p><p>读取到jmp指令时；IP &#x3D; IP + 指令长度；</p><p>cpu执行EB 03时，修改IP，（IP）值加3</p><p><strong>机器码中不包含转移的目的地址，包含的是转移的位移（由编译器计算）</strong></p><h3 id="jmp-short-标号"><a href="#jmp-short-标号" class="headerlink" title="jmp short 标号"></a>jmp short 标号</h3><p>8位位移</p><p>段内短转移；对IP的修改范围为-128~127</p><p>编译时算出</p><h3 id="jmp-near-ptr-标号"><a href="#jmp-near-ptr-标号" class="headerlink" title="jmp near ptr 标号"></a>jmp near ptr 标号</h3><p>16位位移</p><p>段内近转移；对IP修改范围-32768~32767</p><p>编译时算出</p><h3 id="jmp-far-ptr-标号"><a href="#jmp-far-ptr-标号" class="headerlink" title="jmp far ptr 标号"></a>jmp far ptr 标号</h3><p>实现的是段间转移，又成为远转移</p><p>(CS) &#x3D; 标号所在段的段地址</p><p>(IP) &#x3D; 标号所在段中的偏移地址</p><p>far ptr使用标号的段地址和偏移地址修改CS和IP</p><h3 id="jmp-16位寄存器"><a href="#jmp-16位寄存器" class="headerlink" title="jmp 16位寄存器"></a>jmp 16位寄存器</h3><p>直接跳转到该地址(CS:IP)</p><h3 id="jmp-word-ptr-内存地址单元（段内转移）"><a href="#jmp-word-ptr-内存地址单元（段内转移）" class="headerlink" title="jmp word ptr 内存地址单元（段内转移）"></a>jmp word ptr 内存地址单元（段内转移）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov ax,0123h<br>mov ds:[0],ax<br>jmp word ptr ds:[0]<br></code></pre></td></tr></table></figure><p>执行后，(IP) &#x3D; 0123H</p><hr><h2 id="call-amp-ret"><a href="#call-amp-ret" class="headerlink" title="call &amp; ret"></a>call &amp; ret</h2><h3 id="ret"><a href="#ret" class="headerlink" title="ret"></a>ret</h3><p>ret指令用栈中的数据，修改IP的内容，实现近转移</p><ol><li>(IP) &#x3D; ((ss)*16 + (sp))</li><li>(sp) &#x3D; (sp) + 2</li></ol><h3 id="retf"><a href="#retf" class="headerlink" title="retf"></a>retf</h3><p>ret指令用栈中的数据，修改IP的内容，实现远转移</p><ol><li>(IP) &#x3D; ((ss)*16 + (sp))</li><li>(sp) &#x3D; (sp) + 2</li><li>(CS) &#x3D; ((ss)*16 + (sp))</li><li>(sp) &#x3D; (sp) + 2</li></ol><h3 id="call指令"><a href="#call指令" class="headerlink" title="call指令"></a>call指令</h3><ol><li>将当前的IP或者CS &amp; IP压入栈中</li><li>转移</li></ol><p>call不能实现短转移</p><h4 id="call-标号"><a href="#call-标号" class="headerlink" title="call 标号"></a>call 标号</h4><p>相当于</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">push IP<br>jmp near ptr 标号<br></code></pre></td></tr></table></figure><ol><li><p>(sp) &#x3D; (sp) - 2</p><p>((ss)*16 + (sp)) &#x3D; (IP)</p></li><li><p>(IP) &#x3D; (IP) + 16位位移</p></li></ol><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs assembly">mov ax,0;ax = 0, ip point to 1000:3<br>call s;ax = 0, ip point to 1000:6<br>;push ip, ip point to 1000:7<br>int ax<br>s:pop ax;ax = 6<br></code></pre></td></tr></table></figure><h3 id="call-far-ptr-标号"><a href="#call-far-ptr-标号" class="headerlink" title="call far ptr 标号"></a>call far ptr 标号</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">push CS<br>push IP<br>jmp far ptr 标号<br></code></pre></td></tr></table></figure><h3 id="call-word-ptr-内存单元地址"><a href="#call-word-ptr-内存单元地址" class="headerlink" title="call word ptr 内存单元地址"></a>call word ptr 内存单元地址</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs assembly">push IP<br>jmp word ptr 标号<br></code></pre></td></tr></table></figure><p>入栈 (sp) &#x3D; (sp) - 2</p><h3 id="call-dword-ptr-内存单元地址"><a href="#call-dword-ptr-内存单元地址" class="headerlink" title="call dword ptr 内存单元地址"></a>call dword ptr 内存单元地址</h3><p>传递双字</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs assembly">push CS<br>push IP<br>jmp dword ptr 标号<br></code></pre></td></tr></table></figure><hr><h2 id="子程序和标志寄存器"><a href="#子程序和标志寄存器" class="headerlink" title="子程序和标志寄存器"></a>子程序和标志寄存器</h2><p>寄存器冲突可能造成程序错误</p><p>SF、OF、CF、SF</p><p>PF：奇偶标志位，bit位中1的个数是否为偶数</p><h3 id="cmp指令"><a href="#cmp指令" class="headerlink" title="cmp指令"></a>cmp指令</h3><p>只比较，相当于进行sub指令，但是不保存结果，只改变结果寄存器</p><p>cmp a,b</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>汇编语言</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>汇编</tag>
+      
+      <tag>C&amp;C++</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>指令系统</title>
+    <link href="/2022/12/10/%E7%AC%AC%E4%B8%89%E7%AB%A0_%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/"/>
+    <url>/2022/12/10/%E7%AC%AC%E4%B8%89%E7%AB%A0_%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="指令系统"><a href="#指令系统" class="headerlink" title="指令系统"></a>指令系统</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>指令：控制计算机完成某种操作的命令<br>指令系统：处理器所能识别的所有指令的集合<br>指令的兼容性：同一系列机的指令都是兼容的</p><h2 id="指令"><a href="#指令" class="headerlink" title="指令"></a>指令</h2><h3 id="指令格式"><a href="#指令格式" class="headerlink" title="指令格式"></a>指令格式</h3><ol><li>操作码——指令执行的功能</li><li>操作数——指令执行的对象<br>包括三个内容：<ol><li>执行的操作</li><li>运算数据的来源</li><li>运算数据的去向</li></ol></li></ol><h3 id="指令的执行速度"><a href="#指令的执行速度" class="headerlink" title="指令的执行速度"></a>指令的执行速度</h3><ol><li>指令的字长影响指令的执行速度</li><li>对不同的操作数，指令执行的时间不同<br> 快——&gt;慢：寄存器、立即数、存储器</li></ol><hr><h2 id="寻址方式（32位模式）"><a href="#寻址方式（32位模式）" class="headerlink" title="寻址方式（32位模式）"></a>寻址方式（32位模式）</h2><h3 id="立即寻址"><a href="#立即寻址" class="headerlink" title="立即寻址"></a>立即寻址</h3><p>指令中的源操作数是立即数（立即数不能超过目的操作数表示范围）</p><h3 id="寄存器寻址"><a href="#寄存器寻址" class="headerlink" title="寄存器寻址"></a>寄存器寻址</h3><p>操作数在CPU的通用寄存器或者段寄存器中</p><h3 id="直接寻址"><a href="#直接寻址" class="headerlink" title="直接寻址"></a>直接寻址</h3><p>指令中给出操作数的偏移地址<br>注意：保护模式下，用户不能自己指定一个常数作为存储单元地址；若使用常数，被当作立即数寻址</p><h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>存储器操作数的长度与指令中另一个操作数的长度要一致</p><h3 id="寄存器间接寻址"><a href="#寄存器间接寻址" class="headerlink" title="寄存器间接寻址"></a>寄存器间接寻址</h3><p>参与操作的数据在内存中，偏移地址为一个32位寄存器的内容<br>存放偏移地址的寄存器叫做间址寄存器<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%AF%84%E5%AD%98%E5%99%A8%E9%97%B4%E6%8E%A5%E5%AF%BB%E5%9D%80.png" srcset="/img/loading.gif" lazyload></p><h3 id="寄存器相对寻址"><a href="#寄存器相对寻址" class="headerlink" title="寄存器相对寻址"></a>寄存器相对寻址</h3><p>操作数的偏移地址为间址寄存器的内容加上一个位移量，位移量可以是一个常数，也可以是符号</p><h3 id="基址-变址寻址"><a href="#基址-变址寻址" class="headerlink" title="基址-变址寻址"></a>基址-变址寻址</h3><ol><li>16位模式<br> 偏移地址为基址寄存器（BX、BP）内容+变址寄存器（SI、DI）内容（+位移量）</li><li>32位模式<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/32%E4%BD%8D%E5%9F%BA%E5%9D%80-%E5%8F%98%E5%9D%80.png" srcset="/img/loading.gif" lazyload></li></ol><h3 id="隐含寻址"><a href="#隐含寻址" class="headerlink" title="隐含寻址"></a>隐含寻址</h3><p>指令中隐含了一个或两个操作数的地址，即操作数在默认的地址中</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>汇编语言</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>汇编</tag>
+      
+      <tag>C&amp;C++</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>微处理器</title>
+    <link href="/2022/12/10/%E7%AC%AC%E4%BA%8C%E7%AB%A0_%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8/"/>
+    <url>/2022/12/10/%E7%AC%AC%E4%BA%8C%E7%AB%A0_%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8/</url>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="微处理器"><a href="#微处理器" class="headerlink" title="微处理器"></a>微处理器</h1><h2 id="8086-x2F-8088微处理器"><a href="#8086-x2F-8088微处理器" class="headerlink" title="8086&#x2F;8088微处理器"></a>8086&#x2F;8088微处理器</h2><ul><li>特点<br>&gt; （CPU内部结构）采用并行流水线工作方式：将CPU分为两个功能部分并设置指令预取队列<br>&gt; （存储器寻址部分）对内存空间实行分段管理：将内存分为多个段并设置4个段地址寄存器<br>&gt; （工作模式）支持多处理器系统</li></ul><h3 id="8088CPU工作模式"><a href="#8088CPU工作模式" class="headerlink" title="8088CPU工作模式"></a>8088CPU工作模式</h3><ol><li>最小模式<br> 单处理器模式，一般CPU直接输出控制信号到总线<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%9C%80%E5%B0%8F%E6%A8%A1%E5%BC%8F.png" srcset="/img/loading.gif" lazyload></li><li>最大模式<br> 多处理器模式，CPU+协处理器，控制信号多，需要通过总线控制器与总线相连接<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%9C%80%E5%A4%A7%E6%A8%A1%E5%BC%8F.png" srcset="/img/loading.gif" lazyload><br>工作模式的选择<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F%E9%80%89%E6%8B%A9.png" srcset="/img/loading.gif" lazyload></li></ol><hr><h3 id="主要引线（8088最小模式）"><a href="#主要引线（8088最小模式）" class="headerlink" title="主要引线（8088最小模式）"></a>主要引线（8088最小模式）</h3><ol><li>地址线和数据线<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/marmdr.png" srcset="/img/loading.gif" lazyload></li><li>主要的控制和状态信号线<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/controlsignal.png" srcset="/img/loading.gif" lazyload><br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/controlsignal2.png" srcset="/img/loading.gif" lazyload></li><li>中断请求和响应信号<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E4%B8%AD%E6%96%AD%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94.png" srcset="/img/loading.gif" lazyload></li></ol><hr><h3 id="8086和8088引线的差异"><a href="#8086和8088引线的差异" class="headerlink" title="8086和8088引线的差异"></a>8086和8088引线的差异</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%BC%95%E7%BA%BF%E5%B7%AE%E5%BC%82.png" srcset="/img/loading.gif" lazyload></p><hr><h2 id="8086CPU内部结构"><a href="#8086CPU内部结构" class="headerlink" title="8086CPU内部结构"></a>8086CPU内部结构</h2><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/8086CPU.png" srcset="/img/loading.gif" lazyload></p><h3 id="执行单元（EU）"><a href="#执行单元（EU）" class="headerlink" title="执行单元（EU）"></a>执行单元（EU）</h3><p>运算器（ALU）<br>8个通用寄存器<br>1个标志寄存器<br>EU部分的控制电路</p><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/EU%E5%8A%9F%E8%83%BD.png" srcset="/img/loading.gif" lazyload></p><hr><h3 id="总线接口单元（BIU）"><a href="#总线接口单元（BIU）" class="headerlink" title="总线接口单元（BIU）"></a>总线接口单元（BIU）</h3><p>地址加法器<br>4个段寄存器<br>指令指针IP<br>总线控制逻辑</p><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/BIU%E5%8A%9F%E8%83%BD.png" srcset="/img/loading.gif" lazyload></p><hr><h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p><strong>指令队列的存在使得RU和BIU两个部分可以并行工作</strong><br>提高了CPU的效率<br>降低了对存储器存取速度的要求</p><hr><h2 id="内部寄存器"><a href="#内部寄存器" class="headerlink" title="内部寄存器"></a>内部寄存器</h2><p>有14个16位寄存器<br>    8个通用寄存器<br>    4个段寄存器<br>    2个控制寄存器</p><h3 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h3><ol><li>数据寄存器（AX、BX、CX、DX）：可以拆分为2个8位寄存器（AH、AL）</li><li>地址指针寄存器（SP、BP）</li><li>变址寄存器（SI、DI）</li></ol><h3 id="数据寄存器特有的固有用法"><a href="#数据寄存器特有的固有用法" class="headerlink" title="数据寄存器特有的固有用法"></a>数据寄存器特有的固有用法</h3><p>数据寄存器：<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%95%B0%E6%8D%AE%E5%AF%84%E5%AD%98%E5%99%A8%E7%94%A8%E6%B3%95.png" srcset="/img/loading.gif" lazyload><br>地址指针寄存器：<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%9C%B0%E5%9D%80%E6%8C%87%E9%92%88%E5%AF%84%E5%AD%98%E5%99%A8%E7%94%A8%E6%B3%95.png" srcset="/img/loading.gif" lazyload><br>作为基址寄存器，BX表示所找的数据在数据段；BP则表示数据在堆栈段<br>变址寄存器：<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%8F%98%E5%9D%80%E5%AF%84%E5%AD%98%E5%99%A8%E7%94%A8%E6%B3%95.png" srcset="/img/loading.gif" lazyload></p><h3 id="控制寄存器——IP与FLAGS"><a href="#控制寄存器——IP与FLAGS" class="headerlink" title="控制寄存器——IP与FLAGS"></a>控制寄存器——IP与FLAGS</h3><p>IP：内容为下一条要执行的指令的偏移地址<br>FLAGS：存放运算结果的状态特征和控制CPU运行<br>6个状态标志位<br>    CF：进位标志位（最高位）<br>    PF（Parity Flag）：奇偶标志位（根据1的个数判断）<br>    AF（Auxiliary Carry Flag）：辅助进位标志位（最后4位有进位，AF&#x3D;1）<br>    ZF：零标志位<br>    SF：运算结果最高位为1，SF&#x3D;1<br>    OF：溢出标志位<br>3个控制标志位<br>    TF（Trap Flag）：陷阱标志位，也叫跟踪标志位。TF&#x3D;1时，CPU处于单步执行指令的工作方式<br>    IF（Interrupt Enable Flag）：中断允许标志位。IF&#x3D;1使CPU可以响应可屏蔽中断请求<br>    DF（Direction Flag）：方向标志位。在数据串操作时确定操作的方向。</p><h3 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h3><p>用于存放相应逻辑段的段基地址<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8.png" srcset="/img/loading.gif" lazyload></p><hr><h2 id="存储器组织"><a href="#存储器组织" class="headerlink" title="存储器组织"></a>存储器组织</h2><p>物理地址：有20根地址线<br>    任何相邻字节单元构成一个字单元<br>    字单元地址为两个字节单元中较小地址字节单元的地址<br>    字数据存放规则是低8位放在较低地址字节单元，高8位放在较高地址字节单元。（<strong>小端方式</strong>）<br>逻辑地址：16位段基地址+16位段内地址（偏移地址）<br>    逻辑段的起始单元称为段首，段首的偏移地址&#x3D;0<br>物理地址&#x3D;段基地址×16+偏移地址</p><h3 id="堆栈段"><a href="#堆栈段" class="headerlink" title="堆栈段"></a>堆栈段</h3><p>栈底是第一个存入数据的地址；<br>SP（栈顶指针）始终表示堆栈段首与栈顶之间的距离（字节数）<br>SP最大时，堆栈为空<br>SP&#x3D;0时，堆栈全满</p><hr><h2 id="8088系统总线"><a href="#8088系统总线" class="headerlink" title="8088系统总线"></a>8088系统总线</h2><p>总线：是一组导线和相关控制、驱动电路的集合，它是计算机系统各部件之间传输地址、数据和控制信息的通道<br>总线包括：<br>    1. 地址总线（AB）<br>    2. 数据总线（DB）<br>    3. 控制总线（CB）</p><h3 id="总线时序"><a href="#总线时序" class="headerlink" title="总线时序"></a>总线时序</h3><p>时序：CPU各个引脚信号在时间上的关系<br>总线周期：CPU完成一次访问内存（或I&#x2F;O接口）操作所需要的时间；1个总线周期至少包括4个时钟周期</p><h3 id="IA-32微处理器的主要寄存器"><a href="#IA-32微处理器的主要寄存器" class="headerlink" title="IA-32微处理器的主要寄存器"></a>IA-32微处理器的主要寄存器</h3><p>通用寄存器<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/IA-32%E5%AF%84%E5%AD%98%E5%99%A8.png" srcset="/img/loading.gif" lazyload></p><p>指令指针和标志寄存器<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/IA-32IP.png" srcset="/img/loading.gif" lazyload></p><p>段寄存器和系统地址寄存器<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/IA-32%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8.png" srcset="/img/loading.gif" lazyload></p><p>IA-32内部有4个32位控制寄存器：CR0、CR1、CR2、CR3</p><h3 id="IA-32工作模式"><a href="#IA-32工作模式" class="headerlink" title="IA-32工作模式"></a>IA-32工作模式</h3><p>实地址方式：实模式（简称位16位模式）<br>保护虚地址工作模式：保护模式（又增加了虚拟8086方式）（简称为32位模式）</p><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E7%BA%BF%E6%80%A7%E5%9C%B0%E5%9D%80-%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80.png" srcset="/img/loading.gif" lazyload></p><p><strong>平坦存储模式</strong><br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/flat%E5%AD%98%E5%82%A8.png" srcset="/img/loading.gif" lazyload></p><hr><h3 id="IA-32e（AMD-64）"><a href="#IA-32e（AMD-64）" class="headerlink" title="IA-32e（AMD-64）"></a>IA-32e（AMD-64）</h3><p>寄存器结构<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/amd64-registers.png" srcset="/img/loading.gif" lazyload></p><p>工作模式<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/amd64-work.png" srcset="/img/loading.gif" lazyload></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>汇编语言</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>汇编</tag>
+      
+      <tag>C&amp;C++</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>计算机组成原理相关知识</title>
     <link href="/2022/12/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F00_%E8%AE%A1%E7%BB%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/"/>
     <url>/2022/12/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F00_%E8%AE%A1%E7%BB%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/</url>

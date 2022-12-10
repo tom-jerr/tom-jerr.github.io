@@ -16,25 +16,25 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="计算机组成原理相关知识RTL语言寄存器传送语言    一条指令可能对应多条RTL语句 CPU相关元器件CPU组成部分(重要)    数据通路(Datapath):指令执行过程中,数据经过的路径,包括经过的部件;是指令的执行部件    控制器(Control):指令译码,生成对应的控制信号,控制数据通路的动作;是指令的控制部件 电脑的五部分:    CPU(控制器和数据通路),内存,输入,输出">
+    <meta name="description" content="微处理器8086&#x2F;8088微处理器 特点&gt; （CPU内部结构）采用并行流水线工作方式：将CPU分为两个功能部分并设置指令预取队列&gt; （存储器寻址部分）对内存空间实行分段管理：将内存分为多个段并设置4个段地址寄存器&gt; （工作模式）支持多处理器系统  8088CPU工作模式 最小模式 单处理器模式，一般CPU直接输出控制信号到总线  最大模式 多处理器模式，CPU+协处理器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="计算机组成原理相关知识">
-<meta property="og:url" content="http://tom-jerr.github.io/2022/12/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F00_%E8%AE%A1%E7%BB%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/index.html">
+<meta property="og:title" content="微处理器">
+<meta property="og:url" content="http://tom-jerr.github.io/2022/12/10/%E7%AC%AC%E4%BA%8C%E7%AB%A0_%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="计算机组成原理相关知识RTL语言寄存器传送语言    一条指令可能对应多条RTL语句 CPU相关元器件CPU组成部分(重要)    数据通路(Datapath):指令执行过程中,数据经过的路径,包括经过的部件;是指令的执行部件    控制器(Control):指令译码,生成对应的控制信号,控制数据通路的动作;是指令的控制部件 电脑的五部分:    CPU(控制器和数据通路),内存,输入,输出">
+<meta property="og:description" content="微处理器8086&#x2F;8088微处理器 特点&gt; （CPU内部结构）采用并行流水线工作方式：将CPU分为两个功能部分并设置指令预取队列&gt; （存储器寻址部分）对内存空间实行分段管理：将内存分为多个段并设置4个段地址寄存器&gt; （工作模式）支持多处理器系统  8088CPU工作模式 最小模式 单处理器模式，一般CPU直接输出控制信号到总线  最大模式 多处理器模式，CPU+协处理器">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://tom-jerr.github.io/img/fluid1.png">
-<meta property="article:published_time" content="2022-12-09T15:15:34.398Z">
-<meta property="article:modified_time" content="2022-12-09T16:20:17.920Z">
+<meta property="article:published_time" content="2022-12-10T14:23:03.022Z">
+<meta property="article:modified_time" content="2022-12-10T14:29:28.333Z">
 <meta property="article:author" content="LZY">
-<meta property="article:tag" content="操作系统">
-<meta property="article:tag" content="计算机组成原理">
+<meta property="article:tag" content="汇编">
+<meta property="article:tag" content="C&amp;C++">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://tom-jerr.github.io/img/fluid1.png">
   
   
   
-  <title>计算机组成原理相关知识 - tom-jerr的个人博客</title>
+  <title>微处理器 - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -207,7 +207,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="计算机组成原理相关知识"></span>
+            <span id="subtitle" data-typed-text="微处理器"></span>
           
         </div>
 
@@ -218,8 +218,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-12-09 23:15" pubdate>
-          2022年12月9日 晚上
+        <time datetime="2022-12-10 22:23" pubdate>
+          2022年12月10日 晚上
         </time>
       </span>
     
@@ -230,7 +230,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          1.5k 字
         
       </span>
     
@@ -241,7 +241,7 @@
         
         
         
-          12 分钟
+          13 分钟
         
       </span>
     
@@ -279,12 +279,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">计算机组成原理相关知识</h1>
+            <h1 style="display: none">微处理器</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2022年12月10日 凌晨
+                    本文最后更新于：2022年12月10日 晚上
                   
                 
               </p>
@@ -292,39 +292,56 @@
             
               <div class="markdown-body">
                 
-                <h1 id="计算机组成原理相关知识"><a href="#计算机组成原理相关知识" class="headerlink" title="计算机组成原理相关知识"></a>计算机组成原理相关知识</h1><h2 id="RTL语言"><a href="#RTL语言" class="headerlink" title="RTL语言"></a>RTL语言</h2><p>寄存器传送语言<br>    一条指令可能对应多条RTL语句</p>
-<h2 id="CPU相关元器件"><a href="#CPU相关元器件" class="headerlink" title="CPU相关元器件"></a>CPU相关元器件</h2><p>CPU组成部分(重要)<br>    数据通路(Datapath):指令执行过程中,数据经过的路径,包括经过的部件;是指令的执行部件<br>    控制器(Control):指令译码,生成对应的控制信号,控制数据通路的动作;是指令的控制部件</p>
-<p>电脑的五部分:<br>    CPU(控制器和数据通路),内存,输入,输出<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/Snipaste_2022-10-08_22-12-02.png" srcset="/img/loading.gif" lazyload></p>
-<p>数据通路:<br>    组合逻辑:操作部件<br>    时序逻辑:状态部件,存储部件</p>
-<h2 id="相关寄存器"><a href="#相关寄存器" class="headerlink" title="相关寄存器"></a>相关寄存器</h2><p>数据寄存器(内存缓冲寄存器): Memory Data Register &#x2F; Memory Buffer Register</p>
-<p>随机存储寄存器(RAM):<br>    静态:SRAM,常用作高速缓存(cache)<br>    动态:DRAM,常用作主存(Main Memory)</p>
-<p>只读存储器(ROM):<br>    闪存(Flash ROM),电擦除或者紫外线照射擦除</p>
-<h2 id="cache相关概念"><a href="#cache相关概念" class="headerlink" title="cache相关概念"></a>cache相关概念</h2><p><strong>cache的位数是计算机字长	cache块与主存块大小相同</strong></p>
-<h3 id="cache与主存映射规则"><a href="#cache与主存映射规则" class="headerlink" title="cache与主存映射规则:"></a>cache与主存映射规则:</h3><pre><code class="hljs">1. 直接映射(Direct):将主存映射到cache的固定行,所以不需要淘汰策略
-2. 全相联映射(Full Associate):每个内存块映射到任一行
-3. 组相联映射:每个内存块映射到组内的任一行(N-路组相联则,N为组内可以全相联的个数)
-</code></pre>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/Snipaste_2022-10-08_22-32-24.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="cache淘汰替换算法"><a href="#cache淘汰替换算法" class="headerlink" title="cache淘汰替换算法"></a>cache淘汰替换算法</h3><p><strong>只有一个主存块映射多个cache行时,才需要进行淘汰替换策略 (直接映射不需要替换)</strong></p>
-<p>LRU(最近最少用):每次将最近一段时间最少使用的cache块替换:<br>    是栈算法,命中率随着组的个数增加而增加<br>    实现时,通过对cache行设定一个计数器,没出现就加1,命中就归0(计数值为LRU位)</p>
-<p>FIFO(先进先出):<br>    不是栈算法,命中率不随着组的个数增加而增加</p>
-<h3 id="写cache策略"><a href="#写cache策略" class="headerlink" title="写cache策略"></a>写cache策略</h3><p>写命中(Write Hit):写单元在cache中<br>    1. 直写(Write Through):同时写cache和主存<br>    2. 回写(Write Back):只写cache,不写主存,缺失时一次写回,每行有一个修改位(dirty bit)</p>
-<p>写不命中(Write Miss):<br>    1. 写分配(Write Allocate):主存块装入cache中,更新单元<br>    2. 非写分配(Not Write Allocate):直接写主存单元,不把主存块装入cache</p>
-<p><strong>写回与写分配搭配,只写一次主存(缺失时写),不断更改cache</strong></p>
-<h2 id="虚存相关概念"><a href="#虚存相关概念" class="headerlink" title="虚存相关概念"></a>虚存相关概念</h2><p>主存与辅存之间的存储映射技术</p>
-<p>逻辑上提供比物理存储区更大的虚存空间(虚拟地址&#x2F;逻辑地址)</p>
-<p>方式:分页式, 分段式, 段页式</p>
-<h3 id="分页式"><a href="#分页式" class="headerlink" title="分页式"></a>分页式</h3><p>虚页号对应实页号(将虚页号(高几位)替换为实页号, 逻辑地址转化为物理地址)</p>
-<p>经常使用的页表位于主存中,其它页表存在磁盘;<br>    采用按需调页的方式(Demanding Paging)</p>
-<p>使用快表(TLB):	<br>    高速存储器(可能在cpu中)</p>
-<h2 id="外设相关知识"><a href="#外设相关知识" class="headerlink" title="外设相关知识"></a>外设相关知识</h2><h3 id="外设通用模型"><a href="#外设通用模型" class="headerlink" title="外设通用模型"></a>外设通用模型</h3><p>外设中存在三种信号:控制信号, 状态信号, 数据信号<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/Snipaste_2022-10-08_22-58-51.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h3><p>总线裁决: 共享传输, 决定哪个设备使用总线; 点对点传输无需总线裁决</p>
-<p>总线定时:<br>    同步(Synchronous):时钟信号进行同步<br>    异步(Asynchronous):握手信号,前一个信号结束,后一个信号开始</p>
-<p>并行&#x2F;串行:<br>    并行:一个方向同时传多位数据,位与位需要同步<br>    串行:一个方向只传一位数,无需同步</p>
-<h3 id="I-x2F-O设备相关"><a href="#I-x2F-O设备相关" class="headerlink" title="I&#x2F;O设备相关"></a>I&#x2F;O设备相关</h3><p>I&#x2F;O设备寻址方式:<br>    统一编址方式:内存映射,I&#x2F;O地址占据主存地址空间<br>    独立编址:有自己的命令和存储空间</p>
-<p>I&#x2F;O传输方式:</p>
-<pre><code class="hljs">1. 程序直接控制
-</code></pre>
+                <h1 id="微处理器"><a href="#微处理器" class="headerlink" title="微处理器"></a>微处理器</h1><h2 id="8086-x2F-8088微处理器"><a href="#8086-x2F-8088微处理器" class="headerlink" title="8086&#x2F;8088微处理器"></a>8086&#x2F;8088微处理器</h2><ul>
+<li>特点<br>&gt; （CPU内部结构）采用并行流水线工作方式：将CPU分为两个功能部分并设置指令预取队列<br>&gt; （存储器寻址部分）对内存空间实行分段管理：将内存分为多个段并设置4个段地址寄存器<br>&gt; （工作模式）支持多处理器系统</li>
+</ul>
+<h3 id="8088CPU工作模式"><a href="#8088CPU工作模式" class="headerlink" title="8088CPU工作模式"></a>8088CPU工作模式</h3><ol>
+<li>最小模式<br> 单处理器模式，一般CPU直接输出控制信号到总线<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%9C%80%E5%B0%8F%E6%A8%A1%E5%BC%8F.png" srcset="/img/loading.gif" lazyload></li>
+<li>最大模式<br> 多处理器模式，CPU+协处理器，控制信号多，需要通过总线控制器与总线相连接<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%9C%80%E5%A4%A7%E6%A8%A1%E5%BC%8F.png" srcset="/img/loading.gif" lazyload><br>工作模式的选择<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F%E9%80%89%E6%8B%A9.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
+<hr>
+<h3 id="主要引线（8088最小模式）"><a href="#主要引线（8088最小模式）" class="headerlink" title="主要引线（8088最小模式）"></a>主要引线（8088最小模式）</h3><ol>
+<li>地址线和数据线<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/marmdr.png" srcset="/img/loading.gif" lazyload></li>
+<li>主要的控制和状态信号线<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/controlsignal.png" srcset="/img/loading.gif" lazyload><br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/controlsignal2.png" srcset="/img/loading.gif" lazyload></li>
+<li>中断请求和响应信号<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E4%B8%AD%E6%96%AD%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
+<hr>
+<h3 id="8086和8088引线的差异"><a href="#8086和8088引线的差异" class="headerlink" title="8086和8088引线的差异"></a>8086和8088引线的差异</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%BC%95%E7%BA%BF%E5%B7%AE%E5%BC%82.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h2 id="8086CPU内部结构"><a href="#8086CPU内部结构" class="headerlink" title="8086CPU内部结构"></a>8086CPU内部结构</h2><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/8086CPU.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="执行单元（EU）"><a href="#执行单元（EU）" class="headerlink" title="执行单元（EU）"></a>执行单元（EU）</h3><p>运算器（ALU）<br>8个通用寄存器<br>1个标志寄存器<br>EU部分的控制电路</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/EU%E5%8A%9F%E8%83%BD.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h3 id="总线接口单元（BIU）"><a href="#总线接口单元（BIU）" class="headerlink" title="总线接口单元（BIU）"></a>总线接口单元（BIU）</h3><p>地址加法器<br>4个段寄存器<br>指令指针IP<br>总线控制逻辑</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/BIU%E5%8A%9F%E8%83%BD.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p><strong>指令队列的存在使得RU和BIU两个部分可以并行工作</strong><br>提高了CPU的效率<br>降低了对存储器存取速度的要求</p>
+<hr>
+<h2 id="内部寄存器"><a href="#内部寄存器" class="headerlink" title="内部寄存器"></a>内部寄存器</h2><p>有14个16位寄存器<br>    8个通用寄存器<br>    4个段寄存器<br>    2个控制寄存器</p>
+<h3 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h3><ol>
+<li>数据寄存器（AX、BX、CX、DX）：可以拆分为2个8位寄存器（AH、AL）</li>
+<li>地址指针寄存器（SP、BP）</li>
+<li>变址寄存器（SI、DI）</li>
+</ol>
+<h3 id="数据寄存器特有的固有用法"><a href="#数据寄存器特有的固有用法" class="headerlink" title="数据寄存器特有的固有用法"></a>数据寄存器特有的固有用法</h3><p>数据寄存器：<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%95%B0%E6%8D%AE%E5%AF%84%E5%AD%98%E5%99%A8%E7%94%A8%E6%B3%95.png" srcset="/img/loading.gif" lazyload><br>地址指针寄存器：<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%9C%B0%E5%9D%80%E6%8C%87%E9%92%88%E5%AF%84%E5%AD%98%E5%99%A8%E7%94%A8%E6%B3%95.png" srcset="/img/loading.gif" lazyload><br>作为基址寄存器，BX表示所找的数据在数据段；BP则表示数据在堆栈段<br>变址寄存器：<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%8F%98%E5%9D%80%E5%AF%84%E5%AD%98%E5%99%A8%E7%94%A8%E6%B3%95.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="控制寄存器——IP与FLAGS"><a href="#控制寄存器——IP与FLAGS" class="headerlink" title="控制寄存器——IP与FLAGS"></a>控制寄存器——IP与FLAGS</h3><p>IP：内容为下一条要执行的指令的偏移地址<br>FLAGS：存放运算结果的状态特征和控制CPU运行<br>6个状态标志位<br>    CF：进位标志位（最高位）<br>    PF（Parity Flag）：奇偶标志位（根据1的个数判断）<br>    AF（Auxiliary Carry Flag）：辅助进位标志位（最后4位有进位，AF&#x3D;1）<br>    ZF：零标志位<br>    SF：运算结果最高位为1，SF&#x3D;1<br>    OF：溢出标志位<br>3个控制标志位<br>    TF（Trap Flag）：陷阱标志位，也叫跟踪标志位。TF&#x3D;1时，CPU处于单步执行指令的工作方式<br>    IF（Interrupt Enable Flag）：中断允许标志位。IF&#x3D;1使CPU可以响应可屏蔽中断请求<br>    DF（Direction Flag）：方向标志位。在数据串操作时确定操作的方向。</p>
+<h3 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h3><p>用于存放相应逻辑段的段基地址<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h2 id="存储器组织"><a href="#存储器组织" class="headerlink" title="存储器组织"></a>存储器组织</h2><p>物理地址：有20根地址线<br>    任何相邻字节单元构成一个字单元<br>    字单元地址为两个字节单元中较小地址字节单元的地址<br>    字数据存放规则是低8位放在较低地址字节单元，高8位放在较高地址字节单元。（<strong>小端方式</strong>）<br>逻辑地址：16位段基地址+16位段内地址（偏移地址）<br>    逻辑段的起始单元称为段首，段首的偏移地址&#x3D;0<br>物理地址&#x3D;段基地址×16+偏移地址</p>
+<h3 id="堆栈段"><a href="#堆栈段" class="headerlink" title="堆栈段"></a>堆栈段</h3><p>栈底是第一个存入数据的地址；<br>SP（栈顶指针）始终表示堆栈段首与栈顶之间的距离（字节数）<br>SP最大时，堆栈为空<br>SP&#x3D;0时，堆栈全满</p>
+<hr>
+<h2 id="8088系统总线"><a href="#8088系统总线" class="headerlink" title="8088系统总线"></a>8088系统总线</h2><p>总线：是一组导线和相关控制、驱动电路的集合，它是计算机系统各部件之间传输地址、数据和控制信息的通道<br>总线包括：<br>    1. 地址总线（AB）<br>    2. 数据总线（DB）<br>    3. 控制总线（CB）</p>
+<h3 id="总线时序"><a href="#总线时序" class="headerlink" title="总线时序"></a>总线时序</h3><p>时序：CPU各个引脚信号在时间上的关系<br>总线周期：CPU完成一次访问内存（或I&#x2F;O接口）操作所需要的时间；1个总线周期至少包括4个时钟周期</p>
+<h3 id="IA-32微处理器的主要寄存器"><a href="#IA-32微处理器的主要寄存器" class="headerlink" title="IA-32微处理器的主要寄存器"></a>IA-32微处理器的主要寄存器</h3><p>通用寄存器<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/IA-32%E5%AF%84%E5%AD%98%E5%99%A8.png" srcset="/img/loading.gif" lazyload></p>
+<p>指令指针和标志寄存器<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/IA-32IP.png" srcset="/img/loading.gif" lazyload></p>
+<p>段寄存器和系统地址寄存器<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/IA-32%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8.png" srcset="/img/loading.gif" lazyload></p>
+<p>IA-32内部有4个32位控制寄存器：CR0、CR1、CR2、CR3</p>
+<h3 id="IA-32工作模式"><a href="#IA-32工作模式" class="headerlink" title="IA-32工作模式"></a>IA-32工作模式</h3><p>实地址方式：实模式（简称位16位模式）<br>保护虚地址工作模式：保护模式（又增加了虚拟8086方式）（简称为32位模式）</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E7%BA%BF%E6%80%A7%E5%9C%B0%E5%9D%80-%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>平坦存储模式</strong><br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/flat%E5%AD%98%E5%82%A8.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h3 id="IA-32e（AMD-64）"><a href="#IA-32e（AMD-64）" class="headerlink" title="IA-32e（AMD-64）"></a>IA-32e（AMD-64）</h3><p>寄存器结构<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/amd64-registers.png" srcset="/img/loading.gif" lazyload></p>
+<p>工作模式<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/amd64-work.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>
@@ -343,7 +360,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" class="category-chain-item">汇编语言</a>
   
   
 
@@ -358,9 +375,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">#操作系统</a>
+        <a href="/tags/%E6%B1%87%E7%BC%96/">#汇编</a>
       
-        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86/">#计算机组成原理</a>
+        <a href="/tags/C-C/">#C&C++</a>
       
     </div>
   
@@ -372,8 +389,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>计算机组成原理相关知识</div>
-      <div>http://tom-jerr.github.io/2022/12/09/计算机操作系统00_计组相关知识/</div>
+      <div>微处理器</div>
+      <div>http://tom-jerr.github.io/2022/12/10/第二章_微处理器/</div>
     </div>
     <div class="license-meta">
       
@@ -385,7 +402,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年12月9日</div>
+          <div>2022年12月10日</div>
         </div>
       
       
@@ -417,9 +434,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/12/10/%E7%AC%AC%E4%BA%8C%E7%AB%A0_%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8/" title="微处理器">
+                      <a href="/2022/12/10/%E7%AC%AC%E4%B8%89%E7%AB%A0_%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/" title="指令系统">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">微处理器</span>
+                        <span class="hidden-mobile">指令系统</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -427,8 +444,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/12/09/Faster-RCNN/" title="Faster-RCNN">
-                        <span class="hidden-mobile">Faster-RCNN</span>
+                      <a href="/2022/12/09/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F00_%E8%AE%A1%E7%BB%84%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86/" title="计算机组成原理相关知识">
+                        <span class="hidden-mobile">计算机组成原理相关知识</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
