@@ -1,0 +1,830 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid1.png">
+  <link rel="icon" href="/img/fluid1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="LZY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言本文是汇编语言第二章内容总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微处理器">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/02/20/assembly/%E7%AC%AC%E4%BA%8C%E7%AB%A0_%E5%BE%AE%E5%A4%84%E7%90%86%E5%99%A8/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="前言本文是汇编语言第二章内容总结">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/assembly.png">
+<meta property="article:published_time" content="2023-02-19T16:38:16.585Z">
+<meta property="article:modified_time" content="2022-12-10T16:38:32.481Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="C&amp;C++">
+<meta property="article:tag" content="汇编">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/assembly.png">
+  
+  
+  
+  <title>微处理器 - tom-jerr的个人博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>tom-jerr的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/playlist/">
+                <i class="iconfont icon-music"></i>
+                <span>音乐</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="微处理器"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-20 00:38" pubdate>
+          2023年2月20日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          13 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">微处理器</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2022年12月11日 凌晨
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文是汇编语言第二章内容总结</p>
+<span id="more"></span>
+
+<h1 id="微处理器"><a href="#微处理器" class="headerlink" title="微处理器"></a>微处理器</h1><h2 id="8086-x2F-8088微处理器"><a href="#8086-x2F-8088微处理器" class="headerlink" title="8086&#x2F;8088微处理器"></a>8086&#x2F;8088微处理器</h2><ul>
+<li>特点</li>
+</ul>
+<pre><code class="hljs">&gt; （CPU内部结构）采用并行流水线工作方式：将CPU分为两个功能部分并设置指令预取队列
+&gt; （存储器寻址部分）对内存空间实行分段管理：将内存分为多个段并设置4个段地址寄存器
+&gt; （工作模式）支持多处理器系统
+</code></pre>
+<h3 id="8088CPU工作模式"><a href="#8088CPU工作模式" class="headerlink" title="8088CPU工作模式"></a>8088CPU工作模式</h3><ol>
+<li>最小模式<br> 单处理器模式，一般CPU直接输出控制信号到总线<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%9C%80%E5%B0%8F%E6%A8%A1%E5%BC%8F.png" srcset="/img/loading.gif" lazyload></li>
+<li>最大模式<br> 多处理器模式，CPU+协处理器，控制信号多，需要通过总线控制器与总线相连接<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%9C%80%E5%A4%A7%E6%A8%A1%E5%BC%8F.png" srcset="/img/loading.gif" lazyload><br>工作模式的选择<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F%E9%80%89%E6%8B%A9.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
+<hr>
+<h3 id="主要引线（8088最小模式）"><a href="#主要引线（8088最小模式）" class="headerlink" title="主要引线（8088最小模式）"></a>主要引线（8088最小模式）</h3><ol>
+<li>地址线和数据线<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/marmdr.png" srcset="/img/loading.gif" lazyload></li>
+<li>主要的控制和状态信号线<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/controlsignal.png" srcset="/img/loading.gif" lazyload><br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/controlsignal2.png" srcset="/img/loading.gif" lazyload></li>
+<li>中断请求和响应信号<br> <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E4%B8%AD%E6%96%AD%E8%AF%B7%E6%B1%82%E4%B8%8E%E5%93%8D%E5%BA%94.png" srcset="/img/loading.gif" lazyload></li>
+</ol>
+<hr>
+<h3 id="8086和8088引线的差异"><a href="#8086和8088引线的差异" class="headerlink" title="8086和8088引线的差异"></a>8086和8088引线的差异</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%BC%95%E7%BA%BF%E5%B7%AE%E5%BC%82.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h2 id="8086CPU内部结构"><a href="#8086CPU内部结构" class="headerlink" title="8086CPU内部结构"></a>8086CPU内部结构</h2><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/8086CPU.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="执行单元（EU）"><a href="#执行单元（EU）" class="headerlink" title="执行单元（EU）"></a>执行单元（EU）</h3><p>运算器（ALU）<br>8个通用寄存器<br>1个标志寄存器<br>EU部分的控制电路</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/EU%E5%8A%9F%E8%83%BD.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h3 id="总线接口单元（BIU）"><a href="#总线接口单元（BIU）" class="headerlink" title="总线接口单元（BIU）"></a>总线接口单元（BIU）</h3><p>地址加法器<br>4个段寄存器<br>指令指针IP<br>总线控制逻辑</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/BIU%E5%8A%9F%E8%83%BD.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p><strong>指令队列的存在使得RU和BIU两个部分可以并行工作</strong><br>提高了CPU的效率<br>降低了对存储器存取速度的要求</p>
+<hr>
+<h2 id="内部寄存器"><a href="#内部寄存器" class="headerlink" title="内部寄存器"></a>内部寄存器</h2><p>有14个16位寄存器<br>    8个通用寄存器<br>    4个段寄存器<br>    2个控制寄存器</p>
+<h3 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h3><ol>
+<li>数据寄存器（AX、BX、CX、DX）：可以拆分为2个8位寄存器（AH、AL）</li>
+<li>地址指针寄存器（SP、BP）</li>
+<li>变址寄存器（SI、DI）</li>
+</ol>
+<h3 id="数据寄存器特有的固有用法"><a href="#数据寄存器特有的固有用法" class="headerlink" title="数据寄存器特有的固有用法"></a>数据寄存器特有的固有用法</h3><p>数据寄存器：<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%95%B0%E6%8D%AE%E5%AF%84%E5%AD%98%E5%99%A8%E7%94%A8%E6%B3%95.png" srcset="/img/loading.gif" lazyload><br>地址指针寄存器：<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%9C%B0%E5%9D%80%E6%8C%87%E9%92%88%E5%AF%84%E5%AD%98%E5%99%A8%E7%94%A8%E6%B3%95.png" srcset="/img/loading.gif" lazyload><br>作为基址寄存器，BX表示所找的数据在数据段；BP则表示数据在堆栈段<br>变址寄存器：<br>    <img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E5%8F%98%E5%9D%80%E5%AF%84%E5%AD%98%E5%99%A8%E7%94%A8%E6%B3%95.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="控制寄存器——IP与FLAGS"><a href="#控制寄存器——IP与FLAGS" class="headerlink" title="控制寄存器——IP与FLAGS"></a>控制寄存器——IP与FLAGS</h3><p>IP：内容为下一条要执行的指令的偏移地址<br>FLAGS：存放运算结果的状态特征和控制CPU运行<br>6个状态标志位<br>    CF：进位标志位（最高位）<br>    PF（Parity Flag）：奇偶标志位（根据1的个数判断）<br>    AF（Auxiliary Carry Flag）：辅助进位标志位（最后4位有进位，AF&#x3D;1）<br>    ZF：零标志位<br>    SF：运算结果最高位为1，SF&#x3D;1<br>    OF：溢出标志位<br>3个控制标志位<br>    TF（Trap Flag）：陷阱标志位，也叫跟踪标志位。TF&#x3D;1时，CPU处于单步执行指令的工作方式<br>    IF（Interrupt Enable Flag）：中断允许标志位。IF&#x3D;1使CPU可以响应可屏蔽中断请求<br>    DF（Direction Flag）：方向标志位。在数据串操作时确定操作的方向。</p>
+<h3 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h3><p>用于存放相应逻辑段的段基地址<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h2 id="存储器组织"><a href="#存储器组织" class="headerlink" title="存储器组织"></a>存储器组织</h2><p>物理地址：有20根地址线<br>    任何相邻字节单元构成一个字单元<br>    字单元地址为两个字节单元中较小地址字节单元的地址<br>    字数据存放规则是低8位放在较低地址字节单元，高8位放在较高地址字节单元。（<strong>小端方式</strong>）<br>逻辑地址：16位段基地址+16位段内地址（偏移地址）<br>    逻辑段的起始单元称为段首，段首的偏移地址&#x3D;0<br>物理地址&#x3D;段基地址×16+偏移地址</p>
+<h3 id="堆栈段"><a href="#堆栈段" class="headerlink" title="堆栈段"></a>堆栈段</h3><p>栈底是第一个存入数据的地址；<br>SP（栈顶指针）始终表示堆栈段首与栈顶之间的距离（字节数）<br>SP最大时，堆栈为空<br>SP&#x3D;0时，堆栈全满</p>
+<hr>
+<h2 id="8088系统总线"><a href="#8088系统总线" class="headerlink" title="8088系统总线"></a>8088系统总线</h2><p>总线：是一组导线和相关控制、驱动电路的集合，它是计算机系统各部件之间传输地址、数据和控制信息的通道<br>总线包括：<br>    1. 地址总线（AB）<br>    2. 数据总线（DB）<br>    3. 控制总线（CB）</p>
+<h3 id="总线时序"><a href="#总线时序" class="headerlink" title="总线时序"></a>总线时序</h3><p>时序：CPU各个引脚信号在时间上的关系<br>总线周期：CPU完成一次访问内存（或I&#x2F;O接口）操作所需要的时间；1个总线周期至少包括4个时钟周期</p>
+<h3 id="IA-32微处理器的主要寄存器"><a href="#IA-32微处理器的主要寄存器" class="headerlink" title="IA-32微处理器的主要寄存器"></a>IA-32微处理器的主要寄存器</h3><p>通用寄存器<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/IA-32%E5%AF%84%E5%AD%98%E5%99%A8.png" srcset="/img/loading.gif" lazyload></p>
+<p>指令指针和标志寄存器<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/IA-32IP.png" srcset="/img/loading.gif" lazyload></p>
+<p>段寄存器和系统地址寄存器<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/IA-32%E6%AE%B5%E5%AF%84%E5%AD%98%E5%99%A8.png" srcset="/img/loading.gif" lazyload></p>
+<p>IA-32内部有4个32位控制寄存器：CR0、CR1、CR2、CR3</p>
+<h3 id="IA-32工作模式"><a href="#IA-32工作模式" class="headerlink" title="IA-32工作模式"></a>IA-32工作模式</h3><p>实地址方式：实模式（简称位16位模式）<br>保护虚地址工作模式：保护模式（又增加了虚拟8086方式）（简称为32位模式）</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/%E7%BA%BF%E6%80%A7%E5%9C%B0%E5%9D%80-%E7%89%A9%E7%90%86%E5%9C%B0%E5%9D%80.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>平坦存储模式</strong><br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/flat%E5%AD%98%E5%82%A8.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h3 id="IA-32e（AMD-64）"><a href="#IA-32e（AMD-64）" class="headerlink" title="IA-32e（AMD-64）"></a>IA-32e（AMD-64）</h3><p>寄存器结构<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/amd64-registers.png" srcset="/img/loading.gif" lazyload></p>
+<p>工作模式<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/amd64-work.png" srcset="/img/loading.gif" lazyload></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" class="category-chain-item">汇编语言</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C-C/">#C&C++</a>
+      
+        <a href="/tags/%E6%B1%87%E7%BC%96/">#汇编</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>微处理器</div>
+      <div>http://tom-jerr.github.io/2023/02/20/assembly/第二章_微处理器/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>LZY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年2月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/20/assembly/%E7%AC%AC%E5%9B%9B%E7%AB%A0_%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F/" title="汇编程序">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">汇编程序</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/20/assembly/%E7%AC%AC%E4%B8%89%E7%AB%A0_%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F/" title="指令系统">
+                        <span class="hidden-mobile">指令系统</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments">
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div>tom-jerr的个人博客 | 记录美好生活</div> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="/js/useaplayer.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
