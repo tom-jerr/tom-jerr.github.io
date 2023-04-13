@@ -18,23 +18,23 @@
   
     <meta name="description" content="前言">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前缀和-算法">
-<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/alorithm/%E5%89%8D%E7%BC%80%E5%92%8C/index.html">
+<meta property="og:title" content="Informer">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/deeplearning/Informer/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
 <meta property="og:description" content="前言">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://tom-jerr.github.io/img/acm.png">
-<meta property="article:published_time" content="2023-04-13T12:53:42.336Z">
-<meta property="article:modified_time" content="2023-04-13T12:53:07.185Z">
+<meta property="og:image" content="http://tom-jerr.github.io/img/DP.png">
+<meta property="article:published_time" content="2023-04-13T13:01:01.766Z">
+<meta property="article:modified_time" content="2023-04-13T13:06:52.901Z">
 <meta property="article:author" content="LZY">
-<meta property="article:tag" content="算法">
-<meta property="article:tag" content="前缀和">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="pytorch">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://tom-jerr.github.io/img/acm.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/DP.png">
   
   
   
-  <title>前缀和-算法 - tom-jerr的个人博客</title>
+  <title>Informer - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -218,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="前缀和-算法"></span>
+            <span id="subtitle" data-typed-text="Informer"></span>
           
         </div>
 
@@ -229,7 +229,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-13 20:53" pubdate>
+        <time datetime="2023-04-13 21:01" pubdate>
           2023年4月13日 晚上
         </time>
       </span>
@@ -241,7 +241,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          732 字
+          137 字
         
       </span>
     
@@ -252,7 +252,7 @@
         
         
         
-          7 分钟
+          2 分钟
         
       </span>
     
@@ -290,7 +290,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">前缀和-算法</h1>
+            <h1 style="display: none">Informer</h1>
             
               <p class="note note-info">
                 
@@ -305,18 +305,21 @@
                 
                 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><span id="more"></span>
 
-<h1 id="前缀和"><a href="#前缀和" class="headerlink" title="前缀和"></a>前缀和</h1><p>一般前缀和辅佐以数学相关证明以及简化</p>
-<p>关注模（如<strong>K倍区间</strong>：$sum[r]modk&#x3D;&#x3D;sum[l-1]modk$）</p>
-<h2 id="截断数组"><a href="#截断数组" class="headerlink" title="截断数组"></a>截断数组</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>使用前缀和；枚举前一个前缀和为sum1&#x2F;3且本身的前缀和为sum2&#x2F;3的位置；存在结果res就加1</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br>read = <span class="hljs-keyword">lambda</span>:[<span class="hljs-built_in">int</span>(x) <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> sys.stdin.readline().split()]<br>n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>a = [<span class="hljs-number">0</span>] + read()<br>s = [<span class="hljs-number">0</span>]*(n + <span class="hljs-number">1</span>)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n + <span class="hljs-number">1</span>):<br>    s[i] = s[i - <span class="hljs-number">1</span>] + a[i]<br>res,cnt = <span class="hljs-number">0</span>,<span class="hljs-number">0</span><br><span class="hljs-keyword">if</span> s[i] % <span class="hljs-number">3</span> != <span class="hljs-number">0</span>: <span class="hljs-built_in">print</span>(<span class="hljs-number">0</span>)<br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>, n):<br>        <span class="hljs-keyword">if</span> s[j - <span class="hljs-number">1</span>] == s[n] / <span class="hljs-number">3</span>: cnt += <span class="hljs-number">1</span><br>        <span class="hljs-keyword">if</span> s[j] == s[n] / <span class="hljs-number">3</span> * <span class="hljs-number">2</span>: res += cnt<br>    <span class="hljs-built_in">print</span>(res)<br></code></pre></td></tr></table></figure>
-
-<h2 id="二维差分"><a href="#二维差分" class="headerlink" title="二维差分"></a>二维差分</h2><p>注意其作用域是从（i, j）到右下角；差分与前缀和是一对逆反操作</p>
-<p><img src="C:\Github_io\source\img\BlueBridge\erweichafen.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="增减序列（差分）"><a href="#增减序列（差分）" class="headerlink" title="增减序列（差分）"></a>增减序列（差分）</h2><h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><p>差分数组b除b[1]外，均为0则满足条件</p>
-<p>所以最少操作数是max(正数和， 负数和)</p>
-<p>种类是b[1]的操作次数 + 1（abs(正数和 - 负数和) + 1）</p>
-<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>a = [<span class="hljs-number">0</span>]*<span class="hljs-number">100010</span><br>b = [<span class="hljs-number">0</span>] * <span class="hljs-number">100010</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):<br>    a[i] = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):<br>    b[i] = a[i] - a[i - <span class="hljs-number">1</span>]<br>p,q = <span class="hljs-number">0</span>,<span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>, n + <span class="hljs-number">1</span>):<br>    <span class="hljs-keyword">if</span> b[i] &gt; <span class="hljs-number">0</span>: p += b[i]<br>    <span class="hljs-keyword">else</span>: q -= b[i]<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">max</span>(p,q))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">abs</span>(p - q) + <span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
-
+<h1 id="Informer"><a href="#Informer" class="headerlink" title="Informer"></a>Informer</h1><ul>
+<li>基于Transformer模型改进</li>
+</ul>
+<h3 id="LSTF问题"><a href="#LSTF问题" class="headerlink" title="LSTF问题"></a>LSTF问题</h3><ul>
+<li>长时间序列检测问题（<strong>Long Sequence Time-series Forecasting</strong>）</li>
+</ul>
+<h2 id="网络架构"><a href="#网络架构" class="headerlink" title="网络架构"></a>网络架构</h2><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/informer.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>使用新的注意力机制，采用蒸馏的方式进行特征提取；每次特征维度在变小</li>
+</ul>
+<h3 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/informer_great.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="训练结果"><a href="#训练结果" class="headerlink" title="训练结果"></a>训练结果</h2><ul>
+<li>基于$WTH.csv$训练和测试</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/informer_test_result.png" srcset="/img/loading.gif" lazyload></p>
 
                 
               </div>
@@ -335,7 +338,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
   
   
 
@@ -350,9 +353,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
       
-        <a href="/tags/%E5%89%8D%E7%BC%80%E5%92%8C/">#前缀和</a>
+        <a href="/tags/pytorch/">#pytorch</a>
       
     </div>
   
@@ -364,8 +367,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>前缀和-算法</div>
-      <div>http://tom-jerr.github.io/2023/04/13/alorithm/前缀和/</div>
+      <div>Informer</div>
+      <div>http://tom-jerr.github.io/2023/04/13/deeplearning/Informer/</div>
     </div>
     <div class="license-meta">
       
@@ -409,9 +412,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/04/13/alorithm/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="数据结构-算法">
+                      <a href="/2023/04/13/deeplearning/pytorch_lightning/" title="">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">数据结构-算法</span>
+                        <span class="hidden-mobile"></span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -419,8 +422,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/04/13/alorithm/%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%9F%E9%A2%98/" title="蓝桥杯真题-算法">
-                        <span class="hidden-mobile">蓝桥杯真题-算法</span>
+                      <a href="/2023/04/13/deeplearning/BN&amp;GN/" title="Normalization">
+                        <span class="hidden-mobile">Normalization</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

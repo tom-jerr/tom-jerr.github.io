@@ -18,23 +18,23 @@
   
     <meta name="description" content="前言">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前缀和-算法">
-<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/alorithm/%E5%89%8D%E7%BC%80%E5%92%8C/index.html">
+<meta property="og:title" content="Transformer">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/deeplearning/Transformer/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
 <meta property="og:description" content="前言">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://tom-jerr.github.io/img/acm.png">
-<meta property="article:published_time" content="2023-04-13T12:53:42.336Z">
-<meta property="article:modified_time" content="2023-04-13T12:53:07.185Z">
+<meta property="og:image" content="http://tom-jerr.github.io/img/DP.png">
+<meta property="article:published_time" content="2023-04-13T13:01:01.775Z">
+<meta property="article:modified_time" content="2023-04-13T13:07:49.803Z">
 <meta property="article:author" content="LZY">
-<meta property="article:tag" content="算法">
-<meta property="article:tag" content="前缀和">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="pytorch">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://tom-jerr.github.io/img/acm.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/DP.png">
   
   
   
-  <title>前缀和-算法 - tom-jerr的个人博客</title>
+  <title>Transformer - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -218,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="前缀和-算法"></span>
+            <span id="subtitle" data-typed-text="Transformer"></span>
           
         </div>
 
@@ -229,7 +229,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-13 20:53" pubdate>
+        <time datetime="2023-04-13 21:01" pubdate>
           2023年4月13日 晚上
         </time>
       </span>
@@ -241,7 +241,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          732 字
+          3.1k 字
         
       </span>
     
@@ -252,7 +252,7 @@
         
         
         
-          7 分钟
+          27 分钟
         
       </span>
     
@@ -290,7 +290,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">前缀和-算法</h1>
+            <h1 style="display: none">Transformer</h1>
             
               <p class="note note-info">
                 
@@ -305,17 +305,74 @@
                 
                 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><span id="more"></span>
 
-<h1 id="前缀和"><a href="#前缀和" class="headerlink" title="前缀和"></a>前缀和</h1><p>一般前缀和辅佐以数学相关证明以及简化</p>
-<p>关注模（如<strong>K倍区间</strong>：$sum[r]modk&#x3D;&#x3D;sum[l-1]modk$）</p>
-<h2 id="截断数组"><a href="#截断数组" class="headerlink" title="截断数组"></a>截断数组</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>使用前缀和；枚举前一个前缀和为sum1&#x2F;3且本身的前缀和为sum2&#x2F;3的位置；存在结果res就加1</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br>read = <span class="hljs-keyword">lambda</span>:[<span class="hljs-built_in">int</span>(x) <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> sys.stdin.readline().split()]<br>n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>a = [<span class="hljs-number">0</span>] + read()<br>s = [<span class="hljs-number">0</span>]*(n + <span class="hljs-number">1</span>)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n + <span class="hljs-number">1</span>):<br>    s[i] = s[i - <span class="hljs-number">1</span>] + a[i]<br>res,cnt = <span class="hljs-number">0</span>,<span class="hljs-number">0</span><br><span class="hljs-keyword">if</span> s[i] % <span class="hljs-number">3</span> != <span class="hljs-number">0</span>: <span class="hljs-built_in">print</span>(<span class="hljs-number">0</span>)<br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>, n):<br>        <span class="hljs-keyword">if</span> s[j - <span class="hljs-number">1</span>] == s[n] / <span class="hljs-number">3</span>: cnt += <span class="hljs-number">1</span><br>        <span class="hljs-keyword">if</span> s[j] == s[n] / <span class="hljs-number">3</span> * <span class="hljs-number">2</span>: res += cnt<br>    <span class="hljs-built_in">print</span>(res)<br></code></pre></td></tr></table></figure>
-
-<h2 id="二维差分"><a href="#二维差分" class="headerlink" title="二维差分"></a>二维差分</h2><p>注意其作用域是从（i, j）到右下角；差分与前缀和是一对逆反操作</p>
-<p><img src="C:\Github_io\source\img\BlueBridge\erweichafen.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="增减序列（差分）"><a href="#增减序列（差分）" class="headerlink" title="增减序列（差分）"></a>增减序列（差分）</h2><h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><p>差分数组b除b[1]外，均为0则满足条件</p>
-<p>所以最少操作数是max(正数和， 负数和)</p>
-<p>种类是b[1]的操作次数 + 1（abs(正数和 - 负数和) + 1）</p>
-<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>a = [<span class="hljs-number">0</span>]*<span class="hljs-number">100010</span><br>b = [<span class="hljs-number">0</span>] * <span class="hljs-number">100010</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):<br>    a[i] = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):<br>    b[i] = a[i] - a[i - <span class="hljs-number">1</span>]<br>p,q = <span class="hljs-number">0</span>,<span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>, n + <span class="hljs-number">1</span>):<br>    <span class="hljs-keyword">if</span> b[i] &gt; <span class="hljs-number">0</span>: p += b[i]<br>    <span class="hljs-keyword">else</span>: q -= b[i]<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">max</span>(p,q))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">abs</span>(p - q) + <span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+<h1 id="Transformer"><a href="#Transformer" class="headerlink" title="Transformer"></a>Transformer</h1><ul>
+<li><p>主体是一个<code>Encoder-Decoder</code>模型</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/encoder_decoder.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h2><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/Transformer.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>其中，编码组件由多层编码器（Encoder）组成（在论文中作者使用了 6 层编码器，在实际使用过程中你可以尝试其他层数）。解码组件也是由相同层数的解码器（Decoder）组成（在论文也使用了 6 层）。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/Transformer_1.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>每个编码器由两个子层组成：<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=Self-Attention&spm=1001.2101.3001.7020">Self-Attention</a> 层（自注意力层）和 Position-wise Feed Forward Network（前馈网络，缩写为 FFN）</p>
+</li>
+<li><p>解码器也有编码器中这两层，但是它们之间还有一个注意力层（即 Encoder-Decoder Attention），其用来帮忙解码器关注输入句子的相关部分（类似于 seq2seq 模型中的注意力）。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/Transformer_2.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+<h2 id="Self-Attention机制"><a href="#Self-Attention机制" class="headerlink" title="Self-Attention机制"></a>Self-Attention机制</h2><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/self-attention.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>对于 Self Attention 来讲，Q（Query），K（Key）和 V（Value）三个矩阵均来自同一输入，并按照以下步骤计算：</p>
+<ul>
+<li>首先计算 Q 和 K 之间的点积，为了防止其结果过大，会除以 $ \sqrt{d_{k}} $，其中$d_{k}$为 Key 向量的维度。</li>
+<li>然后利用 Softmax 操作将其结果归一化为概率分布，再乘以矩阵 V 就得到权重求和的表示。</li>
+</ul>
+<p>整个计算过程可以表示为：<br>$$<br>Attention(Q,K,V)&#x3D;softmax(\frac{QK^{T}}{\sqrt{d_{k}}})<br>$$<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/self-attention_1.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+<h3 id="矩阵计算Self-Attention"><a href="#矩阵计算Self-Attention" class="headerlink" title="矩阵计算Self-Attention"></a>矩阵计算Self-Attention</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/self-attention_2.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/self-attention_3.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="Multi-head-Attention"><a href="#Multi-head-Attention" class="headerlink" title="Multi-head Attention"></a>Multi-head Attention</h2><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/multi-head_attention.png" srcset="/img/loading.gif" lazyload><br>$$<br>MultiHead(Q,K,V)&#x3D;Concat(head_{1},\cdots,head_{h})W^{O}\<br>head_i&#x3D;Attention(QW^{Q}<em>{i},KW^{K}</em>{i},VW^{V}_{i})<br>$$<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/multi-head_attention_matrix.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="位置前馈网络（Position-wise-Feed-Forward-Networks）"><a href="#位置前馈网络（Position-wise-Feed-Forward-Networks）" class="headerlink" title="位置前馈网络（Position-wise Feed-Forward Networks）"></a>位置前馈网络（Position-wise Feed-Forward Networks）</h2><ul>
+<li>位置前馈网络就是一个全连接前馈网络，每个位置的词都单独经过这个完全相同的前馈神经网络。其由两个线性变换组成，即两个全连接层组成，第一个全连接层的激活函数为 ReLU 激活函数。可以表示为：</li>
+</ul>
+<p>$$<br>FFN(x)&#x3D;max(0,xW_{1}+b_{1})W_{2}+b_{2}<br>$$</p>
+<h2 id="残差连接和LayerNorm"><a href="#残差连接和LayerNorm" class="headerlink" title="残差连接和LayerNorm"></a>残差连接和LayerNorm</h2><p>$$<br>sub_layer_output&#x3D;LayerNorm(x+SubLayer(x))<br>$$</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/sublayerout.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>为了方便进行残差连接，编码器和解码器中的所有子层和嵌入层的输出维度需要保持一致，在 Transformer 论文中 $d_{model}&#x3D;512$</li>
+</ul>
+<h2 id="位置编码"><a href="#位置编码" class="headerlink" title="位置编码"></a>位置编码</h2><ul>
+<li>Transformer 模型为每个输入的词嵌入向量添加一个向量。这些向量遵循模型学习的特定模式，有助于模型确定每个词的位置，或序列中不同词之间的距离。</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/position_code.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><strong>公式：</strong>$pos$表示位置，$i$表示维度</li>
+</ul>
+<p>$$<br>PE_{(pos,2i)}&#x3D;sin(pos&#x2F;10000^{wi&#x2F;d_{model}})\</p>
+<p>PE_{(pos,2i+1)}&#x3D;cos(pos&#x2F;10000^{wi&#x2F;d_{model}})<br>$$</p>
+<h2 id="Mask-掩码"><a href="#Mask-掩码" class="headerlink" title="Mask(掩码)"></a>Mask(掩码)</h2><ul>
+<li><p>Padding Mask</p>
+<ul>
+<li>因为每个批次输入序列的长度是不一样的，所以我们要对输入序列进行对齐。具体来说，就是在较短的序列后面填充 0（但是如果输入的序列太长，则是截断，把多余的直接舍弃）。</li>
+<li>把这些位置的值加上一个非常大的负数（负无穷），这样的话，经过 Softmax 后，这些位置的概率就会接近 0。</li>
+</ul>
+</li>
+<li><p>Sequence Mask</p>
+<ul>
+<li>Sequence Mask 是为了使得 Decoder 不能看见未来的信息。</li>
+<li>产生一个上三角矩阵，上三角的值全为 0。把这个矩阵作用在每个序列上，就可以达到我们的目的。</li>
+</ul>
+</li>
+</ul>
+<h2 id="最后的线性层和-Softmax-层"><a href="#最后的线性层和-Softmax-层" class="headerlink" title="最后的线性层和 Softmax 层"></a>最后的线性层和 Softmax 层</h2><ul>
+<li>现在假设我们的模型有 10000 个英文单词（模型的输出词汇表）。因此 logits 向量有 10000 个数字，每个数表示一个单词的分数。</li>
+<li>然后，Softmax 层会把这些分数转换为概率（把所有的分数转换为正数，并且加起来等于 1）。最后选择最高概率所对应的单词，作为这个时间步的输出。</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/Transformer_last.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="贪心解码"><a href="#贪心解码" class="headerlink" title="贪心解码"></a>贪心解码</h2><ul>
+<li>采用贪心算法来进行解码，即在每个时间步选择概率最大的输出作为下一个输入。该过程一直持续到生成的序列以 “.” 结尾。在每个时间步中，输入序列是由之前生成的目标单词构成的。每次将生成的单词添加到输入序列的末尾，并使用编码器和解码器来计算输出。接着使用模型的投影层将解码器的输出转换为目标序列的概率分布，并选择概率最大的单词作为下一个输入。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">greedy_decoder</span>(<span class="hljs-params">model, enc_input, start_symbol</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    For simplicity, a Greedy Decoder is Beam search when K=1. This is necessary for inference as we don&#x27;t know the</span><br><span class="hljs-string">    target sequence input. Therefore we try to generate the target input word by word, then feed it into the transformer.</span><br><span class="hljs-string">    Starting Reference: http://nlp.seas.harvard.edu/2018/04/03/attention.html#greedy-decoding</span><br><span class="hljs-string">    :param model: Transformer Model</span><br><span class="hljs-string">    :param enc_input: The encoder input (batch_size, seq_len)</span><br><span class="hljs-string">    :param start_symbol: The start symbol. In this example it is &#x27;S&#x27; which corresponds to index 4</span><br><span class="hljs-string">    :return: The target input</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    enc_outputs, enc_self_attns = model.encoder(enc_input)<br>    dec_input = torch.zeros(<span class="hljs-number">1</span>, <span class="hljs-number">0</span>).type_as(enc_input.data)<br>    terminal = <span class="hljs-literal">False</span><br>    next_symbol = start_symbol<br>    <span class="hljs-comment"># 在每个时间步中，将生成的单词添加到输入序列的末尾，通过 torch.cat 函数将上一个生成的单词添加到输入序列中。</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-keyword">not</span> terminal:<br>        <span class="hljs-comment"># (1, seq_len) -&gt; (1, seq_len + 1)         </span><br>        dec_input = torch.cat([dec_input.detach(),torch.tensor([[next_symbol]],dtype=enc_input.dtype).cuda()],-<span class="hljs-number">1</span>)<br>        dec_outputs, _, _ = model.decoder(dec_input, enc_input, enc_outputs)<br>        <span class="hljs-comment"># (1, seq_len, tgt_vocab_size)</span><br>        projected = model.projection(dec_outputs)<br>        <span class="hljs-comment"># prob:(1, )		(seq_len, tgt_vocab_size) -&gt; (1, )</span><br>        prob = projected.squeeze(<span class="hljs-number">0</span>).<span class="hljs-built_in">max</span>(dim=-<span class="hljs-number">1</span>, keepdim=<span class="hljs-literal">False</span>)[<span class="hljs-number">1</span>]<br>        <span class="hljs-comment"># 将张量中的唯一元素取出，并转换为标量</span><br>        next_word = prob.data[-<span class="hljs-number">1</span>]<br>        next_symbol = next_word<br>        <span class="hljs-keyword">if</span> next_symbol == tgt_vocab[<span class="hljs-string">&quot;.&quot;</span>]:<br>            terminal = <span class="hljs-literal">True</span><br>        <span class="hljs-comment">#print(next_word)            </span><br>    <span class="hljs-keyword">return</span> dec_input<br></code></pre></td></tr></table></figure>
 
 
                 
@@ -335,7 +392,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
   
   
 
@@ -350,9 +407,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
       
-        <a href="/tags/%E5%89%8D%E7%BC%80%E5%92%8C/">#前缀和</a>
+        <a href="/tags/pytorch/">#pytorch</a>
       
     </div>
   
@@ -364,8 +421,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>前缀和-算法</div>
-      <div>http://tom-jerr.github.io/2023/04/13/alorithm/前缀和/</div>
+      <div>Transformer</div>
+      <div>http://tom-jerr.github.io/2023/04/13/deeplearning/Transformer/</div>
     </div>
     <div class="license-meta">
       
@@ -409,9 +466,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/04/13/alorithm/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="数据结构-算法">
+                      <a href="/2023/04/13/deeplearning/Yolo/" title="YOLO">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">数据结构-算法</span>
+                        <span class="hidden-mobile">YOLO</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -419,8 +476,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/04/13/alorithm/%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%9F%E9%A2%98/" title="蓝桥杯真题-算法">
-                        <span class="hidden-mobile">蓝桥杯真题-算法</span>
+                      <a href="/2023/04/13/deeplearning/pytorch_lightning/" title="">
+                        <span class="hidden-mobile"></span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

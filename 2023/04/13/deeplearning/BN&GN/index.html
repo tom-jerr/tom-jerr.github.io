@@ -18,23 +18,23 @@
   
     <meta name="description" content="前言">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前缀和-算法">
-<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/alorithm/%E5%89%8D%E7%BC%80%E5%92%8C/index.html">
+<meta property="og:title" content="Normalization">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/deeplearning/BN&GN/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
 <meta property="og:description" content="前言">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://tom-jerr.github.io/img/acm.png">
-<meta property="article:published_time" content="2023-04-13T12:53:42.336Z">
-<meta property="article:modified_time" content="2023-04-13T12:53:07.185Z">
+<meta property="og:image" content="http://tom-jerr.github.io/img/DP.png">
+<meta property="article:published_time" content="2023-04-13T13:01:01.761Z">
+<meta property="article:modified_time" content="2023-04-13T13:03:27.594Z">
 <meta property="article:author" content="LZY">
-<meta property="article:tag" content="算法">
-<meta property="article:tag" content="前缀和">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="pytorch">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://tom-jerr.github.io/img/acm.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/DP.png">
   
   
   
-  <title>前缀和-算法 - tom-jerr的个人博客</title>
+  <title>Normalization - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -218,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="前缀和-算法"></span>
+            <span id="subtitle" data-typed-text="Normalization"></span>
           
         </div>
 
@@ -229,7 +229,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-13 20:53" pubdate>
+        <time datetime="2023-04-13 21:01" pubdate>
           2023年4月13日 晚上
         </time>
       </span>
@@ -241,7 +241,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          732 字
+          1.3k 字
         
       </span>
     
@@ -252,7 +252,7 @@
         
         
         
-          7 分钟
+          12 分钟
         
       </span>
     
@@ -290,7 +290,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">前缀和-算法</h1>
+            <h1 style="display: none">Normalization</h1>
             
               <p class="note note-info">
                 
@@ -305,18 +305,42 @@
                 
                 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><span id="more"></span>
 
-<h1 id="前缀和"><a href="#前缀和" class="headerlink" title="前缀和"></a>前缀和</h1><p>一般前缀和辅佐以数学相关证明以及简化</p>
-<p>关注模（如<strong>K倍区间</strong>：$sum[r]modk&#x3D;&#x3D;sum[l-1]modk$）</p>
-<h2 id="截断数组"><a href="#截断数组" class="headerlink" title="截断数组"></a>截断数组</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>使用前缀和；枚举前一个前缀和为sum1&#x2F;3且本身的前缀和为sum2&#x2F;3的位置；存在结果res就加1</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br>read = <span class="hljs-keyword">lambda</span>:[<span class="hljs-built_in">int</span>(x) <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> sys.stdin.readline().split()]<br>n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>a = [<span class="hljs-number">0</span>] + read()<br>s = [<span class="hljs-number">0</span>]*(n + <span class="hljs-number">1</span>)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n + <span class="hljs-number">1</span>):<br>    s[i] = s[i - <span class="hljs-number">1</span>] + a[i]<br>res,cnt = <span class="hljs-number">0</span>,<span class="hljs-number">0</span><br><span class="hljs-keyword">if</span> s[i] % <span class="hljs-number">3</span> != <span class="hljs-number">0</span>: <span class="hljs-built_in">print</span>(<span class="hljs-number">0</span>)<br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>, n):<br>        <span class="hljs-keyword">if</span> s[j - <span class="hljs-number">1</span>] == s[n] / <span class="hljs-number">3</span>: cnt += <span class="hljs-number">1</span><br>        <span class="hljs-keyword">if</span> s[j] == s[n] / <span class="hljs-number">3</span> * <span class="hljs-number">2</span>: res += cnt<br>    <span class="hljs-built_in">print</span>(res)<br></code></pre></td></tr></table></figure>
+<h1 id="Normalization"><a href="#Normalization" class="headerlink" title="Normalization"></a>Normalization</h1><h2 id="1-Batch-Norm"><a href="#1-Batch-Norm" class="headerlink" title="1. Batch Norm"></a>1. Batch Norm</h2><p>在DNN的训练过程中，各层的参数发生变化，则每层的输入分布也会发生变化，此时则需要通过降低学习率和通过更为仔细的参数初始化来减慢训练速度，使得神经网络变成饱和的非线性的模型，这个现象称之为<strong>internal covariate shift（内部协变量偏移）</strong>。</p>
+<p> 更进一步的，通过将归一化变为模型的一部分，为每个训练的小批量数据执行归一化，这样可以在训练时使用更高的学习率，并且参数初始化时不用那么小心和仔细，同时充当正则化器，在某些情况下可以不适用droupout。</p>
+<pre><code class="hljs">internal covariate shift：在训练过程中每层输入的分布会改变，因为前面层的参数在不断更新，意味着层会需要连续不断的去适应新的分布。
 
-<h2 id="二维差分"><a href="#二维差分" class="headerlink" title="二维差分"></a>二维差分</h2><p>注意其作用域是从（i, j）到右下角；差分与前缀和是一对逆反操作</p>
-<p><img src="C:\Github_io\source\img\BlueBridge\erweichafen.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="增减序列（差分）"><a href="#增减序列（差分）" class="headerlink" title="增减序列（差分）"></a>增减序列（差分）</h2><h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><p>差分数组b除b[1]外，均为0则满足条件</p>
-<p>所以最少操作数是max(正数和， 负数和)</p>
-<p>种类是b[1]的操作次数 + 1（abs(正数和 - 负数和) + 1）</p>
-<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>a = [<span class="hljs-number">0</span>]*<span class="hljs-number">100010</span><br>b = [<span class="hljs-number">0</span>] * <span class="hljs-number">100010</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):<br>    a[i] = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):<br>    b[i] = a[i] - a[i - <span class="hljs-number">1</span>]<br>p,q = <span class="hljs-number">0</span>,<span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>, n + <span class="hljs-number">1</span>):<br>    <span class="hljs-keyword">if</span> b[i] &gt; <span class="hljs-number">0</span>: p += b[i]<br>    <span class="hljs-keyword">else</span>: q -= b[i]<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">max</span>(p,q))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">abs</span>(p - q) + <span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
-
+covariate shift：Internal Covariate Shift 和Covariate Shift具有相似性，但并不是一个东西，前者发生在神经网络的内部，所以是Internal，后者发生在输入数据上。Covariate Shift主要描述的是由于训练数据和测试数据存在分布的差异性，给网络的泛化性和训练速度带来了影响，我们经常使用的方法是做归一化或者白化。
+</code></pre>
+<p><img src="C:\Users\我\Pictures\图片\bn.png" srcset="/img/loading.gif" lazyload></p>
+<p>链式求导法则：</p>
+<p><img src="C:\Users\我\Pictures\图片\bn_reverse.png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h2 id="2-Group-Norm"><a href="#2-Group-Norm" class="headerlink" title="2. Group Norm"></a>2. Group Norm</h2><h3 id="2-1-batch-norm的缺点"><a href="#2-1-batch-norm的缺点" class="headerlink" title="2.1 batch-norm的缺点"></a>2.1 batch-norm的缺点</h3><p>​    首先看到Batch-norm的缺点：极度依赖与batch_size的大小的问题，当bs较小时，当前的批数据的均值和方差没有办法代表整体输入数据的分布，此时效果就会变差；</p>
+<h3 id="2-2-Norm方式的定义"><a href="#2-2-Norm方式的定义" class="headerlink" title="2.2 Norm方式的定义"></a>2.2 Norm方式的定义</h3><ul>
+<li>首先来看定义，什么叫做BN，Layer Norm、Instance Norm、Group Norm。</li>
+</ul>
+<p>​    直接回到paper中给出的定义，如下图所示：</p>
+<p><img src="C:\Users\我\Pictures\图片\gn.png" srcset="/img/loading.gif" lazyload></p>
+<p>N代表<code>batch-size</code>的维度，H*W代表<code>feature-map</code>尺寸，C代表<code>channel</code>数。但是上图是只有3个维度的，是将H&amp;W融合到了一个维度上。</p>
+<ol>
+<li><p>BN是将整个N（batch-szie）维度归一化，对N维度的feature值求均值和方差，然后将特征点的值归一化；</p>
+</li>
+<li><p>Layer norm是将C维度进行归一化，对于每个输入数据的所有通道（整层），即所有feature-map，求其所有像素点的均值和方差；</p>
+</li>
+<li><p>Instance norm是对每个输入数据的单通道，即每张feature-map的单通道的像素点求均值和方差；</p>
+</li>
+<li><p>Group norm是将channels分为很多组，对每组求均值和方差，然后对每组进行归一化，则当group&#x3D;1时，Group norm&#x3D;Instance norm，当group&#x3D;C时，Group norm&#x3D;Instancenorm。</p>
+<pre><code class="hljs">注意：BN需要通过滑动平均来记录全局的均值和方差，但是其他norm方法与batch无关，实现了训练与测试的统一。
+</code></pre>
+</li>
+</ol>
+<p>首先，paper给出了norm方法的一般形态，如式1：</p>
+<p><img src="https://img-blog.csdnimg.cn/20210315150613457.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>​    其中均值和方差的定义如下式：</p>
+<p><img src="https://img-blog.csdnimg.cn/20210315150859822.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>Group norm时将通道分组，每次计算取同一个输入（N）、一组通道（group channels）、所有hw的均值和方差，将以上维度的特征点数值进行归一化。</p>
+<p><img src="C:\Users\我\Pictures\图片\gn_1.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>Group norm对batch-size不敏感，且当bn的batch-size变小时，效果是比Group-norm要差的。</strong></p>
 
                 
               </div>
@@ -335,7 +359,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
   
   
 
@@ -350,9 +374,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
       
-        <a href="/tags/%E5%89%8D%E7%BC%80%E5%92%8C/">#前缀和</a>
+        <a href="/tags/pytorch/">#pytorch</a>
       
     </div>
   
@@ -364,8 +388,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>前缀和-算法</div>
-      <div>http://tom-jerr.github.io/2023/04/13/alorithm/前缀和/</div>
+      <div>Normalization</div>
+      <div>http://tom-jerr.github.io/2023/04/13/deeplearning/BN&amp;GN/</div>
     </div>
     <div class="license-meta">
       
@@ -409,9 +433,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/04/13/alorithm/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="数据结构-算法">
+                      <a href="/2023/04/13/deeplearning/Informer/" title="Informer">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">数据结构-算法</span>
+                        <span class="hidden-mobile">Informer</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -419,8 +443,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/04/13/alorithm/%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%9F%E9%A2%98/" title="蓝桥杯真题-算法">
-                        <span class="hidden-mobile">蓝桥杯真题-算法</span>
+                      <a href="/2023/04/13/deeplearning/%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5%E5%8F%8A%E5%87%BD%E6%95%B0/" title="pytorch相关函数">
+                        <span class="hidden-mobile">pytorch相关函数</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

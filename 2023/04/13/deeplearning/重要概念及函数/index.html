@@ -18,23 +18,23 @@
   
     <meta name="description" content="前言">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前缀和-算法">
-<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/alorithm/%E5%89%8D%E7%BC%80%E5%92%8C/index.html">
+<meta property="og:title" content="pytorch相关函数">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/deeplearning/%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5%E5%8F%8A%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
 <meta property="og:description" content="前言">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://tom-jerr.github.io/img/acm.png">
-<meta property="article:published_time" content="2023-04-13T12:53:42.336Z">
-<meta property="article:modified_time" content="2023-04-13T12:53:07.185Z">
+<meta property="og:image" content="http://tom-jerr.github.io/img/DP.png">
+<meta property="article:published_time" content="2023-04-13T13:01:01.756Z">
+<meta property="article:modified_time" content="2023-04-13T13:09:38.208Z">
 <meta property="article:author" content="LZY">
-<meta property="article:tag" content="算法">
-<meta property="article:tag" content="前缀和">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="pytorch">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://tom-jerr.github.io/img/acm.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/DP.png">
   
   
   
-  <title>前缀和-算法 - tom-jerr的个人博客</title>
+  <title>pytorch相关函数 - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -218,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="前缀和-算法"></span>
+            <span id="subtitle" data-typed-text="pytorch相关函数"></span>
           
         </div>
 
@@ -229,7 +229,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-13 20:53" pubdate>
+        <time datetime="2023-04-13 21:01" pubdate>
           2023年4月13日 晚上
         </time>
       </span>
@@ -241,7 +241,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          732 字
+          1.7k 字
         
       </span>
     
@@ -252,7 +252,7 @@
         
         
         
-          7 分钟
+          15 分钟
         
       </span>
     
@@ -290,7 +290,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">前缀和-算法</h1>
+            <h1 style="display: none">pytorch相关函数</h1>
             
               <p class="note note-info">
                 
@@ -305,18 +305,38 @@
                 
                 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><span id="more"></span>
 
-<h1 id="前缀和"><a href="#前缀和" class="headerlink" title="前缀和"></a>前缀和</h1><p>一般前缀和辅佐以数学相关证明以及简化</p>
-<p>关注模（如<strong>K倍区间</strong>：$sum[r]modk&#x3D;&#x3D;sum[l-1]modk$）</p>
-<h2 id="截断数组"><a href="#截断数组" class="headerlink" title="截断数组"></a>截断数组</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>使用前缀和；枚举前一个前缀和为sum1&#x2F;3且本身的前缀和为sum2&#x2F;3的位置；存在结果res就加1</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br>read = <span class="hljs-keyword">lambda</span>:[<span class="hljs-built_in">int</span>(x) <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> sys.stdin.readline().split()]<br>n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>a = [<span class="hljs-number">0</span>] + read()<br>s = [<span class="hljs-number">0</span>]*(n + <span class="hljs-number">1</span>)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n + <span class="hljs-number">1</span>):<br>    s[i] = s[i - <span class="hljs-number">1</span>] + a[i]<br>res,cnt = <span class="hljs-number">0</span>,<span class="hljs-number">0</span><br><span class="hljs-keyword">if</span> s[i] % <span class="hljs-number">3</span> != <span class="hljs-number">0</span>: <span class="hljs-built_in">print</span>(<span class="hljs-number">0</span>)<br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>, n):<br>        <span class="hljs-keyword">if</span> s[j - <span class="hljs-number">1</span>] == s[n] / <span class="hljs-number">3</span>: cnt += <span class="hljs-number">1</span><br>        <span class="hljs-keyword">if</span> s[j] == s[n] / <span class="hljs-number">3</span> * <span class="hljs-number">2</span>: res += cnt<br>    <span class="hljs-built_in">print</span>(res)<br></code></pre></td></tr></table></figure>
-
-<h2 id="二维差分"><a href="#二维差分" class="headerlink" title="二维差分"></a>二维差分</h2><p>注意其作用域是从（i, j）到右下角；差分与前缀和是一对逆反操作</p>
-<p><img src="C:\Github_io\source\img\BlueBridge\erweichafen.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="增减序列（差分）"><a href="#增减序列（差分）" class="headerlink" title="增减序列（差分）"></a>增减序列（差分）</h2><h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><p>差分数组b除b[1]外，均为0则满足条件</p>
-<p>所以最少操作数是max(正数和， 负数和)</p>
-<p>种类是b[1]的操作次数 + 1（abs(正数和 - 负数和) + 1）</p>
-<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>a = [<span class="hljs-number">0</span>]*<span class="hljs-number">100010</span><br>b = [<span class="hljs-number">0</span>] * <span class="hljs-number">100010</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):<br>    a[i] = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):<br>    b[i] = a[i] - a[i - <span class="hljs-number">1</span>]<br>p,q = <span class="hljs-number">0</span>,<span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>, n + <span class="hljs-number">1</span>):<br>    <span class="hljs-keyword">if</span> b[i] &gt; <span class="hljs-number">0</span>: p += b[i]<br>    <span class="hljs-keyword">else</span>: q -= b[i]<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">max</span>(p,q))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">abs</span>(p - q) + <span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
-
+<h1 id="Pytorch学习"><a href="#Pytorch学习" class="headerlink" title="Pytorch学习"></a>Pytorch学习</h1><h2 id="conv2d函数"><a href="#conv2d函数" class="headerlink" title="conv2d函数"></a>conv2d函数</h2><p>将多个输入平面组成的输入进行二维卷积<br>官方API：<br>N为batch_size；$c_{in}$为输入通道数；$H_{in}$为输入平面的高；$W_{in}$为输入平面的宽<br><img src="C:\Users\我\Desktop\截图\conv2d.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="Linear函数"><a href="#Linear函数" class="headerlink" title="Linear函数"></a>Linear函数</h2><p>输入和输出的维度可以是任意维度，输出形状除了最后一个维度，其他均与输入相同；第一个参数是batch.size()<br><img src="C:\Users\我\Desktop\截图\Linear.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="torch-cat"><a href="#torch-cat" class="headerlink" title="torch.cat()"></a>torch.cat()</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python">batch_size=<span class="hljs-number">3</span><br>x = torch.randn(batch_size).unsqueeze(<span class="hljs-number">1</span>)<br>result_0=torch.cat([x**i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>,<span class="hljs-number">4</span>)],<span class="hljs-number">0</span>)<br>result_1=torch.cat([x**i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>,<span class="hljs-number">4</span>)],<span class="hljs-number">1</span>)<br><span class="hljs-built_in">print</span>(result_0.size())<br><span class="hljs-built_in">print</span>(result_1.size())<br></code></pre></td></tr></table></figure>
+<p>最后的参数为0时，在第一维度连接；<br>最后的参数为1时，在第二维度连接</p>
+<h2 id="降维：torch-squeeze-input-dim-x3D-None-out-x3D-None"><a href="#降维：torch-squeeze-input-dim-x3D-None-out-x3D-None" class="headerlink" title="降维：torch.squeeze(input, dim&#x3D;None, out&#x3D;None)"></a>降维：torch.squeeze(input, dim&#x3D;None, out&#x3D;None)</h2><p>squeeze(0)代表第一维度值为1则去除第一维度<br>squeeze(1)代表第二维度值为1则去除第一维度<br>当不给定dim时，将输入张量形状中的1 去除并返回。 如果输入是形如(A×1×B×1×C×1×D)(A×1×B×1×C×1×D)，那么输出形状就为： (A×B×C×D)(A×B×C×D)</p>
+<ul>
+<li>参数</li>
+</ul>
+<pre><code class="hljs">&gt;input (Tensor) – 输入张量
+&gt;dim (int, optional) – 如果给定，则input只会在给定维度挤压，维度的索引（从0开始）
+&gt;out (Tensor, optional) – 输出张量
+</code></pre>
+<h2 id="增维：torch-unsqueeze-input-dim-out-x3D-None"><a href="#增维：torch-unsqueeze-input-dim-out-x3D-None" class="headerlink" title="增维：torch.unsqueeze(input, dim, out&#x3D;None)"></a>增维：torch.unsqueeze(input, dim, out&#x3D;None)</h2><p>x &#x3D; torch.unsqueeze(x, 3) # 在第3个维度上扩展<br>注意：返回张量与输入张量共享内存，所以改变其中一个的内容会改变另一个<br>如果dim为负，则将会被转化dim+input.dim()+1</p>
+<ul>
+<li>参数</li>
+</ul>
+<pre><code class="hljs">&gt;input (Tensor) – 输入张量
+&gt;dim (int) – 插入维度的索引（从0开始）
+&gt;out (Tensor, optional) – 输出张量
+</code></pre>
+<h2 id="view-：重新定义矩阵的形状"><a href="#view-：重新定义矩阵的形状" class="headerlink" title="view()：重新定义矩阵的形状"></a>view()：重新定义矩阵的形状</h2><p>view中一个参数定为-1，代表动态调整这个维度上的元素个数，以保证元素的总数不变</p>
+<h2 id="torch-clamp"><a href="#torch-clamp" class="headerlink" title="torch.clamp"></a>torch.clamp</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">torch.clamp(<span class="hljs-built_in">input</span>,<span class="hljs-built_in">min</span>,<span class="hljs-built_in">max</span>,out=<span class="hljs-literal">None</span>)-&gt;Tensor<br></code></pre></td></tr></table></figure>
+<p>将输入的张量每个元素夹紧到 [ min, max ]中，并返回一个新张量</p>
+<h2 id="hook函数"><a href="#hook函数" class="headerlink" title="hook函数"></a>hook函数</h2><p>在Pytorch的计算图中，只有叶子节点的变量会保存梯度，所有中间变量的梯度只会用于反向传播，一但完成反向传播，中间变量梯度自动释放。<br><strong>hook可以保存中间变量的梯度甚至替换</strong></p>
+<ol>
+<li>hook_fn(grad) -&gt; Tensor or None：输入为z的梯度，返回值为Tensor（改变梯度继续传播） or None（按原有梯度继续传播）</li>
+<li>register forward hook：获取前向传播过程中，各个网络模块的输入和输出。使用方式：moudle.register_forward_hook(hook_fn)		hook_fn(module, input, output)</li>
+<li>register forward hook：获取神经网络反向传播过程中，各个模块输入端和输出端的梯度值<br> moudle.register_backward_hook(hook_fn)		hook_fn(module, input, output)<br><strong>register_backward_hook对复杂模块只能得到该模块最后一次简单操作的梯度</strong></li>
+</ol>
+<h2 id="named-children-amp-named-moudles"><a href="#named-children-amp-named-moudles" class="headerlink" title="named_children()	&amp; named_moudles()"></a>named_children()	&amp; named_moudles()</h2><p>named_children()：返回包含子模块的迭代器，同时产生模块的名称以及模块本身<br>named_modules()：返回网络中所有模块的迭代器，同时产生模块的名称以及模块本身</p>
+<h2 id="torch-flatten-x-dim"><a href="#torch-flatten-x-dim" class="headerlink" title="torch.flatten(x,dim)"></a>torch.flatten(x,dim)</h2><p>将整个tensor x展平，成为一个一维tensor</p>
+<h2 id="torch-detach"><a href="#torch-detach" class="headerlink" title="torch.detach()"></a>torch.detach()</h2><p>返回一个张量，其张量不具有梯度；即使修改<code>requires_grad</code>属性也无法改变</p>
 
                 
               </div>
@@ -335,7 +355,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
   
   
 
@@ -350,9 +370,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
       
-        <a href="/tags/%E5%89%8D%E7%BC%80%E5%92%8C/">#前缀和</a>
+        <a href="/tags/pytorch/">#pytorch</a>
       
     </div>
   
@@ -364,8 +384,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>前缀和-算法</div>
-      <div>http://tom-jerr.github.io/2023/04/13/alorithm/前缀和/</div>
+      <div>pytorch相关函数</div>
+      <div>http://tom-jerr.github.io/2023/04/13/deeplearning/重要概念及函数/</div>
     </div>
     <div class="license-meta">
       
@@ -409,9 +429,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/04/13/alorithm/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="数据结构-算法">
+                      <a href="/2023/04/13/deeplearning/BN&amp;GN/" title="Normalization">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">数据结构-算法</span>
+                        <span class="hidden-mobile">Normalization</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -419,8 +439,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/04/13/alorithm/%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%9F%E9%A2%98/" title="蓝桥杯真题-算法">
-                        <span class="hidden-mobile">蓝桥杯真题-算法</span>
+                      <a href="/2023/04/13/alorithm/%E5%9B%BE%E8%AE%BA/" title="图论——算法">
+                        <span class="hidden-mobile">图论——算法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

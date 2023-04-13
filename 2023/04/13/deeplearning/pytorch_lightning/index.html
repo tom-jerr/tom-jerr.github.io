@@ -1,0 +1,790 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid1.png">
+  <link rel="icon" href="/img/fluid1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="LZY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Pytorch-lightningTrain 训练主要是重写def training_setp(self, batch, batch_idx)函数，并返回要反向传播的loss即可，其中batch 即为从 train_dataloader 采样的一个batch的数据，batch_idx即为目前batch的索引。 123456def training_setp(self, batch, batch_i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/deeplearning/pytorch_lightning/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="Pytorch-lightningTrain 训练主要是重写def training_setp(self, batch, batch_idx)函数，并返回要反向传播的loss即可，其中batch 即为从 train_dataloader 采样的一个batch的数据，batch_idx即为目前batch的索引。 123456def training_setp(self, batch, batch_i">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-13T13:01:01.770Z">
+<meta property="article:modified_time" content="2023-02-28T10:09:32.867Z">
+<meta property="article:author" content="LZY">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>tom-jerr的个人博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>tom-jerr的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/playlist/">
+                <i class="iconfont icon-music"></i>
+                <span>音乐</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-13 21:01" pubdate>
+          2023年4月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          74 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年2月28日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Pytorch-lightning"><a href="#Pytorch-lightning" class="headerlink" title="Pytorch-lightning"></a>Pytorch-lightning</h1><h2 id="Train"><a href="#Train" class="headerlink" title="Train"></a>Train</h2><ul>
+<li><p>训练主要是重写def training_setp(self, batch, batch_idx)函数，并返回要<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD&spm=1001.2101.3001.7020">反向传播</a>的loss即可，其中batch 即为从 train_dataloader 采样的一个batch的数据，batch_idx即为目前batch的索引。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">training_setp</span>(<span class="hljs-params">self, batch, batch_idx</span>):<br>    image, label = batch<br>    pred = self.forward(iamge)<br>    loss = ...<br>    <span class="hljs-comment"># 一定要返回loss</span><br>    <span class="hljs-keyword">return</span> loss<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Validation（设置校验的频率）"><a href="#Validation（设置校验的频率）" class="headerlink" title="Validation（设置校验的频率）"></a>Validation（设置校验的频率）</h2><h3 id="2-1-每训练n个epochs-校验一次"><a href="#2-1-每训练n个epochs-校验一次" class="headerlink" title="2.1 每训练n个epochs 校验一次"></a>2.1 每训练n个epochs 校验一次</h3><p>默认为每1个epoch校验一次，即自动调用validation_step()函数：<code>check_val_every_n_epoch</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">trainer = Trainer(check_val_every_n_epoch=<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-2-单个epoch内校验频率"><a href="#2-2-单个epoch内校验频率" class="headerlink" title="2.2 单个epoch内校验频率"></a>2.2 单个epoch内校验频率</h3><ul>
+<li><p>当一个epoch 比较大时，就需要在单个epoch 内进行多次校验，这时就需要对校验的调动频率进行修改， 传入<code>val_check_interval</code>的参数为float型时表示百分比，为int时表示batch：</p>
+</li>
+<li><p>校验和训练是一样的，重写<code>def validation_step(self, batch, batch_idx)</code>函数，不需要返回值：</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 每训练单个epoch的 25% 调用校验函数一次，注意：要传入float型数</span><br>trainer = Trainer(val_check_interval=<span class="hljs-number">0.25</span>)<br><span class="hljs-comment"># 当然也可以是单个epoch训练完多少个batch后调用一次校验函数，但是一定是传入int型</span><br>trainer = Trainer(val_check_interval=<span class="hljs-number">100</span>) <span class="hljs-comment"># 每训练100个batch校验一次</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">validation_step</span>(<span class="hljs-params">self, batch, batch_idx</span>):<br>    image, label = batch<br>    pred = self.forward(iamge)<br>    loss = ...<br>    <span class="hljs-comment"># 标记该loss，用于保存模型时监控该量</span><br>    self.log(<span class="hljs-string">&#x27;val_loss&#x27;</span>, loss)<br></code></pre></td></tr></table></figure>
+
+<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><ul>
+<li><p>在pytoch_lightning框架中，test 在训练过程中是不调用的，也就是说是不相关，在训练过程中只进行training和validation，因此如果需要在训练过中保存validation的一些信息，就要放到validation中。</p>
+<p>关于测试，测试是在训练完成之后的，因此这里假设已经训练完成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 获取恢复了权重和超参数等的模型</span><br>model = MODEL.load_from_checkpoint(checkpoint_path=<span class="hljs-string">&#x27;my_model_path/heiheihei.ckpt&#x27;</span>)<br><span class="hljs-comment"># 修改测试时需要的参数，例如预测的步数等</span><br>model.pred_step = <span class="hljs-number">1000</span><br><span class="hljs-comment"># 定义trainer, 其中limit_test_batches表示取测试集中的0.05的数据来做测试</span><br>trainer = pl.Trainer(gpus=<span class="hljs-number">1</span>, precision=<span class="hljs-number">16</span>, limit_test_batches=<span class="hljs-number">0.05</span>)<br><span class="hljs-comment"># 测试，自动调用test_step(), 其中dm为数据集，放在下面讲</span><br>trainer.test(model=dck, datamodule=dm)<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="自定义DataModule类"><a href="#自定义DataModule类" class="headerlink" title="自定义DataModule类"></a>自定义DataModule类</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> torch.utils.data <span class="hljs-keyword">import</span> DataLoader, random_split<br><span class="hljs-keyword">import</span> pytorch_lightning <span class="hljs-keyword">as</span> pl<br><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">MyDataModule</span>(pl.LightningDataModule):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-built_in">super</span>().__init__()<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">prepare_data</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-comment"># 在该函数里一般实现数据集的下载等，只有cuda:0 会执行该函数</span><br>        <span class="hljs-comment"># download, split, etc...</span><br>        <span class="hljs-comment"># only called on 1 GPU/TPU in distributed</span><br>        <span class="hljs-keyword">pass</span><br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">setup</span>(<span class="hljs-params">self, stage</span>):<br>        <span class="hljs-comment"># make assignments here (val/train/test split)</span><br>        <span class="hljs-comment"># called on every process in DDP</span><br>        <span class="hljs-comment"># 实现数据集的定义，每张GPU都会执行该函数, stage 用于标记是用于什么阶段</span><br>        <span class="hljs-keyword">if</span> stage == <span class="hljs-string">&#x27;fit&#x27;</span> <span class="hljs-keyword">or</span> stage <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:<br>            self.train_dataset = MyDataset(self.train_file_path, self.train_file_num, transform=<span class="hljs-literal">None</span>)<br>            self.val_dataset = MyDataset(self.val_file_path, self.val_file_num, transform=<span class="hljs-literal">None</span>)<br>        <span class="hljs-keyword">if</span> stage == <span class="hljs-string">&#x27;test&#x27;</span> <span class="hljs-keyword">or</span> stage <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:<br>            self.test_dataset = MyDataset(self.test_file_path, self.test_file_num, transform=<span class="hljs-literal">None</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">train_dataloader</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> DataLoader(self.train_dataset, batch_size=self.batch_size, shuffle=<span class="hljs-literal">False</span>, num_workers=<span class="hljs-number">0</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">val_dataloader</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> DataLoader(self.val_dataset, batch_size=self.batch_size, shuffle=<span class="hljs-literal">False</span>)<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">test_dataloader</span>(<span class="hljs-params">self</span>):<br>        <span class="hljs-keyword">return</span> DataLoader(self.test_dataset, batch_size=<span class="hljs-number">1</span>, shuffle=<span class="hljs-literal">True</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="PL的使用"><a href="#PL的使用" class="headerlink" title="PL的使用"></a>PL的使用</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># Training &amp; Test</span><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    parser = argparse.ArgumentParser()<br>    parser.add_argument(<span class="hljs-string">&quot;-is_train&quot;</span>, default=<span class="hljs-string">&#x27;yes&#x27;</span>, <span class="hljs-built_in">type</span>=<span class="hljs-built_in">str</span>, choices=[<span class="hljs-string">&#x27;yes&#x27;</span>, <span class="hljs-string">&#x27;no&#x27;</span>])<br>    args = parser.parse_args()<br><br>    seed_everything(<span class="hljs-number">42</span>)<br><br>    <span class="hljs-comment"># 定义数据集</span><br>    data_module = GLUEDataModule(model_name_or_path=<span class="hljs-string">r&quot;D:\Pretrained_Model\albert-base-v2&quot;</span>, task_name=<span class="hljs-string">&quot;cola&quot;</span>)<br><br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;args.is_train = &quot;</span>, args.is_train)<br><br>    <span class="hljs-keyword">if</span> args.is_train == <span class="hljs-string">&#x27;yes&#x27;</span>:  <span class="hljs-comment"># 训练</span><br>        <span class="hljs-comment"># 定义数据集为训练校验(train+validation)阶段</span><br>        data_module.setup(<span class="hljs-string">&quot;fit&quot;</span>)<br><br>        <span class="hljs-comment"># 初始化`ModelCheckpoint`回调，并设置要监控的量</span><br>        checkpoint_callback = ModelCheckpoint(monitor=<span class="hljs-string">&#x27;val_loss&#x27;</span>, dirpath=<span class="hljs-string">&quot;saved_module&quot;</span>, filename=<span class="hljs-string">&#x27;sample-cola-&#123;epoch:02d&#125;-&#123;val_loss:.2f&#125;&#x27;</span>)<br><br>        <span class="hljs-comment"># 定义模型</span><br>        model = GLUETransformer(model_name_or_path=<span class="hljs-string">r&quot;D:\Pretrained_Model\albert-base-v2&quot;</span>, num_labels=data_module.num_labels, eval_splits=data_module.eval_splits, task_name=data_module.task_name)<br><br>        <span class="hljs-comment"># 定义logger</span><br>        logger = TensorBoardLogger(<span class="hljs-string">&#x27;log_dir&#x27;</span>, name=<span class="hljs-string">&#x27;test_PL&#x27;</span>)<br><br>        <span class="hljs-comment"># 定义trainer</span><br>        trainer = Trainer(max_epochs=<span class="hljs-number">20</span>, gpus=AVAIL_GPUS, check_val_every_n_epoch=<span class="hljs-number">1</span>, callbacks=[checkpoint_callback])  <span class="hljs-comment"># 默认为每1个epoch校验一次，即自动调用validation_step()函数；将 checkpoint_callback 放到Trainer的callback 的list中</span><br><br>        <span class="hljs-comment"># 开始训练</span><br>        trainer.fit(model=model, datamodule=data_module)<br>        <span class="hljs-comment"># trainer.save_checkpoint(filepath=os.path.join(&quot;saved_module&quot;))</span><br>        <span class="hljs-comment"># trainer.validate(model, data_module.val_dataloader())</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-comment"># 定义数据集为测试(test)阶段</span><br>        data_module.setup(<span class="hljs-string">&quot;test&quot;</span>)<br>        <span class="hljs-comment"># 恢复模型</span><br>        model = GLUETransformer.load_from_checkpoint(checkpoint_path=<span class="hljs-string">&#x27;saved_module/sample-cola-epoch=00-val_loss=0.53.ckpt&#x27;</span>)<br>        <span class="hljs-comment"># 定义trainer并测试</span><br>        trainer = Trainer(gpus=AVAIL_GPUS, precision=<span class="hljs-number">16</span>, limit_test_batches=<span class="hljs-number">0.05</span>)<br>        trainer.test(model=model, datamodule=data_module)<br></code></pre></td></tr></table></figure>
+
+<h2 id="模型的保存与恢复"><a href="#模型的保存与恢复" class="headerlink" title="模型的保存与恢复"></a>模型的保存与恢复</h2><ul>
+<li><p>Lightning 会自动保存最近训练的epoch的模型到当前的工作空间(or.getcwd())，也可以在定义Trainer的时候指定：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">trainer = Trainer(default_root_dir=<span class="hljs-string">&#x27;/your/path/to/save/checkpoints&#x27;</span>)<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="ModelCheckpoint-（callbacks）保存模型"><a href="#ModelCheckpoint-（callbacks）保存模型" class="headerlink" title="ModelCheckpoint （callbacks）保存模型"></a>ModelCheckpoint （callbacks）保存模型</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs python">ModelCheckpoint(<br>    dirpath=<span class="hljs-literal">None</span>,<br>    filename=<span class="hljs-literal">None</span>,<br>    monitor=<span class="hljs-literal">None</span>,<br>    verbose=<span class="hljs-literal">False</span>,<br>    save_last=<span class="hljs-literal">None</span>,<br>    save_top_k=<span class="hljs-number">1</span>,<br>    save_weights_only=<span class="hljs-literal">False</span>,<br>    mode=<span class="hljs-string">&quot;min&quot;</span>,<br>    auto_insert_metric_name=<span class="hljs-literal">True</span>,<br>    every_n_train_steps=<span class="hljs-literal">None</span>,<br>    train_time_interval=<span class="hljs-literal">None</span>,<br>    every_n_epochs=<span class="hljs-literal">None</span>,<br>    save_on_train_epoch_end=<span class="hljs-literal">None</span>,<br>    every_n_val_epochs=<span class="hljs-literal">None</span><br>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>dirpath: string类型。例如：dirpath&#x3D;‘my&#x2F;path_to_save_model&#x2F;’；</li>
+<li>filename: string类型；前面就说过不建议使用filepath变量，推荐使用</li>
+<li>monitor：需要监控的量，string类型。例如’val_loss’（在training_step() or validation_step()函数中通过self.log(‘val_loss’, loss)进行标记）；默认为None，只保存最后一个epoch的模型参数,（我的理解是只保留最后一个epoch的模型参数，但是还是每训练完一个epoch之后会保存一次，然后覆盖上一次的模型)</li>
+<li>verbose：冗余模式，默认为False.</li>
+<li>save_last: bool类型; 默认None，当为True时，表示在每个epoch 结果的时候，总是会保存一个模型last.ckpt，也就意味着会覆盖保存，只会有一个文件保留。</li>
+<li>save_top_k：int类型；<br>当 save_top_k&#x3D;&#x3D;k，根据monitor监控的量，保存k个最好的模型，而最好的模型是当monitor监控的量最大时表示最好，还是最小时表示最好，在后面的参数mode中进行设置。<br>当save_top_k&#x3D;&#x3D;0时，不保存；<br>当save_top_k&#x3D;&#x3D;-1时，保存所有的模型，即每个次保存模型不进行覆盖保存，全都保存下来；<br>当save_top_k&gt;&#x3D;2，并且在单个epoch内多次调用保存模型的函数，则模型的名字最后会追加版本号，从v0开始。</li>
+<li>save_weights_only: bool 类型；True只保存模型权重(model.save_weights(flepath))，否则保存整个模型。建议保存权重就可以了，保存整个模型会消耗更多时间和存储空间。</li>
+<li>mode ：string类型，只能取{‘auto’, ‘min’, ‘max’}中的一个；当save_top_k!&#x3D;0时，保存模型时就会覆盖保存，如果monitor监控的是val_loss等越小就表示模型越好的，这个参数应该被设置成’min’，当monitor监控的是val_acc（校验准确度）等越大就表示模型训练的越好的量，则应该设置成’max’。auto会自动根据monitor的名字来判断（auto模式是个人理解，可能会出错，例如你编程的时候，你就喜欢用val_loss表示模型准确度这样就会导致保存的模型是最差的模型了）。</li>
+</ul>
+<h3 id="ModelCheckpoint的使用"><a href="#ModelCheckpoint的使用" class="headerlink" title="ModelCheckpoint的使用"></a>ModelCheckpoint的使用</h3><p>自动保存下，也可以自定义要监控的量来保存模型，步骤如下：</p>
+<ul>
+<li>计算需要监控的量，例如校验误差：loss</li>
+<li>使用log()函数标记该要监控的量（直接在training_step、validation_step中添加）</li>
+<li>初始化ModelCheckpoint回调，并设置要监控的量，</li>
+<li>将其传回到Trainer中</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> pytorch_lightning <span class="hljs-keyword">import</span> Trainer, LightningDataModule, LightningModule, Callback, seed_everything<br><span class="hljs-keyword">from</span> pytorch_lightning.callbacks <span class="hljs-keyword">import</span> ModelCheckpoint<br><span class="hljs-keyword">from</span> pytorch_lightning.loggers <span class="hljs-keyword">import</span> TensorBoardLogger<br><br><span class="hljs-comment"># Transformer LightningModule</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">GLUETransformer</span>(<span class="hljs-title class_ inherited__">LightningModule</span>):<br>	...<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">training_step</span>(<span class="hljs-params">self, batch, batch_idx</span>):<br>        <span class="hljs-comment"># 1. 计算loss</span><br>        outputs = self(**batch)<br>        train_loss = outputs[<span class="hljs-number">0</span>]<br>        <span class="hljs-comment"># 2. 使用log()函数标记该要监控的量,名字叫&#x27;val_loss&#x27;</span><br>        self.log(<span class="hljs-string">&#x27;ltrain_lossoss&#x27;</span>, train_loss)<br>        <span class="hljs-keyword">return</span> train_loss<br>	...<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">validation_step</span>(<span class="hljs-params">self, batch, batch_idx, dataloader_idx=<span class="hljs-number">0</span></span>):<br>        outputs = self(**batch)<br><br>        <span class="hljs-comment"># 1. 计算需要监控的量</span><br>        val_loss, logits = outputs[:<span class="hljs-number">2</span>]<br><br>        <span class="hljs-comment"># 2. 使用log()函数标记该要监控的量,名字叫&#x27;val_loss&#x27;</span><br>        self.log(<span class="hljs-string">&#x27;val_loss&#x27;</span>, val_loss)<br><br>        <span class="hljs-keyword">if</span> self.hparams.num_labels &gt;= <span class="hljs-number">1</span>:<br>            preds = torch.argmax(logits, axis=<span class="hljs-number">1</span>)<br>        <span class="hljs-keyword">elif</span> self.hparams.num_labels == <span class="hljs-number">1</span>:<br>            preds = logits.squeeze()<br><br>        labels = batch[<span class="hljs-string">&quot;labels&quot;</span>]<br><br>        <span class="hljs-keyword">return</span> &#123;<span class="hljs-string">&quot;loss&quot;</span>: val_loss, <span class="hljs-string">&quot;preds&quot;</span>: preds, <span class="hljs-string">&quot;labels&quot;</span>: labels&#125;<br>	...<br><br><br><span class="hljs-comment"># Training &amp; Test</span><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    seed_everything(<span class="hljs-number">42</span>)<br>    <span class="hljs-comment"># 定义数据集</span><br>    data_module = GLUEDataModule(model_name_or_path=<span class="hljs-string">r&quot;D:\Pretrained_Model\albert-base-v2&quot;</span>, task_name=<span class="hljs-string">&quot;cola&quot;</span>)<br>    <span class="hljs-comment"># 定义模型</span><br>    model = GLUETransformer(model_name_or_path=<span class="hljs-string">r&quot;D:\Pretrained_Model\albert-base-v2&quot;</span>, num_labels=data_module.num_labels, eval_splits=data_module.eval_splits, task_name=data_module.task_name)<br>    <span class="hljs-comment"># 初始化`ModelCheckpoint`回调，并设置要监控的量</span><br>    checkpoint_callback = ModelCheckpoint(<br>        dirpath=<span class="hljs-string">&#x27;saved_module&#x27;</span>,<br>        filename=<span class="hljs-string">&#x27;sample-cola-&#123;epoch:02d&#125;-&#123;val_loss:.2f&#125;&#x27;</span>,<br>        monitor=<span class="hljs-string">&#x27;val_loss&#x27;</span><br>    )<br>    <span class="hljs-comment"># 定义trainer</span><br>    trainer = Trainer(max_epochs=<span class="hljs-number">20</span>, gpus=AVAIL_GPUS, check_val_every_n_epoch=<span class="hljs-number">1</span>, callbacks=[checkpoint_callback])  <span class="hljs-comment"># 默认为每1个epoch校验一次，即自动调用validation_step()函数；将 checkpoint_callback 放到Trainer的callback 的list中</span><br>    <span class="hljs-comment"># 开始训练</span><br>    trainer.fit(model=model, datamodule=data_module)<br></code></pre></td></tr></table></figure>
+
+<h2 id="学习率衰减与优化"><a href="#学习率衰减与优化" class="headerlink" title="学习率衰减与优化"></a>学习率衰减与优化</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">configure_optimizers</span>(<span class="hljs-params">self</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;Prepare optimizer and schedule (linear warmup and decay)&quot;&quot;&quot;</span><br>    model = self.model<br>    no_decay = [<span class="hljs-string">&quot;bias&quot;</span>, <span class="hljs-string">&quot;LayerNorm.weight&quot;</span>]<br>    optimizer_grouped_parameters = [<br>        &#123;<br>            <span class="hljs-string">&quot;params&quot;</span>: [p <span class="hljs-keyword">for</span> n, p <span class="hljs-keyword">in</span> model.named_parameters() <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-built_in">any</span>(nd <span class="hljs-keyword">in</span> n <span class="hljs-keyword">for</span> nd <span class="hljs-keyword">in</span> no_decay)],<br>            <span class="hljs-string">&quot;weight_decay&quot;</span>: self.hparams.weight_decay,<br>        &#125;,<br>        &#123;<br>            <span class="hljs-string">&quot;params&quot;</span>: [p <span class="hljs-keyword">for</span> n, p <span class="hljs-keyword">in</span> model.named_parameters() <span class="hljs-keyword">if</span> <span class="hljs-built_in">any</span>(nd <span class="hljs-keyword">in</span> n <span class="hljs-keyword">for</span> nd <span class="hljs-keyword">in</span> no_decay)],<br>            <span class="hljs-string">&quot;weight_decay&quot;</span>: <span class="hljs-number">0.0</span>,<br>        &#125;,<br>    ]<br>    optimizer = AdamW(optimizer_grouped_parameters, lr=self.hparams.learning_rate, eps=self.hparams.adam_epsilon)<br><br>    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=self.hparams.warmup_steps, num_training_steps=self.total_steps)<br>    scheduler = &#123;<span class="hljs-string">&quot;scheduler&quot;</span>: scheduler, <span class="hljs-string">&quot;interval&quot;</span>: <span class="hljs-string">&quot;step&quot;</span>, <span class="hljs-string">&quot;frequency&quot;</span>: <span class="hljs-number">1</span>&#125;<br>    <span class="hljs-keyword">return</span> [optimizer], [scheduler]<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://tom-jerr.github.io/2023/04/13/deeplearning/pytorch_lightning/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>LZY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/13/deeplearning/Transformer/" title="Transformer">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Transformer</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/13/deeplearning/Informer/" title="Informer">
+                        <span class="hidden-mobile">Informer</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments">
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div>tom-jerr的个人博客 | 记录美好生活</div> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="/js/useaplayer.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

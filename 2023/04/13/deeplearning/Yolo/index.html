@@ -18,23 +18,24 @@
   
     <meta name="description" content="前言">
 <meta property="og:type" content="article">
-<meta property="og:title" content="前缀和-算法">
-<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/alorithm/%E5%89%8D%E7%BC%80%E5%92%8C/index.html">
+<meta property="og:title" content="YOLO">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/deeplearning/Yolo/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
 <meta property="og:description" content="前言">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://tom-jerr.github.io/img/acm.png">
-<meta property="article:published_time" content="2023-04-13T12:53:42.336Z">
-<meta property="article:modified_time" content="2023-04-13T12:53:07.185Z">
+<meta property="og:image" content="http://tom-jerr.github.io/img/DP.png">
+<meta property="article:published_time" content="2023-04-13T13:01:01.779Z">
+<meta property="article:modified_time" content="2023-04-13T13:08:23.729Z">
 <meta property="article:author" content="LZY">
-<meta property="article:tag" content="算法">
-<meta property="article:tag" content="前缀和">
+<meta property="article:tag" content="深度学习">
+<meta property="article:tag" content="pytorch">
+<meta property="article:tag" content="目标检测">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://tom-jerr.github.io/img/acm.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/DP.png">
   
   
   
-  <title>前缀和-算法 - tom-jerr的个人博客</title>
+  <title>YOLO - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -218,7 +219,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="前缀和-算法"></span>
+            <span id="subtitle" data-typed-text="YOLO"></span>
           
         </div>
 
@@ -229,7 +230,7 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-04-13 20:53" pubdate>
+        <time datetime="2023-04-13 21:01" pubdate>
           2023年4月13日 晚上
         </time>
       </span>
@@ -241,7 +242,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          732 字
+          4.1k 字
         
       </span>
     
@@ -252,7 +253,7 @@
         
         
         
-          7 分钟
+          35 分钟
         
       </span>
     
@@ -290,7 +291,7 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">前缀和-算法</h1>
+            <h1 style="display: none">YOLO</h1>
             
               <p class="note note-info">
                 
@@ -305,19 +306,75 @@
                 
                 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><span id="more"></span>
 
-<h1 id="前缀和"><a href="#前缀和" class="headerlink" title="前缀和"></a>前缀和</h1><p>一般前缀和辅佐以数学相关证明以及简化</p>
-<p>关注模（如<strong>K倍区间</strong>：$sum[r]modk&#x3D;&#x3D;sum[l-1]modk$）</p>
-<h2 id="截断数组"><a href="#截断数组" class="headerlink" title="截断数组"></a>截断数组</h2><h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>使用前缀和；枚举前一个前缀和为sum1&#x2F;3且本身的前缀和为sum2&#x2F;3的位置；存在结果res就加1</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> sys<br>read = <span class="hljs-keyword">lambda</span>:[<span class="hljs-built_in">int</span>(x) <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> sys.stdin.readline().split()]<br>n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>a = [<span class="hljs-number">0</span>] + read()<br>s = [<span class="hljs-number">0</span>]*(n + <span class="hljs-number">1</span>)<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n + <span class="hljs-number">1</span>):<br>    s[i] = s[i - <span class="hljs-number">1</span>] + a[i]<br>res,cnt = <span class="hljs-number">0</span>,<span class="hljs-number">0</span><br><span class="hljs-keyword">if</span> s[i] % <span class="hljs-number">3</span> != <span class="hljs-number">0</span>: <span class="hljs-built_in">print</span>(<span class="hljs-number">0</span>)<br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>, n):<br>        <span class="hljs-keyword">if</span> s[j - <span class="hljs-number">1</span>] == s[n] / <span class="hljs-number">3</span>: cnt += <span class="hljs-number">1</span><br>        <span class="hljs-keyword">if</span> s[j] == s[n] / <span class="hljs-number">3</span> * <span class="hljs-number">2</span>: res += cnt<br>    <span class="hljs-built_in">print</span>(res)<br></code></pre></td></tr></table></figure>
+<h1 id="Yolo"><a href="#Yolo" class="headerlink" title="Yolo"></a>Yolo</h1><h2 id="Yolov1"><a href="#Yolov1" class="headerlink" title="Yolov1"></a>Yolov1</h2><h3 id="输入输出"><a href="#输入输出" class="headerlink" title="输入输出"></a>输入输出</h3><ul>
+<li><p>Input：整张图</p>
+</li>
+<li><p>Output：bbox位置 + bbox的类别（使用回归）</p>
+</li>
+<li><p>分成S*S个网格，网格即为感兴趣的地方；每个网格预测 B 个Boundingbox，每个Boundingbox需要预测5个值<code>(x,y,w,h,confidence(是否是预测的类))</code></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/yolov1_4.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/volov1_1.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/yolov1_loss.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="整体结构"><a href="#整体结构" class="headerlink" title="整体结构"></a>整体结构</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/yolov1_3.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="Yolov2"><a href="#Yolov2" class="headerlink" title="Yolov2"></a>Yolov2</h2><h3 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/yolov2.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li><p>具体过程</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/yolov2_.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+<h3 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h3><ul>
+<li><p><strong>YOLOv2: Darknet-19</strong>：</p>
+<ul>
+<li>与VGG相似，使用了很多3×3卷积核；并且每一次池化后，下一层的卷积核的通道数 &#x3D; 池化输出的通道 × 2。</li>
+<li>在每一层卷积后，都增加了批量标准化（Batch Normalization）进行预处理。</li>
+<li>采用了降维的思想，把1×1的卷积置于3×3之间，用来压缩特征。</li>
+<li>在网络最后的输出增加了一个global average pooling层。</li>
+<li>整体上采用了19个卷积层，5个池化层。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># leaky relu激活函数</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">leaky_relu</span>(<span class="hljs-params"><span class="hljs-built_in">input</span>, alpha = <span class="hljs-number">0.01</span></span>):<br>    output = tf.maximum(<span class="hljs-built_in">input</span>, tf.multiply(<span class="hljs-built_in">input</span>, alpha))<br><br>    <span class="hljs-keyword">return</span> output<br><br><span class="hljs-comment"># conv2d层+BN层+leaky relu合并一起的过程</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">conv2d</span>(<span class="hljs-params">inputs, filters, shape, stride = (<span class="hljs-params"><span class="hljs-number">1</span>, <span class="hljs-number">1</span></span>), training = <span class="hljs-literal">True</span></span>):<br>    layer = tf.layers.conv2d(inputs,<br>                        filters,<br>                        shape,<br>                        stride,<br>                        padding = <span class="hljs-string">&#x27;SAME&#x27;</span>,<br>                        kernel_initializer = tf.truncated_normal_initializer(stddev = <span class="hljs-number">0.01</span>))<br><br>    layer = tf.layers.batch_normalization(layer, training = training)<br>    layer = leaky_relu(layer)<br><br>    <span class="hljs-keyword">return</span> layer<br><br><span class="hljs-comment"># Darknet-19分类任务网络结构创建例程</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">darknet_19_for_classification</span>(<span class="hljs-params">inputs, num_classes = <span class="hljs-number">1000</span>, is_training = <span class="hljs-literal">True</span></span>):<br>    <span class="hljs-comment"># conv1 and pool1</span><br>    net = conv2d(inputs, <span class="hljs-number">32</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>    net = slim.max_pool2d(net, [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], padding = <span class="hljs-string">&#x27;SAME&#x27;</span>)<br>   <br>    <span class="hljs-comment"># conv2 and pool2</span><br>    net = conv2d(net, <span class="hljs-number">64</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>    net = slim.max_pool2d(net, [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], padding = <span class="hljs-string">&#x27;SAME&#x27;</span>)<br>	<br>    <span class="hljs-comment"># conv3_1~conv3_3 and pool3</span><br>    net = conv2d(net, <span class="hljs-number">128</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">64</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">128</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>    net = slim.max_pool2d(net, [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], padding = <span class="hljs-string">&#x27;SAME&#x27;</span>)<br>	<br>    <span class="hljs-comment"># conv4_1~conv4_3 and pool4</span><br>    net = conv2d(net, <span class="hljs-number">256</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">128</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">256</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>    net = slim.max_pool2d(net, [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], padding = <span class="hljs-string">&#x27;SAME&#x27;</span>)<br>	<br>    <span class="hljs-comment"># conv5_1~conv5_5 and pool5</span><br>    net = conv2d(net, <span class="hljs-number">512</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">256</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">512</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">256</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">512</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>    net = slim.max_pool2d(net, [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>], padding = <span class="hljs-string">&#x27;SAME&#x27;</span>)<br>	<br>    <span class="hljs-comment"># conv6_1~conv6_5</span><br>    net = conv2d(net, <span class="hljs-number">1024</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">512</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">1024</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">512</span>, [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>], training = is_training)<br>    net = conv2d(net, <span class="hljs-number">1024</span>, [<span class="hljs-number">3</span>, <span class="hljs-number">3</span>], training = is_training)<br>	<br>    <span class="hljs-comment"># conv7</span><br>    net = conv2d(net, num_classes, [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>], training = is_training)<br>	<br>    <span class="hljs-comment"># pool6</span><br>    net = slim.avg_pool2d(net, [<span class="hljs-number">7</span>, <span class="hljs-number">7</span>], padding = <span class="hljs-string">&#x27;SAME&#x27;</span>)<br><br>    <span class="hljs-keyword">return</span> net<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Batch Normalization</strong></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/BN.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p><strong>引入Anchor box</strong></p>
+<p> YOLOv2 在此方法上进行了一点改变：预测边界框中心点相对于该网格左上角坐标$(C_{x},C_{y})$</p>
+<p> 的相对偏移量$(t_{x},t_{y})$，同时为了将<strong>bounding box的中心点约束在当前网格</strong>中，使用 sigmoid 函数将其归一化处理，<strong>将值约束在0-1</strong>，这使得模型训练更稳定。</p>
+<p>下图为 Anchor box 与 bounding box 转换示意图，其中蓝色的是要预测的bounding box，黑色虚线框是Anchor box。<br><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/yolo_anchorbox.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p><strong>加密网格</strong></p>
+<p>将YOLO-V1的7×7网格划分加密到13×13，网格单元数量增加到将近4倍，因此增大了能够产生包围框位置的密度。YOLOv2 在最后一个卷积层输出 13×13 的 feature map，意味着一张图片被分成了13×13个网格。每个网格有5个anchor box来预测5个bounding box，每个bounding box预测得到5个值：$(t_{x},t_{y},t_{w},t_{h},t_{o}(类似Fast-RCNN中的confidence))$</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/yolo_bounding.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>置信度$t_{o}$ 的计算公式为：$Pr(object)*IOU(b,object)&#x3D;\delta(t_{o})$</p>
+</li>
+<li><p><strong>全卷积代替全连接</strong>：与Faster R-CNN和SSD类似，YOLO-V2利用具有小卷积核的全卷积层替换YOLO-V1最后的全连接层进行目标包围框预测，该操作的实质即以局部特征代替全局特征来预测包围框，在一定程度上恢复局部包围框预测模式。下图为YOLO-V2以全卷积模式预测目标包围框的示意图（假设每个位置预测k个包围框）</p>
+<p><code>conf: confidence</code>、<code>c:number of classes</code>、<code>k:number of anchor boxes</code></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/yolov2_1.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p><strong>Passthrough layer:</strong></p>
+<p>YOLO-V2为了能够实现对小目标的检测，提出一种称之为“直通”层（passthrough layer）的操作，也是将具有丰富纹理信息的浅层特征与具有丰富语义信息的深层特征进行融合，实现对目标的“大小通吃”</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/passthrough_layer.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/passthrough_layer2.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 使用Tensorflow的extract_image_patches实现直通操作</span><br>out = tf.extract_image_patches(<span class="hljs-keyword">in</span>, <br>              [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">2</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>], padding = <span class="hljs-string">&#x27;VALID&#x27;</span>)<br><br><span class="hljs-comment"># 使用Tensorflow的space_to_depth实现直通操作</span><br>out = tf.space_to_depth(<span class="hljs-keyword">in</span>, <span class="hljs-number">2</span>)<br></code></pre></td></tr></table></figure>
 
-<h2 id="二维差分"><a href="#二维差分" class="headerlink" title="二维差分"></a>二维差分</h2><p>注意其作用域是从（i, j）到右下角；差分与前缀和是一对逆反操作</p>
-<p><img src="C:\Github_io\source\img\BlueBridge\erweichafen.png" srcset="/img/loading.gif" lazyload></p>
-<h2 id="增减序列（差分）"><a href="#增减序列（差分）" class="headerlink" title="增减序列（差分）"></a>增减序列（差分）</h2><h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><p>差分数组b除b[1]外，均为0则满足条件</p>
-<p>所以最少操作数是max(正数和， 负数和)</p>
-<p>种类是b[1]的操作次数 + 1（abs(正数和 - 负数和) + 1）</p>
-<h3 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs python">n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>a = [<span class="hljs-number">0</span>]*<span class="hljs-number">100010</span><br>b = [<span class="hljs-number">0</span>] * <span class="hljs-number">100010</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):<br>    a[i] = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):<br>    b[i] = a[i] - a[i - <span class="hljs-number">1</span>]<br>p,q = <span class="hljs-number">0</span>,<span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">2</span>, n + <span class="hljs-number">1</span>):<br>    <span class="hljs-keyword">if</span> b[i] &gt; <span class="hljs-number">0</span>: p += b[i]<br>    <span class="hljs-keyword">else</span>: q -= b[i]<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">max</span>(p,q))<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">abs</span>(p - q) + <span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
-
-
+<ul>
+<li><p><strong>使用K-means聚类</strong></p>
+<p>在数据集上使用K-means，选择所需要的anchor box的数目，论文中是<strong>5</strong></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/yolov2_k-means.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p><strong>reorg layer</strong></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/yolov2_reorg.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">class</span> <span class="hljs-title class_">reorg_layer</span>(nn.Module):<br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">__init__</span>(<span class="hljs-params">self, stride</span>):<br>        <span class="hljs-built_in">super</span>(reorg_layer, self).__init__()<br>        self.stride = stride<br><br>    <span class="hljs-keyword">def</span> <span class="hljs-title function_">forward</span>(<span class="hljs-params">self, x</span>):<br>        batch_size, channels, height, width = x.size()<br>        _height, _width = height // self.stride, width // self.stride<br>        <br>        x = x.view(batch_size, channels, _height, self.stride, _width, self.stride).transpose(<span class="hljs-number">3</span>, <span class="hljs-number">4</span>).contiguous()<br>        x = x.view(batch_size, channels, _height * _width, self.stride * self.stride).transpose(<span class="hljs-number">2</span>, <span class="hljs-number">3</span>).contiguous()<br>        x = x.view(batch_size, channels, self.stride * self.stride, _height, _width).transpose(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>).contiguous()<br>        x = x.view(batch_size, -<span class="hljs-number">1</span>, _height, _width)<br><br>        <span class="hljs-keyword">return</span> x<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="loss"><a href="#loss" class="headerlink" title="loss"></a>loss</h3><ul>
+<li>一个<code>groundtruth</code>只分配给一个<code>anchor</code></li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/object_detection/yolov2_loss.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="Yolov3"><a href="#Yolov3" class="headerlink" title="Yolov3"></a>Yolov3</h2>
                 
               </div>
             
@@ -335,7 +392,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
   
   
 
@@ -350,9 +407,11 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
       
-        <a href="/tags/%E5%89%8D%E7%BC%80%E5%92%8C/">#前缀和</a>
+        <a href="/tags/pytorch/">#pytorch</a>
+      
+        <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">#目标检测</a>
       
     </div>
   
@@ -364,8 +423,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>前缀和-算法</div>
-      <div>http://tom-jerr.github.io/2023/04/13/alorithm/前缀和/</div>
+      <div>YOLO</div>
+      <div>http://tom-jerr.github.io/2023/04/13/deeplearning/Yolo/</div>
     </div>
     <div class="license-meta">
       
@@ -409,18 +468,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/04/13/alorithm/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="数据结构-算法">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">数据结构-算法</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/04/13/alorithm/%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%9F%E9%A2%98/" title="蓝桥杯真题-算法">
-                        <span class="hidden-mobile">蓝桥杯真题-算法</span>
+                      <a href="/2023/04/13/deeplearning/Transformer/" title="Transformer">
+                        <span class="hidden-mobile">Transformer</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
