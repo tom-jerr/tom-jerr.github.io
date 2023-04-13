@@ -16,26 +16,25 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言本文是针对GDB调试XV6的一些知识">
+    <meta name="description" content="前言linux文件系统分支——EXT3，一个实现了日志的文件系统">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Calling conventions——xv6">
-<meta property="og:url" content="http://tom-jerr.github.io/2023/02/20/OS/calling%20conventions/index.html">
+<meta property="og:title" content="FileSystem——ext3">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/OS/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%AE%9E%E4%BE%8B/ext3%E5%AE%9E%E7%8E%B0/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="前言本文是针对GDB调试XV6的一些知识">
+<meta property="og:description" content="前言linux文件系统分支——EXT3，一个实现了日志的文件系统">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://tom-jerr.github.io/img/img/OS.png">
-<meta property="article:published_time" content="2023-02-20T02:34:57.364Z">
-<meta property="article:modified_time" content="2023-02-19T15:12:45.580Z">
+<meta property="og:image" content="http://tom-jerr.github.io/img/OS.png">
+<meta property="article:published_time" content="2023-04-13T12:47:24.242Z">
+<meta property="article:modified_time" content="2023-04-13T12:48:46.731Z">
 <meta property="article:author" content="LZY">
-<meta property="article:tag" content="MIT">
+<meta property="article:tag" content="FS">
 <meta property="article:tag" content="OS">
-<meta property="article:tag" content="xv6">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://tom-jerr.github.io/img/img/OS.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/OS.png">
   
   
   
-  <title>Calling conventions——xv6 - tom-jerr的个人博客</title>
+  <title>FileSystem——ext3 - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -219,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Calling conventions——xv6"></span>
+            <span id="subtitle" data-typed-text="FileSystem——ext3"></span>
           
         </div>
 
@@ -230,8 +229,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-02-20 10:34" pubdate>
-          2023年2月20日 上午
+        <time datetime="2023-04-13 20:47" pubdate>
+          2023年4月13日 晚上
         </time>
       </span>
     
@@ -242,7 +241,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          5.1k 字
+          4k 字
         
       </span>
     
@@ -253,7 +252,7 @@
         
         
         
-          43 分钟
+          34 分钟
         
       </span>
     
@@ -291,12 +290,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Calling conventions——xv6</h1>
+            <h1 style="display: none">FileSystem——ext3</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年2月19日 晚上
+                    本文最后更新于：2023年4月13日 晚上
                   
                 
               </p>
@@ -304,119 +303,109 @@
             
               <div class="markdown-body">
                 
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文是针对GDB调试XV6的一些知识</p>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>linux文件系统分支——EXT3，一个实现了日志的文件系统</p>
 <span id="more"></span>
 
-<h1 id="Calling-conventions"><a href="#Calling-conventions" class="headerlink" title="Calling conventions"></a>Calling conventions</h1><h2 id="gdb和和汇编代码执行"><a href="#gdb和和汇编代码执行" class="headerlink" title="gdb和和汇编代码执行"></a>gdb和和汇编代码执行</h2><p>接下来我们来看一些真实的汇编代码。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(294).png" srcset="/img/loading.gif" lazyload></p>
-<p>图中的代码，上半部分的注释是对应的C代码，这是个简单的函数，它累加了从1到n的所有数字，并返回结果。下半部分是可以编译出的最简单的汇编代码。如果你在你自己的计算机编写同样的C代码并编译，你得到的极有可能是差别较大的汇编代码。这里有很多原因，有一些原因我们之后会讲，有一些原因是因为编译器。当将C代码编译成汇编代码时，现代的编译器会执行各种各样的优化，所以你们自己编译得到的汇编代码可能看起来是不一样的。例如，当你在gdb中做debug的时候，有时候你会看到gdb提示你说某些变量被优化掉了，这意味着编译器决定了自己不再需要那个变量，变量以及相关的信息会在某个时间点删掉。</p>
-<p>上图中的代码都很直观，首先将寄存器a0中的值保存在寄存器t0中。之后将寄存器a0设置为0，之后在每个循环中将t0中的数据加到a0中，直到t0变成0。这就是代码的所有内容。</p>
-<blockquote>
-<p>学生提问：这里面.secion，.global，.text分别是什么意思？</p>
-<p>TA：global表示你可以在其他文件中调用这个函数。text表明这里的是代码，如果你还记得XV6中的图3.4，</p>
-</blockquote>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(300).png" srcset="/img/loading.gif" lazyload></p>
-<blockquote>
-<p>每个进程的page table中有一个区域是text，汇编代码中的text表明这部分是代码，并且位于page table的text区域中。text中保存的就是代码。</p>
-</blockquote>
-<p>如果你对内核比较感兴趣，在编译完之后，你可以查看kernel.asm文件，你可以看到XV6完整内核的汇编版本。文件中每一行左边的数字表明的是这条指令会在内存中的哪个位置，这个信息非常有用。在汇编代码中还可以看到函数对应的label，以及它们是在哪里定义的。这些信息在我们调试代码的时候可能会非常非常有用，我稍后会展示这部分。</p>
-<blockquote>
-<p>学生提问：.asm文件和.s文件有什么区别？</p>
-<p>TA：我并不是百分百确定。这两类文件都是汇编代码，.asm文件中包含大量额外的标注，而.s文件中没有。所以通常来说当你编译你的C代码，你得到的是.s文件。如果你好奇我们是如何得到.asm文件，makefile里面包含了具体的步骤。</p>
-</blockquote>
-<hr>
-<h2 id="gdb调试汇编"><a href="#gdb调试汇编" class="headerlink" title="gdb调试汇编"></a>gdb调试汇编</h2><p>在另一个窗口打开gdb，</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(343).png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="gdb中输入tui-enable可以打开源代码展示窗口。"><a href="#gdb中输入tui-enable可以打开源代码展示窗口。" class="headerlink" title="gdb中输入tui enable可以打开源代码展示窗口。"></a>gdb中输入tui enable可以打开源代码展示窗口。</h3><p>sum_to的代码现在都位于内核中，我在sum_to中设置一个断点。然后继续代码的执行，代码在断点处停住。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/MIT/image%20(290).png" srcset="/img/loading.gif" lazyload></p>
-<p>gdb窗口的左上角是程序计数器，我们可以看到当前的值是0x800065e2。如果我们去kernel.asm中，查找这个地址，我们可以看到这个地址就是sum_to函数的起始地址。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image(344).png" srcset="/img/loading.gif" lazyload></p>
-<p>如果代码出现了问题，在gdb中看到的地址，你可以直接在kernel.asm找到具体的行，分析问题的原因，然后再向相应的地址设置断点。</p>
-<p>在gdb中输入layout asm，可以在tui窗口看到所有的汇编指令。再输入layout reg可以看到所有的寄存器信息。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(210).png" srcset="/img/loading.gif" lazyload></p>
-<p>在寄存器窗口，可以看到t0，a0寄存器的值。在执行完一条汇编指令之后，t0寄存器拥有了a0寄存器的内容，也就是5。在寄存器窗口，更新了的寄存器会被高亮出来。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(317).png" srcset="/img/loading.gif" lazyload></p>
-<p>之后持续的单步执行代码，直到函数返回。</p>
-<p>如果你关心你设置了哪些断点，或着你跟踪代码的时候迷糊了，你可以在gdb中输入info breakpoints，你可以看到所有设置了的断点。你甚至可以看到这个断点已经被命中了几次。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(272).png" srcset="/img/loading.gif" lazyload></p>
-<p>类似的，你也可以通过输入info reg查看寄存器的信息。</p>
-<blockquote>
-<p>学生提问：你是怎么打开多个terminal窗口的？</p>
-<p>TA：我是通过tmux打开的。（30:27 - 31:45在介绍tmux，与课程无关故跳过）</p>
-<p>学生提问：为什么这里展示的是汇编代码而不是C代码？</p>
-<p>TA：从最初的代码可以看出，这里的程序完全是汇编代码实现的，所以自然也没有关联的C程序。如果我将断点设置在C代码中，在命中断点之后输入layout split或者layout source，就可以看到相应的C代码了。</p>
-<p>layout split会同时展现C代码和汇编，而layout source只会展示C代码。</p>
-<p>学生提问：在C代码中，断点设置在某一行，如果这一行有多个语句的话，断点会设置在哪个语句？</p>
-<p>TA：断点会设置在第一个语句。</p>
-</blockquote>
-<p>gdb和tmux有上百个快捷指令，可以通过google去查找，对于gdb，也可以使用apropos指令查看帮助。</p>
-<h2 id="RISC-V的寄存器"><a href="#RISC-V的寄存器" class="headerlink" title="RISC-V的寄存器"></a>RISC-V的寄存器</h2><p>我们之前看过了汇编语言和RISC-V的介绍。接下来我们看一下之后lab相关的内容。这部分的内容其实就是本节课的<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2020/readings/riscv-calling.pdf">准备材料</a>中的内容。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(315).png" srcset="/img/loading.gif" lazyload></p>
-<p>你们现在对于这个表达应该都很熟悉了，这个表里面是RISC-V寄存器。寄存器是CPU或者处理器上，预先定义的可以用来存储数据的位置。寄存器之所以重要是因为汇编代码并不是在内存上执行，而是在寄存器上执行，也就是说，当我们在做add，sub时，我们是对寄存器进行操作。所以你们通常看到的汇编代码中的模式是，我们通过load将数据存放在寄存器中，这里的数据源可以是来自内存，也可以来自另一个寄存器。之后我们在寄存器上执行一些操作。如果我们对操作的结果关心的话，我们会将操作的结果store在某个地方。这里的目的地可能是内存中的某个地址，也可能是另一个寄存器。这就是通常使用寄存器的方法。</p>
-<h2 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h2><p>其中每一个区域都是一个Stack Frame，每执行一次函数调用就会产生一个Stack Frame。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(263).png" srcset="/img/loading.gif" lazyload></p>
-<p>每一次我们调用一个函数，函数都会为自己创建一个Stack Frame，并且只给自己用。函数通过移动Stack Pointer来完成Stack Frame的空间分配。</p>
-<h2 id="SP-amp-FP"><a href="#SP-amp-FP" class="headerlink" title="SP&amp;FP"></a>SP&amp;FP</h2><p>对于Stack来说，是从高地址开始向低地址使用。所以栈总是向下增长。当我们想要创建一个新的Stack Frame的时候，总是对当前的Stack Pointer做减法。一个函数的Stack Frame包含了保存的寄存器，本地变量，并且，如果函数的参数多于8个，额外的参数会出现在Stack中。所以Stack Frame大小并不总是一样，即使在这个图里面看起来是一样大的。不同的函数有不同数量的本地变量，不同的寄存器，所以Stack Frame的大小是不一样的。但是有关Stack Frame有两件事情是确定的：</p>
-<ul>
-<li><strong>Return address总是会出现在Stack Frame的第一位</strong></li>
-<li><strong>指向前一个Stack Frame的指针也会出现在栈中的固定位置</strong></li>
+<h1 id="ext3"><a href="#ext3" class="headerlink" title="ext3"></a>ext3</h1><ul>
+<li>ext3是针对之前一种的文件系统（ext2）logging方案的修改，所以ext3就是在几乎不改变之前的ext2文件系统的前提下，在其上增加一层logging系统。所以某种程度来说，logging是一个容易升级的模块。</li>
 </ul>
-<p>有关Stack Frame中有两个重要的寄存器，第一个是SP（Stack Pointer），它指向Stack的底部并代表了当前Stack Frame的位置。第二个是FP（Frame Pointer），它指向当前Stack Frame的顶部。因为Return address和指向前一个Stack Frame的的指针都在当前Stack Frame的固定位置，所以可以通过当前的FP寄存器寻址到这两个数据。</p>
-<p>我们保存前一个Stack Frame的指针的原因是为了让我们能跳转回去。所以当前函数返回时，我们可以将前一个Frame Pointer存储到FP寄存器中。所以我们使用Frame Pointer来操纵我们的Stack Frames，并确保我们总是指向正确的函数。</p>
-<p>Stack Frame必须要被汇编代码创建，所以是编译器生成了汇编代码，进而创建了Stack Frame。所以通常，在汇编代码中，函数的最开始你们可以看到Function prologue，之后是函数的本体，最后是Epollgue。这就是一个汇编函数通常的样子。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(262).png" srcset="/img/loading.gif" lazyload></p>
-<hr>
-<h2 id="stack的例子"><a href="#stack的例子" class="headerlink" title="stack的例子"></a>stack的例子</h2><p>从汇编代码中来看一下这里的操作。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image(339).png" srcset="/img/loading.gif" lazyload></p>
-<p>在我们之前的sum_to函数中，只有函数主体，并没有Stack Frame的内容。它这里能正常工作的原因是它足够简单，并且它是一个leaf函数。leaf函数是指不调用别的函数的函数，它的特别之处在于它不用担心保存自己的Return address或者任何其他的Caller Saved寄存器，因为它不会调用别的函数。</p>
-<p>而另一个函数sum_then_double就不是一个leaf函数了，这里你可以看到它调用了sum_to。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(264).png" srcset="/img/loading.gif" lazyload></p>
-<p>所以在这个函数中，需要包含prologue。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(285).png" srcset="/img/loading.gif" lazyload></p>
-<p>这里我们对Stack Pointer减16，这样我们为新的Stack Frame创建了16字节的空间。之后我们将Return address保存在Stack Pointer位置。</p>
-<p>之后就是调用sum_to并对结果乘以2。最后是Epllogue，</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(347).png" srcset="/img/loading.gif" lazyload></p>
-<p>这里首先将Return address加载回ra寄存器，通过对Stack Pointer加16来删除刚刚创建的Stack Frame，最后ret从函数中退出。</p>
-<p>这里我替大家问一个问题，如果我们删除掉Prologue和Epllogue，然后只剩下函数主体会发生什么？有人可以猜一下吗？</p>
-<blockquote>
-<p>学生回答：sum_then_double将不知道它应该返回的Return address。所以调用sum_to的时候，Return address被覆盖了，最终sum_to函数不能返回到它原本的调用位置。</p>
-</blockquote>
-<p>是的，完全正确，我们可以看一下具体会发生什么。先在修改过的sum_then_double设置断点，然后执行sum_then_double。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(254).png" srcset="/img/loading.gif" lazyload></p>
-<p>我们可以看到现在的ra寄存器是0x80006392，它指向demo2函数，也就是sum_then_double的调用函数。之后我们执行代码，调用了sum_to。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(329).png" srcset="/img/loading.gif" lazyload></p>
-<p>我们可以看到ra寄存器的值被sum_to重写成了0x800065f4，指向sum_then_double，这也合理，符合我们的预期。我们在函数sum_then_double中调用了sum_to，那么sum_to就应该要返回到sum_then_double。</p>
-<p>之后执行代码直到sum_then_double返回。如前面那位同学说的，因为没有恢复sum_then_double自己的Return address，现在的Return address仍然是sum_to对应的值，现在我们就会进入到一个无限循环中。</p>
-<p>我认为这是一个很好的例子用来展示为什么跟踪Caller和Callee寄存器是重要的。</p>
-<blockquote>
-<p>学生提问，为什在最开始要对sp寄存器减16？</p>
-<p>TA：是为了Stack Frame创建空间。减16相当于内存地址向前移16，这样对于我们自己的Stack Frame就有了空间，我们可以在那个空间存数据。我们并不想覆盖原来在Stack Pointer位置的数据。</p>
-<p>学生提问：为什么不减4呢？</p>
-<p>TA：我认为我们不需要减16那么多，但是4个也太少了，你至少需要减8，因为接下来要存的ra寄存器是64bit（8字节）。这里的习惯是用16字节，因为我们要存Return address和指向上一个Stack Frame的地址，只不过我们这里没有存指向上一个Stack Frame的地址。如果你看kernel.asm，你可以发现16个字节通常就是编译器的给的值。</p>
-</blockquote>
-<h2 id="例子的C代码与汇编"><a href="#例子的C代码与汇编" class="headerlink" title="例子的C代码与汇编"></a>例子的C代码与汇编</h2><p>接下来我们来看一些C代码。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(209).png" srcset="/img/loading.gif" lazyload></p>
-<p>demo4函数里面调用了dummymain函数。我们在dummymain函数中设置一个断点，</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(296).png" srcset="/img/loading.gif" lazyload></p>
-<hr>
-<h3 id="Stack-Frame的信息"><a href="#Stack-Frame的信息" class="headerlink" title="Stack Frame的信息"></a>Stack Frame的信息</h3><p>现在我们在dummymain函数中。如果我们在gdb中输入info frame，可以看到有关当前Stack Frame许多有用的信息。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(256).png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><ul>
+<li><p>block cache：写回block（稍后写回磁盘）</p>
+</li>
+<li><p>维护了一些transaction信息</p>
 <ul>
-<li>Stack level 0，表明这是调用栈的最底层</li>
-<li>pc，当前的程序计数器</li>
-<li>saved pc，demo4的位置，表明当前函数要返回的位置</li>
-<li>source language c，表明这是C代码</li>
-<li>Arglist at，表明参数的起始地址。当前的参数都在寄存器中，可以看到argc&#x3D;3，argv是一个地址</li>
+<li>一个序列号</li>
+<li>一系列该transaction修改的block编号。这些block编号指向的是在cache中的block，因为任何修改最初都是在cache中完成。</li>
+<li>以及一系列的handle，handle对应了系统调用，并且这些系统调用是transaction的一部分，会读写cache中的block</li>
 </ul>
-<p>如果输入backtrace（简写bt）可以看到从当前调用栈开始的所有Stack Frame。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(253).png" srcset="/img/loading.gif" lazyload></p>
-<p>如果对某一个Stack Frame感兴趣，可以先定位到那个frame再输入info frame，假设对syscall的Stack Frame感兴趣。</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(352).png" srcset="/img/loading.gif" lazyload></p>
-<p>在这个Stack Frame中有更多的信息，有一堆的Saved Registers，有一些本地变量等等。这些信息对于调试代码来说超级重要。</p>
-<blockquote>
-<p>学生提问：为什么有的时候编译器会优化掉argc或者argv？这个以前发生过。</p>
-<p>TA：这意味着编译器发现了一种更有效的方法，不使用这些变量，而是通过寄存器来完成所有的操作。如果一个变量不是百分百必要的话，这种优化还是很有常见的。我们并没有给你编译器的控制能力，但是在你们的日常使用中，你可以尝试设置编译器的optimization flag为0，不过就算这样，编译器也会做某些程度的优化。</p>
-</blockquote>
+</li>
+<li><p>一个文件系统树，包含了inode，目录，文件等等</p>
+</li>
+<li><p>bitmap block来表明每个data block是被分配的还是空闲的</p>
+</li>
+<li><p>在磁盘的一个指定区域，会保存log</p>
+</li>
+</ul>
+<h2 id="Log"><a href="#Log" class="headerlink" title="Log"></a>Log</h2><ul>
+<li><p>log的<strong>super block</strong>包含了log中第一个有效的transaction的起始位置和序列号。起始位置就是磁盘上log分区的block编号，序列号就是前面提到的每个transaction都有的序列号。</p>
+</li>
+<li><p>一个<strong>descriptor block</strong>，其中包含了log数据对应的<strong>实际block编号</strong>，这与XV6中的header block很像。</p>
+</li>
+<li><p>之后是针对每一个block编号的<strong>更新数据</strong>。</p>
+</li>
+<li><p>最后当一个transaction完成并commit了，会有一个<strong>commit block</strong></p>
+</li>
+</ul>
+<p><img src="C:\Users\我\Desktop\MyblogImg\MIT\6.828\ext3_log.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="性能提升"><a href="#性能提升" class="headerlink" title="性能提升"></a>性能提升</h2><h3 id="异步系统调用（asynchronous）"><a href="#异步系统调用（asynchronous）" class="headerlink" title="异步系统调用（asynchronous）"></a>异步系统调用（asynchronous）</h3><ul>
+<li>系统调用在写入到磁盘之前就返回了，系统调用只会更新缓存在内存中的block，并不用等待写磁盘操作。不过它可能会等待读磁盘。</li>
+<li>它也使得<strong>I&#x2F;O可以并行的运行</strong>，也就是说应用程序可以调用一些文件系统的系统调用，但是应用程序可以很快从系统调用中返回并继续运算，与此同时文件系统在后台会并行的完成之前的系统调用所要求的写磁盘操作。<strong>这被称为I&#x2F;O concurrency</strong>，如果没有异步系统调用，很难获得I&#x2F;O concurrency，或者说很难同时进行磁盘操作和应用程序运算，因为同步系统调用中，应用程序总是要等待磁盘操作结束才能从系统调用中返回。</li>
+<li>缺点：异步系统调用的缺点是系统调用的返回并不能表示系统调用应该完成的工作实际完成了。</li>
+</ul>
+<h4 id="fsync-x2F-flush"><a href="#fsync-x2F-flush" class="headerlink" title="fsync &#x2F; flush"></a>fsync &#x2F; flush</h4><ul>
+<li>所以文件系统对于这类应用程序也提供了一些工具以确保在crash之后可以有预期的结果。<strong>这里的工具是一个系统调用，叫做fsync</strong></li>
+<li>系统调用接收一个文件描述符作为参数，它会告诉文件系统去完成所有的与该文件相关的写磁盘操作，在<strong>所有的数据都确认写入到磁盘之后，fsync才会返回</strong>。</li>
+</ul>
+<h3 id="批量执行能力（batching）"><a href="#批量执行能力（batching）" class="headerlink" title="批量执行能力（batching）"></a>批量执行能力（batching）</h3><ul>
+<li>将多个系统调用打包成一个transaction</li>
+<li>在任何时候，ext3只会有一个open transaction。</li>
+<li>它首先会宣告要开始一个新的transaction，接下来的几秒所有的系统调用都是这个大的transaction的一部分。我认为默认情况下，ext3每5秒钟都会创建一个新的transaction，所以每个transaction都会包含5秒钟内的系统调用，这些系统调用都打包在一个transaction中。在5秒钟结束的时候，ext3会commit这个包含了可能有数百个更新的大transaction。</li>
+</ul>
+<h4 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h4><ul>
+<li>首先它在多个系统调用之间<strong>分摊了transaction带来的固有的损耗</strong>。固有的损耗包括写transaction的descriptor block和commit block；在一个机械硬盘中需要查找log的位置并等待磁碟旋转，这些都是成本很高的操作</li>
+<li><strong>极大的减少写磁盘的总时间。</strong>通过batching，多次更新同一组block会先快速的在内存的block cache中完成，之后在transaction结束时，一次性的写入磁盘的log中。这被称为write absorption</li>
+<li><strong>disk scheduling。</strong>假设我们要向磁盘写1000个block，不论是在机械硬盘还是SSD（机械硬盘效果会更好），一次性的向磁盘的连续位置写入1000个block，要比分1000次每次写一个不同位置的磁盘block快得多。</li>
+</ul>
+<h3 id="并发（concurrency）"><a href="#并发（concurrency）" class="headerlink" title="并发（concurrency）"></a>并发（concurrency）</h3><ul>
+<li><strong>首先ext3允许多个系统调用同时执行，所以我们可以有并行执行的多个不同的系统调用</strong>。在ext3决定关闭并commit当前的transaction之前，系统调用不必等待其他的系统调用完成，它可以直接修改作为transaction一部分的block。许多个系统调用都可以并行的执行，并向当前transaction增加block</li>
+<li>另一种ext3提供的并发是，可以有多个不同状态的transaction同时存在。<strong>所以尽管只有一个open transaction可以接收系统调用，但是其他之前的transaction可以并行的写磁盘</strong>。<ul>
+<li>首先是一个open transaction</li>
+<li>若干个正在commit到log的transaction，我们并不需要等待这些transaction结束。当之前的transaction还没有commit并还在写log的过程中，新的系统调用仍然可以在当前的open transaction中进行。</li>
+<li>若干个正在从cache中向文件系统block写数据的transaction</li>
+<li>若干个正在被释放的transaction，这个并不占用太多的工作</li>
+</ul>
+</li>
+</ul>
+<h2 id="syscall"><a href="#syscall" class="headerlink" title="syscall"></a>syscall</h2><p><img src="C:\Users\我\Desktop\MyblogImg\MIT\6.828\ext3_syscall.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>通过handle获取系统调用</li>
+<li>修改位于缓存中的block。</li>
+<li>这个系统调用结束时，它会调用stop函数，并将handle作为参数传入。</li>
+</ul>
+<h2 id="commit-transaction"><a href="#commit-transaction" class="headerlink" title="commit transaction"></a>commit transaction</h2><ol>
+<li><strong>首先需要阻止新的系统调用</strong>。当我们正在commit一个transaction时，我们不会想要有新增的系统调用，我们只会想要包含已经开始了的系统调用，所以我们需要阻止新的系统调用。</li>
+<li>第二，<strong>需要等待包含在transaction中的已经开始了的系统调用们结束。</strong>所以我们需要等待transaction中未完成的系统调用完成，这样transaction能够反映所有的写操作。</li>
+<li>一旦transaction中的所有系统调用都完成了，也就是完成了更新cache中的数据，那么就可以开始一个新的transaction，并且让在第一步中等待的系统调用继续执行。<strong>所以现在需要为后续的系统调用开始一个新的transaction。</strong></li>
+<li><strong>更新descriptor block</strong>，其中包含了所有在transaction中被修改了的block编号。</li>
+<li><strong>将实际的block写入到log</strong>中。</li>
+<li>接下来，我们需要等待前两步中的写log结束。</li>
+<li>之后我们可以<strong>写入commit block</strong>。</li>
+<li>接下来我们需要等待写commit block结束。结束之后，从技术上来说，当前transaction已经到达了commit point，也就是说transaction中的写操作可以保证在面对crash并重启时还是可见的。如果crash发生在写commit block之前，那么transaction中的写操作在crash并重启时会丢失。</li>
+<li>接下来我们可以<strong>将transaction包含的block写入到文件系统中的实际位置</strong>。</li>
+<li>在第9步中的所有写操作完成之后，我们才能重用<strong>transaction对应的那部分log空间</strong>。</li>
+</ol>
+<p><img src="C:\Users\我\Desktop\MyblogImg\MIT\6.828\log_structure.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="是否可重用Log"><a href="#是否可重用Log" class="headerlink" title="是否可重用Log"></a>是否可重用Log</h3><ul>
+<li>我们是否能重用一段log空间，<strong>取决于相应的transaction</strong>，例如T2，是否已经commit并且写入到文件系统的实际位置中，这样在crash并重启时就不需要重新执行这段transaction了。同时也取决于T2之前的的所有transaction是否已经被释放了。所有的这些条件都满足时，我们就可以释放并重用T2对应的log空间。</li>
+</ul>
+<h2 id="恢复过程"><a href="#恢复过程" class="headerlink" title="恢复过程"></a>恢复过程</h2><ul>
+<li>文件系统会更新super block中的指针将其指向当前最早的transaction的起始位置。</li>
+<li>所以恢复软件会从super block指向的位置开始一直扫描，直到：<ul>
+<li>某个commit block之后的一个block并不是descriptor block</li>
+<li>或者某个commit block之后是descriptor block，但是根据descriptor block找到的并不是一个commit block</li>
+</ul>
+</li>
+</ul>
+<h2 id="transaction需要等前一个transaction中系统调用执行完成"><a href="#transaction需要等前一个transaction中系统调用执行完成" class="headerlink" title="transaction需要等前一个transaction中系统调用执行完成"></a>transaction需要等前一个transaction中系统调用执行完成</h2><ul>
+<li>如果未等待可能会失去原子性</li>
+</ul>
+<p><img src="C:\Users\我\Desktop\MyblogImg\MIT\6.828\syscall_crash.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>因为create在unlink释放inode之后分配的inode，它可能会<strong>重用同一个inode</strong>，所以x可能会获得y的inode，假设是inode 17。目前为止没有问题，因为unlink本来就是释放inode。当T1中的create结束之后，我们会关闭T1，在最后我们会将T1的所有更新都写入到磁盘的log中。之后unlink还要花点时间才能结束，但是在它结束之前计算机crash了。</li>
+<li>在重启并运行恢复软件时，可以发现T1已经commit了，而T2没有。所以恢复软件会完全忽略T2，这意味着T2中的unlink就跟没有发生过一样，<strong>恢复软件不会执行T2中的unlink，也就不会删除文件y</strong>。</li>
+<li>所以crash并重启之后y文件仍然存在，并还在使用inode 17。然而T1又完成了，x文件使用的也是inode 17，<strong>所以现在我们错误的有了两个文件都使用了相同的inode，这意味着它们共享了文件内容</strong>，向一个文件写数据会神奇的出现在另一个文件中。这完全是错误的。</li>
+<li>这里可以这么想，T2中的unlink修改了一个block，最终这个修改过的block被前一个transaction所使用。<strong>T2中修改的信息，被T1所使用了，这意味着我们丢失了T2的原子性</strong>。因为T2的目标是unlink的效果要么是全发生，要么是完全不发生。但是刚刚的例子中，因为T1使用了T2中释放的inode，这意味着T2中部分修改已经生效了，但是其他的修改随着crash又丢失了。</li>
+</ul>
 
                 
               </div>
@@ -450,11 +439,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/MIT/">#MIT</a>
+        <a href="/tags/FS/">#FS</a>
       
         <a href="/tags/OS/">#OS</a>
-      
-        <a href="/tags/xv6/">#xv6</a>
       
     </div>
   
@@ -466,8 +453,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Calling conventions——xv6</div>
-      <div>http://tom-jerr.github.io/2023/02/20/OS/calling conventions/</div>
+      <div>FileSystem——ext3</div>
+      <div>http://tom-jerr.github.io/2023/04/13/OS/文件系统实例/ext3实现/</div>
     </div>
     <div class="license-meta">
       
@@ -479,7 +466,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年2月20日</div>
+          <div>2023年4月13日</div>
         </div>
       
       
@@ -511,9 +498,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/02/20/OS/filesystem1/" title="File system——xv4——part1">
+                      <a href="/2023/04/13/alorithm/%E5%8D%9A%E5%BC%88%E8%AE%BA/" title="博弈论-算法">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">File system——xv4——part1</span>
+                        <span class="hidden-mobile">博弈论-算法</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -521,8 +508,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/02/20/alorithm/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/" title="贪心算法">
-                        <span class="hidden-mobile">贪心算法</span>
+                      <a href="/2023/03/26/linux/%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B%E6%A6%82%E5%BF%B5/" title="">
+                        <span class="hidden-mobile"></span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

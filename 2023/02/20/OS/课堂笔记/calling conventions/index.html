@@ -1,0 +1,889 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid1.png">
+  <link rel="icon" href="/img/fluid1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="LZY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言本文是针对GDB调试XV6的一些知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Calling conventions——xv6">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/02/20/OS/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/calling%20conventions/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="前言本文是针对GDB调试XV6的一些知识">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/img/OS.png">
+<meta property="article:published_time" content="2023-02-20T02:34:57.364Z">
+<meta property="article:modified_time" content="2023-02-19T15:12:45.580Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="MIT">
+<meta property="article:tag" content="xv6">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/img/OS.png">
+  
+  
+  
+  <title>Calling conventions——xv6 - tom-jerr的个人博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>tom-jerr的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/playlist/">
+                <i class="iconfont icon-music"></i>
+                <span>音乐</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Calling conventions——xv6"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-02-20 10:34" pubdate>
+          2023年2月20日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          43 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Calling conventions——xv6</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年2月19日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文是针对GDB调试XV6的一些知识</p>
+<span id="more"></span>
+
+<h1 id="Calling-conventions"><a href="#Calling-conventions" class="headerlink" title="Calling conventions"></a>Calling conventions</h1><h2 id="gdb和和汇编代码执行"><a href="#gdb和和汇编代码执行" class="headerlink" title="gdb和和汇编代码执行"></a>gdb和和汇编代码执行</h2><p>接下来我们来看一些真实的汇编代码。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(294).png" srcset="/img/loading.gif" lazyload></p>
+<p>图中的代码，上半部分的注释是对应的C代码，这是个简单的函数，它累加了从1到n的所有数字，并返回结果。下半部分是可以编译出的最简单的汇编代码。如果你在你自己的计算机编写同样的C代码并编译，你得到的极有可能是差别较大的汇编代码。这里有很多原因，有一些原因我们之后会讲，有一些原因是因为编译器。当将C代码编译成汇编代码时，现代的编译器会执行各种各样的优化，所以你们自己编译得到的汇编代码可能看起来是不一样的。例如，当你在gdb中做debug的时候，有时候你会看到gdb提示你说某些变量被优化掉了，这意味着编译器决定了自己不再需要那个变量，变量以及相关的信息会在某个时间点删掉。</p>
+<p>上图中的代码都很直观，首先将寄存器a0中的值保存在寄存器t0中。之后将寄存器a0设置为0，之后在每个循环中将t0中的数据加到a0中，直到t0变成0。这就是代码的所有内容。</p>
+<blockquote>
+<p>学生提问：这里面.secion，.global，.text分别是什么意思？</p>
+<p>TA：global表示你可以在其他文件中调用这个函数。text表明这里的是代码，如果你还记得XV6中的图3.4，</p>
+</blockquote>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(300).png" srcset="/img/loading.gif" lazyload></p>
+<blockquote>
+<p>每个进程的page table中有一个区域是text，汇编代码中的text表明这部分是代码，并且位于page table的text区域中。text中保存的就是代码。</p>
+</blockquote>
+<p>如果你对内核比较感兴趣，在编译完之后，你可以查看kernel.asm文件，你可以看到XV6完整内核的汇编版本。文件中每一行左边的数字表明的是这条指令会在内存中的哪个位置，这个信息非常有用。在汇编代码中还可以看到函数对应的label，以及它们是在哪里定义的。这些信息在我们调试代码的时候可能会非常非常有用，我稍后会展示这部分。</p>
+<blockquote>
+<p>学生提问：.asm文件和.s文件有什么区别？</p>
+<p>TA：我并不是百分百确定。这两类文件都是汇编代码，.asm文件中包含大量额外的标注，而.s文件中没有。所以通常来说当你编译你的C代码，你得到的是.s文件。如果你好奇我们是如何得到.asm文件，makefile里面包含了具体的步骤。</p>
+</blockquote>
+<hr>
+<h2 id="gdb调试汇编"><a href="#gdb调试汇编" class="headerlink" title="gdb调试汇编"></a>gdb调试汇编</h2><p>在另一个窗口打开gdb，</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(343).png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="gdb中输入tui-enable可以打开源代码展示窗口。"><a href="#gdb中输入tui-enable可以打开源代码展示窗口。" class="headerlink" title="gdb中输入tui enable可以打开源代码展示窗口。"></a>gdb中输入tui enable可以打开源代码展示窗口。</h3><p>sum_to的代码现在都位于内核中，我在sum_to中设置一个断点。然后继续代码的执行，代码在断点处停住。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/MIT/image%20(290).png" srcset="/img/loading.gif" lazyload></p>
+<p>gdb窗口的左上角是程序计数器，我们可以看到当前的值是0x800065e2。如果我们去kernel.asm中，查找这个地址，我们可以看到这个地址就是sum_to函数的起始地址。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image(344).png" srcset="/img/loading.gif" lazyload></p>
+<p>如果代码出现了问题，在gdb中看到的地址，你可以直接在kernel.asm找到具体的行，分析问题的原因，然后再向相应的地址设置断点。</p>
+<p>在gdb中输入layout asm，可以在tui窗口看到所有的汇编指令。再输入layout reg可以看到所有的寄存器信息。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(210).png" srcset="/img/loading.gif" lazyload></p>
+<p>在寄存器窗口，可以看到t0，a0寄存器的值。在执行完一条汇编指令之后，t0寄存器拥有了a0寄存器的内容，也就是5。在寄存器窗口，更新了的寄存器会被高亮出来。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(317).png" srcset="/img/loading.gif" lazyload></p>
+<p>之后持续的单步执行代码，直到函数返回。</p>
+<p>如果你关心你设置了哪些断点，或着你跟踪代码的时候迷糊了，你可以在gdb中输入info breakpoints，你可以看到所有设置了的断点。你甚至可以看到这个断点已经被命中了几次。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(272).png" srcset="/img/loading.gif" lazyload></p>
+<p>类似的，你也可以通过输入info reg查看寄存器的信息。</p>
+<blockquote>
+<p>学生提问：你是怎么打开多个terminal窗口的？</p>
+<p>TA：我是通过tmux打开的。（30:27 - 31:45在介绍tmux，与课程无关故跳过）</p>
+<p>学生提问：为什么这里展示的是汇编代码而不是C代码？</p>
+<p>TA：从最初的代码可以看出，这里的程序完全是汇编代码实现的，所以自然也没有关联的C程序。如果我将断点设置在C代码中，在命中断点之后输入layout split或者layout source，就可以看到相应的C代码了。</p>
+<p>layout split会同时展现C代码和汇编，而layout source只会展示C代码。</p>
+<p>学生提问：在C代码中，断点设置在某一行，如果这一行有多个语句的话，断点会设置在哪个语句？</p>
+<p>TA：断点会设置在第一个语句。</p>
+</blockquote>
+<p>gdb和tmux有上百个快捷指令，可以通过google去查找，对于gdb，也可以使用apropos指令查看帮助。</p>
+<h2 id="RISC-V的寄存器"><a href="#RISC-V的寄存器" class="headerlink" title="RISC-V的寄存器"></a>RISC-V的寄存器</h2><p>我们之前看过了汇编语言和RISC-V的介绍。接下来我们看一下之后lab相关的内容。这部分的内容其实就是本节课的<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.828/2020/readings/riscv-calling.pdf">准备材料</a>中的内容。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(315).png" srcset="/img/loading.gif" lazyload></p>
+<p>你们现在对于这个表达应该都很熟悉了，这个表里面是RISC-V寄存器。寄存器是CPU或者处理器上，预先定义的可以用来存储数据的位置。寄存器之所以重要是因为汇编代码并不是在内存上执行，而是在寄存器上执行，也就是说，当我们在做add，sub时，我们是对寄存器进行操作。所以你们通常看到的汇编代码中的模式是，我们通过load将数据存放在寄存器中，这里的数据源可以是来自内存，也可以来自另一个寄存器。之后我们在寄存器上执行一些操作。如果我们对操作的结果关心的话，我们会将操作的结果store在某个地方。这里的目的地可能是内存中的某个地址，也可能是另一个寄存器。这就是通常使用寄存器的方法。</p>
+<h2 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h2><p>其中每一个区域都是一个Stack Frame，每执行一次函数调用就会产生一个Stack Frame。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(263).png" srcset="/img/loading.gif" lazyload></p>
+<p>每一次我们调用一个函数，函数都会为自己创建一个Stack Frame，并且只给自己用。函数通过移动Stack Pointer来完成Stack Frame的空间分配。</p>
+<h2 id="SP-amp-FP"><a href="#SP-amp-FP" class="headerlink" title="SP&amp;FP"></a>SP&amp;FP</h2><p>对于Stack来说，是从高地址开始向低地址使用。所以栈总是向下增长。当我们想要创建一个新的Stack Frame的时候，总是对当前的Stack Pointer做减法。一个函数的Stack Frame包含了保存的寄存器，本地变量，并且，如果函数的参数多于8个，额外的参数会出现在Stack中。所以Stack Frame大小并不总是一样，即使在这个图里面看起来是一样大的。不同的函数有不同数量的本地变量，不同的寄存器，所以Stack Frame的大小是不一样的。但是有关Stack Frame有两件事情是确定的：</p>
+<ul>
+<li><strong>Return address总是会出现在Stack Frame的第一位</strong></li>
+<li><strong>指向前一个Stack Frame的指针也会出现在栈中的固定位置</strong></li>
+</ul>
+<p>有关Stack Frame中有两个重要的寄存器，第一个是SP（Stack Pointer），它指向Stack的底部并代表了当前Stack Frame的位置。第二个是FP（Frame Pointer），它指向当前Stack Frame的顶部。因为Return address和指向前一个Stack Frame的的指针都在当前Stack Frame的固定位置，所以可以通过当前的FP寄存器寻址到这两个数据。</p>
+<p>我们保存前一个Stack Frame的指针的原因是为了让我们能跳转回去。所以当前函数返回时，我们可以将前一个Frame Pointer存储到FP寄存器中。所以我们使用Frame Pointer来操纵我们的Stack Frames，并确保我们总是指向正确的函数。</p>
+<p>Stack Frame必须要被汇编代码创建，所以是编译器生成了汇编代码，进而创建了Stack Frame。所以通常，在汇编代码中，函数的最开始你们可以看到Function prologue，之后是函数的本体，最后是Epollgue。这就是一个汇编函数通常的样子。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(262).png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h2 id="stack的例子"><a href="#stack的例子" class="headerlink" title="stack的例子"></a>stack的例子</h2><p>从汇编代码中来看一下这里的操作。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image(339).png" srcset="/img/loading.gif" lazyload></p>
+<p>在我们之前的sum_to函数中，只有函数主体，并没有Stack Frame的内容。它这里能正常工作的原因是它足够简单，并且它是一个leaf函数。leaf函数是指不调用别的函数的函数，它的特别之处在于它不用担心保存自己的Return address或者任何其他的Caller Saved寄存器，因为它不会调用别的函数。</p>
+<p>而另一个函数sum_then_double就不是一个leaf函数了，这里你可以看到它调用了sum_to。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(264).png" srcset="/img/loading.gif" lazyload></p>
+<p>所以在这个函数中，需要包含prologue。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(285).png" srcset="/img/loading.gif" lazyload></p>
+<p>这里我们对Stack Pointer减16，这样我们为新的Stack Frame创建了16字节的空间。之后我们将Return address保存在Stack Pointer位置。</p>
+<p>之后就是调用sum_to并对结果乘以2。最后是Epllogue，</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(347).png" srcset="/img/loading.gif" lazyload></p>
+<p>这里首先将Return address加载回ra寄存器，通过对Stack Pointer加16来删除刚刚创建的Stack Frame，最后ret从函数中退出。</p>
+<p>这里我替大家问一个问题，如果我们删除掉Prologue和Epllogue，然后只剩下函数主体会发生什么？有人可以猜一下吗？</p>
+<blockquote>
+<p>学生回答：sum_then_double将不知道它应该返回的Return address。所以调用sum_to的时候，Return address被覆盖了，最终sum_to函数不能返回到它原本的调用位置。</p>
+</blockquote>
+<p>是的，完全正确，我们可以看一下具体会发生什么。先在修改过的sum_then_double设置断点，然后执行sum_then_double。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(254).png" srcset="/img/loading.gif" lazyload></p>
+<p>我们可以看到现在的ra寄存器是0x80006392，它指向demo2函数，也就是sum_then_double的调用函数。之后我们执行代码，调用了sum_to。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(329).png" srcset="/img/loading.gif" lazyload></p>
+<p>我们可以看到ra寄存器的值被sum_to重写成了0x800065f4，指向sum_then_double，这也合理，符合我们的预期。我们在函数sum_then_double中调用了sum_to，那么sum_to就应该要返回到sum_then_double。</p>
+<p>之后执行代码直到sum_then_double返回。如前面那位同学说的，因为没有恢复sum_then_double自己的Return address，现在的Return address仍然是sum_to对应的值，现在我们就会进入到一个无限循环中。</p>
+<p>我认为这是一个很好的例子用来展示为什么跟踪Caller和Callee寄存器是重要的。</p>
+<blockquote>
+<p>学生提问，为什在最开始要对sp寄存器减16？</p>
+<p>TA：是为了Stack Frame创建空间。减16相当于内存地址向前移16，这样对于我们自己的Stack Frame就有了空间，我们可以在那个空间存数据。我们并不想覆盖原来在Stack Pointer位置的数据。</p>
+<p>学生提问：为什么不减4呢？</p>
+<p>TA：我认为我们不需要减16那么多，但是4个也太少了，你至少需要减8，因为接下来要存的ra寄存器是64bit（8字节）。这里的习惯是用16字节，因为我们要存Return address和指向上一个Stack Frame的地址，只不过我们这里没有存指向上一个Stack Frame的地址。如果你看kernel.asm，你可以发现16个字节通常就是编译器的给的值。</p>
+</blockquote>
+<h2 id="例子的C代码与汇编"><a href="#例子的C代码与汇编" class="headerlink" title="例子的C代码与汇编"></a>例子的C代码与汇编</h2><p>接下来我们来看一些C代码。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(209).png" srcset="/img/loading.gif" lazyload></p>
+<p>demo4函数里面调用了dummymain函数。我们在dummymain函数中设置一个断点，</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(296).png" srcset="/img/loading.gif" lazyload></p>
+<hr>
+<h3 id="Stack-Frame的信息"><a href="#Stack-Frame的信息" class="headerlink" title="Stack Frame的信息"></a>Stack Frame的信息</h3><p>现在我们在dummymain函数中。如果我们在gdb中输入info frame，可以看到有关当前Stack Frame许多有用的信息。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(256).png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>Stack level 0，表明这是调用栈的最底层</li>
+<li>pc，当前的程序计数器</li>
+<li>saved pc，demo4的位置，表明当前函数要返回的位置</li>
+<li>source language c，表明这是C代码</li>
+<li>Arglist at，表明参数的起始地址。当前的参数都在寄存器中，可以看到argc&#x3D;3，argv是一个地址</li>
+</ul>
+<p>如果输入backtrace（简写bt）可以看到从当前调用栈开始的所有Stack Frame。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(253).png" srcset="/img/loading.gif" lazyload></p>
+<p>如果对某一个Stack Frame感兴趣，可以先定位到那个frame再输入info frame，假设对syscall的Stack Frame感兴趣。</p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/MIT/image%20(352).png" srcset="/img/loading.gif" lazyload></p>
+<p>在这个Stack Frame中有更多的信息，有一堆的Saved Registers，有一些本地变量等等。这些信息对于调试代码来说超级重要。</p>
+<blockquote>
+<p>学生提问：为什么有的时候编译器会优化掉argc或者argv？这个以前发生过。</p>
+<p>TA：这意味着编译器发现了一种更有效的方法，不使用这些变量，而是通过寄存器来完成所有的操作。如果一个变量不是百分百必要的话，这种优化还是很有常见的。我们并没有给你编译器的控制能力，但是在你们的日常使用中，你可以尝试设置编译器的optimization flag为0，不过就算这样，编译器也会做某些程度的优化。</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/">#OS</a>
+      
+        <a href="/tags/MIT/">#MIT</a>
+      
+        <a href="/tags/xv6/">#xv6</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Calling conventions——xv6</div>
+      <div>http://tom-jerr.github.io/2023/02/20/OS/课堂笔记/calling conventions/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>LZY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年2月20日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/20/OS/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0/filesystem1/" title="File system——xv4——part1">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">File system——xv4——part1</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/02/20/alorithm/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/" title="贪心算法">
+                        <span class="hidden-mobile">贪心算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments">
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div>tom-jerr的个人博客 | 记录美好生活</div> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="/js/useaplayer.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

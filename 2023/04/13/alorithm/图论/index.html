@@ -1,0 +1,857 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid1.png">
+  <link rel="icon" href="/img/fluid1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="LZY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图论——算法">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/alorithm/%E5%9B%BE%E8%AE%BA/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="前言">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/algorithm.png">
+<meta property="article:published_time" content="2023-04-13T12:54:27.896Z">
+<meta property="article:modified_time" content="2023-04-13T12:54:22.904Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="图论">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/algorithm.png">
+  
+  
+  
+  <title>图论——算法 - tom-jerr的个人博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>tom-jerr的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/playlist/">
+                <i class="iconfont icon-music"></i>
+                <span>音乐</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="图论——算法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-13 20:54" pubdate>
+          2023年4月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          10k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          86 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">图论——算法</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年4月13日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><span id="more"></span>
+
+<h1 id="图论"><a href="#图论" class="headerlink" title="图论"></a>图论</h1><h2 id="BFS"><a href="#BFS" class="headerlink" title="BFS"></a>BFS</h2><ul>
+<li>剪枝：dist不更新的点(dist[nx][ny] &lt;&#x3D; dist[cx][cy])，直接break，不再进行搜索</li>
+</ul>
+<h3 id="方格迷宫"><a href="#方格迷宫" class="headerlink" title="方格迷宫"></a>方格迷宫</h3><ul>
+<li>搜索空间过大，需要剪枝</li>
+<li>将dist不更新的点(dist[nx][ny] &lt;&#x3D; dist[cx][cy])，直接break，不再进行搜索</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs python">n,m,k=<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>,<span class="hljs-built_in">input</span>().split())<br>grid=[<span class="hljs-built_in">list</span>(<span class="hljs-built_in">input</span>())<span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n)]<br>dist=[[<span class="hljs-number">10</span>**<span class="hljs-number">9</span>]*m <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n)]<br>x1,y1,x2,y2=<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>,<span class="hljs-built_in">input</span>().split())<br>x1,y1,x2,y2=x1-<span class="hljs-number">1</span>,y1-<span class="hljs-number">1</span>,x2-<span class="hljs-number">1</span>,y2-<span class="hljs-number">1</span><br>dr=[[-<span class="hljs-number">1</span>,<span class="hljs-number">0</span>],[<span class="hljs-number">1</span>,<span class="hljs-number">0</span>],[<span class="hljs-number">0</span>,-<span class="hljs-number">1</span>],[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>]]<br>cur=<span class="hljs-number">0</span><br>q=[]<br>q.append((x1,y1))<br>dist[x1][y1]=<span class="hljs-number">0</span><br><span class="hljs-keyword">while</span> cur&lt;<span class="hljs-built_in">len</span>(q):<br>  cx,cy=q[cur]<br>  <span class="hljs-keyword">if</span> (cx,cy)==(x2,y2):<span class="hljs-keyword">break</span><br>  <span class="hljs-keyword">for</span> dx,dy <span class="hljs-keyword">in</span> dr:<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>,k+<span class="hljs-number">1</span>):<br>      nx,ny=dx*i+cx,dy*i+cy<br>      <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> (<span class="hljs-number">0</span>&lt;=nx&lt;n <span class="hljs-keyword">and</span> <span class="hljs-number">0</span>&lt;=ny&lt;m <span class="hljs-keyword">and</span> grid[nx][ny]==<span class="hljs-string">&#x27;.&#x27;</span> <span class="hljs-keyword">and</span> dist[nx][ny]&gt;dist[cx][cy]):<br>        <span class="hljs-keyword">break</span><br>      <span class="hljs-keyword">if</span> dist[nx][ny]&gt;dist[cx][cy]+<span class="hljs-number">1</span>:<br>        dist[nx][ny]=dist[cx][cy]+<span class="hljs-number">1</span><br>        q.append((nx,ny))<br>  cur+=<span class="hljs-number">1</span><br><span class="hljs-keyword">if</span> dist[x2][y2]==<span class="hljs-number">10</span>**<span class="hljs-number">9</span>:<span class="hljs-built_in">print</span>(-<span class="hljs-number">1</span>)<br><span class="hljs-keyword">else</span>:<span class="hljs-built_in">print</span>(dist[x2][y2])<br></code></pre></td></tr></table></figure>
+
+<h2 id="拓扑序列"><a href="#拓扑序列" class="headerlink" title="拓扑序列"></a>拓扑序列</h2><h3 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">topsort</span>():<br>    <span class="hljs-keyword">global</span> res<br>    q = deque()<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>,n+<span class="hljs-number">1</span>):<br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> d[i]:<br>            q.append(i)<br>            <br>    <span class="hljs-keyword">while</span> q:<br>        t = q.popleft()<br>        res.append(t)<br>        i = h[t]<br>        <span class="hljs-keyword">while</span> i != -<span class="hljs-number">1</span>:<br>            j = e[i]<br>            d[j] -= <span class="hljs-number">1</span><br>            <span class="hljs-keyword">if</span> d[j] == <span class="hljs-number">0</span>:<br>                q.append(j)<br>                <br>            i = ne[i]<br>	<span class="hljs-comment">#return len(res) == n+1</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>计算有向图的度</li>
+<li>如果度为0就入队；将节点去掉，将其所影响的节点的度-1；重复上述操作</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> deque<br><br>N = <span class="hljs-number">100010</span><br><br>h = [-<span class="hljs-number">1</span>] * N<br>e = [<span class="hljs-number">0</span>] * N<br>ne = [<span class="hljs-number">0</span>] * N<br>idx = <span class="hljs-number">0</span><br>d = [<span class="hljs-number">0</span>] * N<br><br>n, m = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b</span>):<br>    <span class="hljs-keyword">global</span> idx<br>    e[idx] = b<br>    ne[idx] = h[a]<br>    h[a] = idx<br>    idx += <span class="hljs-number">1</span><br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">topsort</span>():<br>    q = deque()<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n + <span class="hljs-number">1</span>):<br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> d[i]:<br>            q.append(i)<br><br>    res = []<br>    <span class="hljs-keyword">while</span> q:<br>        t = q.popleft()<br><br>        res.append(t)<br><br>        i = h[t]<br>        <span class="hljs-keyword">while</span> i != -<span class="hljs-number">1</span>:<br>            j = e[i]<br>            d[j] -= <span class="hljs-number">1</span><br>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> d[j]:<br>                q.append(j)<br>            i = ne[i]<br><br>    <span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(res) &lt; n: <span class="hljs-built_in">print</span>(-<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">else</span>: <br>        <span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> res:<br>            <span class="hljs-built_in">print</span>(x, end = <span class="hljs-string">&quot; &quot;</span>)<br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>    a, b = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>    add(a, b)<br>    d[b] += <span class="hljs-number">1</span><br>topsort()<br></code></pre></td></tr></table></figure>
+
+<h3 id="构造有向无环图"><a href="#构造有向无环图" class="headerlink" title="构造有向无环图"></a>构造有向无环图</h3><ul>
+<li>最后的拓扑序列一定是从小的指向大的；所以记录无向边端点再拓扑排序中的位置</li>
+<li>如果前面的有向边不能成为拓扑排序，说明加入无向边后也不能</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> deque<br><span class="hljs-keyword">from</span> sys <span class="hljs-keyword">import</span> stdin<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b</span>):<br>    <span class="hljs-keyword">global</span> idx<br><br>    e[idx] = b<br>    ne[idx] = h[a]<br>    h[a] = idx<br>    idx += <span class="hljs-number">1</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">topsort</span>():<br>    q = deque()<br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>        <span class="hljs-keyword">if</span> d[i] == <span class="hljs-number">0</span>:<br>            q.append(i)<br>            ans.append(i)<br><br>    <span class="hljs-keyword">while</span> q:<br>        t = q.popleft()<br><br>        i = h[t]<br>        <span class="hljs-keyword">while</span> i != -<span class="hljs-number">1</span>:<br><br>            j = e[i]<br>            d[j] -= <span class="hljs-number">1</span><br>            <span class="hljs-keyword">if</span> d[j] == <span class="hljs-number">0</span>:<br>                q.append(j)<br>                ans.append(j)<br><br>            i = ne[i]<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">len</span>(ans) == n + <span class="hljs-number">1</span><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    T = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br><br>    <span class="hljs-keyword">while</span> T:<br>        T -= <span class="hljs-number">1</span><br>        n, m = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>        h, e, ne = [-<span class="hljs-number">1</span>]*(n+<span class="hljs-number">1</span>), [<span class="hljs-number">0</span>]*(m+<span class="hljs-number">1</span>), [-<span class="hljs-number">1</span>]*(m+<span class="hljs-number">1</span>)<br>        idx = <span class="hljs-number">0</span><br>        d = [<span class="hljs-number">0</span>]*(n+<span class="hljs-number">1</span>)<br>        edge = []<br>        ans = [<span class="hljs-number">0</span>]       <span class="hljs-comment"># 存放的是拓扑排序的顺序</span><br>        pos = [<span class="hljs-number">0</span>]*(n+<span class="hljs-number">1</span>) <span class="hljs-comment"># 存放的是位置</span><br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>            t, a, b = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, stdin.readline().split())<br>            <span class="hljs-keyword">if</span> t == <span class="hljs-number">1</span>:<br>                add(a, b)<br>                d[b] += <span class="hljs-number">1</span><br>            <span class="hljs-keyword">else</span>:<br>                edge.append((a, b))<br><br>        <span class="hljs-keyword">if</span> topsort():<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;YES&quot;</span>)<br>            <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>                i = h[a]<br>                <span class="hljs-keyword">while</span> i != -<span class="hljs-number">1</span>:<br>                    j = e[i]<br>                    <span class="hljs-built_in">print</span>(a, j)<br>                    i = ne[i]<br><br>            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>                pos[ans[i]] = i <br><br>            <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(edge)):<br>                a, b = edge[i][<span class="hljs-number">0</span>], edge[i][<span class="hljs-number">1</span>]<br>                <span class="hljs-keyword">if</span> pos[a] &gt; pos[b]:<br>                    a, b = b, a<br>                <span class="hljs-built_in">print</span>(a, b)<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;NO&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h2 id="Dijkstra"><a href="#Dijkstra" class="headerlink" title="Dijkstra"></a>Dijkstra</h2><h3 id="点稠密型"><a href="#点稠密型" class="headerlink" title="点稠密型"></a>点稠密型</h3><ul>
+<li>使用邻接矩阵</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">dijkstra</span>():<br>    dist[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span><br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        t = -<span class="hljs-number">1</span><br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> st[j]  <span class="hljs-keyword">and</span> (t == -<span class="hljs-number">1</span> <span class="hljs-keyword">or</span> dist[t] &gt; dist[j]):<br>                t = j<br><br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>            dist[j] = <span class="hljs-built_in">min</span>(dist[j], dist[t] + g[t][j])<br><br>        st[t] = <span class="hljs-number">1</span><br><br>    <span class="hljs-keyword">if</span> dist[n] == <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>):<br>        <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> dist[n]<br></code></pre></td></tr></table></figure>
+
+<h3 id="堆优化版Dijkstra"><a href="#堆优化版Dijkstra" class="headerlink" title="堆优化版Dijkstra"></a>堆优化版Dijkstra</h3><ul>
+<li>适合点稀疏</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs python"><br><span class="hljs-keyword">from</span> heapq <span class="hljs-keyword">import</span> heappush, heappop<br><span class="hljs-keyword">import</span> sys<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">x, y, z</span>):<br>    <span class="hljs-keyword">global</span> idx<br>    e[idx] = y<br>    w[idx] = z<br>    ne[idx] = h[x]<br>    h[x] = idx<br>    idx += <span class="hljs-number">1</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">dijkstra</span>():<br>    dist[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span><br>    heap = []<br>    heappush(heap,(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>))<br><br>    <span class="hljs-keyword">while</span> heap:<br>        cur = heappop(heap)<br>        point, distance = cur[<span class="hljs-number">1</span>],cur[<span class="hljs-number">0</span>]<br><br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> st[point]:<br>            st[point] = <span class="hljs-number">1</span><br>            i = h[point]<br><br>            <span class="hljs-keyword">while</span> i != -<span class="hljs-number">1</span>:<br>                j = e[i]<br>                <span class="hljs-keyword">if</span> dist[j] &gt; distance + w[i]:<br>                    dist[j] = distance + w[i]<br>                    heappush(heap,(dist[j],j))<br>                i = ne[i]<br>    <span class="hljs-keyword">if</span> dist[n] == <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>):<br>        <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> dist[n]<br><br>N = <span class="hljs-number">150010</span><br>h, e, ne, w = [-<span class="hljs-number">1</span>]*N, [<span class="hljs-number">0</span>]*N, [-<span class="hljs-number">1</span>]*N, [<span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)]*N<br>idx = <span class="hljs-number">0</span><br>dist = [<span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)]*N<br>st = [<span class="hljs-number">0</span>]*N<br><br>n, m = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>    x, y, z = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, sys.stdin.readline().split())<br>    add(x, y, z)<br><br>res = dijkstra()<br><span class="hljs-built_in">print</span>(res)<br></code></pre></td></tr></table></figure>
+
+<h3 id="超级源点和超级汇点"><a href="#超级源点和超级汇点" class="headerlink" title="超级源点和超级汇点"></a>超级源点和超级汇点</h3><ul>
+<li><p>超级源点跟超级汇点是模拟出来的虚拟点，多用于图中：<br>&lt;1&gt;同时有多个源点和多个汇点，建立超级源点和超级汇点</p>
+<p>&lt;2&gt;同时有多个源点和一个汇点，建立超级源点</p>
+<p>&lt;3&gt;同时有多个汇点和一个源点，建立超级汇点</p>
+</li>
+</ul>
+<h4 id="最短路径"><a href="#最短路径" class="headerlink" title="最短路径"></a>最短路径</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs Python"><span class="hljs-keyword">from</span> sys <span class="hljs-keyword">import</span> stdin<br><span class="hljs-keyword">from</span> heapq <span class="hljs-keyword">import</span> heappush, heappop<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b, c</span>):<br>    <span class="hljs-keyword">global</span> idx<br>    e[idx] = b<br>    w[idx] = c<br>    ne[idx] = h[a]<br>    h[a] = idx<br>    idx += <span class="hljs-number">1</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">dijkstra</span>():<br>    heap = []<br>    heappush(heap, (<span class="hljs-number">0</span>, <span class="hljs-number">0</span>))<br>    dist[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span><br><br>    <span class="hljs-keyword">while</span> heap:<br>        cur = heappop(heap)<br>        point, distance = cur[<span class="hljs-number">1</span>], cur[<span class="hljs-number">0</span>]<br>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> st[point]:<br>            st[point] = <span class="hljs-number">1</span><br>            i = h[point]<br>            <span class="hljs-keyword">while</span> i != -<span class="hljs-number">1</span>:<br>                j = e[i]<br>                <span class="hljs-keyword">if</span> dist[j] &gt; dist[point] + w[i]:<br>                    dist[j] = dist[point] + w[i]<br>                    heappush(heap, (dist[j], j))<br>                i = ne[i]<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    N = <span class="hljs-number">100010</span><br>    M = <span class="hljs-number">3</span> * N<br>    h, e, ne, w = [-<span class="hljs-number">1</span>]*N, [<span class="hljs-number">0</span>]*M, [-<span class="hljs-number">1</span>]*M, [<span class="hljs-number">0</span>]*M<br>    idx = <span class="hljs-number">0</span><br>    st = [<span class="hljs-number">0</span>]*N<br>    dist = [<span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)]*N<br><br><br>    n, m = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>        a, b, c = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, stdin.readline().split())<br>        add(a, b, c)<br>        add(b, a, c)<br><br>    k = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(k):<br>        x = <span class="hljs-built_in">int</span>(stdin.readline())<br>        add(<span class="hljs-number">0</span>, x, <span class="hljs-number">0</span>)<br><br>    dijkstra()<br>    q = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(q):<br>        y = <span class="hljs-built_in">int</span>(stdin.readline())<br>        <span class="hljs-built_in">print</span>(dist[y])<br></code></pre></td></tr></table></figure>
+
+<h2 id="SPFA"><a href="#SPFA" class="headerlink" title="SPFA"></a>SPFA</h2><ul>
+<li>存在负权边时使用</li>
+<li>通过一个cnt计数数组可以判断是否存在环</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> deque<br><span class="hljs-keyword">from</span> sys <span class="hljs-keyword">import</span> stdin<br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b, c</span>):<br>    <span class="hljs-keyword">global</span> idx<br>    e[idx] = b<br>    w[idx] = c<br>    ne[idx] = h[a]<br>    h[a] = idx<br>    idx += <span class="hljs-number">1</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">spfa</span>():<br>    q= deque()<br>    q.append(<span class="hljs-number">1</span>)<br>    dist[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span><br>    st[<span class="hljs-number">1</span>] = <span class="hljs-literal">True</span><br><br>    <span class="hljs-keyword">while</span> q:<br>        t = q.popleft()<br>        st[t] = <span class="hljs-literal">False</span><br>        i = h[t]<br>        <span class="hljs-keyword">while</span> i != -<span class="hljs-number">1</span>:<br>            j = e[i]<br>            <span class="hljs-keyword">if</span> dist[j] &gt; dist[t] + w[i]:<br>                dist[j] = dist[t] + w[i]<br>                <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> st[j]:<br>                    q.append(j)<br>                    st[j] = <span class="hljs-literal">True</span><br>            i = ne[i]<br><br>    <span class="hljs-keyword">return</span> dist[n]<br><br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    N = <span class="hljs-number">100010</span><br>    h, e, ne, w = [-<span class="hljs-number">1</span>]*N, [<span class="hljs-number">0</span>]*N, [<span class="hljs-number">0</span>]*N, [<span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)]*N<br>    idx = <span class="hljs-number">0</span><br>    dist = [<span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)]*N<br>    st = [<span class="hljs-literal">False</span>]*N<br><br><br>    n, m = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>        x, y, z = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, stdin.readline().split())<br>        add(x, y, z)<br><br>    res = spfa()<br>    <span class="hljs-keyword">if</span> res != <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>):<br>        <span class="hljs-built_in">print</span>(res)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;impossible&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="SPFA判断负环"><a href="#SPFA判断负环" class="headerlink" title="SPFA判断负环"></a>SPFA判断负环</h3><ul>
+<li>必须将每个点都放入队列进行判断</li>
+<li>dist（距离）初值定义为0</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>        q.append(i)<br>        st[i] = <span class="hljs-literal">True</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="最优贸易"><a href="#最优贸易" class="headerlink" title="最优贸易"></a>最优贸易</h3><ul>
+<li>两次SPFA分别计算最小值和最大值</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> deque<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">h, x, y</span>):<br>    <span class="hljs-keyword">global</span> idx<br>    e[idx] = y<br>    ne[idx] = h[x]<br>    h[x] = idx<br>    idx += <span class="hljs-number">1</span><br><br><span class="hljs-comment"># 将正向spfa和反向spfa合并到一个函数中</span><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">spfa</span>(<span class="hljs-params">d, start, h, flag</span>):<br>    q = deque()<br>    st = [<span class="hljs-literal">False</span>]*N<br><br>    q.append(start)<br>    st[start] = <span class="hljs-literal">True</span><br>    d[start] = w[start]<br><br>    <span class="hljs-keyword">while</span> q:<br>        t = q.popleft()<br>        st[t] = <span class="hljs-literal">False</span><br>        i = h[t]<br>        <span class="hljs-keyword">while</span> i != -<span class="hljs-number">1</span>:<br>            j = e[i]<br>            <span class="hljs-keyword">if</span> (flag <span class="hljs-keyword">and</span> d[j] &gt; <span class="hljs-built_in">min</span>(d[t], w[j])) <span class="hljs-keyword">or</span> (<span class="hljs-keyword">not</span> flag <span class="hljs-keyword">and</span> d[j] &lt; <span class="hljs-built_in">max</span>(d[t], w[j])):<br>                <span class="hljs-keyword">if</span> flag:<br>                    d[j] = <span class="hljs-built_in">min</span>(d[t], w[j])<br>                <span class="hljs-keyword">else</span>:<br>                    d[j] = <span class="hljs-built_in">max</span>(d[t], w[j])<br>                <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> st[j]:<br>                    q.append(j)<br>                    st[j] = <span class="hljs-literal">True</span><br>            i = ne[i]<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    N, M = <span class="hljs-number">100010</span>, <span class="hljs-number">2000010</span><br>    h, rh, e, ne = [-<span class="hljs-number">1</span>]*N, [-<span class="hljs-number">1</span>]*N, [<span class="hljs-number">0</span>]*M, [<span class="hljs-number">0</span>]*M<br>    idx = <span class="hljs-number">0</span><br><br>    dmin, dmax = [<span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)]*N, [<span class="hljs-number">0</span>]*N<br><br>    n, m = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>    w = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split()))<br>    w.insert(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>)<br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>        x, y, z = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>        add(h, x, y)<br>        add(rh, y, x)<br>        <span class="hljs-keyword">if</span> z == <span class="hljs-number">2</span>:<br>            add(h, y, x)<br>            add(rh, x, y)<br><br>    spfa(dmin, <span class="hljs-number">1</span>, h, <span class="hljs-literal">True</span>)<br>    spfa(dmax, n, rh, <span class="hljs-literal">False</span>)<br><br>    res = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>        res = <span class="hljs-built_in">max</span>(res, dmax[i] - dmin[i])<br>    <span class="hljs-built_in">print</span>(res)<br></code></pre></td></tr></table></figure>
+
+<h3 id="作物杂交"><a href="#作物杂交" class="headerlink" title="作物杂交"></a>作物杂交</h3><ul>
+<li><p>在构建图的过程中，边不仅可以存储边权，还可以存储其他额外信息</p>
+</li>
+<li><p>把所有初始的作物加到队列中；将能够生成的作物加到图中</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> deque<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">a, b, c</span>):<br>    <span class="hljs-keyword">global</span> idx<br>    e[idx] = b<br>    target[idx] = c<br>    ne[idx] = h[a]<br>    h[a] = idx<br>    idx += <span class="hljs-number">1</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">spfa</span>():<br><br>    <span class="hljs-keyword">while</span> q:<br>        x = q.popleft()<br>        st[x] = <span class="hljs-literal">False</span><br><br>        i = h[x]<br>        <span class="hljs-keyword">while</span> i != -<span class="hljs-number">1</span>:<br>            y, z = e[i], target[i]<br>            <span class="hljs-keyword">if</span> dist[z] &gt; <span class="hljs-built_in">max</span>(dist[x], dist[y]) + <span class="hljs-built_in">max</span>(w[x], w[y]):<br>                dist[z] = <span class="hljs-built_in">max</span>(dist[x], dist[y]) + <span class="hljs-built_in">max</span>(w[x], w[y])<br>                <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> st[z]:<br>                    q.append(z)<br>                    st[z] = <span class="hljs-literal">True</span><br>            i = ne[i]<br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    N, M = <span class="hljs-number">2010</span>, <span class="hljs-number">200010</span><br>    h, e, ne, target,  w = [-<span class="hljs-number">1</span>]*N, [<span class="hljs-number">0</span>]*M, [<span class="hljs-number">0</span>]*M, [<span class="hljs-number">0</span>]*M, [<span class="hljs-number">0</span>]*N<br>    idx = <span class="hljs-number">0</span><br>    dist = [<span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)]*N<br>    st = [<span class="hljs-literal">False</span>]*N<br>    q = deque()<br><br>    n, m, k, t = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>    times = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split()))<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        w[i+<span class="hljs-number">1</span>] = times[i]<br><br>    seeds = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>,<span class="hljs-built_in">input</span>().split()))<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>        cur = seeds[i]<br>        dist[cur] = <span class="hljs-number">0</span><br>        q.append(cur)<br>        st[cur] = <span class="hljs-literal">True</span><br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, k+<span class="hljs-number">1</span>):<br>        a, b, c = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>        add(a, b, c)<br>        add(b, a, c)<br><br>    spfa()<br><br>    res = dist[t]<br>    <span class="hljs-built_in">print</span>(res)<br></code></pre></td></tr></table></figure>
+
+<h2 id="Floyd"><a href="#Floyd" class="headerlink" title="Floyd"></a>Floyd</h2><ul>
+<li>计算连通块之间的最大值的最小值使用floyd（n较小时）</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sys <span class="hljs-keyword">import</span> stdin<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">floyd</span>():<br><br>    <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>            <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>                dist[i][j] = <span class="hljs-built_in">min</span>(dist[i][j], dist[i][k] + dist[k][j])<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    N, M = <span class="hljs-number">210</span>, <span class="hljs-number">20010</span><br><br>    dist = [[<span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N)] <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N)]<br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, N):<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, N):<br>            <span class="hljs-keyword">if</span> i == j:<br>                dist[i][j] = <span class="hljs-number">0</span><br><br>    n, m, k = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>        x, y, z = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, stdin.readline().split())<br>        dist[x][y] = <span class="hljs-built_in">min</span>(dist[x][y], z)<br><br>    floyd()<br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(k):<br>        x, y = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, stdin.readline().split())<br>        res = dist[x][y]<br>        <span class="hljs-keyword">if</span> res != <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>):<br>            <span class="hljs-built_in">print</span>(dist[x][y])<br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;impossible&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="牛的旅行"><a href="#牛的旅行" class="headerlink" title="牛的旅行"></a>牛的旅行</h3><ul>
+<li>转换成两个连通块求最大距离的最小值</li>
+<li>maxd[i]求出与 i 连通的最大值</li>
+<li>更新最大值的最小值res2 &#x3D; min(res2, getdist(i, j) + maxd[i] + maxd[j] )</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> math <span class="hljs-keyword">import</span> sqrt<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">get_dist</span>(<span class="hljs-params">a, b</span>):<br>    dx = a[<span class="hljs-number">0</span>] - b[<span class="hljs-number">0</span>]<br>    dy = a[<span class="hljs-number">1</span>] - b[<span class="hljs-number">1</span>]<br>    <span class="hljs-keyword">return</span> sqrt(dx * dx + dy * dy)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">floyd</span>():<br><br>    <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>            <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>                d[i][j] = <span class="hljs-built_in">min</span>(d[i][j], d[i][k] + d[k][j])<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    N = <span class="hljs-number">160</span><br>    q = []<br>    d = [[<span class="hljs-number">0</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N)]<span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N)]<br>    maxd = [<span class="hljs-number">0</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N)]<br>    g = []<br><br>    n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        x, y = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split()) <br>        q.append((x, y))<br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        row = <span class="hljs-built_in">input</span>().strip()<br>        g.append(row)<br><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>            <span class="hljs-keyword">if</span> i == j: d[i][j] = <span class="hljs-number">0</span><br>            <span class="hljs-keyword">elif</span> g[i][j] == <span class="hljs-string">&quot;1&quot;</span>:<br>                d[i][j] = get_dist(q[i], q[j])<br>            <span class="hljs-keyword">else</span>:<br>                d[i][j] = <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)<br>    <span class="hljs-comment"># 求出任意两点最短距离</span><br>    floyd()<br><br>    <span class="hljs-comment"># 连通的距离i最远的点maxd[i]</span><br>    res1 = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>            <span class="hljs-keyword">if</span> d[i][j] != <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>):<br>                maxd[i] = <span class="hljs-built_in">max</span>(maxd[i], d[i][j])<br>        res1 = <span class="hljs-built_in">max</span>(maxd[i], res1)<br><br>    <span class="hljs-comment"># 枚举在哪两个点之间连边</span><br>    res2 = <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>            <span class="hljs-keyword">if</span> d[i][j] == <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>):<br>                res2 = <span class="hljs-built_in">min</span>(res2, get_dist(q[i],q[j]) + maxd[i] + maxd[j])<br><br>    res = <span class="hljs-built_in">max</span>(res1, res2)<br>    <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;%.6f&quot;</span>%res)<br></code></pre></td></tr></table></figure>
+
+<h2 id="最小生成树"><a href="#最小生成树" class="headerlink" title="最小生成树"></a>最小生成树</h2><h3 id="Prime算法"><a href="#Prime算法" class="headerlink" title="Prime算法"></a>Prime算法</h3><ul>
+<li>每次选择最短的点加入生成树</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">prim</span>():<br>    res = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>        t = -<span class="hljs-number">1</span><br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> st[j] <span class="hljs-keyword">and</span> (t == -<span class="hljs-number">1</span> <span class="hljs-keyword">or</span> d[j] &lt; d[t]):<br>                t = j<br><br>        <span class="hljs-comment">#判断孤立点</span><br>        <span class="hljs-keyword">if</span> i <span class="hljs-keyword">and</span> d[t] == <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>):<br>            <span class="hljs-keyword">return</span> <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)<br><br>        <span class="hljs-keyword">if</span> i:<br>            res += d[t]<br>        <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, n+<span class="hljs-number">1</span>):<br>            d[k] = <span class="hljs-built_in">min</span>(d[k], g[t][k])<br>        st[t] = <span class="hljs-literal">True</span><br><br>    <span class="hljs-keyword">return</span> res<br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    N, M = <span class="hljs-number">510</span>, <span class="hljs-number">100010</span><br>    g = [[<span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>) <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N)] <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N)]<br>    d = [<span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)]*N<br>    st = [<span class="hljs-literal">False</span>]*N<br><br>    n, m = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>        u, v, w = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>        g[u][v] = g[v][u] = <span class="hljs-built_in">min</span>(g[u][v], w)<br><br>    res = prim()<br><br>    <span class="hljs-keyword">if</span> res == <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>):<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;impossible&quot;</span>)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(res)<br></code></pre></td></tr></table></figure>
+
+<h3 id="Kruskal"><a href="#Kruskal" class="headerlink" title="Kruskal"></a>Kruskal</h3><ul>
+<li>每次加入最短边；并查集</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sys <span class="hljs-keyword">import</span> stdin<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">find</span>(<span class="hljs-params">x</span>):<br>    <span class="hljs-keyword">if</span> p[x] != x:<br>        p[x] = find(p[x])<br>    <span class="hljs-keyword">return</span> p[x] <br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">kruskal</span>():<br>    cnt, res = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>        u, v, w = g[i][<span class="hljs-number">0</span>], g[i][<span class="hljs-number">1</span>], g[i][<span class="hljs-number">2</span>]<br>        u, v = find(u), find(v)<br>        <span class="hljs-keyword">if</span> u != v:<br>            p[u] = v<br>            cnt += <span class="hljs-number">1</span><br>            res += w<br><br>    <span class="hljs-keyword">if</span> cnt &lt; n - <span class="hljs-number">1</span>:	<span class="hljs-comment"># 生成树应该有n-1条边</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-keyword">return</span> res <br><br><br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    N, M = <span class="hljs-number">100010</span>, <span class="hljs-number">200010</span><br>    g = []<br>    p = [i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N)]<br>    n, m = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>        row = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, stdin.readline().split()))<br>        g.append(row)<br><br>    g.sort(key = <span class="hljs-keyword">lambda</span> x:x[<span class="hljs-number">2</span>])<br><br>    res = kruskal()<br>    <span class="hljs-keyword">if</span> res != <span class="hljs-built_in">float</span>(<span class="hljs-string">&quot;inf&quot;</span>):<br>        <span class="hljs-built_in">print</span>(res)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;impossible&quot;</span>)<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+      
+        <a href="/tags/%E5%9B%BE%E8%AE%BA/">#图论</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>图论——算法</div>
+      <div>http://tom-jerr.github.io/2023/04/13/alorithm/图论/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>LZY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/13/alorithm/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" title="数据结构-算法">
+                        <span class="hidden-mobile">数据结构-算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments">
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div>tom-jerr的个人博客 | 记录美好生活</div> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="/js/useaplayer.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

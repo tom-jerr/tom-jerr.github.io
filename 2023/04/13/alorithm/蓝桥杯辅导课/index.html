@@ -1,0 +1,813 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid1.png">
+  <link rel="icon" href="/img/fluid1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="LZY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言">
+<meta property="og:type" content="article">
+<meta property="og:title" content="蓝桥杯-算法">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/04/13/alorithm/%E8%93%9D%E6%A1%A5%E6%9D%AF%E8%BE%85%E5%AF%BC%E8%AF%BE/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="前言">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/acm.png">
+<meta property="article:published_time" content="2023-04-13T12:53:42.330Z">
+<meta property="article:modified_time" content="2023-04-13T12:52:25.058Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="蓝桥杯">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/acm.png">
+  
+  
+  
+  <title>蓝桥杯-算法 - tom-jerr的个人博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>tom-jerr的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/playlist/">
+                <i class="iconfont icon-music"></i>
+                <span>音乐</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="蓝桥杯-算法"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-04-13 20:53" pubdate>
+          2023年4月13日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          18k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          154 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">蓝桥杯-算法</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年4月13日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><span id="more"></span>
+
+<h1 id="蓝桥杯技巧"><a href="#蓝桥杯技巧" class="headerlink" title="蓝桥杯技巧"></a>蓝桥杯技巧</h1><h2 id="开矩阵"><a href="#开矩阵" class="headerlink" title="开矩阵"></a>开矩阵</h2><ul>
+<li><p>注意使用for语句</p>
+</li>
+<li><p>~~~python<br>[[0]*N for _ in range(N)]	#使用该方式进行声明</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br><span class="line">379</span><br><span class="line">380</span><br><span class="line">381</span><br><span class="line">382</span><br><span class="line">383</span><br><span class="line">384</span><br><span class="line">385</span><br><span class="line">386</span><br><span class="line">387</span><br><span class="line">388</span><br><span class="line">389</span><br><span class="line">390</span><br><span class="line">391</span><br><span class="line">392</span><br><span class="line">393</span><br><span class="line">394</span><br><span class="line">395</span><br><span class="line">396</span><br><span class="line">397</span><br><span class="line">398</span><br><span class="line">399</span><br><span class="line">400</span><br><span class="line">401</span><br><span class="line">402</span><br><span class="line">403</span><br><span class="line">404</span><br><span class="line">405</span><br><span class="line">406</span><br><span class="line">407</span><br><span class="line">408</span><br><span class="line">409</span><br><span class="line">410</span><br><span class="line">411</span><br><span class="line">412</span><br><span class="line">413</span><br><span class="line">414</span><br><span class="line">415</span><br><span class="line">416</span><br><span class="line">417</span><br><span class="line">418</span><br><span class="line">419</span><br><span class="line">420</span><br><span class="line">421</span><br><span class="line">422</span><br><span class="line">423</span><br><span class="line">424</span><br><span class="line">425</span><br><span class="line">426</span><br><span class="line">427</span><br><span class="line">428</span><br><span class="line">429</span><br><span class="line">430</span><br><span class="line">431</span><br><span class="line">432</span><br><span class="line">433</span><br><span class="line">434</span><br><span class="line">435</span><br><span class="line">436</span><br><span class="line">437</span><br><span class="line">438</span><br><span class="line">439</span><br><span class="line">440</span><br><span class="line">441</span><br><span class="line">442</span><br><span class="line">443</span><br><span class="line">444</span><br><span class="line">445</span><br><span class="line">446</span><br><span class="line">447</span><br><span class="line">448</span><br><span class="line">449</span><br><span class="line">450</span><br><span class="line">451</span><br><span class="line">452</span><br><span class="line">453</span><br><span class="line">454</span><br><span class="line">455</span><br><span class="line">456</span><br><span class="line">457</span><br><span class="line">458</span><br><span class="line">459</span><br><span class="line">460</span><br><span class="line">461</span><br><span class="line">462</span><br><span class="line">463</span><br><span class="line">464</span><br><span class="line">465</span><br><span class="line">466</span><br><span class="line">467</span><br><span class="line">468</span><br><span class="line">469</span><br><span class="line">470</span><br><span class="line">471</span><br><span class="line">472</span><br><span class="line">473</span><br><span class="line">474</span><br><span class="line">475</span><br><span class="line">476</span><br><span class="line">477</span><br><span class="line">478</span><br><span class="line">479</span><br><span class="line">480</span><br><span class="line">481</span><br><span class="line">482</span><br><span class="line">483</span><br><span class="line">484</span><br><span class="line">485</span><br><span class="line">486</span><br><span class="line">487</span><br><span class="line">488</span><br><span class="line">489</span><br><span class="line">490</span><br><span class="line">491</span><br><span class="line">492</span><br><span class="line">493</span><br><span class="line">494</span><br><span class="line">495</span><br><span class="line">496</span><br><span class="line">497</span><br><span class="line">498</span><br><span class="line">499</span><br><span class="line">500</span><br><span class="line">501</span><br><span class="line">502</span><br><span class="line">503</span><br><span class="line">504</span><br><span class="line">505</span><br><span class="line">506</span><br><span class="line">507</span><br><span class="line">508</span><br><span class="line">509</span><br><span class="line">510</span><br><span class="line">511</span><br><span class="line">512</span><br><span class="line">513</span><br><span class="line">514</span><br><span class="line">515</span><br><span class="line">516</span><br><span class="line">517</span><br><span class="line">518</span><br><span class="line">519</span><br><span class="line">520</span><br><span class="line">521</span><br><span class="line">522</span><br><span class="line">523</span><br><span class="line">524</span><br><span class="line">525</span><br><span class="line">526</span><br><span class="line">527</span><br><span class="line">528</span><br><span class="line">529</span><br><span class="line">530</span><br><span class="line">531</span><br><span class="line">532</span><br><span class="line">533</span><br><span class="line">534</span><br><span class="line">535</span><br><span class="line">536</span><br><span class="line">537</span><br><span class="line">538</span><br><span class="line">539</span><br><span class="line">540</span><br><span class="line">541</span><br><span class="line">542</span><br><span class="line">543</span><br><span class="line">544</span><br><span class="line">545</span><br><span class="line">546</span><br><span class="line">547</span><br><span class="line">548</span><br><span class="line">549</span><br><span class="line">550</span><br><span class="line">551</span><br><span class="line">552</span><br><span class="line">553</span><br><span class="line">554</span><br><span class="line">555</span><br><span class="line">556</span><br><span class="line">557</span><br><span class="line">558</span><br><span class="line">559</span><br><span class="line">560</span><br><span class="line">561</span><br><span class="line">562</span><br><span class="line">563</span><br><span class="line">564</span><br><span class="line">565</span><br><span class="line">566</span><br><span class="line">567</span><br><span class="line">568</span><br><span class="line">569</span><br><span class="line">570</span><br><span class="line">571</span><br><span class="line">572</span><br><span class="line">573</span><br><span class="line">574</span><br><span class="line">575</span><br><span class="line">576</span><br><span class="line">577</span><br><span class="line">578</span><br><span class="line">579</span><br><span class="line">580</span><br><span class="line">581</span><br><span class="line">582</span><br><span class="line">583</span><br><span class="line">584</span><br><span class="line">585</span><br><span class="line">586</span><br><span class="line">587</span><br><span class="line">588</span><br><span class="line">589</span><br><span class="line">590</span><br><span class="line">591</span><br><span class="line">592</span><br><span class="line">593</span><br><span class="line">594</span><br><span class="line">595</span><br><span class="line">596</span><br><span class="line">597</span><br><span class="line">598</span><br><span class="line">599</span><br><span class="line">600</span><br><span class="line">601</span><br><span class="line">602</span><br><span class="line">603</span><br><span class="line">604</span><br><span class="line">605</span><br><span class="line">606</span><br><span class="line">607</span><br><span class="line">608</span><br><span class="line">609</span><br><span class="line">610</span><br><span class="line">611</span><br><span class="line">612</span><br><span class="line">613</span><br><span class="line">614</span><br><span class="line">615</span><br><span class="line">616</span><br><span class="line">617</span><br><span class="line">618</span><br><span class="line">619</span><br><span class="line">620</span><br><span class="line">621</span><br><span class="line">622</span><br><span class="line">623</span><br><span class="line">624</span><br><span class="line">625</span><br><span class="line">626</span><br><span class="line">627</span><br><span class="line">628</span><br><span class="line">629</span><br><span class="line">630</span><br><span class="line">631</span><br><span class="line">632</span><br><span class="line">633</span><br><span class="line">634</span><br><span class="line">635</span><br><span class="line">636</span><br><span class="line">637</span><br><span class="line">638</span><br><span class="line">639</span><br><span class="line">640</span><br><span class="line">641</span><br><span class="line">642</span><br><span class="line">643</span><br><span class="line">644</span><br><span class="line">645</span><br><span class="line">646</span><br><span class="line">647</span><br><span class="line">648</span><br><span class="line">649</span><br><span class="line">650</span><br><span class="line">651</span><br><span class="line">652</span><br><span class="line">653</span><br><span class="line">654</span><br><span class="line">655</span><br><span class="line">656</span><br><span class="line">657</span><br><span class="line">658</span><br><span class="line">659</span><br><span class="line">660</span><br><span class="line">661</span><br><span class="line">662</span><br><span class="line">663</span><br><span class="line">664</span><br><span class="line">665</span><br><span class="line">666</span><br><span class="line">667</span><br><span class="line">668</span><br><span class="line">669</span><br><span class="line">670</span><br><span class="line">671</span><br><span class="line">672</span><br><span class="line">673</span><br><span class="line">674</span><br><span class="line">675</span><br><span class="line">676</span><br><span class="line">677</span><br><span class="line">678</span><br><span class="line">679</span><br><span class="line">680</span><br><span class="line">681</span><br><span class="line">682</span><br><span class="line">683</span><br><span class="line">684</span><br><span class="line">685</span><br><span class="line">686</span><br><span class="line">687</span><br><span class="line">688</span><br><span class="line">689</span><br><span class="line">690</span><br><span class="line">691</span><br><span class="line">692</span><br><span class="line">693</span><br><span class="line">694</span><br><span class="line">695</span><br><span class="line">696</span><br><span class="line">697</span><br><span class="line">698</span><br><span class="line">699</span><br><span class="line">700</span><br><span class="line">701</span><br><span class="line">702</span><br><span class="line">703</span><br><span class="line">704</span><br><span class="line">705</span><br><span class="line">706</span><br><span class="line">707</span><br><span class="line">708</span><br><span class="line">709</span><br><span class="line">710</span><br><span class="line">711</span><br><span class="line">712</span><br><span class="line">713</span><br><span class="line">714</span><br><span class="line">715</span><br><span class="line">716</span><br><span class="line">717</span><br><span class="line">718</span><br><span class="line">719</span><br><span class="line">720</span><br><span class="line">721</span><br><span class="line">722</span><br><span class="line">723</span><br><span class="line">724</span><br><span class="line">725</span><br><span class="line">726</span><br><span class="line">727</span><br><span class="line">728</span><br><span class="line">729</span><br><span class="line">730</span><br><span class="line">731</span><br><span class="line">732</span><br><span class="line">733</span><br><span class="line">734</span><br><span class="line">735</span><br><span class="line">736</span><br><span class="line">737</span><br><span class="line">738</span><br><span class="line">739</span><br><span class="line">740</span><br><span class="line">741</span><br><span class="line">742</span><br><span class="line">743</span><br><span class="line">744</span><br><span class="line">745</span><br><span class="line">746</span><br><span class="line">747</span><br><span class="line">748</span><br><span class="line">749</span><br><span class="line">750</span><br><span class="line">751</span><br><span class="line">752</span><br><span class="line">753</span><br><span class="line">754</span><br><span class="line">755</span><br><span class="line">756</span><br><span class="line">757</span><br><span class="line">758</span><br><span class="line">759</span><br><span class="line">760</span><br><span class="line">761</span><br><span class="line">762</span><br><span class="line">763</span><br><span class="line">764</span><br><span class="line">765</span><br><span class="line">766</span><br><span class="line">767</span><br><span class="line">768</span><br><span class="line">769</span><br><span class="line">770</span><br><span class="line">771</span><br><span class="line">772</span><br><span class="line">773</span><br><span class="line">774</span><br><span class="line">775</span><br><span class="line">776</span><br><span class="line">777</span><br><span class="line">778</span><br><span class="line">779</span><br><span class="line">780</span><br><span class="line">781</span><br><span class="line">782</span><br><span class="line">783</span><br><span class="line">784</span><br><span class="line">785</span><br><span class="line">786</span><br><span class="line">787</span><br><span class="line">788</span><br><span class="line">789</span><br><span class="line">790</span><br><span class="line">791</span><br><span class="line">792</span><br><span class="line">793</span><br><span class="line">794</span><br><span class="line">795</span><br><span class="line">796</span><br><span class="line">797</span><br><span class="line">798</span><br><span class="line">799</span><br><span class="line">800</span><br><span class="line">801</span><br><span class="line">802</span><br><span class="line">803</span><br><span class="line">804</span><br><span class="line">805</span><br><span class="line">806</span><br><span class="line">807</span><br><span class="line">808</span><br><span class="line">809</span><br><span class="line">810</span><br><span class="line">811</span><br><span class="line">812</span><br><span class="line">813</span><br><span class="line">814</span><br><span class="line">815</span><br><span class="line">816</span><br><span class="line">817</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>## 注意读入和读出<br>**不同行或矩阵中可能有空行，注意读入**<br>使用sys.stdin.readline会使读入更快，读入字符直接使用input()<br>引入队列，使用<span class="hljs-keyword">from</span> queue <span class="hljs-keyword">import</span> Queue<br>## 由数据范围反推算法复杂度以及算法内容<br>![小技巧](C:\Users\我\Desktop\截图\Snipaste_2022<span class="hljs-number">-09</span><span class="hljs-number">-16</span>_22<span class="hljs-number">-33</span><span class="hljs-number">-13.</span>png)<br>## 常见的<span class="hljs-number">2</span>的幂指数<br>*    <span class="hljs-number">2</span>^<span class="hljs-number">16</span>	<span class="hljs-number">32768</span><br>*    <span class="hljs-number">2</span>^<span class="hljs-number">32</span>	<span class="hljs-number">65536</span><br>*    <span class="hljs-number">2</span>^<span class="hljs-number">20</span> 	约为<span class="hljs-number">10</span>^<span class="hljs-number">6</span><br>*    <span class="hljs-number">2</span>^<span class="hljs-number">63</span>	约为<span class="hljs-number">10</span>^<span class="hljs-number">18</span><br>## 递归搜索后必须恢复现场<br>保证所有子树有公平的父节点，保证父节点决策的公平性<br>## 字典序<br>两个序列或字符串相同位置的元素进行比较，相同则比较下一个元素，只要有一个序列中元素小于另一个元素中的序列（不存在视为最小），则认定该序列小于另一个序列<br><span class="hljs-number">9</span>!	<span class="hljs-number">328800</span><br><br>## 递归<br><br>### 排列枚举<br>*	递归中的顺序很重要（大体分为两种）<br>	&gt; 依次枚举每个数放在哪个位置<br>	&gt; 依次枚举每个位置放哪个数<br><br>### 计算时间复杂度<br>可以适当采取放缩的方法，比如枚举组合数的递归方法<br>*    递归搜索树的方法总和一个大于n!的式子<br>	&gt; 使用放缩的方式将与n有关的式子变为只含有常数和n!的上限值<br>	&gt; **蓝桥杯中不会出现，但面试会用到**<br>### python中遇到获取多少位为<span class="hljs-number">1</span>，或者只有<span class="hljs-number">0</span>/<span class="hljs-number">1</span>的数组<br>通常采用位运算形式，&amp;=求得<span class="hljs-number">1</span>的数量<br>倍乘、倍除采用左移、右移操作<br>*    **num&amp;= num<span class="hljs-number">-1</span>：效率极高的一种求<span class="hljs-number">1</span>个数的方式**<br>*    当需要求这种位的个数时，考虑用本身加减法和位运算<br>	&gt;```python<br>	&gt;def countOne(num):<br>    cnt=<span class="hljs-number">0</span><br>    while num!=<span class="hljs-number">0</span>:<br>        num&amp;= num<span class="hljs-number">-1</span><br>        cnt+=<span class="hljs-number">1</span><br>    return cnt<br>	&gt;```<br><br>### 组合枚举 <br>*    增加一个对排序的限制<br>	&gt; 升序或降序<br>	&gt; 具体操作为保证每次新加的数大于/小于前面的数<br>*    参数的选择  <br>	&gt; 方案的数组  <br>	&gt; 枚举到哪个位置<br>	&gt; 从哪个数开始枚举<br>	&gt; dfs可以使用剪枝方式优化算法<br>*    剪枝：如果当前的分支完全不能满足有解条件，直接回溯，不再进行搜索<br>*    例图<br>![参数](C:\Users\我\Desktop\截图\Snipaste_2022<span class="hljs-number">-09</span><span class="hljs-number">-17</span>_21<span class="hljs-number">-39</span><span class="hljs-number">-03.</span>png)<br>***<br>### 汉诺塔问题（Strange Towers <span class="hljs-keyword">of</span> Hanoi）<br>*    n盘<span class="hljs-number">3</span>塔问题存在递归公式：d[n]=<span class="hljs-number">2</span>\*d[n<span class="hljs-number">-1</span>]+<span class="hljs-number">1</span><br>*    n盘<span class="hljs-number">4</span>塔问题递归公式：f[n]=min(<span class="hljs-number">2</span>\*f[i]+d[n-i])<br>	&gt; 将i个盘子挪至其中一个柱子<br>	&gt; 其它盘子执行<span class="hljs-number">3</span>塔的操作<br>### 可以使用分治发求等比数列的和<br>![分治法](C:\Users\我\Desktop\截图\Snipaste_2022<span class="hljs-number">-09</span><span class="hljs-number">-18</span>_10<span class="hljs-number">-33</span><span class="hljs-number">-02.</span>png)<br>### 差分法<br>#### 问题 IncDec Sequence<br>![IncDec Sequence](C:\Users\我\Desktop\截图\Snipaste_2022<span class="hljs-number">-09</span><span class="hljs-number">-18</span>_13<span class="hljs-number">-30</span><span class="hljs-number">-41.</span>png)<br>#### 解题思路<br>*    保证所有的元素均相同，使用差分来表示<br><span class="hljs-number">1.</span> 求出所有a[ i ]-a[ i - <span class="hljs-number">1</span> ]的差b[ i ];b[ <span class="hljs-number">1</span> ]=a[ <span class="hljs-number">1</span> ],b[ i ]=a[ i ]-a[ i - <span class="hljs-number">1</span> ];<br><span class="hljs-number">2.</span> 将所有数全部变成一样的数等效于将b[ i ]数组中的所有值变成<span class="hljs-number">0</span>；<br><span class="hljs-number">3.</span> [ l , r ]都 + <span class="hljs-number">1</span> ，可以简化成b[ l ] + <span class="hljs-number">1</span>,b[ r + <span class="hljs-number">1</span> ]<span class="hljs-number">-1</span>;<br><span class="hljs-number">4.</span> 整个变化过程最短的步骤就是将b[ i ]&gt;<span class="hljs-number">0</span>的减<span class="hljs-number">1</span>和b[ i ]&lt;<span class="hljs-number">0</span>的加<span class="hljs-number">1</span>同时进行；<br><span class="hljs-number">5.</span> 将b[ i ]&gt;<span class="hljs-number">0</span>和b[ i ]&lt;<span class="hljs-number">0</span>的绝对值分别累加存入q,p，比较q,p的大小，最短步骤次数就等于max(q,p);<br><span class="hljs-number">6.</span> 差分数组b会变化到&#123; <span class="hljs-number">0</span> , <span class="hljs-number">0</span> , <span class="hljs-number">0</span> , <span class="hljs-number">0</span> ,……, <span class="hljs-number">0</span> , q-p &#125;，即原数组最后种类数共有abs(q-p)+<span class="hljs-number">1</span>种；<br>***<br><br>## 递推<br>递归自顶向下求解，将大问题分解为子问题<br>递推自底向上求解，先解决子问题再解决原问题<br>### 费解的开关<br>原题链接	[费解的开关](https:<span class="hljs-comment">//www.acwing.com/problem/content/97/)</span><br>#### 解析<br>经过分析发现： <br>每一行的状态由上一行进行的操作决定<br>最后一行的状态在最后会固定，不能改变<br><br>*    <span class="hljs-number">1.</span> 枚举第一行的状态（共<span class="hljs-number">32</span>种情况，使用二进制）<br>*    <span class="hljs-number">2.</span> 如果前n<span class="hljs-number">-1</span>行出现灯未亮，只能在没亮灯的下一行进行操作<br>	&gt;```pyhton<br>	&gt;<span class="hljs-keyword">if</span> l[i][j]==<span class="hljs-number">0</span>:<br>	&gt;	step+=<span class="hljs-number">1</span><br>	&gt;	turn(i+<span class="hljs-number">1</span>,j)<br>	&gt;```<br>*    <span class="hljs-number">3.</span> 如果最后一行灯都亮了，记录此时所用的步数<br>#### 操作技巧<br><span class="hljs-number">1.</span> 二进制寻找位置使用移位操作<br><span class="hljs-number">2.</span> 想要改变二进制数<span class="hljs-number">0</span>或<span class="hljs-number">1</span>，直接将原来的串亦或上<span class="hljs-number">1</span>（x^=<span class="hljs-number">1</span>，<span class="hljs-number">0</span>与<span class="hljs-number">1</span>的ASCII值只有最后一位不同）<br><span class="hljs-number">3.</span> 注意输入和输出是否有空格<br><br>#### 注意溢出<br>int类型在运算中可能会出现越界的情况，导致最后运算的结果出现未知错误<br>需要改变类型位long long<br><br>***<br><br>## 整数二分<br>*    <span class="hljs-number">1.</span> 确定一个区间[L, R]，使得目标值一定在区间中<br>*    <span class="hljs-number">2.</span> 找一个性质，满足：性质具有二段性；答案是二段性的分界点（分成两种情况）<br>*    注意边界问题：出现L=M时，M=(L+R+<span class="hljs-number">1</span>)/<span class="hljs-number">2</span>；避免死循环<br>### 第一类<br>ans是左区间的右端点<br>#### 模板<br>```C++<br>while(L&lt;R)<br>&#123;<br>	M=(L+R+<span class="hljs-number">1</span>)/<span class="hljs-number">2</span>;<br>	<span class="hljs-keyword">if</span> (M为左)L=M;<br>	else R=M<span class="hljs-number">-1</span>;<br>&#125;<br>```<br>### 第二类<br>ans是由右区间的左端点<br>#### 模板<br>```C++<br>while(L&lt;R)<br>&#123;<br>	M=(L+R)/<span class="hljs-number">2</span>;<br>	<span class="hljs-keyword">if</span> (M为左)R=M;<br>	else L=M+<span class="hljs-number">1</span>;<br>&#125;<br>```<br>实数二分，区间是稠密的，中点Mid可以分给左右两个区间<br>```C++<br>while(R-L&gt;<span class="hljs-number">1</span>e-(保留位数+<span class="hljs-number">2</span>))	<span class="hljs-comment">//保险起见 </span><br>&#123;<br>	<span class="hljs-keyword">if</span>(condition)L=Mid;<br>	else R=Mid;<br>&#125;<br>```<br>**只能对单股函数进行三等分法，或者对其斜率进行二分法**<br>***<br><br>**对于二分问题，注意初始边界问题，检查是否可以缩小范围（防止数据爆掉），由表达式检查是否大于某一个值后，该值均满足条件（即单调性）<br>**<br>### 空间换时间<br>*    **复杂度过大的枚举，可以拆分成两个枚举：**<br>	<br>	&gt;<span class="hljs-number">1.</span> 第一个枚举的结果存起来<br>	&gt;<span class="hljs-number">2.</span> 使用二分在第二个枚举中寻找<br><br>### 数学公式表示方法<br>$$<br>\lceil x \rceil  \sqrt [<span class="hljs-number">2</span>]&#123;a&#125;<br>$$<br>$$<br>\alpha<br>\beta<br>$$<br>$$<br>\boxed&#123;E=mc^<span class="hljs-number">2</span>&#125;<br>$$<br><br>## 前缀和<br>**只能查询静态数组，不能修改**<br>计算并保存前面所有的数之和（前缀和数组下标为<span class="hljs-number">1</span>）<br>计算区间内的和只需要直接在数组中查找<br>### 二维前缀和<br>	<span class="hljs-number">1.</span> 计算前缀和矩阵，每个位置相当于计算以它为左下角的子矩阵（使用容斥原理）<br>	<span class="hljs-number">2.</span> <br><br>## 快速排序<br>**注意边界问题，当x=q[l]，边界不能是i<span class="hljs-number">-1</span>；当x=q[r]，边界不能是j+<span class="hljs-number">1</span>**<br>举例：<br>当排序组合中只有<span class="hljs-number">1</span>，<span class="hljs-number">2</span>时，两个指针均在i=j=<span class="hljs-number">0</span>处停下来，递归一直会重复在[<span class="hljs-number">0</span>,<span class="hljs-number">1</span>]区间内，无法实现<br>**标准模板（解决边界问题）**<br>```python<br>def quick_sort(q,l,r):<br>	<span class="hljs-keyword">if</span> l&gt;=r:return	##当数组中没有或者只有一个数据时不需要排序<br>	i,j,k=l<span class="hljs-number">-1</span>,r+<span class="hljs-number">1</span>,q[l+r&gt;&gt;<span class="hljs-number">1</span>]<br>	while i&lt;j:<br>		while <span class="hljs-number">1</span>:<br>			i+=<span class="hljs-number">1</span><br>			<span class="hljs-keyword">if</span> f[i]&gt;=x:break<br>		while <span class="hljs-number">1</span>:<br>			j-=<span class="hljs-number">1</span><br>			<span class="hljs-keyword">if</span> f[j]&lt;=x:break<br>		<span class="hljs-keyword">if</span> i &gt; j : f[i],f[j]=f[j],f[i]<br>	##在子区间继续递归<br>	quick_sort(q,l,j)<br>	quick_sort(q,j+<span class="hljs-number">1</span>,r)<br>```<br>***<br><br>## 归并排序<br>使用分治的思想，将数组不断地分成两个子数组，直到只剩一个元素为止<br>将两个数组再合并成一个数组即可<br>**标准模板**<br>```python<br>def merge_sort(q,l,r):<br>	<span class="hljs-keyword">if</span> l&gt;=r:return<br>	mid=l+r&gt;&gt;<span class="hljs-number">1</span><br>	merge_sort(q,l,mid)<br>	merge_sort(q,mid+<span class="hljs-number">1</span>,r)<br>	<br>	i,j,k=l,mid+<span class="hljs-number">1</span>,<span class="hljs-number">0</span><br>	while i&lt;=mid and j&lt;=right:<br>		<span class="hljs-keyword">if</span> f[i]&lt;=f[j]:<br>			res[k]=f[i]<br>			i+=<span class="hljs-number">1</span><br>		else: <br>			res[k]=f[j]<br>			j+=<span class="hljs-number">1</span><br>		k+=<span class="hljs-number">1</span><br>	while i&lt;=mid:<br>		res[k]=f[i]<br>		k+=<span class="hljs-number">1</span><br>		i+=<span class="hljs-number">1</span><br>	while j&lt;=right:<br>		res[k]=f[j]<br>		k+=<span class="hljs-number">1</span><br>		j+=<span class="hljs-number">1</span><br>	##将res数组写入q数组中，可以向上回溯<br>	m=<span class="hljs-number">0</span><br>	for i <span class="hljs-keyword">in</span> range(l,r+<span class="hljs-number">1</span>):<br>		q[i]=res[m]<br>		m+=<span class="hljs-number">1</span><br>```<br><br>## 模拟<br>### 日期问题<br>可以先处理一部分输入，用s[:len]来截取；再使用int(s[<span class="hljs-number">-2</span>])代表倒数第二个元素，继续处理<br>**例题**<br>```python<br>n=int(input())<br>def time(s):<br>    a,b,c=map(int,s.split(<span class="hljs-string">&#x27;:&#x27;</span>))<br>    return a*<span class="hljs-number">3600</span>+b*<span class="hljs-number">60</span>+c<br>slen=len(<span class="hljs-string">&#x27;xx:xx:xx xx:xx:xx&#x27;</span>)<br>def get_time(s):<br>    t1,t2=s[:<span class="hljs-number">17</span>].split(<span class="hljs-string">&#x27; &#x27;</span>)<br>    sub=time(t2)-time(t1)<br>    <span class="hljs-keyword">if</span> len(s)&gt;slen:<br>        sub+=<span class="hljs-number">3600</span>*<span class="hljs-number">24</span>*int(s[<span class="hljs-number">-2</span>]) ##s数组的倒数第二个元素是天数<br>    return sub<br>for _ <span class="hljs-keyword">in</span> range(n):<br>    s1,s2=get_time(input()),get_time(input())<br>    t=(s1+s2)<span class="hljs-comment">//2</span><br>    h=t<span class="hljs-comment">//3600</span><br>    m=t%<span class="hljs-number">3600</span><span class="hljs-comment">//60</span><br>    s=t%<span class="hljs-number">60</span><br>    print(<span class="hljs-string">&#x27;%02d:%02d:%02d&#x27;</span>%(h,m,s))<br>```<br>### 外卖店优先级<br><span class="hljs-number">1.</span> 将订单的时间和店铺共同加入一个列表<br><span class="hljs-number">2.</span> 维护一个last[ids]，上次取得订单的时间，ts-last[ids]<span class="hljs-number">-1</span>是优先级降低的数目；score[ids]是优先级；st[ids]维护的是 是否加入优先缓存<br><span class="hljs-number">3.</span> 将订单排序后，依次进行维护；最后，将所有last[i]与T比较，还要对score和st数组进行处理<br>**代码**<br>```python<br>n,m,t=map(int,input().split())<br>order=[]<br>for i <span class="hljs-keyword">in</span> range(m):<br>    order.append(list(map(int,input().split())))<br>order=sorted(order)<br><br>last=[<span class="hljs-number">0</span> for i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>)]<br>score=[<span class="hljs-number">0</span> for i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>)]<br>st=[<span class="hljs-literal">False</span> for i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>)]<br><br>for ts,ids <span class="hljs-keyword">in</span> order:<br>    ##处理上一次订单<br>    <span class="hljs-keyword">if</span> last[ids]&lt;ts:<br>        score[ids]=max(<span class="hljs-number">0</span>,score[ids]-ts+last[ids]+<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">if</span> score[ids]&lt;=<span class="hljs-number">3</span>:<br>        st[ids]=<span class="hljs-literal">False</span><br>    <span class="hljs-keyword">if</span> score[ids]&gt;<span class="hljs-number">5</span>:<br>        st[ids]=<span class="hljs-literal">True</span><br>    score[ids]+=<span class="hljs-number">2</span><br>    <span class="hljs-keyword">if</span> score[ids]&gt;<span class="hljs-number">5</span>:<br>        st[ids]=<span class="hljs-literal">True</span><br>    last[ids]=ts<br>for i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>,n+<span class="hljs-number">1</span>):<br>    <span class="hljs-keyword">if</span> last[i]!=t:<br>        score[i]=max(<span class="hljs-number">0</span>,score[i]-t+last[i])<br>        <span class="hljs-keyword">if</span> score[i]&lt;=<span class="hljs-number">3</span>:<br>            st[i]=<span class="hljs-literal">False</span><br><br>res=<span class="hljs-number">0</span><br>for i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>,n+<span class="hljs-number">1</span>):<br>    <span class="hljs-keyword">if</span> st[i]:<br>        res+=<span class="hljs-number">1</span><br>print(res)<br>```<br>### 逆序对的数量(使用分治法)<br>**采用分治的思想，分为左右两个区间**<br><span class="hljs-number">1.</span> 左半边内部逆序对的数量：merge_sort(L,mid)<br><span class="hljs-number">2.</span> 右半边内部逆序对的数量：merge_sort(mid+<span class="hljs-number">1</span>,R)<br><span class="hljs-number">3.</span> 一部分在左边，一部分在右边：排序，如果q[i]&gt;q[j]，那么q[i+<span class="hljs-number">1</span>]~q[mid]均大于q[j]，所以res+=mid-l+<span class="hljs-number">1</span><br><span class="hljs-number">4.</span> 在函数中使用全局变量，需要声明一下：global x<br>**代码**<br>```python<br>n=int(input())<br>read=lambda:[int(x)for x <span class="hljs-keyword">in</span> input().split()]<br>a,res=read(),[<span class="hljs-number">0</span>]*(n+<span class="hljs-number">1</span>)<br>ans=<span class="hljs-number">0</span><br>def merge_sort(a,l,r):<br>    global ans<br>    <span class="hljs-keyword">if</span> l&gt;=r:<br>        return<br>    mid=(l+r)&gt;&gt;<span class="hljs-number">1</span><br>    merge_sort(a,l,mid)<br>    merge_sort(a,mid+<span class="hljs-number">1</span>,r)<br>    i,j,k=l,mid+<span class="hljs-number">1</span>,<span class="hljs-number">0</span><br>    while i&lt;=mid and j&lt;=r:<br>        <span class="hljs-keyword">if</span> a[i]&gt;a[j]:<br>            res[k]=a[j]<br>            ans+=mid-i+<span class="hljs-number">1</span><br>            j+=<span class="hljs-number">1</span><br>        else:<br>            res[k]=a[i]<br>            i+=<span class="hljs-number">1</span><br>        k+=<span class="hljs-number">1</span><br>    while i&lt;=mid:<br>        res[k]=a[i]<br>        k+=<span class="hljs-number">1</span><br>        i+=<span class="hljs-number">1</span><br>    while j&lt;=r:<br>        res[k]=a[j]<br>        k+=<span class="hljs-number">1</span><br>        j+=<span class="hljs-number">1</span><br>    m=<span class="hljs-number">0</span><br>    for i <span class="hljs-keyword">in</span> range(l,r+<span class="hljs-number">1</span>):<br>        a[i]=res[m]<br>        m+=<span class="hljs-number">1</span><br>merge_sort(a,<span class="hljs-number">0</span>,n<span class="hljs-number">-1</span>)<br>print(ans)<br>```<br>## 树状数组和线段树<br>### 树状数组（O(logn)）<br><span class="hljs-number">1.</span> 在某个位置上的数加上一个数（单点修改）<br><span class="hljs-number">2.</span> 求某一个前缀和（区间查询）<br><span class="hljs-number">3.</span> 区间修改=区间查询+差分<br>**c[x]为树状数组，x的二进制表示最后有k个零，在第k层**<br>**c[x]表示为 ( x<span class="hljs-number">-2</span>^k,x] 区间的和**<br><br>**树状数组下标从<span class="hljs-number">1</span>开始，所以输入存在<span class="hljs-number">0</span>时，需要全部做+<span class="hljs-number">1</span>处理**<br>```python<br>##树状数组实现的<span class="hljs-number">3</span>个函数<br><br>##树状数组的三个函数<br>##lowbit是求树状数组表示的区间增长值<br>##add是在数组的某个数上加上一个数<br>##query是求一下区间的和<br>def lowbit(x):<br>    return x &amp; -x<br><br>def add(x,v):<br>    ##注意这里的n是树状数组的大小<br>    while x&lt;=n:<br>        tr[x]+=v<br>        x+=lowbit(x)<br><br>def query(x):<br>    res=<span class="hljs-number">0</span><br>    while x&gt;<span class="hljs-number">0</span>:<br>        res+=tr[x]<br>        x-=lowbit(x)<br>    return res<br>```<br>#### 例题<br>#####  数星星（经典树状数组）<br>######  题目：<br>天空中有一些星星，这些星星都在不同的位置，每个星星有个坐标。<br><br>如果一个星星的左下方（包含正左和正下）有 k 颗星星，就说这颗星星是 k 级的。<br><br>![](https:<span class="hljs-comment">//cdn.acwing.com/media/article/image/2019/12/11/19_6f40991a1c-1.png)</span><br>    <br>    例如，上图中星星 <span class="hljs-number">5</span> 是 <span class="hljs-number">3</span> 级的（<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">4</span> 在它左下），星星 <span class="hljs-number">2</span>,<span class="hljs-number">4</span> 是 <span class="hljs-number">1</span> 级的。<br><br>例图中有 <span class="hljs-number">1</span> 个 <span class="hljs-number">0</span> 级，<span class="hljs-number">2</span> 个 <span class="hljs-number">1</span> 级，<span class="hljs-number">1</span> 个 <span class="hljs-number">2</span> 级，<span class="hljs-number">1</span> 个 <span class="hljs-number">3</span> 级的星星。<br><br>给定星星的位置，输出各级星星的数目。<br><br>换句话说，给定 N 个点，定义每个点的等级是在该点左下方（含正左、正下）的点的数目，试统计每个等级有多少个点。<br><br>输入格式<br>第一行一个整数 N，表示星星的数目；<br><br>接下来 N 行给出每颗星星的坐标，坐标用两个整数 x,y 表示；<br><br>不会有星星重叠。星星按 y 坐标增序给出，y 坐标相同的按 x 坐标增序给出。<br><br>输出格式<br>N 行，每行一个整数，分别是 <span class="hljs-number">0</span> 级，<span class="hljs-number">1</span> 级，<span class="hljs-number">2</span> 级，……，N−<span class="hljs-number">1</span> 级的星星的数目。<br><br>###### 分析<br>根据题目所给的星星顺序，之后枚举的所有星星一定x,y均大于之前枚举的所有星星<br>求星星的级别就只需要**求小于当前x的星星有几个**，使用前缀和查询，需要将当前x包含的星星加进区间——使用树状数组<br><br>###### 代码<br>```python<br><span class="hljs-keyword">import</span> sys<br>readline=sys.stdin.readline<br>read=lambda:[int(x)for x <span class="hljs-keyword">in</span> readline().split()]<br>N=<span class="hljs-number">32010</span><br>n,=read()<br>tr=[<span class="hljs-number">0</span> for i <span class="hljs-keyword">in</span> range(N+<span class="hljs-number">1</span>)]<br>level=[<span class="hljs-number">0</span> for i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>)]<br><br>def lowbit(x):<br>    return x &amp; -x<br><br>def add(x,v):<br>    while x&lt;=N:<br>        tr[x]+=v<br>        x+=lowbit(x)<br><br>def query(x):<br>    res=<span class="hljs-number">0</span><br>    while x&gt;<span class="hljs-number">0</span>:<br>        res+=tr[x]<br>        x-=lowbit(x)<br>    return res<br><br><br>for i <span class="hljs-keyword">in</span> range(n):<br>    x,y=read()<br>    ##树状数组下标从<span class="hljs-number">1</span>开始<br>    x+=<span class="hljs-number">1</span><br>    level[query(x)]+=<span class="hljs-number">1</span><br>    add(x,<span class="hljs-number">1</span>)<br><br>for i <span class="hljs-keyword">in</span> range(n):<br>    print(level[i])<br>```<br><br>### 线段树<br>操作<span class="hljs-number">1</span>：单点修改<br>递归过程，直到叶节点，同时更新所有的和<br><br>操作<span class="hljs-number">2</span>：区间查询<br>递归过程，最多查询节点小于<span class="hljs-number">4</span>\*logn<br><br>区间修改需要添加懒标记，非常麻烦<br><br>**函数**<br>**<span class="hljs-number">2</span>\*x  : x&lt;&lt;<span class="hljs-number">1</span><br><span class="hljs-number">2</span>\* x+<span class="hljs-number">1</span> : x&lt;&lt;<span class="hljs-number">1</span> |<span class="hljs-number">1</span>**<br><br>**注意：线段树build时要初始化其左右子树节点；query时要注意mid为树的中点**<br>```python<br>##节点<br><span class="hljs-keyword">class</span> Node:<br>	def __init__(self):<br>		self.l,self.r,self.sum=<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span><br>##更新节点信息<br>def pushup(u):<br>	tr[u].sum=tr[u&lt;&lt;<span class="hljs-number">1</span>].sum+tr[u&lt;&lt;<span class="hljs-number">1</span>|<span class="hljs-number">1</span>].sum<br>##初始化线段树<br>def build(u,l,r):<br>	<span class="hljs-keyword">if</span> l==r:<br>		tr[u].l,tr[u].r,tr[u].sum=l,r,w[r]<br>	else:<br>		##初始化线段树节点<br>		tr[u].l,tr[u].r=l,r<br>		mid=l+r&gt;&gt;<span class="hljs-number">1</span><br>		build(u&lt;&lt;<span class="hljs-number">1</span>,l,mid),build(u&lt;&lt;<span class="hljs-number">1</span>|<span class="hljs-number">1</span>,mid+<span class="hljs-number">1</span>,r)<br>		pushup(u)<br>##求区间和<br>def query(u, l, r):<br>    <span class="hljs-keyword">if</span> tr[u].l &gt;= l and tr[u].r &lt;= r: return tr[u].sum<br>    ##对树的中点进行操作<br>    mid = tr[u].l + tr[u].r &gt;&gt; <span class="hljs-number">1</span><br>    sum = <span class="hljs-number">0</span><br>    <span class="hljs-keyword">if</span> l &lt;= mid: sum = query(u &lt;&lt; <span class="hljs-number">1</span>, l, r)<br>    <span class="hljs-keyword">if</span> r &gt; mid: sum += query(u &lt;&lt; <span class="hljs-number">1</span> | <span class="hljs-number">1</span>, l, r)<br>    return sum<br>##修改节点<br>def modify(u, x, v):<br>    <span class="hljs-keyword">if</span> tr[u].l == tr[u].r:<br>        tr[u].sum += v<br>    else:<br>        mid = tr[u].l + tr[u].r &gt;&gt; <span class="hljs-number">1</span><br>        <span class="hljs-keyword">if</span> x &lt;= mid:<br>            modify(u &lt;&lt; <span class="hljs-number">1</span>, x, v)<br>        else:<br>            modify(u &lt;&lt; <span class="hljs-number">1</span> | <span class="hljs-number">1</span>, x, v)<br>        pushup(u)<br>```<br>### 数列区间最大值<br>#### 线段树求解，数据会超时一部分（TLE）<br>```python<br><span class="hljs-keyword">import</span> sys<br>readline=sys.stdin.readline<br>read=lambda:[int(x) for x <span class="hljs-keyword">in</span> readline().split()]<br>n,m=read()<br>a=[<span class="hljs-number">0</span>]+read()<br><br><span class="hljs-keyword">class</span> Node:<br>    def __init__(self):<br>        self.l,self.r,self.maxv=<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span><br><br>def build(u,l,r):<br>    <span class="hljs-keyword">if</span> l==r:<br>        tr[u].l = l; <br>        tr[u].r = r;<br>        tr[u].maxv=a[r]<br>    else:<br>    	tr[u].l,tr[u].r=l,r<br>        mid=l+r&gt;&gt;<span class="hljs-number">1</span><br>        build(u&lt;&lt;<span class="hljs-number">1</span>,l,mid),build(u&lt;&lt;<span class="hljs-number">1</span>|<span class="hljs-number">1</span>,mid+<span class="hljs-number">1</span>,r)<br>        tr[u].maxv=max(tr[u&lt;&lt;<span class="hljs-number">1</span>].maxv,tr[u&lt;&lt;<span class="hljs-number">1</span>|<span class="hljs-number">1</span>].maxv)<br><br>def query(u,l,r):<br>    <span class="hljs-keyword">if</span> tr[u].l&gt;=l and tr[u].r&lt;=r:return tr[u].maxv<br>    mid=tr[u].l+tr[u].r&gt;&gt;<span class="hljs-number">1</span><br>    maxv=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">if</span> l&lt;=mid: maxv=query(u&lt;&lt;<span class="hljs-number">1</span>,l,r)<br>    <span class="hljs-keyword">if</span> r&gt;mid: maxv=max(maxv,query(u&lt;&lt;<span class="hljs-number">1</span>|<span class="hljs-number">1</span>,r))<br>    return maxv<br>tr=[Node()for i <span class="hljs-keyword">in</span> range(<span class="hljs-number">4</span>*n+<span class="hljs-number">5</span>)]<br>build(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>,n)<br>for _ <span class="hljs-keyword">in</span> range(m):<br>    x,y=read()<br>    print(query(<span class="hljs-number">1</span>,x,y))<br>```<br>#### ST表求解RMQ(区间最值问题)、GCD(最大公因数)<br><span class="hljs-number">1.</span> 预处理构建logn数组<br><span class="hljs-number">2.</span> ST表进行初始化（f[i]\[j]中存的是此时在区间内的最大值）<br><span class="hljs-number">3.</span> 进行查询<br>**代码**<br>```python<br><span class="hljs-keyword">import</span> sys<br>read = lambda: [int(x) for x <span class="hljs-keyword">in</span> sys.stdin.readline().split()]<br>alloc = lambda *s: len(s) - <span class="hljs-number">1</span> and [alloc(*s[<span class="hljs-number">1</span>:]) for i <span class="hljs-keyword">in</span> range(int(s[<span class="hljs-number">0</span>]) + <span class="hljs-number">2</span>)] or [<span class="hljs-number">0</span>] * int(s[<span class="hljs-number">0</span>] + <span class="hljs-number">2</span>)<br>n,m=read()<br><br>a=[<span class="hljs-number">0</span>]+read()<br>logn=[<span class="hljs-number">0</span>]*(n+<span class="hljs-number">1</span>)<br><br><br>logn[<span class="hljs-number">1</span>],logn[<span class="hljs-number">2</span>]=<span class="hljs-number">0</span>,<span class="hljs-number">1</span><br>##构建logn数组，存储所有n的log2的值<br>for i <span class="hljs-keyword">in</span> range(<span class="hljs-number">3</span>,n+<span class="hljs-number">1</span>):<br>    logn[i]=logn[i<span class="hljs-comment">//2]+1</span><br>    <br>f=alloc(n,logn[n]+<span class="hljs-number">1</span>)<br><br>##初始化ST表<br>##先循环i+<span class="hljs-number">2</span>^(j<span class="hljs-number">-1</span>)，再循环i+<span class="hljs-number">2</span>^j<br>for j <span class="hljs-keyword">in</span> range(logn[n]+<span class="hljs-number">1</span>):<br>    for i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>,n+<span class="hljs-number">1</span>):<br>        <span class="hljs-keyword">if</span> j==<span class="hljs-number">0</span>:f[i][j]=a[i]<br>        else:<br>            <span class="hljs-keyword">if</span> (i+(<span class="hljs-number">1</span>&lt;&lt;j)<span class="hljs-number">-1</span>)&gt;n:break<br>            f[i][j]=max(f[i][j<span class="hljs-number">-1</span>],f[i+(<span class="hljs-number">1</span>&lt;&lt;(j<span class="hljs-number">-1</span>))][j<span class="hljs-number">-1</span>])<br><br>##查询l-r区间上的最大值，要求两个区间[l,l+<span class="hljs-number">2</span>^s<span class="hljs-number">-1</span>]和[r<span class="hljs-number">-2</span>^s+<span class="hljs-number">1</span>,r]的公共覆盖区间最大<br>##所以使用了<span class="hljs-number">2</span>^s=r-l+<span class="hljs-number">1</span><br>def query(l,r):<br>    s=logn[r-l+<span class="hljs-number">1</span>]<br>    return max(f[l][s],f[r-(<span class="hljs-number">1</span>&lt;&lt;s)+<span class="hljs-number">1</span>][s])<br>for _ <span class="hljs-keyword">in</span> range(m):<br>    l,r=read()<br>    print(query(l,r))<br>```<br>## 差分<br>**差分实质上是前缀和的逆运算**<br>对某一区间进行加某个数的操作或者同时减某个数的操作，可以将时间复杂度降低<br>### 一维差分<br>对s[i]上 [ l ，r ] 区间的数同时+c：只需要在差分数组b[l]+c,b[r+<span class="hljs-number">1</span>]-c；可将s[i]看作是b[i]的前缀和数组<br>### 二维差分<br>由前缀和的推导公式推的公式（找规律）<br>b(x1,y1)+=c		<span class="hljs-number">00</span><br>b(x1,y2+<span class="hljs-number">1</span>)-=c	 <span class="hljs-number">01</span><br>b(x2+<span class="hljs-number">1</span>,y1)-=c	 <span class="hljs-number">10</span><br>b(x2+<span class="hljs-number">1</span>,y2+<span class="hljs-number">1</span>)+=c	<span class="hljs-number">11</span><br>### 三维差分<br>可推导三维前缀和公式，倒推三维差分公式(**由立体图形推导**)<br>s(x,y,z) = b(x,y,z) + s(x<span class="hljs-number">-1</span>,y,z) + s(x,y<span class="hljs-number">-1</span>,z) - s(x<span class="hljs-number">-1</span>,y<span class="hljs-number">-1</span>,z) + s(x,y,z<span class="hljs-number">-1</span>) - s(x<span class="hljs-number">-1</span>,y,z<span class="hljs-number">-1</span>) - s(x,y<span class="hljs-number">-1</span>,z<span class="hljs-number">-1</span>) + s(x<span class="hljs-number">-1</span>,y<span class="hljs-number">-1</span>,z<span class="hljs-number">-1</span>)<br>#### 差分修改同二维方式相同<br>按<span class="hljs-number">000</span><span class="hljs-number">-111</span>定义b(x1,y1,z1),b(x1,y1,z2+<span class="hljs-number">1</span>)······<br><br>## 滑动窗口&amp;双指针<br>利用左右两个指针维护一个区间大小恒定的窗口，对其中的数据进行演算<br>### 例题<br>日志统计<br>```python<br><span class="hljs-keyword">import</span> sys<br>read=lambda:[int(x)for x <span class="hljs-keyword">in</span> sys.stdin.readline().split()]<br>n,D,k=read()<br>N=<span class="hljs-number">100010</span><br><br>##开成大一些的数组<br>cnt=[<span class="hljs-number">0</span>]*(N+<span class="hljs-number">1</span>)<br>st=[<span class="hljs-number">0</span>]*(N+<span class="hljs-number">1</span>)<br>logs=[read() for i <span class="hljs-keyword">in</span> range(n)]<br>logs.sort()<br><br>i=<span class="hljs-number">0</span><br>for log_ <span class="hljs-keyword">in</span> logs:<br>    cnt[log_[<span class="hljs-number">1</span>]]+=<span class="hljs-number">1</span><br>    ##滑动窗口的维护<br>    while log_[<span class="hljs-number">0</span>]-logs[i][<span class="hljs-number">0</span>]&gt;=D:<br>        cnt[logs[i][<span class="hljs-number">1</span>]]-=<span class="hljs-number">1</span><br>        i+=<span class="hljs-number">1</span><br>    <span class="hljs-keyword">if</span> cnt[log_[<span class="hljs-number">1</span>]]&gt;=k:<br>        st[log_[<span class="hljs-number">1</span>]]=<span class="hljs-number">1</span><br><br>for i <span class="hljs-keyword">in</span> range(N+<span class="hljs-number">1</span>):<br>    <span class="hljs-keyword">if</span> st[i]:<br>        print(i)<br>```<br>## 最少交换次数<br>### 交换瓶子<br>**解析**<br><br>- 将排序转化为图论，判断所有环转化为自环需要的次数，计算环的数量使用bool数组判定，每次j=a[j]：环中的每个元素指向此时占据它位置的元素<br>- 最后自环的数量减去原来的环数<br><br>**代码**<br><br>```python<br>##通过是否都是自环判定<br><span class="hljs-keyword">import</span> sys<br>read=lambda:[int(x) for x <span class="hljs-keyword">in</span> sys.stdin.readline().split()]<br>n,=read()<br>a=[<span class="hljs-number">0</span>]+read()<br><br>N=<span class="hljs-number">10010</span><br>st=[<span class="hljs-number">0</span>]*(N+<span class="hljs-number">1</span>)<br><br>cnt=<span class="hljs-number">0</span><br>for i <span class="hljs-keyword">in</span> range(<span class="hljs-number">1</span>,n+<span class="hljs-number">1</span>):<br>    <span class="hljs-keyword">if</span> st[i]==<span class="hljs-number">0</span>:<br>        cnt+=<span class="hljs-number">1</span><br>        while st[i]==<span class="hljs-number">0</span>:<br>            st[i]=<span class="hljs-number">1</span><br>            i=a[i]<br>print(n-cnt)<br>```<br>## 连通块问题（找可以统计的东西）<br>遍历：bfs、dfs<br>并查集<br>**对一个点进行bfs、dfs，实际上是对一个连通分量的遍历**<br>### 全球变暖<br>#### 分析<br><span class="hljs-number">1.</span> 找连通块：使用bfs统计<br><span class="hljs-number">2.</span> 被海淹没：一个连通块中陆地的数量与与海相邻陆地的数量相同<br>上述两个操作可以直接在一个bfs中实现<br><br>#### 代码<br>```python<br>dx=[<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">-1</span>,<span class="hljs-number">1</span>]<br>dy=[<span class="hljs-number">1</span>,<span class="hljs-number">-1</span>,<span class="hljs-number">0</span>,<span class="hljs-number">0</span>]<br><br>def bfs(i,j):<br>    global bound,total<br>    q=[]<br>    q.append((i,j))<br>    st[i][j]=<span class="hljs-number">1</span><br><br>    while(len(q)):<br>        x,y=q.pop()<br>        total+=<span class="hljs-number">1</span><br>        is_bound=<span class="hljs-literal">False</span><br><br>        for k <span class="hljs-keyword">in</span> range(<span class="hljs-number">4</span>):<br>            nx=x+dx[k]<br>            ny=y+dy[k]<br>            <span class="hljs-keyword">if</span> nx&lt;<span class="hljs-number">0</span> or nx&gt;n or ny&lt;<span class="hljs-number">0</span> or ny&gt;n:continue<br>            <span class="hljs-keyword">if</span> st[nx][ny]==<span class="hljs-number">1</span>:continue<br>            <span class="hljs-keyword">if</span> web[nx][ny]==<span class="hljs-string">&#x27;.&#x27;</span>:<br>                is_bound=<span class="hljs-literal">True</span><br>                continue<br><br>            q.append((nx,ny))<br>            st[nx][ny]=<span class="hljs-literal">True</span><br><br>        <span class="hljs-keyword">if</span>(is_bound):bound+=<span class="hljs-number">1</span><br><br>n=int(input())<br><br>st=[[<span class="hljs-number">0</span> for i <span class="hljs-keyword">in</span> range(n)]for j <span class="hljs-keyword">in</span> range(n)]<br>cnt=<span class="hljs-number">0</span><br>web=[input() for i <span class="hljs-keyword">in</span> range(n)]<br><br>for i <span class="hljs-keyword">in</span> range(n):<br>    for j <span class="hljs-keyword">in</span> range(n):<br>        <span class="hljs-keyword">if</span> web[i][j]==<span class="hljs-string">&#x27;#&#x27;</span> and st[i][j]==<span class="hljs-number">0</span>:<br>            bound,total=<span class="hljs-number">0</span>,<span class="hljs-number">0</span><br>            bfs(i,j)<br>            <span class="hljs-keyword">if</span> total==bound:<br>                cnt+=<span class="hljs-number">1</span><br><br>print(cnt)<br>```<br>***<br><br>## 找树的直径（在图中找路径最长的路径）<br>### 解法<br><span class="hljs-number">1.</span> 使用邻接表将图存储起来，python使用字典或者列表实现邻接表<br><span class="hljs-number">2.</span> dfs：将当前节点、父节点和距离传入，更新一个dist矩阵<br><span class="hljs-number">3.</span> 连续求两次dist中最大值（第一次选取x为起点，y为最大点；第二次以y为起点，寻找到最大点）<br>**使用dfs在python中可能会爆栈，使用bfs**<br>### 对树递归，将父节点传入，防止递归回父节点<br><br>### 代码<br>```python<br>##图的邻接矩阵可以使用字典或者列表进行模拟<br>n=int(input())<br>h=&#123;&#125;<br><br>def add(a,b,x):<br>    <span class="hljs-keyword">if</span> a <span class="hljs-keyword">in</span> h:<br>        h[a].append((b,x))<br>    else:<br>        h[a]=[(b,x)]<br>    <span class="hljs-keyword">if</span> b <span class="hljs-keyword">in</span> h:<br>        h[b].append((a,x))<br>    else:<br>        h[b]=[(a,x)]<br><br>for i <span class="hljs-keyword">in</span> range(n<span class="hljs-number">-1</span>):<br>    a,b,x=map(int,input().split())<br>    add(a,b,x)<br><br>##dfs方法会爆栈<br>    <br>#def dfs(u,father,distance):<br>#    dist[u]=distance<br>#    for i,j <span class="hljs-keyword">in</span> h[u]:<br>#        <span class="hljs-keyword">if</span> i!=father:<br>#            dfs(i,u,distance+j)<br>            <br>def bfs(u,father,distance):<br>    q=[]<br>    q.append((u,father,distance))<br>    while len(q):<br>        u,father,distance=q.pop()<br>        dist[u]=distance<br>        for i,j <span class="hljs-keyword">in</span> h[u]:<br>            <span class="hljs-keyword">if</span> i!=father:<br>                q.append((i,u,distance+j))<br>dist=[<span class="hljs-number">0</span> for i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>)]<br>bfs(<span class="hljs-number">1</span>,<span class="hljs-number">-1</span>,<span class="hljs-number">0</span>)<br><br>maxs=<span class="hljs-number">1</span><br>for i <span class="hljs-keyword">in</span> range(len(dist)):<br>    <span class="hljs-keyword">if</span> dist[i]&gt;dist[maxs]:<br>        maxs=i<br><br>bfs(maxs,<span class="hljs-number">1</span>,<span class="hljs-number">0</span>)<br>for i <span class="hljs-keyword">in</span> range(len(dist)):<br>    <span class="hljs-keyword">if</span> dist[i]&gt;dist[maxs]:<br>        maxs=i<br>s=dist[maxs]<br>print(<span class="hljs-number">10</span>*s+s*(s+<span class="hljs-number">1</span>)<span class="hljs-comment">//2)</span><br>```<br>***<br>## 单链表实现（python）<br>e[]表示节点的值，ne[]存放该节点的下一个节点，head为头节点<br><br>**代码**<br>```python<br>n=int(input())<br>e=[<span class="hljs-number">0</span> for i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>)]<br>ne=[<span class="hljs-number">0</span> for i <span class="hljs-keyword">in</span> range(n+<span class="hljs-number">1</span>)]<br>idx,head=<span class="hljs-number">1</span>,<span class="hljs-number">-1</span><br><br>def add_head(v):<br>    global e,ne,idx,head<br>    e[idx]=v<br>    ne[idx]=head<br>    head=idx<br>    idx+=<span class="hljs-number">1</span><br><br>def add(k,v):<br>    global e,ne,idx,head<br>    e[idx]=v<br>    ne[idx]=ne[k]<br>    ne[k]=idx<br>    idx+=<span class="hljs-number">1</span><br>##删除头节点需要特判 head=ne[head]<br>def remove(k):<br>    global e,ne,idx,head<br>    <span class="hljs-keyword">if</span> k==<span class="hljs-number">0</span>:<br>        head=ne[head]<br>    else:<br>        ne[k]=ne[ne[k]]<br>        <br>for _ <span class="hljs-keyword">in</span> range(n):<br>    f=input().split()<br>    <span class="hljs-keyword">if</span> f[<span class="hljs-number">0</span>]==<span class="hljs-string">&#x27;H&#x27;</span>:add_head(int(f[<span class="hljs-number">1</span>]))<br>    <span class="hljs-keyword">if</span> f[<span class="hljs-number">0</span>]==<span class="hljs-string">&#x27;I&#x27;</span>:add(int(f[<span class="hljs-number">1</span>]),int(f[<span class="hljs-number">2</span>]))<br>    <span class="hljs-keyword">if</span> f[<span class="hljs-number">0</span>]==<span class="hljs-string">&#x27;D&#x27;</span>:remove(int(f[<span class="hljs-number">1</span>]))<br>    <br>i=head<br>##遍历从头节点开始一直到指向<span class="hljs-number">-1</span>(null)<br>while i!=<span class="hljs-number">-1</span>:<br>    print(e[i],end=<span class="hljs-string">&#x27; &#x27;</span>)<br>    i=ne[i]<br>```<br><br>## 求组合数<br><br>~~~python<br># 组合数公式<br>def C(a,b):<br>    res = <span class="hljs-number">1</span><br>    i,j = a,<span class="hljs-number">1</span><br>    while i &gt;= <span class="hljs-number">1</span> and j&lt;=b:<br>        res = res * i <span class="hljs-comment">//j</span><br>        <span class="hljs-keyword">if</span> res &gt; n: return res<br>        i -= <span class="hljs-number">1</span>; j += <span class="hljs-number">1</span><br>    return res<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="求最近公共祖先问题（LCA）"><a href="#求最近公共祖先问题（LCA）" class="headerlink" title="求最近公共祖先问题（LCA）"></a>求最近公共祖先问题（LCA）</h2><ul>
+<li>树上的节点之间的距离可以使用LCA求解</li>
+<li>将x, y距离转化为到根节点之间的距离</li>
+<li><code>depth[x] + depth[y] - depth[py] * 2</code></li>
+</ul>
+<h3 id="倍增法："><a href="#倍增法：" class="headerlink" title="倍增法："></a>倍增法：</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> defaultdict, deque<br><span class="hljs-keyword">from</span> sys <span class="hljs-keyword">import</span> stdin<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">bfs</span>(<span class="hljs-params">root</span>):<br>    depth[<span class="hljs-number">0</span>] = <span class="hljs-number">0</span><br>    depth[root] = <span class="hljs-number">1</span><br>    q = deque()<br>    q.append(root)<br>    <span class="hljs-keyword">while</span> q:<br>        t = q.popleft()<br>        <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> paths[t]:<br>            <span class="hljs-keyword">if</span> depth[v] == INF: <span class="hljs-comment"># 说明j还没被搜索</span><br>                depth[v] = depth[t] + <span class="hljs-number">1</span><br>                q.append(v)<br>                fa[v][<span class="hljs-number">0</span>] = t<br>                <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, <span class="hljs-number">16</span>):<br>                    fa[v][k] = fa[fa[v][k - <span class="hljs-number">1</span>]][k - <span class="hljs-number">1</span>]<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">lca</span>(<span class="hljs-params">a, b</span>):<br>    <span class="hljs-keyword">if</span> depth[a] &lt; depth[b]:<br>        a, b = b, a<br>    <span class="hljs-comment"># 把深度更深的a往上跳到b</span><br>    <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">15</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>):<br>        <span class="hljs-comment"># 当a跳完2^k依然在b下面 我们就一直跳</span><br>        <span class="hljs-comment"># 二进制拼凑法</span><br>        <span class="hljs-keyword">if</span> depth[fa[a][k]] &gt;= depth[b]:<br>            a = fa[a][k]<br>        <span class="hljs-keyword">if</span> a == b:<br>            <span class="hljs-keyword">return</span> a<br>    <span class="hljs-keyword">for</span> k <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">15</span>, -<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>):<br>        <span class="hljs-comment"># 假如a,b都跳出根节点,fa[a][k]==fa[b][k]==0 不符合更新条件</span><br>        <span class="hljs-keyword">if</span> fa[a][k] != fa[b][k]:<br>            a = fa[a][k]<br>            b = fa[b][k]<br>    <span class="hljs-keyword">return</span> fa[a][<span class="hljs-number">0</span>]<br><br><br>N = <span class="hljs-number">40010</span>   <span class="hljs-comment"># 开数组时直接考虑最大的点值，避免用哈希表进行映射</span><br>n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>paths = defaultdict(<span class="hljs-built_in">list</span>) <span class="hljs-comment"># 记录无向图路径</span><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>    a, b = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, stdin.readline().split())<br>    <span class="hljs-keyword">if</span> b == -<span class="hljs-number">1</span>:<br>        root = a<br>    <span class="hljs-keyword">else</span>:<br>        paths[a].append(b)<br>        paths[b].append(a)<br><br><span class="hljs-comment"># 预处理，倍增法</span><br>INF = <span class="hljs-number">1e9</span><br>fa = [[<span class="hljs-number">0</span> <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">16</span>)] <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N + <span class="hljs-number">1</span>)]<br>depth = [INF] * (N + <span class="hljs-number">1</span>)<br>bfs(root)<br>m = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>    x, y = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, stdin.readline().split())<br>    p = lca(x, y)<br>    <span class="hljs-keyword">if</span> p == x:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">elif</span> p == y:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-number">2</span>)<br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-built_in">print</span>(<span class="hljs-number">0</span>)<br></code></pre></td></tr></table></figure>
+
+<h3 id="Tarjan-离线做法"><a href="#Tarjan-离线做法" class="headerlink" title="Tarjan(离线做法):"></a>Tarjan(离线做法):</h3><ul>
+<li>将x, y距离转化为到根节点之间的距离</li>
+<li><code>depth[x] + depth[y] - depth[py] * 2</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> sys <span class="hljs-keyword">import</span> *<br><span class="hljs-keyword">from</span> collections <span class="hljs-keyword">import</span> *<br>N = <span class="hljs-number">10010</span><br>M = N * <span class="hljs-number">2</span><br>e = [<span class="hljs-number">0</span>] * M<br>ne = [<span class="hljs-number">0</span>] * M<br>head = [-<span class="hljs-number">1</span>] * N<br>w = [<span class="hljs-number">0</span>] * M<br>idx = <span class="hljs-number">0</span><br>p = [i <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N)]; query = [[] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(N)]<br>d = [<span class="hljs-number">0</span>] * N; st = [<span class="hljs-number">0</span>] * N; res = [<span class="hljs-number">0</span>] * M<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">x, y, k</span>):<br>    <span class="hljs-keyword">global</span> idx<br>    e[idx] = y<br>    ne[idx] = head[x]<br>    w[idx] = k<br>    head[x] = idx<br>    idx += <span class="hljs-number">1</span><br>    <br><span class="hljs-keyword">def</span> <span class="hljs-title function_">find</span>(<span class="hljs-params">x</span>):<br>    <span class="hljs-keyword">if</span> x != p[x]:<br>        p[x] = find(p[x])<br>    <span class="hljs-keyword">return</span> p[x]<br>    <br><span class="hljs-keyword">def</span> <span class="hljs-title function_">bfs</span>(<span class="hljs-params">node, father</span>):<br>    q = deque()<br>    q.append((node, father))<br>    <span class="hljs-keyword">while</span> q:<br>        node, father = q.popleft()<br>        i = head[node]<br>        <span class="hljs-keyword">while</span> i != -<span class="hljs-number">1</span>:<br>            j = e[i]<br>            <span class="hljs-keyword">if</span> j != father:<br>                q.append((j, node))<br>                d[j] = d[node] + w[i]<br>            i = ne[i]<br>            <br><span class="hljs-keyword">def</span> <span class="hljs-title function_">tarjan</span>(<span class="hljs-params">x</span>):<br>    st[x] = <span class="hljs-number">1</span><br>    i = head[x]<br>    <span class="hljs-keyword">while</span> i != -<span class="hljs-number">1</span>:<br>        j = e[i]<br>        <span class="hljs-keyword">if</span> st[j] == <span class="hljs-number">0</span>:<br>            <span class="hljs-comment"># 当前点未被标记，直接递归到下一层</span><br>            tarjan(j)<br>            <span class="hljs-comment"># 合并已经访问过的</span><br>            p[j] = x<br>        i = ne[i]<br>    <span class="hljs-keyword">for</span> y, num <span class="hljs-keyword">in</span> query[x]:<br>        <span class="hljs-keyword">if</span> st[y] == <span class="hljs-number">2</span>:<br>            anc = find(y)<br>            res[num] = d[x] + d[y] - d[anc] * <span class="hljs-number">2</span><br>    <span class="hljs-comment"># 已经访问并已经回溯过的</span><br>    st[x] = <span class="hljs-number">2</span><br>    <br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    n, m = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, stdin.readline().split())<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n-<span class="hljs-number">1</span>):<br>        x, y, k = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, stdin.readline().split())<br>        add(x, y, k)<br>        add(y, x, k)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, m+<span class="hljs-number">1</span>):<br>        x, y = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, stdin.readline().split())<br>        query[x].append((y, i))<br>        query[y].append((x, i))<br>    bfs(<span class="hljs-number">1</span>, -<span class="hljs-number">1</span>)<br>    tarjan(<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>, m+<span class="hljs-number">1</span>):<br>        <span class="hljs-built_in">print</span>(res[i])<br></code></pre></td></tr></table></figure>
+
+<h2 id="最长不重复子序列问题"><a href="#最长不重复子序列问题" class="headerlink" title="最长不重复子序列问题"></a>最长不重复子序列问题</h2><ul>
+<li>使用双指针算法；记录以 j 结尾的频次，超过1则让 i 向后移动</li>
+<li><strong>存储数据频次、次数使用哈希表</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python">n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>a = <span class="hljs-built_in">list</span>(<span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>,<span class="hljs-built_in">input</span>().split()))<br>s = [<span class="hljs-number">0</span>]*<span class="hljs-number">100010</span><br>res = <span class="hljs-number">0</span><br>i = <span class="hljs-number">0</span><br><span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>    s[a[j]] += <span class="hljs-number">1</span><br>    <span class="hljs-keyword">while</span> s[a[j]] &gt; <span class="hljs-number">1</span>:<br>        s[a[i]] -= <span class="hljs-number">1</span><br>        i += <span class="hljs-number">1</span><br>    res = <span class="hljs-built_in">max</span>(res, j - i + <span class="hljs-number">1</span>)<br><span class="hljs-built_in">print</span>(res)<br></code></pre></td></tr></table></figure>
+
+<h2 id="求连通块"><a href="#求连通块" class="headerlink" title="求连通块"></a>求连通块</h2><ul>
+<li><p>dfs</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">dfs</span>(<span class="hljs-params">x, y</span>):<br>    <span class="hljs-keyword">global</span> cur, vis<br>    <span class="hljs-keyword">for</span> i, j <span class="hljs-keyword">in</span> [[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>], [<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [-<span class="hljs-number">1</span>, <span class="hljs-number">0</span>], [<span class="hljs-number">0</span>, -<span class="hljs-number">1</span>]]:<br>        dx = i + x<br>        dy = j + y<br>        <span class="hljs-keyword">if</span> dx &lt; <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> dy &lt; <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> dx &gt;= <span class="hljs-number">30</span> <span class="hljs-keyword">or</span> dy &gt;= <span class="hljs-number">60</span> <span class="hljs-keyword">or</span> mp[dx][dy] == <span class="hljs-string">&#x27;0&#x27;</span> <span class="hljs-keyword">or</span> vis[dx][dy]:<br>            <span class="hljs-keyword">continue</span><br>        cur += <span class="hljs-number">1</span><br>        vis[dx][dy] = <span class="hljs-number">1</span><br>        dfs(dx, dy)<br><br><br>n, m = <span class="hljs-number">30</span>, <span class="hljs-number">60</span><br>mp = []<br><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>    mp.append(<span class="hljs-built_in">input</span>())<br><br>ans, cur = <span class="hljs-number">0</span>, <span class="hljs-number">0</span><br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n):<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(m):<br>        <span class="hljs-keyword">if</span> mp[i][j] == <span class="hljs-string">&#x27;0&#x27;</span>:<br>            <span class="hljs-keyword">continue</span><br>        vis = [[<span class="hljs-number">0</span>] * m <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n)]<br>        vis[i][j] = <span class="hljs-number">1</span><br>        cur = <span class="hljs-number">1</span><br>        dfs(i, j)<br>        ans = <span class="hljs-built_in">max</span>(ans, cur)<br><br><span class="hljs-built_in">print</span>(ans)<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="RMQ问题"><a href="#RMQ问题" class="headerlink" title="RMQ问题"></a>RMQ问题</h2><ul>
+<li><p>ST模板</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>,n):<br>	mx[i][<span class="hljs-number">0</span>] = a[i]<br>j = <span class="hljs-number">1</span><br><span class="hljs-keyword">while</span> <span class="hljs-number">1</span> &lt;&lt; j &lt;= n:<br>    i = <span class="hljs-number">1</span><br>    <span class="hljs-keyword">while</span> i + <span class="hljs-number">1</span> &lt;&lt; j &lt;= n + <span class="hljs-number">1</span>:<br>        mx[i][j] = <span class="hljs-built_in">max</span>(mx[i][j - <span class="hljs-number">1</span>], mx[i + <span class="hljs-number">1</span> &lt;&lt; (j - <span class="hljs-number">1</span>)][j - <span class="hljs-number">1</span>])<br>        i += <span class="hljs-number">1</span><br>    j += <span class="hljs-number">1</span><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">query</span>(<span class="hljs-params">l,r</span>):<br>    k = math.log2(r - l + <span class="hljs-number">1</span>)<br>    mx = <span class="hljs-built_in">max</span>(mx[l][k], mx[r - (<span class="hljs-number">1</span> &lt;&lt; k) + <span class="hljs-number">1</span>][k])<br>    <span class="hljs-keyword">return</span> mx<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="离散化操作"><a href="#离散化操作" class="headerlink" title="离散化操作"></a>离散化操作</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">arr = read()<br>nums = sort(<span class="hljs-built_in">list</span>(<span class="hljs-built_in">set</span>(arr)))<br>nums_i = &#123;v:i <span class="hljs-keyword">for</span> i,v <span class="hljs-keyword">in</span> <span class="hljs-built_in">enumerate</span>(nums)&#125;<br>arr = [nums_i[v] <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> arr]<br>M = <span class="hljs-built_in">len</span>(arr)<br></code></pre></td></tr></table></figure>
+
+<h2 id="中国剩余定理"><a href="#中国剩余定理" class="headerlink" title="中国剩余定理"></a>中国剩余定理</h2><p><img src="C:\Users\我\Desktop\MyblogImg\alorithm\zhongguoshengyu.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs python">n = <span class="hljs-built_in">int</span>(<span class="hljs-built_in">input</span>())<br>flag = <span class="hljs-literal">True</span><br>a1, m1 = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">exgcd</span>(<span class="hljs-params">a,b</span>):<br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> b:<br>        <span class="hljs-keyword">return</span> a,<span class="hljs-number">1</span>,<span class="hljs-number">0</span><br>    d, y, x = exgcd(b, a % b)<br>    y -= a // b * x<br>    <span class="hljs-keyword">return</span> d, x, y<br><br><span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(n - <span class="hljs-number">1</span>):<br>    a2,m2 = <span class="hljs-built_in">map</span>(<span class="hljs-built_in">int</span>, <span class="hljs-built_in">input</span>().split())<br>    d,k1,k2 = exgcd(a1,a2)<br>    <span class="hljs-keyword">if</span> (m2-m1) % d:<br>        flag = <span class="hljs-literal">False</span><br>        <span class="hljs-keyword">break</span><br>    <br>    k1 *= (m2 - m1)//d<br>    t = a2 // d<br>    k1 %= t<br>    <br>    m1 += a1 * k1<br>    a1 = a1 * a2 // d<br><br><span class="hljs-keyword">if</span> flag:<br>    <span class="hljs-built_in">print</span>(m1 % a1)<br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-built_in">print</span>(-<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+      
+        <a href="/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/">#蓝桥杯</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>蓝桥杯-算法</div>
+      <div>http://tom-jerr.github.io/2023/04/13/alorithm/蓝桥杯辅导课/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>LZY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年4月13日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/04/13/alorithm/%E8%93%9D%E6%A1%A5%E6%9D%AF%E7%9C%9F%E9%A2%98/" title="蓝桥杯真题-算法">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">蓝桥杯真题-算法</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/04/13/alorithm/%E9%80%92%E6%8E%A8%E4%B8%8E%E9%80%92%E5%BD%92/" title="递推与递归-算法">
+                        <span class="hidden-mobile">递推与递归-算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments">
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div>tom-jerr的个人博客 | 记录美好生活</div> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="/js/useaplayer.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
