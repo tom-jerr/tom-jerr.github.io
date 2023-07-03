@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://tom-jerr.github.io/img/OS.png">
 <meta property="article:published_time" content="2023-03-19T15:30:49.012Z">
-<meta property="article:modified_time" content="2023-03-19T15:33:38.521Z">
+<meta property="article:modified_time" content="2023-04-23T15:11:37.144Z">
 <meta property="article:author" content="LZY">
 <meta property="article:tag" content="C&amp;C++">
 <meta name="twitter:card" content="summary_large_image">
@@ -240,7 +240,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3.7k 字
+          3.8k 字
         
       </span>
     
@@ -251,7 +251,7 @@
         
         
         
-          31 分钟
+          32 分钟
         
       </span>
     
@@ -294,7 +294,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年3月19日 晚上
+                    本文最后更新于：2023年4月23日 晚上
                   
                 
               </p>
@@ -309,8 +309,9 @@
 
 <h1 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h1><ul>
 <li>函数指针是指向函数的指针变量。</li>
+<li>函数名 &#x3D; &amp;函数名<code>ADD = &amp;ADD</code></li>
 </ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// 函数返回值类型 (* 指针变量名) (函数参数列表);</span><br><span class="hljs-type">int</span>* (*f)();<br><span class="hljs-type">void</span>* (*func)();<br><br><span class="hljs-comment">// typedef 函数返回值类型 (* 指针变量名) (函数参数列表);</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-title function_">int</span> <span class="hljs-params">(*Fun1)</span><span class="hljs-params">(<span class="hljs-type">int</span>)</span>;			<span class="hljs-comment">//声明也可写成int (*Fun1)(int x)，但习惯上一般不这样。</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-title function_">int</span> <span class="hljs-params">(*Fun2)</span><span class="hljs-params">(<span class="hljs-type">int</span>, <span class="hljs-type">int</span>)</span>;		<span class="hljs-comment">//参数为两个整型，返回值为整型</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-title function_">void</span> <span class="hljs-params">(*Fun3)</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;			<span class="hljs-comment">//无参数和返回值</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-type">void</span>* (*Fun4)(<span class="hljs-type">void</span>*);		<span class="hljs-comment">//参数和返回值都为void*指针</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// 函数返回值类型 (* 指针变量名) (函数参数列表);</span><br><span class="hljs-type">int</span>* (*f)();<br><span class="hljs-type">void</span>* (*func)();<br><br><span class="hljs-type">int</span> *(*f[])(<span class="hljs-type">int</span>, <span class="hljs-type">float</span>);	<span class="hljs-comment">// 函数指针数组</span><br><br><span class="hljs-comment">// typedef 函数返回值类型 (* 指针变量名) (函数参数列表);</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-title function_">int</span> <span class="hljs-params">(*Fun1)</span><span class="hljs-params">(<span class="hljs-type">int</span>)</span>;			<span class="hljs-comment">//声明也可写成int (*Fun1)(int x)，但习惯上一般不这样。</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-title function_">int</span> <span class="hljs-params">(*Fun2)</span><span class="hljs-params">(<span class="hljs-type">int</span>, <span class="hljs-type">int</span>)</span>;		<span class="hljs-comment">//参数为两个整型，返回值为整型</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-title function_">void</span> <span class="hljs-params">(*Fun3)</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;			<span class="hljs-comment">//无参数和返回值</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-type">void</span>* (*Fun4)(<span class="hljs-type">void</span>*);		<span class="hljs-comment">//参数和返回值都为void*指针</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="函数指针作为参数"><a href="#函数指针作为参数" class="headerlink" title="函数指针作为参数"></a>函数指针作为参数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-title function_">void</span> <span class="hljs-params">(*FunType)</span><span class="hljs-params">(<span class="hljs-type">int</span>)</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">myFun</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">hisFun</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">herFun</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">callFun</span><span class="hljs-params">(FunType fp,<span class="hljs-type">int</span> x)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    callFun(myFun,<span class="hljs-number">100</span>);     <span class="hljs-comment">//传入函数指针常量，作为回调函数</span><br>    callFun(hisFun,<span class="hljs-number">200</span>);<br>    callFun(herFun,<span class="hljs-number">300</span>);<br>    system(<span class="hljs-string">&quot;pause&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">callFun</span><span class="hljs-params">(FunType fp,<span class="hljs-type">int</span> x)</span><br>&#123;<br>    fp(x);  <span class="hljs-comment">//通过fp的指针执行传递进来的函数，注意fp所指的函数有一个参数</span><br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">myFun</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span><br>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;myFun: %d\n&quot;</span>,x);<br>&#125;<br><span class="hljs-type">void</span> <span class="hljs-title function_">hisFun</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span><br>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;hisFun: %d\n&quot;</span>,x);<br>&#125;<br><span class="hljs-type">void</span> <span class="hljs-title function_">herFun</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span><br>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;herFun: %d\n&quot;</span>,x);<br>&#125;<br></code></pre></td></tr></table></figure>
 
@@ -318,6 +319,13 @@
 <li>在这里， <strong>func5</strong> 以 <strong>(int, int, float)</strong> 为参数，其返回类型为 <strong>void (*)(int, int)</strong></li>
 </ul>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> (* func5(<span class="hljs-type">int</span>, <span class="hljs-type">int</span>, <span class="hljs-type">float</span> ))(<span class="hljs-type">int</span>, <span class="hljs-type">int</span>)<br>&#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>signal</strong>也返回一个函数指针</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> (* signal(<span class="hljs-type">int</span>, <span class="hljs-type">void</span>(*)(<span class="hljs-type">int</span>)))(<span class="hljs-type">int</span>)<br>&#123;<br>    ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
 
 <h2 id="函数指针数组"><a href="#函数指针数组" class="headerlink" title="函数指针数组"></a>函数指针数组</h2>  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/* 方法1 */</span><br><span class="hljs-type">void</span> (*func_array_1[<span class="hljs-number">5</span>])(<span class="hljs-type">int</span>, <span class="hljs-type">int</span>, <span class="hljs-type">float</span>);<br><br><span class="hljs-comment">/* 方法2 */</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-title function_">void</span> <span class="hljs-params">(*p_func_array)</span><span class="hljs-params">(<span class="hljs-type">int</span>, <span class="hljs-type">int</span>, <span class="hljs-type">float</span>)</span>;<br>p_func_array func_array_2[<span class="hljs-number">5</span>];<br></code></pre></td></tr></table></figure>
 

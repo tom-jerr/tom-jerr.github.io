@@ -1,0 +1,874 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid1.png">
+  <link rel="icon" href="/img/fluid1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="LZY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Linux多线程 fork：复制当前进程（产生新任务） clone：创建子进程并从指定位置开始执行（产生新线程）  可重入 函数没有执行完成，由于外部因素或者自身调用再次进入该函数执行  volatile阻止编译器将数据存放在寄存器，造成过度优化   链接编译 每个编译单元只能有一个强符号，但是可以有多个弱符号  readelf观察符号表   两步链接 空间与地址分配，设置全局符号表，将目标文件的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/07/03/linux/%E9%93%BE%E6%8E%A5/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="Linux多线程 fork：复制当前进程（产生新任务） clone：创建子进程并从指定位置开始执行（产生新线程）  可重入 函数没有执行完成，由于外部因素或者自身调用再次进入该函数执行  volatile阻止编译器将数据存放在寄存器，造成过度优化   链接编译 每个编译单元只能有一个强符号，但是可以有多个弱符号  readelf观察符号表   两步链接 空间与地址分配，设置全局符号表，将目标文件的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\ram_linux.png">
+<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\stack.png">
+<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\free_list.png">
+<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\syscall_args.png">
+<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\main_argv.png">
+<meta property="article:published_time" content="2023-07-03T10:18:05.164Z">
+<meta property="article:modified_time" content="2023-05-01T06:28:53.024Z">
+<meta property="article:author" content="LZY">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\ram_linux.png">
+  
+  
+  
+  <title>tom-jerr的个人博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>tom-jerr的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/playlist/">
+                <i class="iconfont icon-music"></i>
+                <span>音乐</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-03 18:18" pubdate>
+          2023年7月3日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年5月1日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Linux多线程"><a href="#Linux多线程" class="headerlink" title="Linux多线程"></a>Linux多线程</h1><ul>
+<li>fork：复制当前进程（产生新任务）</li>
+<li>clone：创建子进程并从指定位置开始执行（产生新线程）</li>
+</ul>
+<h2 id="可重入"><a href="#可重入" class="headerlink" title="可重入"></a>可重入</h2><ul>
+<li><p>函数没有执行完成，由于外部因素或者自身调用再次进入该函数执行</p>
+</li>
+<li><p>volatile阻止编译器将数据存放在寄存器，造成过度优化</p>
+</li>
+</ul>
+<h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h1><h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><ul>
+<li><p>每个编译单元只能有一个强符号，但是可以有多个弱符号</p>
+</li>
+<li><p>readelf观察符号表</p>
+</li>
+</ul>
+<h2 id="两步链接"><a href="#两步链接" class="headerlink" title="两步链接"></a>两步链接</h2><ul>
+<li>空间与地址分配，设置全局符号表，将目标文件的各个段进行合并，计算合并后的段长度与位置</li>
+<li>符号解析与重定位<ul>
+<li>（链接时）重定位：存在重定位表，包含重定位入口偏移和重定位入口的类型和信息</li>
+</ul>
+</li>
+</ul>
+<h3 id="全局构造"><a href="#全局构造" class="headerlink" title="全局构造"></a>全局构造</h3><ul>
+<li>Linux下程序入口地址：_start</li>
+<li>ELF中的段<ul>
+<li>.init：main调用前，Glibc初始化部分</li>
+<li>.fini：保存终止代码指令，main正常退出后执行</li>
+</ul>
+</li>
+</ul>
+<h3 id="静态链接库"><a href="#静态链接库" class="headerlink" title="静态链接库"></a>静态链接库</h3><ul>
+<li>一个目标文件只有一个函数</li>
+<li>避免空间浪费</li>
+</ul>
+<h2 id="可执行文件的装载"><a href="#可执行文件的装载" class="headerlink" title="可执行文件的装载"></a>可执行文件的装载</h2><ul>
+<li>操作系统将进程虚拟地址空间划分成一个个VMA；将相同权限的文件映射到同一个VMA中<ul>
+<li>代码VMA</li>
+<li>数据VMA</li>
+<li>堆VMA</li>
+<li>栈VMA</li>
+</ul>
+</li>
+</ul>
+<h2 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h2><ul>
+<li>静态链接下，整个程序只有一个ELF文件，不可分割</li>
+<li>动态链接下，一个程序被分成了若干个文件</li>
+<li>共享对象最终装载地址不确定的（.so文件）</li>
+</ul>
+<h3 id="装载时重定位"><a href="#装载时重定位" class="headerlink" title="装载时重定位"></a>装载时重定位</h3><ul>
+<li>PLT延迟绑定：函数第一次用到时才进行绑定</li>
+</ul>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>多个程序虽然可以共享同一个动态链接库中的相同代码，但每一个进程都为动态链接库使用的全部数据分配了自己的地址空间。而共享内存是代码和数据均被多个程序所共享。</li>
+<li>动态链接库只是实现了代码的复用，对于数据，各个程序要自己保存。</li>
+<li>共享内存用于进程间通信，主要用于数据的内存共享。这也从侧面反映出动态链接库并不能用于实现进程之间通信。</li>
+</ul>
+<h1 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h1><p><img src="C:\Users\我\Desktop\MyblogImg\linux\ram_linux.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h2><ul>
+<li>esp始终指向栈的顶部，ebp被称为<strong>帧指针</strong></li>
+</ul>
+<p><img src="C:\Users\我\Desktop\MyblogImg\linux\stack.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h2><ul>
+<li>malloc中申请的空间在虚拟地址空间是连续的，但物理空间不一定</li>
+</ul>
+<h3 id="堆分配算法"><a href="#堆分配算法" class="headerlink" title="堆分配算法"></a>堆分配算法</h3><ul>
+<li><p>空闲链表组织</p>
+<p><img src="C:\Users\我\Desktop\MyblogImg\linux\free_list.png" srcset="/img/loading.gif" lazyload></p>
+</li>
+<li><p>位图（Bitmap）</p>
+</li>
+</ul>
+<h1 id="运行时库"><a href="#运行时库" class="headerlink" title="运行时库"></a>运行时库</h1><h2 id="linux入口函数"><a href="#linux入口函数" class="headerlink" title="linux入口函数"></a>linux入口函数</h2><ul>
+<li>在main函数调用前调用</li>
+<li>glibc的全局构造函数放置在.ctors段中；手动在该段中添加函数指针，让函数在main函数调用前被调用</li>
+<li>可以使用<code>__attribute__((constructor))</code>实现</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">void</span> <span class="hljs-title function_">my_init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Hello &quot;</span>);<br>&#125;<br><span class="hljs-keyword">typedef</span> <span class="hljs-title function_">void</span> <span class="hljs-params">(*<span class="hljs-type">ctor_t</span>)</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span>;<br><span class="hljs-type">ctor_t</span> __attribute__((section(<span class="hljs-string">&quot;.ctors&quot;</span>))) my_init_p = &amp;my_init;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;World\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><span class="hljs-comment">// Hello World</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="中断切换堆栈"><a href="#中断切换堆栈" class="headerlink" title="中断切换堆栈"></a>中断切换堆栈</h2><ul>
+<li>int 0x80进行中断；寻找中断向量表对应位置</li>
+<li>在内核中压入用户态的SS、ESP、EFLAGS、CS、EIP</li>
+</ul>
+<h3 id="传参"><a href="#传参" class="headerlink" title="传参"></a>传参</h3><ul>
+<li><p>asmlinkage：是一个宏，强迫函数在栈上取参数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c">__attribute__((regparm(<span class="hljs-number">0</span>)))<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p><img src="C:\Users\我\Desktop\MyblogImg\linux\syscall_args.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="write系统调用"><a href="#write系统调用" class="headerlink" title="write系统调用"></a>write系统调用</h3><ul>
+<li>汇编形式，可以用gcc内联汇编改写（-m32：64位系统运行32位汇编）</li>
+<li>系统调用统一使用int $0x80；跳转到中断向量表中按syscall number寻找对应的中断程序入口地址</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs assembly">.data<br>	msg : .string &quot;Hello World!\n&quot;<br>	len = . - msg<br><br>.text<br><br>.global main<br><br>main:<br><br>mov $4, %eax	#write syscall number<br>mov $1, %ebx	#fd<br>mov $msg, %ecx 	#buffer<br>mov $len, %edx	#length<br>int $0x80<br><br>mov $1, %eax	#exit syscall number<br>mov $5, %ebx	#exit code<br>int $0x80<br></code></pre></td></tr></table></figure>
+
+<h2 id="C-amp-C-运行时库的实现"><a href="#C-amp-C-运行时库的实现" class="headerlink" title="C&amp;C++运行时库的实现"></a>C&amp;C++运行时库的实现</h2><h3 id="堆的实现"><a href="#堆的实现" class="headerlink" title="堆的实现"></a>堆的实现</h3><ul>
+<li>Linux下使用brk将数据段结束地址向后调整32MB</li>
+<li>仅仅只是分配了对应的虚拟地址空间，只有进程要访问才会分配地址空间</li>
+<li>“m”约束表示直接在内存上操作数据，而不是传入寄存器后再操作</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// brk系统调用</span><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> <span class="hljs-title function_">brk</span><span class="hljs-params">(<span class="hljs-type">void</span>* end_data_segment)</span> &#123;<br>    <span class="hljs-type">int</span> ret = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">asm</span>(<br>        <span class="hljs-comment">// #define __NR_brk 45</span><br>    	<span class="hljs-string">&quot;movl $45, %%eax	\n\t&quot;</span><br>        <span class="hljs-string">&quot;movl %1, %%ebx	\n\t&quot;</span><br>        <span class="hljs-string">&quot;int $0x80	\n\t&quot;</span><br>        <span class="hljs-string">&quot;movl %%eax, %0	\n\t&quot;</span><br>		: <span class="hljs-string">&quot;=r&quot;</span> (ret)<br>        : <span class="hljs-string">&quot;m&quot;</span> (end_data_segment)<br>    )<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="编译库"><a href="#编译库" class="headerlink" title="编译库"></a>编译库</h3><ul>
+<li><p>静态库：<code>rs -rs *.o</code></p>
+</li>
+<li><p>动态库：<code>gcc test.c  -fPIC -shared -o libtest.so</code></p>
+</li>
+</ul>
+<h3 id="new-amp-delete"><a href="#new-amp-delete" class="headerlink" title="new&amp;delete"></a>new&amp;delete</h3><ul>
+<li>反汇编后出现_Znwj</li>
+<li>使用反修饰符（c++filt  _Znwj），是operator new函数</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-title">new</span> <span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> size)</span></span>;<br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-keyword">operator</span> <span class="hljs-title">delete</span> <span class="hljs-params">(<span class="hljs-type">void</span>* p)</span></span>;<br><span class="hljs-type">void</span>* <span class="hljs-keyword">operator</span> <span class="hljs-keyword">new</span>[] (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> size);<br><span class="hljs-type">void</span> <span class="hljs-keyword">operator</span> <span class="hljs-keyword">delete</span>[] (<span class="hljs-type">void</span>* p)<br></code></pre></td></tr></table></figure>
+
+<h3 id="全局构造和析构函数"><a href="#全局构造和析构函数" class="headerlink" title="全局构造和析构函数"></a>全局构造和析构函数</h3><ul>
+<li>Glibc需要两个目标文件实现全局构造和析构</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-function"><span class="hljs-keyword">typedef</span> <span class="hljs-title">void</span> <span class="hljs-params">(*ctor_func)</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span></span>;<br>ctor_func ctors_begin[<span class="hljs-number">1</span>] __attribute__((<span class="hljs-built_in">section</span>(<span class="hljs-string">&quot;.ctors&quot;</span>))) = <br>&#123;<br>    (ctor_func) <span class="hljs-number">-1</span>;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">run_hooks</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">const</span> ctor_func* list = ctor_begin;<br>    <span class="hljs-keyword">while</span> (*++list != <span class="hljs-number">-1</span>)<br>        (**list)();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="atexit函数"><a href="#atexit函数" class="headerlink" title="atexit函数"></a>atexit函数</h3><ul>
+<li>所有全局对象的析构函数都是通过atexit或其他类似函数注册的，实现程序退出时执行的目的</li>
+</ul>
+<h2 id="main参数"><a href="#main参数" class="headerlink" title="main参数"></a>main参数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span>;<br></code></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\我\Desktop\MyblogImg\linux\main_argv.png" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> argc;<br><span class="hljs-type">char</span>** argv;<br><span class="hljs-type">char</span>* ebp_reg = <span class="hljs-number">0</span>;<br><span class="hljs-comment">//将ebp寄存器中的地址放到char*中</span><br><span class="hljs-keyword">asm</span> (<span class="hljs-string">&quot;movl %%ebp, %0	\n&quot;</span>:<span class="hljs-string">&quot;=r&quot;</span>(ebp_reg));<br><br>argc = *(<span class="hljs-type">int</span>*)(ebp_reg + <span class="hljs-number">4</span>);<br>argv = (<span class="hljs-type">char</span>**)(ebp_reg + <span class="hljs-number">8</span>);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>exit实现是使用Linux的系统调用（1号）</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://tom-jerr.github.io/2023/07/03/linux/链接/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>LZY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/03/linux/%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/06/18/C&amp;C++/C++11%E6%96%B0%E7%89%B9%E6%80%A7/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments">
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div>tom-jerr的个人博客 | 记录美好生活</div> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="/js/useaplayer.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

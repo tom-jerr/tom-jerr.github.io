@@ -16,24 +16,26 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言 对C的部分重要概念进行部分说明">
+    <meta name="description" content="前言">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C - 重要概念">
-<meta property="og:url" content="http://tom-jerr.github.io/2023/03/19/C&C++/%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5/index.html">
+<meta property="og:title" content="CSAPP--知识点">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/04/14/csapp/%E9%87%8D%E8%A6%81%E7%9F%A5%E8%AF%86%E7%82%B9/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="前言 对C的部分重要概念进行部分说明">
+<meta property="og:description" content="前言">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://tom-jerr.github.io/img/OS.png">
-<meta property="article:published_time" content="2023-03-19T15:30:49.023Z">
-<meta property="article:modified_time" content="2023-03-19T15:35:28.474Z">
+<meta property="og:image" content="http://tom-jerr.github.io/img/cmu.png">
+<meta property="article:published_time" content="2023-04-14T03:26:28.710Z">
+<meta property="article:modified_time" content="2023-04-14T03:28:21.185Z">
 <meta property="article:author" content="LZY">
 <meta property="article:tag" content="C&amp;C++">
+<meta property="article:tag" content="labs">
+<meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://tom-jerr.github.io/img/OS.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/cmu.png">
   
   
   
-  <title>C - 重要概念 - tom-jerr的个人博客</title>
+  <title>CSAPP--知识点 - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -217,7 +219,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="C - 重要概念"></span>
+            <span id="subtitle" data-typed-text="CSAPP--知识点"></span>
           
         </div>
 
@@ -228,8 +230,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-03-19 23:30" pubdate>
-          2023年3月19日 晚上
+        <time datetime="2023-04-14 11:26" pubdate>
+          2023年4月14日 上午
         </time>
       </span>
     
@@ -240,7 +242,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          719 字
+          173 字
         
       </span>
     
@@ -251,7 +253,7 @@
         
         
         
-          6 分钟
+          2 分钟
         
       </span>
     
@@ -289,12 +291,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">C - 重要概念</h1>
+            <h1 style="display: none">CSAPP--知识点</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年3月19日 晚上
+                    本文最后更新于：2023年4月14日 上午
                   
                 
               </p>
@@ -302,59 +304,14 @@
             
               <div class="markdown-body">
                 
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ul>
-<li>对C的部分重要概念进行部分说明</li>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><span id="more"></span>
+
+<h1 id="位运算"><a href="#位运算" class="headerlink" title="位运算"></a>位运算</h1><h2 id="补码除法"><a href="#补码除法" class="headerlink" title="补码除法"></a>补码除法</h2><ul>
+<li>需要加上偏置值</li>
+<li>正数可以直接右移，负数必须加上偏置值再右移</li>
 </ul>
-<span id="more"></span>
-
-<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><h2 id="字符串转换成整数"><a href="#字符串转换成整数" class="headerlink" title="字符串转换成整数"></a>字符串转换成整数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> <span class="hljs-title function_">atoi</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *nptr)</span>;<br><span class="hljs-type">long</span> <span class="hljs-title function_">atol</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *nptr)</span>;<br><span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title function_">atoll</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *nptr)</span>;<br><span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-title function_">atoq</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *nptr)</span>;<br></code></pre></td></tr></table></figure>
-
-<h2 id="strstr"><a href="#strstr" class="headerlink" title="strstr()"></a>strstr()</h2><ul>
-<li>找到子串在一个字符串中第一次出现的位置,在string.h头文件中</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// str1是总串，str2是需要匹配的第一个字串位置，返回值为char * 类型。</span><br><span class="hljs-type">char</span>* <span class="hljs-title function_">strstr</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* str1, <span class="hljs-type">const</span> <span class="hljs-type">char</span>* str2)</span><br></code></pre></td></tr></table></figure>
-
-<h2 id="abort"><a href="#abort" class="headerlink" title="abort()"></a>abort()</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">abort</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br></code></pre></td></tr></table></figure>
-
-<ul>
-<li>中止程序执行，直接从调用的地方跳出。</li>
-</ul>
-<h2 id="atexit"><a href="#atexit" class="headerlink" title="atexit()"></a>atexit()</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> <span class="hljs-title function_">atexit</span><span class="hljs-params">(<span class="hljs-type">void</span> (*func)(<span class="hljs-type">void</span>))</span><br></code></pre></td></tr></table></figure>
-
-<ul>
-<li>当程序正常终止时，调用指定的函数 <strong>func</strong>。您可以在任何地方注册你的终止函数，但它会在程序终止的时候被调用。</li>
-</ul>
-<h2 id="exit"><a href="#exit" class="headerlink" title="exit()"></a>exit()</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">exit</span><span class="hljs-params">(<span class="hljs-type">int</span> status)</span><br></code></pre></td></tr></table></figure>
-
-<ul>
-<li>立即终止调用进程。任何属于该进程的打开的文件描述符都会被关闭，该进程的子进程由进程 1 继承，初始化，且会向父进程发送一个 SIGCHLD 信号。</li>
-</ul>
-<hr>
-<h1 id="存储"><a href="#存储" class="headerlink" title="存储"></a>存储</h1><h2 id="extern"><a href="#extern" class="headerlink" title="extern"></a>extern</h2><ul>
-<li>外部存储类别</li>
-<li>若变量被声明在另一个文件中，必须使用extern</li>
-</ul>
-<h2 id="分配内存"><a href="#分配内存" class="headerlink" title="分配内存"></a>分配内存</h2><h3 id="malloc"><a href="#malloc" class="headerlink" title="malloc()"></a>malloc()</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> *<span class="hljs-title function_">malloc</span><span class="hljs-params">(<span class="hljs-type">size_t</span> size)</span><br></code></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>size</strong> – 内存块的大小，以字节为单位。</p>
-</li>
-<li><p><strong>size</strong> – 内存块的大小，以字节为单位。</p>
-</li>
-</ul>
-<h3 id="calloc"><a href="#calloc" class="headerlink" title="calloc()"></a>calloc()</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> *<span class="hljs-title function_">calloc</span><span class="hljs-params">(<span class="hljs-type">size_t</span> nitems, <span class="hljs-type">size_t</span> size)</span><br></code></pre></td></tr></table></figure>
-
-<ul>
-<li><p><strong>nitems</strong> – 要被分配的元素个数。</p>
-</li>
-<li><p><strong>size</strong> – 元素的大小。</p>
-</li>
-<li><p>该函数返回一个指针，指向已分配的内存。如果请求失败，则返回 NULL。</p>
-</li>
-<li><p>将所有内存初始化为0</p>
-</li>
-</ul>
-
+<p><strong>计算 x&#x2F;16（int类型为32位）</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">div16</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span>&#123;<br>	<span class="hljs-type">int</span> bias = (a &gt;&gt; <span class="hljs-number">31</span>) &amp; <span class="hljs-number">0xF</span>;<br>	<span class="hljs-keyword">return</span> (x + bias) &gt;&gt; <span class="hljs-number">4</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
                 
               </div>
             
@@ -372,7 +329,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/C-C/" class="category-chain-item">C&amp;C++</a>
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
   
   
 
@@ -389,6 +346,10 @@
       
         <a href="/tags/C-C/">#C&C++</a>
       
+        <a href="/tags/labs/">#labs</a>
+      
+        <a href="/tags/linux/">#linux</a>
+      
     </div>
   
 </div>
@@ -399,8 +360,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>C - 重要概念</div>
-      <div>http://tom-jerr.github.io/2023/03/19/C&amp;C++/重要概念/</div>
+      <div>CSAPP--知识点</div>
+      <div>http://tom-jerr.github.io/2023/04/14/csapp/重要知识点/</div>
     </div>
     <div class="license-meta">
       
@@ -412,7 +373,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2023年3月19日</div>
+          <div>2023年4月14日</div>
         </div>
       
       
@@ -444,9 +405,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/03/19/C&amp;C++/%E5%AD%97%E7%AC%A6%E4%B8%B2/" title="C - String">
+                      <a href="/2023/04/14/deeplearning/convLSTM/" title="convLSTM">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">C - String</span>
+                        <span class="hidden-mobile">convLSTM</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -454,8 +415,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/03/19/C&amp;C++/%E6%8C%87%E9%92%88/" title="C - 指针">
-                        <span class="hidden-mobile">C - 指针</span>
+                      <a href="/2023/04/13/deeplearning/Yolo/" title="YOLO">
+                        <span class="hidden-mobile">YOLO</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

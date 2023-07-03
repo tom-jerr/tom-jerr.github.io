@@ -1,0 +1,778 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid1.png">
+  <link rel="icon" href="/img/fluid1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="LZY">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="TinyWebServer定时器 需要处理定时事件，比如检测一个客户连接的活动状态  socket选项SO_RCVTIMEO和SO_SNDTIMEO 根据系统调用（send, sendmsg, recv, recvmsg, accept, connect）的 返回值和errno判断  123456ret &#x3D; connect(sockfd, (struct sockaddr*)&amp;addres">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/TinyWebServer/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="TinyWebServer定时器 需要处理定时事件，比如检测一个客户连接的活动状态  socket选项SO_RCVTIMEO和SO_SNDTIMEO 根据系统调用（send, sendmsg, recv, recvmsg, accept, connect）的 返回值和errno判断  123456ret &#x3D; connect(sockfd, (struct sockaddr*)&amp;addres">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-03T10:18:05.179Z">
+<meta property="article:modified_time" content="2023-06-13T02:49:24.363Z">
+<meta property="article:author" content="LZY">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>tom-jerr的个人博客</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>tom-jerr的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/playlist/">
+                <i class="iconfont icon-music"></i>
+                <span>音乐</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-07-03 18:18" pubdate>
+          2023年7月3日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          30 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none"></h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年6月13日 上午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="TinyWebServer"><a href="#TinyWebServer" class="headerlink" title="TinyWebServer"></a>TinyWebServer</h1><h2 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h2><ul>
+<li>需要处理定时事件，比如检测一个客户连接的活动状态</li>
+</ul>
+<h3 id="socket选项SO-RCVTIMEO和SO-SNDTIMEO"><a href="#socket选项SO-RCVTIMEO和SO-SNDTIMEO" class="headerlink" title="socket选项SO_RCVTIMEO和SO_SNDTIMEO"></a>socket选项SO_RCVTIMEO和SO_SNDTIMEO</h3><ul>
+<li>根据系统调用（send, sendmsg, recv, recvmsg, accept, connect）的 返回值和errno判断</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++">ret = <span class="hljs-built_in">connect</span>(sockfd, (<span class="hljs-keyword">struct</span> sockaddr*)&amp;address, <span class="hljs-built_in">sizeof</span>(address));<br><span class="hljs-keyword">if</span> (ret == <span class="hljs-number">-1</span>) &#123;<br>    <span class="hljs-keyword">if</span> (errno == EINPROGRESS) &#123;<br>        ...<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="SIGALRM信号"><a href="#SIGALRM信号" class="headerlink" title="SIGALRM信号"></a>SIGALRM信号</h2><h3 id="基于升序链表的定时器"><a href="#基于升序链表的定时器" class="headerlink" title="基于升序链表的定时器"></a>基于升序链表的定时器</h3><ul>
+<li>定时器一般包含一个超时事件和一个任务回调函数</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> LST_TIMER</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> LST_TIMER</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;time.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> BUF_SIZE 64</span><br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">util_timer</span>;<br><br><span class="hljs-comment">/* 客户端地址、socket文件描述符、定时器 */</span><br><span class="hljs-keyword">struct</span> <span class="hljs-title class_">client_data</span><br>&#123;<br>    sockaddr_in address;<br>    <span class="hljs-type">int</span> sockfd;<br>    util_timer *timer;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">util_timer</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">util_timer</span>() : <span class="hljs-built_in">prev</span>(<span class="hljs-literal">NULL</span>), <span class="hljs-built_in">next</span>(<span class="hljs-literal">NULL</span>) &#123;&#125;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-type">time_t</span> expire;<br>    <br>    <span class="hljs-built_in">void</span> (* cb_func)(client_data *);<br>    <span class="hljs-comment">// 回调函数处理的客户数据</span><br>    client_data *user_data;<br>    util_timer *prev;<br>    util_timer *next;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">sort_timer_lst</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">sort_timer_lst</span>();<br>    ~<span class="hljs-built_in">sort_timer_lst</span>();<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">add_timer</span><span class="hljs-params">(util_timer *timer)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">adjust_timer</span><span class="hljs-params">(util_timer *timer)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">del_timer</span><span class="hljs-params">(util_timer *timer)</span></span>;<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">tick</span><span class="hljs-params">()</span></span>;	<span class="hljs-comment">// 每隔固定时间执行一次</span><br><br><span class="hljs-keyword">private</span>:<br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">add_timer</span><span class="hljs-params">(util_timer *timer, util_timer *lst_head)</span></span>;<br><br>    util_timer *head;<br>    util_timer *tail;<br>&#125;;<br><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Utils</span><br>&#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-built_in">Utils</span>() &#123;&#125;<br>    ~<span class="hljs-built_in">Utils</span>() &#123;&#125;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">init</span><span class="hljs-params">(<span class="hljs-type">int</span> timeslot)</span></span>;<br><br>    <span class="hljs-comment">//对文件描述符设置非阻塞</span><br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">setnonblocking</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span></span>;<br><br>    <span class="hljs-comment">//将内核事件表注册读事件，ET模式，选择开启EPOLLONESHOT</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">addfd</span><span class="hljs-params">(<span class="hljs-type">int</span> epollfd, <span class="hljs-type">int</span> fd, <span class="hljs-type">bool</span> one_shot, <span class="hljs-type">int</span> TRIGMode)</span></span>;<br><br>    <span class="hljs-comment">//信号处理函数</span><br>    <span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title">sig_handler</span><span class="hljs-params">(<span class="hljs-type">int</span> sig)</span></span>;<br><br>    <span class="hljs-comment">//设置信号函数</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">addsig</span><span class="hljs-params">(<span class="hljs-type">int</span> sig, <span class="hljs-type">void</span>(handler)(<span class="hljs-type">int</span>), <span class="hljs-type">bool</span> restart = <span class="hljs-literal">true</span>)</span></span>;<br><br>    <span class="hljs-comment">//定时处理任务，重新定时以不断触发SIGALRM信号</span><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">timer_handler</span><span class="hljs-params">()</span></span>;<br><br>    <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">show_error</span><span class="hljs-params">(<span class="hljs-type">int</span> connfd, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *info)</span></span>;<br><br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-type">static</span> <span class="hljs-type">int</span> *u_pipefd;<br>    sort_timer_lst m_timer_lst;<br>    <span class="hljs-type">static</span> <span class="hljs-type">int</span> u_epollfd;<br>    <span class="hljs-type">int</span> m_TIMESLOT;<br>&#125;;<br><br><span class="hljs-comment">// 删除非活动连接socket上的注册事件</span><br><span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">cb_func</span><span class="hljs-params">(client_data *user_data)</span></span>;<br><br><span class="hljs-meta">#<span class="hljs-keyword">endif</span></span><br></code></pre></td></tr></table></figure>
+
+<h2 id="I-x2F-O复用系统调用的超参数"><a href="#I-x2F-O复用系统调用的超参数" class="headerlink" title="I&#x2F;O复用系统调用的超参数"></a>I&#x2F;O复用系统调用的超参数</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-type">int</span> number = <span class="hljs-built_in">epoll_wait</span>(epollfd, events, MAX_EVENT_NUMBER, timeout);<br></code></pre></td></tr></table></figure>
+
+<h2 id="半同步-x2F-半反应堆线程池"><a href="#半同步-x2F-半反应堆线程池" class="headerlink" title="半同步&#x2F;半反应堆线程池"></a>半同步&#x2F;半反应堆线程池</h2><h3 id="pthread-create"><a href="#pthread-create" class="headerlink" title="pthread_create"></a>pthread_create</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">pthread_create</span> <span class="hljs-params">(<span class="hljs-type">pthread_t</span> *thread_tid,                 <span class="hljs-comment">//返回新生成的线程的id</span></span></span><br><span class="hljs-params"><span class="hljs-function">                    <span class="hljs-type">const</span> <span class="hljs-type">pthread_attr_t</span> *attr,         <span class="hljs-comment">//指向线程属性的指针,通常设置为NULL</span></span></span><br><span class="hljs-params"><span class="hljs-function">                    <span class="hljs-type">void</span> * (*start_routine) (<span class="hljs-type">void</span> *),   <span class="hljs-comment">//处理线程函数的地址</span></span></span><br><span class="hljs-params"><span class="hljs-function">                    <span class="hljs-type">void</span> *arg)</span></span>;                         <span class="hljs-comment">//start_routine()中的参数</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>如果第三个参数为类中的函数，必须为静态成员函数，否则会传递this指针，出现问题</p>
+</li>
+<li><p>主线程为异步线程，负责监听文件描述符，接收socket新连接，若当前监听的socket发生了读写事件，然后将任务插入到请求队列。工作线程从请求队列中取出任务，完成读写数据的处理。</p>
+</li>
+</ul>
+<h4 id="线程处理函数"><a href="#线程处理函数" class="headerlink" title="线程处理函数"></a>线程处理函数</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br><span class="hljs-number">2</span><span class="hljs-type">void</span>* threadpool&lt;T&gt;::<span class="hljs-built_in">worker</span>(<span class="hljs-type">void</span>* arg)&#123;<br><span class="hljs-number">3</span><br><span class="hljs-number">4</span>    <span class="hljs-comment">//将参数强转为线程池类，调用成员方法</span><br><span class="hljs-number">5</span>    threadpool* pool=(threadpool*)arg;<br><span class="hljs-number">6</span>    pool-&gt;<span class="hljs-built_in">run</span>();<br><span class="hljs-number">7</span>    <span class="hljs-keyword">return</span> pool;<br><span class="hljs-number">8</span>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="run执行任务"><a href="#run执行任务" class="headerlink" title="run执行任务"></a>run执行任务</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> T&gt;<br> <span class="hljs-number">2</span><span class="hljs-type">void</span> threadpool&lt;T&gt;::<span class="hljs-built_in">run</span>()<br> <span class="hljs-number">3</span>&#123;<br> <span class="hljs-number">4</span>    <span class="hljs-keyword">while</span>(!m_stop)<br> <span class="hljs-number">5</span>    &#123;    <br> <span class="hljs-number">6</span>        <span class="hljs-comment">//信号量等待</span><br> <span class="hljs-number">7</span>        m_queuestat.<span class="hljs-built_in">wait</span>();<br> <span class="hljs-number">8</span><br> <span class="hljs-number">9</span>        <span class="hljs-comment">//被唤醒后先加互斥锁</span><br><span class="hljs-number">10</span>        m_queuelocker.<span class="hljs-built_in">lock</span>();<br><span class="hljs-number">11</span>        <span class="hljs-keyword">if</span>(m_workqueue.<span class="hljs-built_in">empty</span>())<br><span class="hljs-number">12</span>        &#123;<br><span class="hljs-number">13</span>            m_queuelocker.<span class="hljs-built_in">unlock</span>();<br><span class="hljs-number">14</span>            <span class="hljs-keyword">continue</span>;<br><span class="hljs-number">15</span>        &#125;<br><span class="hljs-number">16</span><br><span class="hljs-number">17</span>        <span class="hljs-comment">//从请求队列中取出第一个任务</span><br><span class="hljs-number">18</span>        <span class="hljs-comment">//将任务从请求队列删除</span><br><span class="hljs-number">19</span>        T* request=m_workqueue.<span class="hljs-built_in">front</span>();<br><span class="hljs-number">20</span>        m_workqueue.<span class="hljs-built_in">pop_front</span>();<br><span class="hljs-number">21</span>        m_queuelocker.<span class="hljs-built_in">unlock</span>();<br><span class="hljs-number">22</span>        <span class="hljs-keyword">if</span>(!request)<br><span class="hljs-number">23</span>            <span class="hljs-keyword">continue</span>;<br><span class="hljs-number">24</span><br><span class="hljs-number">25</span>        <span class="hljs-comment">//从连接池中取出一个数据库连接</span><br><span class="hljs-number">26</span>        request-&gt;mysql = m_connPool-&gt;<span class="hljs-built_in">GetConnection</span>();<br><span class="hljs-number">27</span><br><span class="hljs-number">28</span>        <span class="hljs-comment">//process(模板类中的方法,这里是http类)进行处理</span><br><span class="hljs-number">29</span>        request-&gt;<span class="hljs-built_in">process</span>();<br><span class="hljs-number">30</span><br><span class="hljs-number">31</span>        <span class="hljs-comment">//将数据库连接放回连接池</span><br><span class="hljs-number">32</span>        m_connPool-&gt;<span class="hljs-built_in">ReleaseConnection</span>(request-&gt;mysql);<br><span class="hljs-number">33</span>    &#125;<br><span class="hljs-number">34</span>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="信号处理"><a href="#信号处理" class="headerlink" title="信号处理"></a>信号处理</h2><ul>
+<li><p><strong>为什么管道写端要非阻塞？</strong></p>
+<p>send是将信息发送给套接字缓冲区，如果缓冲区满了，则会阻塞，这时候会进一步增加信号处理函数的执行时间，为此，将其修改为非阻塞</p>
+</li>
+<li><p><strong>没有对非阻塞返回值处理，如果阻塞是不是意味着这一次定时事件失效了？</strong></p>
+<p>是的，但定时事件是非必须立即处理的事件，可以允许这样的情况发生。</p>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="线程池中的工作线程是一直等待吗？"><a href="#线程池中的工作线程是一直等待吗？" class="headerlink" title="线程池中的工作线程是一直等待吗？"></a>线程池中的工作线程是一直等待吗？</h3><p>线程池中的工作线程在没有任务时一直处于挂起等待状态，在任务队列有任务后会唤醒一个任务进程进行任务处理。</p>
+<h3 id="工作线程处理完一个任务后的状态是什么？"><a href="#工作线程处理完一个任务后的状态是什么？" class="headerlink" title="工作线程处理完一个任务后的状态是什么？"></a>工作线程处理完一个任务后的状态是什么？</h3><p>工作线程处理完任务后从任务队列读取任务，若没有任务则处于挂起等待状态。</p>
+<h3 id="多线程能否提高并发度？"><a href="#多线程能否提高并发度？" class="headerlink" title="多线程能否提高并发度？"></a>多线程能否提高并发度？</h3><p>答案是不能。<br>单纯采用one thread per connection模型，若32位linux系统内存为4G，用户态可用内存为3G，每个线程分配栈空间为8M，最多可以分配400个线程，即并发连接数大概为400个；<br>而采用基于事件的单线程模型（IO multiplexing event loop）,即reactor模型，可以达到几千以上的并发度。</p>
+<h3 id="多线程如何让I-x2F-O和计算重叠"><a href="#多线程如何让I-x2F-O和计算重叠" class="headerlink" title="多线程如何让I&#x2F;O和计算重叠"></a>多线程如何让I&#x2F;O和计算重叠</h3><p>举例说明：多线程写日志，由于文件操作慢导致服务线程会等在IO上，让CPU空闲，增加响应时间。<br>解决办法：单独使用一个logging线程负责写磁盘文件，通过BlockingQueue提供对外接口，其他线程需要写日志往队列添加即可。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>http://tom-jerr.github.io/2023/07/03/linux/网络编程/TinyWebServer/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>LZY</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年7月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/IO%E5%A4%8D%E7%94%A8/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/%E4%BF%A1%E5%8F%B7/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments">
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+      <div class="col-lg-7 mx-auto nopadding-x-md">
+        <div class="container custom mx-auto">
+          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
+        </div>
+      </div>
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div>tom-jerr的个人博客 | 记录美好生活</div> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
+<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
+<script src="/js/useaplayer.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
