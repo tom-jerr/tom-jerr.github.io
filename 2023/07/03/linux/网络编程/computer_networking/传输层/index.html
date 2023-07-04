@@ -16,21 +16,24 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="传输层多路复用和多路分解无连接多路分解和复用 需要源端口和目的端口 实际确定目的套接字只需要 目的IP和目标端口号  UDP优势 不需要建立连接 简单 很小的数据段首部 没有拥塞控制，速度快  特点 用户数据报协议  只在IP数据报服务上增加了很少的功能；端口+差错检测  首部开销小，只有8个字节  面向报文，一次发送一个报文（最大长度 65535 -IP header - UDP header）">
+    <meta name="description" content="前言传输层多路复用和多路分解无连接多路分解和复用 需要源端口和目的端口 实际确定目的套接字只需要 目的IP和目标端口号  UDP优势 不需要建立连接 简单 很小的数据段首部 没有拥塞控制，速度快  特点 用户数据报协议  只在IP数据报服务上增加了很少的功能；端口+差错检测  首部开销小，只有8个字节  面向报文，一次发送一个报文（最大长度 65535 -IP header - UDP heade">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:title" content="计算机网络——传输层">
 <meta property="og:url" content="http://tom-jerr.github.io/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/%E4%BC%A0%E8%BE%93%E5%B1%82/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="传输层多路复用和多路分解无连接多路分解和复用 需要源端口和目的端口 实际确定目的套接字只需要 目的IP和目标端口号  UDP优势 不需要建立连接 简单 很小的数据段首部 没有拥塞控制，速度快  特点 用户数据报协议  只在IP数据报服务上增加了很少的功能；端口+差错检测  首部开销小，只有8个字节  面向报文，一次发送一个报文（最大长度 65535 -IP header - UDP header）">
+<meta property="og:description" content="前言传输层多路复用和多路分解无连接多路分解和复用 需要源端口和目的端口 实际确定目的套接字只需要 目的IP和目标端口号  UDP优势 不需要建立连接 简单 很小的数据段首部 没有拥塞控制，速度快  特点 用户数据报协议  只在IP数据报服务上增加了很少的功能；端口+差错检测  首部开销小，只有8个字节  面向报文，一次发送一个报文（最大长度 65535 -IP header - UDP heade">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/OS.png">
 <meta property="article:published_time" content="2023-07-03T10:18:05.195Z">
-<meta property="article:modified_time" content="2023-06-17T03:06:45.905Z">
+<meta property="article:modified_time" content="2023-07-04T07:48:48.769Z">
 <meta property="article:author" content="LZY">
+<meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/OS.png">
   
   
   
-  <title>tom-jerr的个人博客</title>
+  <title>计算机网络——传输层 - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +217,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="计算机网络——传输层"></span>
           
         </div>
 
@@ -237,7 +240,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          523 字
+          525 字
         
       </span>
     
@@ -286,12 +289,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">计算机网络——传输层</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年6月17日 上午
+                    本文最后更新于：2023年7月4日 下午
                   
                 
               </p>
@@ -299,7 +302,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h1><h2 id="多路复用和多路分解"><a href="#多路复用和多路分解" class="headerlink" title="多路复用和多路分解"></a>多路复用和多路分解</h2><h2 id="无连接多路分解和复用"><a href="#无连接多路分解和复用" class="headerlink" title="无连接多路分解和复用"></a>无连接多路分解和复用</h2><ul>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h1><h2 id="多路复用和多路分解"><a href="#多路复用和多路分解" class="headerlink" title="多路复用和多路分解"></a>多路复用和多路分解</h2><h2 id="无连接多路分解和复用"><a href="#无连接多路分解和复用" class="headerlink" title="无连接多路分解和复用"></a>无连接多路分解和复用</h2><ul>
 <li>需要源端口和目的端口</li>
 <li>实际确定目的套接字只需要 <strong>目的IP和目标端口号</strong></li>
 </ul>
@@ -363,6 +366,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+      
+    </div>
   
 </div>
 
@@ -372,7 +403,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
+      <div>计算机网络——传输层</div>
       <div>http://tom-jerr.github.io/2023/07/03/linux/网络编程/computer_networking/传输层/</div>
     </div>
     <div class="license-meta">
@@ -417,9 +448,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/TCP/" title="">
+                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/TCP/" title="计算机网络——TCP">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">计算机网络——TCP</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -427,8 +458,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/IO%E5%A4%8D%E7%94%A8/" title="">
-                        <span class="hidden-mobile"></span>
+                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/TinyWebServer/" title="TinyWebServer">
+                        <span class="hidden-mobile">TinyWebServer</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

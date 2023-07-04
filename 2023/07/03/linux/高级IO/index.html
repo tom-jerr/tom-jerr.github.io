@@ -16,24 +16,25 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="高级I&#x2F;O非阻塞IO 设置O_NONBLOCK  12345678&#x2F;&#x2F; 文件描述符设置成非阻塞; 返回原来的文件描述符int setnonblocking(int fd)&amp;#123;    int old_option &#x3D; fcntl(fd, F_GETFL);    int new_option &#x3D; old_option | O_NONBLOCK;    fcntl(fd, F_SET">
+    <meta name="description" content="前言高级I&#x2F;O非阻塞IO 设置O_NONBLOCK  12345678&#x2F;&#x2F; 文件描述符设置成非阻塞; 返回原来的文件描述符int setnonblocking(int fd)&amp;#123;    int old_option &#x3D; fcntl(fd, F_GETFL);    int new_option &#x3D; old_option | O_NONBLOCK;    fcntl(fd, F_S">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:title" content="高级I&#x2F;O">
 <meta property="og:url" content="http://tom-jerr.github.io/2023/07/03/linux/%E9%AB%98%E7%BA%A7IO/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="高级I&#x2F;O非阻塞IO 设置O_NONBLOCK  12345678&#x2F;&#x2F; 文件描述符设置成非阻塞; 返回原来的文件描述符int setnonblocking(int fd)&amp;#123;    int old_option &#x3D; fcntl(fd, F_GETFL);    int new_option &#x3D; old_option | O_NONBLOCK;    fcntl(fd, F_SET">
+<meta property="og:description" content="前言高级I&#x2F;O非阻塞IO 设置O_NONBLOCK  12345678&#x2F;&#x2F; 文件描述符设置成非阻塞; 返回原来的文件描述符int setnonblocking(int fd)&amp;#123;    int old_option &#x3D; fcntl(fd, F_GETFL);    int new_option &#x3D; old_option | O_NONBLOCK;    fcntl(fd, F_S">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\epoll.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\IOfuyong.png">
+<meta property="og:image" content="http://tom-jerr.github.io/img/OS.png">
 <meta property="article:published_time" content="2023-07-03T10:18:05.222Z">
-<meta property="article:modified_time" content="2023-06-20T15:04:55.258Z">
+<meta property="article:modified_time" content="2023-07-04T07:57:28.542Z">
 <meta property="article:author" content="LZY">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="UNIX">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\epoll.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/OS.png">
   
   
   
-  <title>tom-jerr的个人博客</title>
+  <title>高级I/O - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -217,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="高级I/O"></span>
           
         </div>
 
@@ -240,7 +241,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6.1k 字
+          8.8k 字
         
       </span>
     
@@ -251,7 +252,7 @@
         
         
         
-          52 分钟
+          74 分钟
         
       </span>
     
@@ -289,12 +290,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">高级I/O</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年6月20日 晚上
+                    本文最后更新于：2023年7月4日 下午
                   
                 
               </p>
@@ -302,7 +303,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="高级I-x2F-O"><a href="#高级I-x2F-O" class="headerlink" title="高级I&#x2F;O"></a>高级I&#x2F;O</h1><h2 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h2><ul>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="高级I-x2F-O"><a href="#高级I-x2F-O" class="headerlink" title="高级I&#x2F;O"></a>高级I&#x2F;O</h1><h2 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h2><ul>
 <li>设置O_NONBLOCK</li>
 </ul>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// 文件描述符设置成非阻塞; 返回原来的文件描述符</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">setnonblocking</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span><br>&#123;<br>    <span class="hljs-type">int</span> old_option = fcntl(fd, F_GETFL);<br>    <span class="hljs-type">int</span> new_option = old_option | O_NONBLOCK;<br>    fcntl(fd, F_SETFL, new_option);<br>    <span class="hljs-keyword">return</span> old_option;<br>&#125;<br></code></pre></td></tr></table></figure>
@@ -367,7 +368,7 @@
 
 
 
-<p><img src="C:\Users\我\Desktop\MyblogImg\linux\epoll.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/epoll.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h3><ul>
 <li>没有最大并发连接的限制，能打开的FD的上限远大于1024（1G的内存上能监听约10万个端口）；</li>
 <li>效率提升，不是轮询的方式，不会随着FD数目的增加效率下降。只有活跃可用的FD才会调用callback函数；<br>即Epoll最大的优点就在于它只管你“活跃”的连接，而跟连接总数无关，因此在实际的网络环境中，Epoll的效率就会远远高于select和poll。</li>
@@ -395,15 +396,31 @@
 <li>注册了EPOLLONESHOT事件的socket一旦被某个线程处理完毕，该线程就应该立即重置这个socket上的EPOLLONESHOT事件，以确保这个socket下次可读时，其他EPOLLIN事件能够触发，进而让其他线程有机会继续处理这个socket</li>
 <li>EPOLL_CTL_MOD修改已经注册的fd事件</li>
 </ul>
-<h2 id="I-x2F-O复用间的区别"><a href="#I-x2F-O复用间的区别" class="headerlink" title="I&#x2F;O复用间的区别"></a>I&#x2F;O复用间的区别</h2><p><img src="C:\Users\我\Desktop\MyblogImg\linux\IOfuyong.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="I-x2F-O复用间的区别"><a href="#I-x2F-O复用间的区别" class="headerlink" title="I&#x2F;O复用间的区别"></a>I&#x2F;O复用间的区别</h2><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/IOfuyong.png" srcset="/img/loading.gif" lazyload></p>
 <hr>
 <h2 id="非阻塞IO-1"><a href="#非阻塞IO-1" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h2><h2 id="存储映射I-x2F-O"><a href="#存储映射I-x2F-O" class="headerlink" title="存储映射I&#x2F;O"></a>存储映射I&#x2F;O</h2><ul>
-<li><p>正常的系统调用方式：需要从内核到用户态或从用户态到内核</p>
-</li>
-<li><p>mmap内核间的复制</p>
-</li>
-<li><p>二者都需要进行磁盘到内存的拷贝</p>
-</li>
+<li>正常的系统调用方式：需要从内核到用户态或从用户态到内核</li>
+<li>mmap内核间的复制</li>
+</ul>
+<h2 id="I-x2F-O复用的高级应用"><a href="#I-x2F-O复用的高级应用" class="headerlink" title="I&#x2F;O复用的高级应用"></a>I&#x2F;O复用的高级应用</h2><h3 id="非阻塞connect"><a href="#非阻塞connect" class="headerlink" title="非阻塞connect"></a>非阻塞connect</h3><ul>
+<li>connect出错有一个errno值：EINPROGRESS；发生在对非阻塞的socket调用connect而连接有没有立即建立；可以调用select、poll监听这个失败的socket上的可写事件</li>
+<li>I&#x2F;O复用返回后，利用getsockopt读取错误码并清除错误码，如果ret&#x3D;&#x3D;0，连接成功建立</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> BUFFER_SIZE 1024</span><br><br><span class="hljs-comment">// 文件描述符设置成非阻塞; 返回原来的文件描述符</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">setnonblocking</span><span class="hljs-params">(<span class="hljs-type">int</span> fd)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">int</span> old_option = <span class="hljs-built_in">fcntl</span>(fd, F_GETFL);<br>    <span class="hljs-type">int</span> new_option = old_option | O_NONBLOCK;<br>    <span class="hljs-built_in">fcntl</span>(fd, F_SETFL, new_option);<br>    <span class="hljs-keyword">return</span> old_option;<br>&#125;<br><br><span class="hljs-comment">// 超时连接函数；返回已经处于连接状态的socket</span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">unblock_connect</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span>* ip, <span class="hljs-type">int</span> port, <span class="hljs-type">int</span> time)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">int</span> ret = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">sockaddr_in</span> address;<br>    <span class="hljs-built_in">bzero</span>(&amp;address, <span class="hljs-built_in">sizeof</span>(address));<br><br>    address.sin_family = AF_INET;<br>    <span class="hljs-built_in">inet_pton</span>(AF_INET, ip, &amp;address.sin_addr);<br>    address.sin_port = <span class="hljs-built_in">htons</span>(port);<br><br>    <span class="hljs-type">int</span> sockfd = <span class="hljs-built_in">socket</span>(PF_INET, SOCK_STREAM, <span class="hljs-number">0</span>);<br>    <span class="hljs-type">int</span> fdopt = <span class="hljs-built_in">setnonblocking</span>(sockfd);<br>    ret = <span class="hljs-built_in">connect</span>(sockfd, (<span class="hljs-keyword">struct</span> sockaddr*)&amp;address, <span class="hljs-built_in">sizeof</span>(address));<br>    <span class="hljs-keyword">if</span> (ret == <span class="hljs-number">0</span>)<br>    &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;connect right\n&quot;</span>;<br>        <span class="hljs-built_in">fcntl</span>(sockfd, F_SETFL, fdopt);<br>        <span class="hljs-keyword">return</span> sockfd;<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (errno != EINPROGRESS)<br>    &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;unblock connect not support\n&quot;</span>;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br><br>    fd_set readfds;<br>    fd_set writefds;<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">timeval</span> timeout;<br><br>    <span class="hljs-built_in">FD_ZERO</span>(&amp;readfds);<br>    <span class="hljs-built_in">FD_SET</span>(sockfd, &amp;writefds);<br><br>    timeout.tv_sec = time;<br>    timeout.tv_usec = <span class="hljs-number">0</span>;<br><br>    ret = <span class="hljs-built_in">select</span>(sockfd + <span class="hljs-number">1</span>, <span class="hljs-literal">NULL</span>, &amp;writefds, <span class="hljs-literal">NULL</span>, &amp;timeout);<br>    <span class="hljs-keyword">if</span> (ret &lt;= <span class="hljs-number">0</span>)<br>    &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;timeout\n&quot;</span>;<br>        <span class="hljs-built_in">close</span>(sockfd);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">FD_ISSET</span>(sockfd, &amp;writefds))<br>    &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;no events on sockfd found\n&quot;</span>;<br>        <span class="hljs-built_in">close</span>(sockfd);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br><br>    <span class="hljs-type">int</span> error = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">socklen_t</span> length = <span class="hljs-built_in">sizeof</span>(error);<br>    <span class="hljs-keyword">if</span> (<span class="hljs-built_in">getsockopt</span>(sockfd, SOL_SOCKET, SO_ERROR, &amp;error, &amp;length) &lt; <span class="hljs-number">0</span>)<br>    &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;get socket opt failed\n&quot;</span>;<br>        <span class="hljs-built_in">close</span>(sockfd);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (error != <span class="hljs-number">0</span>)<br>    &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;connection failed after select\n&quot;</span>;<br>        <span class="hljs-built_in">close</span>(sockfd);<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-comment">// connection sucessfully</span><br>    std::cout &lt;&lt; <span class="hljs-string">&quot;connection on &quot;</span> &lt;&lt; sockfd &lt;&lt; std::endl;<br>    <span class="hljs-built_in">fcntl</span>(sockfd, F_SETFL, fdopt);<br>    <span class="hljs-keyword">return</span> sockfd;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span>* argv[])</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">if</span> (argc &lt;= <span class="hljs-number">2</span>)<br>    &#123;<br>        std::cout &lt;&lt; <span class="hljs-string">&quot;usage: &quot;</span> &lt;&lt; <span class="hljs-built_in">basename</span>(argv[<span class="hljs-number">0</span>]) &lt;&lt; <span class="hljs-string">&quot;ip port\n&quot;</span>;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>    &#125;<br>    <span class="hljs-type">const</span> <span class="hljs-type">char</span>* ip = argv[<span class="hljs-number">1</span>];<br>    <span class="hljs-type">int</span> port = <span class="hljs-built_in">atoi</span>(argv[<span class="hljs-number">2</span>]);<br><br>    <span class="hljs-type">int</span> sockfd = <span class="hljs-built_in">unblock_connect</span>(ip, port, <span class="hljs-number">10</span>);<br>    <span class="hljs-keyword">if</span> (sockfd &lt; <span class="hljs-number">0</span>)<br>    &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-built_in">close</span>(sockfd);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="聊天室"><a href="#聊天室" class="headerlink" title="聊天室"></a>聊天室</h3><h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h4><ul>
+<li>监听用户输入和网络连接；使用splice连接和pipe将用户输入内容定向到网络连接</li>
+</ul>
+<h4 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h4><ul>
+<li>使用poll同时管理监听socket和连接socket，牺牲空间来换取时间来提高服务器性能</li>
+<li>使用客户数据结构</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">struct</span> <span class="hljs-title class_">client_data</span><br>&#123;<br>    sockaddr_in address;	<span class="hljs-comment">//客户端socket地址</span><br>    <span class="hljs-type">char</span>* write_buf;		<span class="hljs-comment">//要写入的位置</span><br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">1024</span>];			<span class="hljs-comment">//客户端读入的数据</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>如果是监听fd则建立新连接；</li>
+<li>如果是读事件，将数据读取到client_data的Buf；通知其他socket连接准备写数据</li>
+<li>写完数据后需要重新注册fds[i]上的可读事件</li>
 </ul>
 
                 
@@ -413,6 +430,36 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/">#OS</a>
+      
+        <a href="/tags/UNIX/">#UNIX</a>
+      
+    </div>
   
 </div>
 
@@ -422,7 +469,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
+      <div>高级I/O</div>
       <div>http://tom-jerr.github.io/2023/07/03/linux/高级IO/</div>
     </div>
     <div class="license-meta">
@@ -467,7 +514,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E8%BF%9B%E7%A8%8B%E5%85%B3%E7%B3%BB/" title="">
+                      <a href="/2023/07/03/linux/%E8%BF%9B%E7%A8%8B/" title="">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile"></span>
                         <span class="visible-mobile">上一篇</span>
@@ -477,8 +524,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/07/03/linux/UNIX%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="">
-                        <span class="hidden-mobile"></span>
+                      <a href="/2023/07/03/linux/UNIX%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" title="UNIX基础">
+                        <span class="hidden-mobile">UNIX基础</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

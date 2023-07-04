@@ -16,32 +16,25 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="服务器编程 socket的recv或send：TCP连接传输数据，均会存储到内核缓冲区中；recv将内核缓存区的数据取到用户的buffer中  CGI服务器原理 服务器端关闭stdout； 使用dup复制connfd； printf的值不在服务器端显示，而在客户端显示  readv、writev readv将数据从文件描述符中读到分散的内存块中；writev将分散的内存块读到文件描述符中 使用结构">
+    <meta name="description" content="前言服务器编程 socket的recv或send：TCP连接传输数据，均会存储到内核缓冲区中；recv将内核缓存区的数据取到用户的buffer中  CGI服务器原理 服务器端关闭stdout； 使用dup复制connfd； printf的值不在服务器端显示，而在客户端显示  readv、writev readv将数据从文件描述符中读到分散的内存块中；writev将分散的内存块读到文件描述符中 使用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:title" content="服务器编程">
 <meta property="og:url" content="http://tom-jerr.github.io/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BC%96%E7%A8%8B/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="服务器编程 socket的recv或send：TCP连接传输数据，均会存储到内核缓冲区中；recv将内核缓存区的数据取到用户的buffer中  CGI服务器原理 服务器端关闭stdout； 使用dup复制connfd； printf的值不在服务器端显示，而在客户端显示  readv、writev readv将数据从文件描述符中读到分散的内存块中；writev将分散的内存块读到文件描述符中 使用结构">
+<meta property="og:description" content="前言服务器编程 socket的recv或send：TCP连接传输数据，均会存储到内核缓冲区中；recv将内核缓存区的数据取到用户的buffer中  CGI服务器原理 服务器端关闭stdout； 使用dup复制connfd； printf的值不在服务器端显示，而在客户端显示  readv、writev readv将数据从文件描述符中读到分散的内存块中；writev将分散的内存块读到文件描述符中 使用">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\log.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\TCPConnect.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\reactor.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\Proactor.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\Proactor1.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\tongbu.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\async_sync.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\async_sync2.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\leader.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\leader2.png">
+<meta property="og:image" content="http://tom-jerr.github.io/img/OS.png">
 <meta property="article:published_time" content="2023-07-03T10:18:05.195Z">
-<meta property="article:modified_time" content="2023-06-13T02:25:24.205Z">
+<meta property="article:modified_time" content="2023-07-04T07:51:43.666Z">
 <meta property="article:author" content="LZY">
+<meta property="article:tag" content="UNIX">
+<meta property="article:tag" content="网络编程">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\log.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/OS.png">
   
   
   
-  <title>tom-jerr的个人博客</title>
+  <title>服务器编程 - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -225,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="服务器编程"></span>
           
         </div>
 
@@ -297,12 +290,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">服务器编程</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年6月13日 上午
+                    本文最后更新于：2023年7月4日 下午
                   
                 
               </p>
@@ -310,7 +303,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="服务器编程"><a href="#服务器编程" class="headerlink" title="服务器编程"></a>服务器编程</h1><ul>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="服务器编程"><a href="#服务器编程" class="headerlink" title="服务器编程"></a>服务器编程</h1><ul>
 <li>socket的recv或send：TCP连接传输数据，均会存储到内核缓冲区中；recv将内核缓存区的数据取到用户的buffer中</li>
 </ul>
 <h2 id="CGI服务器原理"><a href="#CGI服务器原理" class="headerlink" title="CGI服务器原理"></a>CGI服务器原理</h2><ul>
@@ -336,7 +329,7 @@
 <li>使用splice和pipe（管道）实现</li>
 <li>将connfd中内容读入pipefd[1]；将pipefd[0]内容读入connfd；并未执行recv或send操作，未涉及用户空间和内核空间的数据拷贝</li>
 </ul>
-<h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><p><img src="C:\Users\我\Desktop\MyblogImg\linux\log.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h2><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/log.png" srcset="/img/loading.gif" lazyload></p>
 <h2 id="PS命令"><a href="#PS命令" class="headerlink" title="PS命令"></a>PS命令</h2><ul>
 <li><p>ps命令查看进程关系</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">ps -o pid,ppid,pgid,sid,<span class="hljs-built_in">comm</span> | less<br></code></pre></td></tr></table></figure></li>
@@ -346,7 +339,7 @@
 <li>创建新会话；切换工作目录为根目录</li>
 <li>关闭打开的文件描述符；关闭stdin, stdout, stderr</li>
 </ul>
-<h2 id="高性能服务器编程"><a href="#高性能服务器编程" class="headerlink" title="高性能服务器编程"></a>高性能服务器编程</h2><h3 id="TCP过程"><a href="#TCP过程" class="headerlink" title="TCP过程"></a>TCP过程</h3><p><img src="C:\Users\我\Desktop\MyblogImg\linux\TCPConnect.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="高性能服务器编程"><a href="#高性能服务器编程" class="headerlink" title="高性能服务器编程"></a>高性能服务器编程</h2><h3 id="TCP过程"><a href="#TCP过程" class="headerlink" title="TCP过程"></a>TCP过程</h3><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/TCPConnect.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="I-x2F-O模型"><a href="#I-x2F-O模型" class="headerlink" title="I&#x2F;O模型"></a>I&#x2F;O模型</h3><ul>
 <li>可能被阻塞的系统调用：accept, send, recv, connect</li>
 <li>非阻塞I&#x2F;O<ul>
@@ -361,18 +354,18 @@
 <h4 id="Reactor模式"><a href="#Reactor模式" class="headerlink" title="Reactor模式"></a>Reactor模式</h4><ul>
 <li>主线程只监听是否有事件发生；其余由工作线程执行</li>
 </ul>
-<p><img src="C:\Users\我\Desktop\MyblogImg\linux\reactor.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/reactor.png" srcset="/img/loading.gif" lazyload></p>
 <h4 id="Proactor模式"><a href="#Proactor模式" class="headerlink" title="Proactor模式"></a>Proactor模式</h4><ul>
 <li>将所有的I&#x2F;O操作都交给主线程和内核操作；工作线程只负责业务逻辑</li>
 </ul>
-<p><img src="C:\Users\我\Desktop\MyblogImg\linux\Proactor.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="同步I-x2F-O模拟Proactor模式"><a href="#同步I-x2F-O模拟Proactor模式" class="headerlink" title="同步I&#x2F;O模拟Proactor模式"></a>同步I&#x2F;O模拟Proactor模式</h4><p><img src="C:\Users\我\Desktop\MyblogImg\linux\Proactor1.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="高效的并发模式"><a href="#高效的并发模式" class="headerlink" title="高效的并发模式"></a>高效的并发模式</h3><h4 id="半同步-x2F-半异步模式"><a href="#半同步-x2F-半异步模式" class="headerlink" title="半同步&#x2F;半异步模式"></a>半同步&#x2F;半异步模式</h4><p><img src="C:\Users\我\Desktop\MyblogImg\linux\tongbu.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/Proactor.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="同步I-x2F-O模拟Proactor模式"><a href="#同步I-x2F-O模拟Proactor模式" class="headerlink" title="同步I&#x2F;O模拟Proactor模式"></a>同步I&#x2F;O模拟Proactor模式</h4><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/Proactor1.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="高效的并发模式"><a href="#高效的并发模式" class="headerlink" title="高效的并发模式"></a>高效的并发模式</h3><h4 id="半同步-x2F-半异步模式"><a href="#半同步-x2F-半异步模式" class="headerlink" title="半同步&#x2F;半异步模式"></a>半同步&#x2F;半异步模式</h4><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/tongbu.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li>同步线程处理客户逻辑；异步线程用于处理I&#x2F;O事件</li>
 <li>异步线程监听到客户请求后，将其封装成请求对象并插入请求对象中；请求队列将通知某个工作在同步模式的工作线程读取并处理该请求对象</li>
 </ul>
-<p><img src="C:\Users\我\Desktop\MyblogImg\linux\async_sync.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/async_sync.png" srcset="/img/loading.gif" lazyload></p>
 <h4 id="半同步-x2F-半反应堆模式"><a href="#半同步-x2F-半反应堆模式" class="headerlink" title="半同步&#x2F;半反应堆模式"></a>半同步&#x2F;半反应堆模式</h4><ul>
 <li>异步线程由主线程充当，只有一个；主线程监听socket，连接socket插入请求队列</li>
 <li>采用Reactor模式：工作线程自己从socket上读取客户请求和往socket写入服务器应答</li>
@@ -385,14 +378,14 @@
 <h4 id="高效的半同步-x2F-半异步模式"><a href="#高效的半同步-x2F-半异步模式" class="headerlink" title="高效的半同步&#x2F;半异步模式"></a>高效的半同步&#x2F;半异步模式</h4><ul>
 <li>主线程只监听socket，连接socket由工作线程管理</li>
 </ul>
-<p><img src="C:\Users\我\Desktop\MyblogImg\linux\async_sync2.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="领导者-x2F-追随者模式"><a href="#领导者-x2F-追随者模式" class="headerlink" title="领导者&#x2F;追随者模式"></a>领导者&#x2F;追随者模式</h4><p><img src="C:\Users\我\Desktop\MyblogImg\linux\leader.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/async_sync2.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="领导者-x2F-追随者模式"><a href="#领导者-x2F-追随者模式" class="headerlink" title="领导者&#x2F;追随者模式"></a>领导者&#x2F;追随者模式</h4><p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/leader.png" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li>句柄集：句柄表示IO资源，通常是一个文件描述符</li>
 <li>线程集：所有工作线程的管理者，负责各线程的同步以及新领导者的推选</li>
 <li>事件处理器：一般包含一个或多个回调函数；使用事件处理器前需要绑定到某个句柄上</li>
 </ul>
-<p><img src="C:\Users\我\Desktop\MyblogImg\linux\leader2.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/linux/leader2.png" srcset="/img/loading.gif" lazyload></p>
 <h3 id="优化方法"><a href="#优化方法" class="headerlink" title="优化方法"></a>优化方法</h3><ul>
 <li>池：静态资源分配</li>
 <li>避免用户和内核之间的数据复制</li>
@@ -406,6 +399,36 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="category-chain-item">网络编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/UNIX/">#UNIX</a>
+      
+        <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">#网络编程</a>
+      
+    </div>
   
 </div>
 
@@ -415,7 +438,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
+      <div>服务器编程</div>
       <div>http://tom-jerr.github.io/2023/07/03/linux/网络编程/服务器编程/</div>
     </div>
     <div class="license-meta">
@@ -460,9 +483,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/%E7%BD%91%E7%BB%9C%E5%B1%82/" title="">
+                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/%E7%BD%91%E7%BB%9C%E5%B1%82/" title="计算机网络——网络层">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">计算机网络——网络层</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -470,8 +493,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/Internet/" title="">
-                        <span class="hidden-mobile"></span>
+                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/Internet/" title="计算机网络——Internet">
+                        <span class="hidden-mobile">计算机网络——Internet</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

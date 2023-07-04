@@ -16,27 +16,24 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="TCP特点 点到点  可靠按序的字节流  流水线：TCP拥塞控制和流量控制设置窗口大小  全双工的数据交换模式（MSS：最大报文段长）  面向连接  流量控制：发送方不会淹没接收方   序号和确认 序号：数据段中第一个字节在数据流的位置编号 确认：期望从另外一边受到的下一个字节的序号，累积ACK  可靠数据传输 在IP上创建rdt服务 流水线技术处理报文 累积确认 TCP使用单个重发定时器  超时">
+    <meta name="description" content="前言TCP特点 点到点  可靠按序的字节流  流水线：TCP拥塞控制和流量控制设置窗口大小  全双工的数据交换模式（MSS：最大报文段长）  面向连接  流量控制：发送方不会淹没接收方   序号和确认 序号：数据段中第一个字节在数据流的位置编号 确认：期望从另外一边受到的下一个字节的序号，累积ACK  可靠数据传输 在IP上创建rdt服务 流水线技术处理报文 累积确认 TCP使用单个重发定时器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:title" content="计算机网络——TCP">
 <meta property="og:url" content="http://tom-jerr.github.io/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/TCP/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="TCP特点 点到点  可靠按序的字节流  流水线：TCP拥塞控制和流量控制设置窗口大小  全双工的数据交换模式（MSS：最大报文段长）  面向连接  流量控制：发送方不会淹没接收方   序号和确认 序号：数据段中第一个字节在数据流的位置编号 确认：期望从另外一边受到的下一个字节的序号，累积ACK  可靠数据传输 在IP上创建rdt服务 流水线技术处理报文 累积确认 TCP使用单个重发定时器  超时">
+<meta property="og:description" content="前言TCP特点 点到点  可靠按序的字节流  流水线：TCP拥塞控制和流量控制设置窗口大小  全双工的数据交换模式（MSS：最大报文段长）  面向连接  流量控制：发送方不会淹没接收方   序号和确认 序号：数据段中第一个字节在数据流的位置编号 确认：期望从另外一边受到的下一个字节的序号，累积ACK  可靠数据传输 在IP上创建rdt服务 流水线技术处理报文 累积确认 TCP使用单个重发定时器">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\TCP.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\TCP2.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\TCP3.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\TCP4.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\TCP5.png">
+<meta property="og:image" content="http://tom-jerr.github.io/img/OS.png">
 <meta property="article:published_time" content="2023-07-03T10:18:05.195Z">
-<meta property="article:modified_time" content="2023-06-17T03:21:45.904Z">
+<meta property="article:modified_time" content="2023-07-04T07:48:40.178Z">
 <meta property="article:author" content="LZY">
+<meta property="article:tag" content="计算机网络">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\TCP.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/OS.png">
   
   
   
-  <title>tom-jerr的个人博客</title>
+  <title>计算机网络——TCP - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -220,7 +217,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="计算机网络——TCP"></span>
           
         </div>
 
@@ -292,12 +289,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">计算机网络——TCP</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年6月17日 上午
+                    本文最后更新于：2023年7月4日 下午
                   
                 
               </p>
@@ -305,7 +302,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ul>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ul>
 <li><p>点到点</p>
 </li>
 <li><p>可靠按序的字节流</p>
@@ -393,6 +390,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="category-chain-item">计算机网络</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">#计算机网络</a>
+      
+    </div>
   
 </div>
 
@@ -402,7 +427,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
+      <div>计算机网络——TCP</div>
       <div>http://tom-jerr.github.io/2023/07/03/linux/网络编程/computer_networking/TCP/</div>
     </div>
     <div class="license-meta">
@@ -447,9 +472,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/Internet/" title="">
+                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/Internet/" title="计算机网络——Internet">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">计算机网络——Internet</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -457,8 +482,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/%E4%BC%A0%E8%BE%93%E5%B1%82/" title="">
-                        <span class="hidden-mobile"></span>
+                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/%E4%BC%A0%E8%BE%93%E5%B1%82/" title="计算机网络——传输层">
+                        <span class="hidden-mobile">计算机网络——传输层</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

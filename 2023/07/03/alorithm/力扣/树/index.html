@@ -16,21 +16,24 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="树二叉树判断是否是完全二叉树 使用层次遍历 将所有节点，包括空节点入队列；如果空节点后面还有节点说明不是完全二叉树  求二叉树高度 使用层次遍历，last记录上层的最右节点，之后跳转到下层的最右节点 通过last与队列尾部rear实现找到每层的最右节点  12345678910111213141516171819202122int Bdepth(BiTree T)&amp;#123;    if (!T)">
+    <meta name="description" content="前言树二叉树判断是否是完全二叉树 使用层次遍历 将所有节点，包括空节点入队列；如果空节点后面还有节点说明不是完全二叉树  求二叉树高度 使用层次遍历，last记录上层的最右节点，之后跳转到下层的最右节点 通过last与队列尾部rear实现找到每层的最右节点  12345678910111213141516171819202122int Bdepth(BiTree T)&amp;#123;    if (!">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:title" content="树">
 <meta property="og:url" content="http://tom-jerr.github.io/2023/07/03/alorithm/%E5%8A%9B%E6%89%A3/%E6%A0%91/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="树二叉树判断是否是完全二叉树 使用层次遍历 将所有节点，包括空节点入队列；如果空节点后面还有节点说明不是完全二叉树  求二叉树高度 使用层次遍历，last记录上层的最右节点，之后跳转到下层的最右节点 通过last与队列尾部rear实现找到每层的最右节点  12345678910111213141516171819202122int Bdepth(BiTree T)&amp;#123;    if (!T)">
+<meta property="og:description" content="前言树二叉树判断是否是完全二叉树 使用层次遍历 将所有节点，包括空节点入队列；如果空节点后面还有节点说明不是完全二叉树  求二叉树高度 使用层次遍历，last记录上层的最右节点，之后跳转到下层的最右节点 通过last与队列尾部rear实现找到每层的最右节点  12345678910111213141516171819202122int Bdepth(BiTree T)&amp;#123;    if (!">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/algorithm.png">
 <meta property="article:published_time" content="2023-07-03T10:19:34.600Z">
-<meta property="article:modified_time" content="2023-06-07T03:07:26.560Z">
+<meta property="article:modified_time" content="2023-07-04T07:24:52.909Z">
 <meta property="article:author" content="LZY">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/algorithm.png">
   
   
   
-  <title>tom-jerr的个人博客</title>
+  <title>树 - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +217,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="树"></span>
           
         </div>
 
@@ -286,12 +289,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">树</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年6月7日 上午
+                    本文最后更新于：2023年7月4日 下午
                   
                 
               </p>
@@ -299,7 +302,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><h3 id="判断是否是完全二叉树"><a href="#判断是否是完全二叉树" class="headerlink" title="判断是否是完全二叉树"></a>判断是否是完全二叉树</h3><ul>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="树"><a href="#树" class="headerlink" title="树"></a>树</h1><h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><h3 id="判断是否是完全二叉树"><a href="#判断是否是完全二叉树" class="headerlink" title="判断是否是完全二叉树"></a>判断是否是完全二叉树</h3><ul>
 <li>使用层次遍历</li>
 <li>将所有节点，包括空节点入队列；如果空节点后面还有节点说明不是完全二叉树</li>
 </ul>
@@ -380,6 +383,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+      
+    </div>
   
 </div>
 
@@ -389,7 +420,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
+      <div>树</div>
       <div>http://tom-jerr.github.io/2023/07/03/alorithm/力扣/树/</div>
     </div>
     <div class="license-meta">
@@ -434,9 +465,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/07/03/alorithm/%E5%8A%9B%E6%89%A3/%E9%80%92%E5%BD%92/" title="">
+                      <a href="/2023/07/03/alorithm/%E5%8A%9B%E6%89%A3/%E9%80%92%E5%BD%92/" title="递归">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">递归</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -444,8 +475,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/07/03/alorithm/%E5%8A%9B%E6%89%A3/%E9%93%BE%E8%A1%A8/" title="">
-                        <span class="hidden-mobile"></span>
+                      <a href="/2023/07/03/alorithm/%E5%8A%9B%E6%89%A3/%E9%93%BE%E8%A1%A8/" title="链表">
+                        <span class="hidden-mobile">链表</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

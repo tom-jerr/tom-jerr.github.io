@@ -16,27 +16,25 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux多线程 fork：复制当前进程（产生新任务） clone：创建子进程并从指定位置开始执行（产生新线程）  可重入 函数没有执行完成，由于外部因素或者自身调用再次进入该函数执行  volatile阻止编译器将数据存放在寄存器，造成过度优化   链接编译 每个编译单元只能有一个强符号，但是可以有多个弱符号  readelf观察符号表   两步链接 空间与地址分配，设置全局符号表，将目标文件的">
+    <meta name="description" content="前言Linux多线程 fork：复制当前进程（产生新任务） clone：创建子进程并从指定位置开始执行（产生新线程）  可重入 函数没有执行完成，由于外部因素或者自身调用再次进入该函数执行  volatile阻止编译器将数据存放在寄存器，造成过度优化   链接编译 每个编译单元只能有一个强符号，但是可以有多个弱符号  readelf观察符号表   两步链接 空间与地址分配，设置全局符号表，将目标文">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:title" content="链接">
 <meta property="og:url" content="http://tom-jerr.github.io/2023/07/03/linux/%E9%93%BE%E6%8E%A5/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="Linux多线程 fork：复制当前进程（产生新任务） clone：创建子进程并从指定位置开始执行（产生新线程）  可重入 函数没有执行完成，由于外部因素或者自身调用再次进入该函数执行  volatile阻止编译器将数据存放在寄存器，造成过度优化   链接编译 每个编译单元只能有一个强符号，但是可以有多个弱符号  readelf观察符号表   两步链接 空间与地址分配，设置全局符号表，将目标文件的">
+<meta property="og:description" content="前言Linux多线程 fork：复制当前进程（产生新任务） clone：创建子进程并从指定位置开始执行（产生新线程）  可重入 函数没有执行完成，由于外部因素或者自身调用再次进入该函数执行  volatile阻止编译器将数据存放在寄存器，造成过度优化   链接编译 每个编译单元只能有一个强符号，但是可以有多个弱符号  readelf观察符号表   两步链接 空间与地址分配，设置全局符号表，将目标文">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\ram_linux.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\stack.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\free_list.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\syscall_args.png">
-<meta property="og:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\main_argv.png">
+<meta property="og:image" content="http://tom-jerr.github.io/img/OS.png">
 <meta property="article:published_time" content="2023-07-03T10:18:05.164Z">
-<meta property="article:modified_time" content="2023-05-01T06:28:53.024Z">
+<meta property="article:modified_time" content="2023-07-04T07:29:13.511Z">
 <meta property="article:author" content="LZY">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="UNIX">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="c:\Users\%E6%88%91\Desktop\MyblogImg\linux\ram_linux.png">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/OS.png">
   
   
   
-  <title>tom-jerr的个人博客</title>
+  <title>链接 - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -220,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="链接"></span>
           
         </div>
 
@@ -292,12 +290,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">链接</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年5月1日 下午
+                    本文最后更新于：2023年7月4日 下午
                   
                 
               </p>
@@ -305,7 +303,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Linux多线程"><a href="#Linux多线程" class="headerlink" title="Linux多线程"></a>Linux多线程</h1><ul>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="Linux多线程"><a href="#Linux多线程" class="headerlink" title="Linux多线程"></a>Linux多线程</h1><ul>
 <li>fork：复制当前进程（产生新任务）</li>
 <li>clone：创建子进程并从指定位置开始执行（产生新线程）</li>
 </ul>
@@ -442,6 +440,36 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/">#OS</a>
+      
+        <a href="/tags/UNIX/">#UNIX</a>
+      
+    </div>
   
 </div>
 
@@ -451,7 +479,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
+      <div>链接</div>
       <div>http://tom-jerr.github.io/2023/07/03/linux/链接/</div>
     </div>
     <div class="license-meta">
@@ -496,9 +524,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/" title="">
+                      <a href="/2023/07/03/linux/%E6%96%87%E4%BB%B6IO/" title="文件IO">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">文件IO</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     

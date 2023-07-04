@@ -16,21 +16,25 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="TinyWebServer定时器 需要处理定时事件，比如检测一个客户连接的活动状态  socket选项SO_RCVTIMEO和SO_SNDTIMEO 根据系统调用（send, sendmsg, recv, recvmsg, accept, connect）的 返回值和errno判断  123456ret &#x3D; connect(sockfd, (struct sockaddr*)&amp;addres">
+    <meta name="description" content="前言TinyWebServer定时器 需要处理定时事件，比如检测一个客户连接的活动状态  socket选项SO_RCVTIMEO和SO_SNDTIMEO 根据系统调用（send, sendmsg, recv, recvmsg, accept, connect）的 返回值和errno判断  123456ret &#x3D; connect(sockfd, (struct sockaddr*)&amp;addr">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:title" content="TinyWebServer">
 <meta property="og:url" content="http://tom-jerr.github.io/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/TinyWebServer/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="TinyWebServer定时器 需要处理定时事件，比如检测一个客户连接的活动状态  socket选项SO_RCVTIMEO和SO_SNDTIMEO 根据系统调用（send, sendmsg, recv, recvmsg, accept, connect）的 返回值和errno判断  123456ret &#x3D; connect(sockfd, (struct sockaddr*)&amp;addres">
+<meta property="og:description" content="前言TinyWebServer定时器 需要处理定时事件，比如检测一个客户连接的活动状态  socket选项SO_RCVTIMEO和SO_SNDTIMEO 根据系统调用（send, sendmsg, recv, recvmsg, accept, connect）的 返回值和errno判断  123456ret &#x3D; connect(sockfd, (struct sockaddr*)&amp;addr">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/OS.png">
 <meta property="article:published_time" content="2023-07-03T10:18:05.179Z">
-<meta property="article:modified_time" content="2023-06-13T02:49:24.363Z">
+<meta property="article:modified_time" content="2023-07-04T07:46:54.511Z">
 <meta property="article:author" content="LZY">
+<meta property="article:tag" content="UNIX">
+<meta property="article:tag" content="网络编程">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/OS.png">
   
   
   
-  <title>tom-jerr的个人博客</title>
+  <title>TinyWebServer - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="TinyWebServer"></span>
           
         </div>
 
@@ -286,12 +290,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">TinyWebServer</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年6月13日 上午
+                    本文最后更新于：2023年7月4日 下午
                   
                 
               </p>
@@ -299,7 +303,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="TinyWebServer"><a href="#TinyWebServer" class="headerlink" title="TinyWebServer"></a>TinyWebServer</h1><h2 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h2><ul>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="TinyWebServer"><a href="#TinyWebServer" class="headerlink" title="TinyWebServer"></a>TinyWebServer</h1><h2 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h2><ul>
 <li>需要处理定时事件，比如检测一个客户连接的活动状态</li>
 </ul>
 <h3 id="socket选项SO-RCVTIMEO和SO-SNDTIMEO"><a href="#socket选项SO-RCVTIMEO和SO-SNDTIMEO" class="headerlink" title="socket选项SO_RCVTIMEO和SO_SNDTIMEO"></a>socket选项SO_RCVTIMEO和SO_SNDTIMEO</h3><ul>
@@ -346,6 +350,36 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" class="category-chain-item">网络编程</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/UNIX/">#UNIX</a>
+      
+        <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">#网络编程</a>
+      
+    </div>
   
 </div>
 
@@ -355,7 +389,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
+      <div>TinyWebServer</div>
       <div>http://tom-jerr.github.io/2023/07/03/linux/网络编程/TinyWebServer/</div>
     </div>
     <div class="license-meta">
@@ -400,9 +434,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/IO%E5%A4%8D%E7%94%A8/" title="">
+                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/computer_networking/%E4%BC%A0%E8%BE%93%E5%B1%82/" title="计算机网络——传输层">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">计算机网络——传输层</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -410,8 +444,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/%E4%BF%A1%E5%8F%B7/" title="">
-                        <span class="hidden-mobile"></span>
+                      <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/%E4%BF%A1%E5%8F%B7/" title="网络编程——信号">
+                        <span class="hidden-mobile">网络编程——信号</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

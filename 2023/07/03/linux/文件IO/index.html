@@ -16,21 +16,25 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="文件IO文件描述符 非负整数 0：STDIN_FILENO；1：STDOUT_FILENO；2：STDERR_FILENO 文件描述符大小为0 ~ OPEN_MAX-1  open &amp; openat1234#include &lt;fcntl.h&gt;int open(const char* path, int oflag, ...&#x2F;* mode_t mode *&#x2F;);int opena">
+    <meta name="description" content="前言文件IO文件描述符 非负整数 0：STDIN_FILENO；1：STDOUT_FILENO；2：STDERR_FILENO 文件描述符大小为0 ~ OPEN_MAX-1  open &amp; openat1234#include &lt;fcntl.h&gt;int open(const char* path, int oflag, ...&#x2F;* mode_t mode *&#x2F;);int ope">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:title" content="文件IO">
 <meta property="og:url" content="http://tom-jerr.github.io/2023/07/03/linux/%E6%96%87%E4%BB%B6IO/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="文件IO文件描述符 非负整数 0：STDIN_FILENO；1：STDOUT_FILENO；2：STDERR_FILENO 文件描述符大小为0 ~ OPEN_MAX-1  open &amp; openat1234#include &lt;fcntl.h&gt;int open(const char* path, int oflag, ...&#x2F;* mode_t mode *&#x2F;);int opena">
+<meta property="og:description" content="前言文件IO文件描述符 非负整数 0：STDIN_FILENO；1：STDOUT_FILENO；2：STDERR_FILENO 文件描述符大小为0 ~ OPEN_MAX-1  open &amp; openat1234#include &lt;fcntl.h&gt;int open(const char* path, int oflag, ...&#x2F;* mode_t mode *&#x2F;);int ope">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/OS.png">
 <meta property="article:published_time" content="2023-07-03T10:18:05.164Z">
-<meta property="article:modified_time" content="2023-05-06T07:40:39.153Z">
+<meta property="article:modified_time" content="2023-07-04T07:27:40.631Z">
 <meta property="article:author" content="LZY">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="UNIX">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/OS.png">
   
   
   
-  <title>tom-jerr的个人博客</title>
+  <title>文件IO - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +218,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="文件IO"></span>
           
         </div>
 
@@ -286,12 +290,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">文件IO</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年5月6日 下午
+                    本文最后更新于：2023年7月4日 下午
                   
                 
               </p>
@@ -299,7 +303,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="文件IO"><a href="#文件IO" class="headerlink" title="文件IO"></a>文件IO</h1><h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><ul>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="文件IO"><a href="#文件IO" class="headerlink" title="文件IO"></a>文件IO</h1><h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><ul>
 <li>非负整数</li>
 <li>0：STDIN_FILENO；1：STDOUT_FILENO；2：STDERR_FILENO</li>
 <li>文件描述符大小为0 ~ OPEN_MAX-1</li>
@@ -381,6 +385,36 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/OS/">#OS</a>
+      
+        <a href="/tags/UNIX/">#UNIX</a>
+      
+    </div>
   
 </div>
 
@@ -390,7 +424,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
+      <div>文件IO</div>
       <div>http://tom-jerr.github.io/2023/07/03/linux/文件IO/</div>
     </div>
     <div class="license-meta">
@@ -435,9 +469,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E4%BF%A1%E5%8F%B7/" title="">
+                      <a href="/2023/07/03/linux/%E4%BF%A1%E5%8F%B7/" title="信号">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">信号</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -445,8 +479,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/07/03/linux/%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/" title="">
-                        <span class="hidden-mobile"></span>
+                      <a href="/2023/07/03/linux/%E9%93%BE%E6%8E%A5/" title="链接">
+                        <span class="hidden-mobile">链接</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

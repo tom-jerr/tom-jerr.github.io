@@ -239,216 +239,24 @@
   <div class="row mx-auto index-card">
     
     
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/IO%E5%A4%8D%E7%94%A8/" target="_self">
-          
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2023/07/03/linux/%E9%93%BE%E6%8E%A5/" target="_self">
+          <img src="/img/OS.png" alt="链接">
         </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/IO%E5%A4%8D%E7%94%A8/" target="_self">
-        <div>
-          I&#x2F;O复用select系统调用 fd_set结构体仅包含一个整型数组，该数组的每个元素的每一位标记一个文件描述符（FD_SETSIZE决定fd_set可容纳的文件描述符数量）  它仅仅知道了，有I&#x2F;O事件发生了，却并不知道是哪那几个流（可能有一个，多个，甚至全部），我们只能无差别轮询所有流，找出能读出数据，或者写入数据的流，对他们进行操作。所以select具有O(n)的无差别轮
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-07-03 18:18" pubdate>
-              2023-07-03
-            </time>
-          </div>
-        
-        
-        
       </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
     
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/TinyWebServer/" target="_self">
-          
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/TinyWebServer/" target="_self">
-        <div>
-          TinyWebServer定时器 需要处理定时事件，比如检测一个客户连接的活动状态  socket选项SO_RCVTIMEO和SO_SNDTIMEO 根据系统调用（send, sendmsg, recv, recvmsg, accept, connect）的 返回值和errno判断  123456ret = connect(sockfd, (struct sockaddr*)&amp;addres
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-07-03 18:18" pubdate>
-              2023-07-03
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/%E4%BF%A1%E5%8F%B7/" target="_self">
-          
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/03/linux/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/%E4%BF%A1%E5%8F%B7/" target="_self">
-        <div>
-          信号统一信号源 设置信号处理函数，保证可重入性 设置管道 如果就绪的文件描述符是pipefd[0]，则处理信号  父子进程通信 使用管道 子进程需要保存父子进程通信的pipefd 子进程监听pipefd，父进程会通知子进程accept新连接 父进程监听listenfd  共享内存 主进程和子进程间建立管道，传递必要的数据 子进程用epoll监听两个文件描述符：客户连接socket、与父进程通信的管
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-07-03 18:18" pubdate>
-              2023-07-03
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/07/03/linux/%E4%BF%A1%E5%8F%B7/" target="_self">
-          
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/03/linux/%E4%BF%A1%E5%8F%B7/" target="_self">
-        <div>
-          信号 信号是软件中断 不存在编号为0的信号，信号名被定义为正整数常量（信号编号）  可重入函数 可以被中断的函数；也就是说，可以在这个函数执行的任何时刻中断它，转入 OS 调度下去执行另外一段代码，而返回控制时不会出现什么错误；而不可重入的函数由于使用了一些系统资源，比如全局变量区，中断向量表等，所以它如果被中断的话，可能会出现问题，这类函数是不能运行在多任务环境下的。  满足下列条件的函数多数是
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-07-03 18:18" pubdate>
-              2023-07-03
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/07/03/linux/%E6%96%87%E4%BB%B6IO/" target="_self">
-          
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/03/linux/%E6%96%87%E4%BB%B6IO/" target="_self">
-        <div>
-          文件IO文件描述符 非负整数 0：STDIN_FILENO；1：STDOUT_FILENO；2：STDERR_FILENO 文件描述符大小为0 ~ OPEN_MAX-1  open &amp; openat1234#include &lt;fcntl.h&gt;int open(const char* path, int oflag, .../* mode_t mode */);int opena
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-07-03 18:18" pubdate>
-              2023-07-03
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2023/07/03/linux/%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/" target="_self">
-          
-        </a>
-      </h1>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/03/linux/%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/" target="_self">
-        <div>
-          文件和目录stat系列函数 将文件信息存储到缓冲区上  文件类型 目录文件：包含其他文件名字以及指向这些文件的指针 块特殊文件：对设备带缓冲的访问，每次访问以固定长度为单位进行 字符特殊文件：对设备不带缓冲的访问 FIFO：这种类型的文件用于进程间通信，称为命名管道 套接字：用于进程间的网络通信 符号链接：指向另一个文件，内容是指向文件的地址  判断文件类型 UNIX实现了宏定义 实际上是将sta
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-07-03 18:18" pubdate>
-              2023-07-03
-            </time>
-          </div>
-        
-        
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
+    <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
         <a href="/2023/07/03/linux/%E9%93%BE%E6%8E%A5/" target="_self">
-          
+          链接
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/07/03/linux/%E9%93%BE%E6%8E%A5/" target="_self">
+      <a class="index-excerpt " href="/2023/07/03/linux/%E9%93%BE%E6%8E%A5/" target="_self">
         <div>
-          Linux多线程 fork：复制当前进程（产生新任务） clone：创建子进程并从指定位置开始执行（产生新线程）  可重入 函数没有执行完成，由于外部因素或者自身调用再次进入该函数执行  volatile阻止编译器将数据存放在寄存器，造成过度优化   链接编译 每个编译单元只能有一个强符号，但是可以有多个弱符号  readelf观察符号表   两步链接 空间与地址分配，设置全局符号表，将目标文件的
+          前言Linux多线程 fork：复制当前进程（产生新任务） clone：创建子进程并从指定位置开始执行（产生新线程）  可重入 函数没有执行完成，由于外部因素或者自身调用再次进入该函数执行  volatile阻止编译器将数据存放在寄存器，造成过度优化   链接编译 每个编译单元只能有一个强符号，但是可以有多个弱符号  readelf观察符号表   两步链接 空间与地址分配，设置全局符号表，将目标文
         </div>
       </a>
 
@@ -462,6 +270,36 @@
           </div>
         
         
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/OS/">#OS</a>
+            
+              <a href="/tags/UNIX/">#UNIX</a>
+            
+          </div>
         
       </div>
     </article>
@@ -566,11 +404,391 @@
     </article>
   </div>
 
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2023/04/23/C&amp;C++/c%E5%92%8C%E6%8C%87%E9%92%88/" target="_self">
+          
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/04/23/C&amp;C++/c%E5%92%8C%E6%8C%87%E9%92%88/" target="_self">
+        <div>
+          C和指针a++ 和 ++a12345678//首先对于i++的实现是：(此时返回的是临时对象)    int   temp;      temp   =   i;      i   =   i+1;      return   temp;  //而++i的实现是：      i   =   i+1;      return   i;      a+++++b 等价于（（a++）++）+b，但是编译
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-04-23 16:44" pubdate>
+              2023-04-23
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2023/04/17/C&amp;C++/C++%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5/" target="_self">
+          <img src="/img/OS.png" alt="C++ -">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2023/04/17/C&amp;C++/C++%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5/" target="_self">
+          C++ -
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2023/04/17/C&amp;C++/C++%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5/" target="_self">
+        <div>
+          前言 对C++的左值引用、右值引用以及移动构造进行梳理
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-04-17 16:50" pubdate>
+              2023-04-17
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C-C/" class="category-chain-item">C&amp;C++</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/C-C/">#C&C++</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2023/04/14/deeplearning/convLSTM/" target="_self">
+          <img src="/img/DP.png" alt="convLSTM">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2023/04/14/deeplearning/convLSTM/" target="_self">
+          convLSTM
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2023/04/14/deeplearning/convLSTM/" target="_self">
+        <div>
+          前言
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-04-14 22:22" pubdate>
+              2023-04-14
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
+            
+              <a href="/tags/pytorch/">#pytorch</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2023/04/14/csapp/%E9%87%8D%E8%A6%81%E7%9F%A5%E8%AF%86%E7%82%B9/" target="_self">
+          <img src="/img/cmu.png" alt="CSAPP--知识点">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2023/04/14/csapp/%E9%87%8D%E8%A6%81%E7%9F%A5%E8%AF%86%E7%82%B9/" target="_self">
+          CSAPP--知识点
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2023/04/14/csapp/%E9%87%8D%E8%A6%81%E7%9F%A5%E8%AF%86%E7%82%B9/" target="_self">
+        <div>
+          前言
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-04-14 11:26" pubdate>
+              2023-04-14
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/OS/" class="category-chain-item">OS</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/C-C/">#C&C++</a>
+            
+              <a href="/tags/labs/">#labs</a>
+            
+              <a href="/tags/linux/">#linux</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2023/04/13/deeplearning/Yolo/" target="_self">
+          <img src="/img/DP.png" alt="YOLO">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2023/04/13/deeplearning/Yolo/" target="_self">
+          YOLO
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2023/04/13/deeplearning/Yolo/" target="_self">
+        <div>
+          前言
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-04-13 21:01" pubdate>
+              2023-04-13
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
+            
+              <a href="/tags/pytorch/">#pytorch</a>
+            
+              <a href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">#目标检测</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2023/04/13/deeplearning/Transformer/" target="_self">
+          <img src="/img/DP.png" alt="Transformer">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2023/04/13/deeplearning/Transformer/" target="_self">
+          Transformer
+        </a>
+      </h1>
+
+      
+      <a class="index-excerpt " href="/2023/04/13/deeplearning/Transformer/" target="_self">
+        <div>
+          前言
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-04-13 21:01" pubdate>
+              2023-04-13
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="category-chain-item">机器学习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">#深度学习</a>
+            
+              <a href="/tags/pytorch/">#pytorch</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#board">4</a><a class="page-number" href="/page/5/#board">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/#board">10</a><a class="extend next" rel="next" href="/page/4/#board"><i class="iconfont icon-arrowright"></i></a>
+      <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#board">4</a><a class="page-number" href="/page/5/#board">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#board">9</a><a class="extend next" rel="next" href="/page/4/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

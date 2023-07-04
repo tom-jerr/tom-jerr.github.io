@@ -16,21 +16,24 @@
   <meta name="author" content="LZY">
   <meta name="keywords" content="">
   
-    <meta name="description" content="链表相关问题 在头指针前加入哑节点（dummy）；构造头节点的前驱节点，避免判断 删除某个节点，找该节点的前驱，方便操作 通过单链表寻找第K个位置或者寻找共同后缀，使用双指针，相差n个节点共同遍历链表，只遍历一次 找中间节点，使用双指针，一个一次走2个节点，一个一次走1个节点 合并K个链表；使用归并或者使用最小堆实现  链表逆置123456789101112131415161718void lis">
+    <meta name="description" content="前言链表相关问题 在头指针前加入哑节点（dummy）；构造头节点的前驱节点，避免判断 删除某个节点，找该节点的前驱，方便操作 通过单链表寻找第K个位置或者寻找共同后缀，使用双指针，相差n个节点共同遍历链表，只遍历一次 找中间节点，使用双指针，一个一次走2个节点，一个一次走1个节点 合并K个链表；使用归并或者使用最小堆实现  链表逆置123456789101112131415161718void l">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tom-jerr的个人博客">
+<meta property="og:title" content="链表">
 <meta property="og:url" content="http://tom-jerr.github.io/2023/07/03/alorithm/%E5%8A%9B%E6%89%A3/%E9%93%BE%E8%A1%A8/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
-<meta property="og:description" content="链表相关问题 在头指针前加入哑节点（dummy）；构造头节点的前驱节点，避免判断 删除某个节点，找该节点的前驱，方便操作 通过单链表寻找第K个位置或者寻找共同后缀，使用双指针，相差n个节点共同遍历链表，只遍历一次 找中间节点，使用双指针，一个一次走2个节点，一个一次走1个节点 合并K个链表；使用归并或者使用最小堆实现  链表逆置123456789101112131415161718void lis">
+<meta property="og:description" content="前言链表相关问题 在头指针前加入哑节点（dummy）；构造头节点的前驱节点，避免判断 删除某个节点，找该节点的前驱，方便操作 通过单链表寻找第K个位置或者寻找共同后缀，使用双指针，相差n个节点共同遍历链表，只遍历一次 找中间节点，使用双指针，一个一次走2个节点，一个一次走1个节点 合并K个链表；使用归并或者使用最小堆实现  链表逆置123456789101112131415161718void l">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/algorithm.png">
 <meta property="article:published_time" content="2023-07-03T10:19:34.600Z">
-<meta property="article:modified_time" content="2023-06-18T00:54:50.674Z">
+<meta property="article:modified_time" content="2023-07-04T07:25:14.099Z">
 <meta property="article:author" content="LZY">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/algorithm.png">
   
   
   
-  <title>tom-jerr的个人博客</title>
+  <title>链表 - tom-jerr的个人博客</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -214,7 +217,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="链表"></span>
           
         </div>
 
@@ -286,12 +289,12 @@
         <div id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none"></h1>
+            <h1 style="display: none">链表</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2023年6月18日 早上
+                    本文最后更新于：2023年7月4日 下午
                   
                 
               </p>
@@ -299,7 +302,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="链表相关问题"><a href="#链表相关问题" class="headerlink" title="链表相关问题"></a>链表相关问题</h1><ul>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><h1 id="链表相关问题"><a href="#链表相关问题" class="headerlink" title="链表相关问题"></a>链表相关问题</h1><ul>
 <li>在头指针前加入哑节点（dummy）；构造头节点的前驱节点，避免判断</li>
 <li>删除某个节点，找该节点的前驱，方便操作</li>
 <li>通过单链表寻找第K个位置或者寻找共同后缀，使用双指针，相差n个节点共同遍历链表，只遍历一次</li>
@@ -363,6 +366,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E7%AE%97%E6%B3%95/" class="category-chain-item">算法</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/">#算法</a>
+      
+    </div>
   
 </div>
 
@@ -372,7 +403,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
+      <div>链表</div>
       <div>http://tom-jerr.github.io/2023/07/03/alorithm/力扣/链表/</div>
     </div>
     <div class="license-meta">
@@ -417,9 +448,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/07/03/alorithm/%E5%8A%9B%E6%89%A3/%E6%A0%91/" title="">
+                      <a href="/2023/07/03/alorithm/%E5%8A%9B%E6%89%A3/%E6%A0%91/" title="树">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
+                        <span class="hidden-mobile">树</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
