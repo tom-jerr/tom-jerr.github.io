@@ -1,329 +1,189 @@
-
-
-<!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
-
-
-
-<head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid1.png">
-  <link rel="icon" href="/img/fluid1.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="LZY">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="前言本文是对信息安全基础实验的内容进行的一些总结">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>信息安全基础实验知识点 | tom-jerr的个人博客</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言本文是对信息安全基础实验的内容进行的一些总结">
 <meta property="og:type" content="article">
 <meta property="og:title" content="信息安全基础实验知识点">
 <meta property="og:url" content="http://tom-jerr.github.io/2023/02/20/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/index.html">
 <meta property="og:site_name" content="tom-jerr的个人博客">
 <meta property="og:description" content="前言本文是对信息安全基础实验的内容进行的一些总结">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://tom-jerr.github.io/img/algorithm.png">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
 <meta property="article:published_time" content="2023-02-19T16:38:16.529Z">
-<meta property="article:modified_time" content="2022-12-10T16:37:16.126Z">
+<meta property="article:modified_time" content="2023-09-10T05:36:15.663Z">
 <meta property="article:author" content="LZY">
 <meta property="article:tag" content="数论">
 <meta property="article:tag" content="信息安全">
 <meta property="article:tag" content="C &amp; C++">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://tom-jerr.github.io/img/algorithm.png">
-  
-  
-  
-  <title>信息安全基础实验知识点 - tom-jerr的个人博客</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
-
-
-
-  
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
-<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/gundongtiao.css# 滚动条颜色.css">
-<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/bynotes/texiao/source/css/shubiao.css# 鼠标指针.css">
-
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"tom-jerr.github.io","root":"/","version":"1.9.4","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2023/02/20/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
     }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '信息安全基础实验知识点',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-10 13:36:15'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
   
-
-
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
   
-<meta name="generator" content="Hexo 6.3.0"></head>
-
-
-<body>
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
   
-
-  <header>
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
     
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>tom-jerr的博客</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                <span>首页</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                <span>归档</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                <span>分类</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                <span>标签</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                <span>关于</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/playlist/">
-                <i class="iconfont icon-music"></i>
-                <span>音乐</span>
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              <i class="iconfont icon-search"></i>
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
-              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
-            </a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/banner/default.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="信息安全基础实验知识点"></span>
-          
-        </div>
-
-        
-          
-  <div class="mt-3">
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
     
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-02-20 00:38" pubdate>
-          2023年2月20日 凌晨
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          17k 字
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          143 分钟
-        
-      </span>
-    
-
-    
-    
-  </div>
-
-
-        
-      </div>
-
-      
-    </div>
-  </div>
-</div>
-
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">信息安全基础实验知识点</h1>
-            
-              <p class="note note-info">
-                
-                  
-                    本文最后更新于：2022年12月11日 凌晨
-                  
-                
-              </p>
-            
-            
-              <div class="markdown-body">
-                
-                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文是对信息安全基础实验的内容进行的一些总结</p>
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="tom-jerr的个人博客"><span class="site-name">tom-jerr的个人博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">信息安全基础实验知识点</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-02-19T16:38:16.529Z" title="发表于 2023-02-20 00:38:16">2023-02-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-10T05:36:15.663Z" title="更新于 2023-09-10 13:36:15">2023-09-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">信息安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>22分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="信息安全基础实验知识点"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文是对信息安全基础实验的内容进行的一些总结</p>
 <span id="more"></span>
 
 <h1 id="信息安全基础实验"><a href="#信息安全基础实验" class="headerlink" title="信息安全基础实验"></a>信息安全基础实验</h1><h2 id="1-数论基础"><a href="#1-数论基础" class="headerlink" title="1. 数论基础"></a>1. 数论基础</h2><h3 id="1-1-模指数运算"><a href="#1-1-模指数运算" class="headerlink" title="1.1 模指数运算"></a>1.1 模指数运算</h3><p>​	在<code>unsigned int</code>情形下，计算模指数幂很难用<code>pow</code>函数直接求解；这里使用平方乘的思想进行求解。<br>$$<br>m^{10} &#x3D; m^{2^{3}+2}<br>$$</p>
 <p>$$<br>&#x3D; ((((m^{2})*m^{0})^{2}*m^{0})*m)^{2}<br>$$</p>
-<h4 id="伪代码："><a href="#伪代码：" class="headerlink" title="伪代码："></a>伪代码：</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> ans = <span class="hljs-number">1</span>;<br>指数求解为二进制串<br><span class="hljs-keyword">for</span> 每个element：<br>	ans = ans * ans % m;<br>	<span class="hljs-keyword">if</span> (element == <span class="hljs-number">1</span>) ans = ans * a % m;<br></code></pre></td></tr></table></figure>
+<h4 id="伪代码："><a href="#伪代码：" class="headerlink" title="伪代码："></a>伪代码：</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> ans = <span class="number">1</span>;</span><br><span class="line">指数求解为二进制串</span><br><span class="line"><span class="keyword">for</span> 每个element：</span><br><span class="line">	ans = ans * ans % m;</span><br><span class="line">	<span class="keyword">if</span> (element == <span class="number">1</span>) ans = ans * a % m;</span><br></pre></td></tr></table></figure>
 
-<h4 id="实验代码"><a href="#实验代码" class="headerlink" title="实验代码"></a>实验代码</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> <span class="hljs-title">mod_exp</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> e, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> m)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> result = <span class="hljs-number">1</span>;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> power = a % m;<br>	<span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">binary</span><span class="hljs-params">(<span class="hljs-number">100</span>)</span></span>; <br>	<span class="hljs-type">long</span> <span class="hljs-type">long</span> i = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">while</span> (e &gt; <span class="hljs-number">0</span>) &#123;<br>		<span class="hljs-keyword">if</span> (e % <span class="hljs-number">2</span> == <span class="hljs-number">1</span>) &#123;<br>			binary[i] = <span class="hljs-number">1</span>;<br>		&#125;<br>		<span class="hljs-keyword">if</span> (e % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>) &#123;<br>			binary[i] = <span class="hljs-number">0</span>;<br>		&#125;<br>		i++;<br>		e /= <span class="hljs-number">2</span>;<br>	&#125;<br>	i--;<br>	<span class="hljs-keyword">for</span> (; i &gt;= <span class="hljs-number">0</span>; i--) &#123;<br>		result = (result * result) % m; <br>		<span class="hljs-keyword">if</span> (binary[i] == <span class="hljs-number">1</span>) &#123;<br>			result = (result * power) % m;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> result;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="实验代码"><a href="#实验代码" class="headerlink" title="实验代码"></a>实验代码</h4><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">unsigned</span> <span class="type">int</span> <span class="title">mod_exp</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> a, <span class="type">unsigned</span> <span class="type">int</span> e, <span class="type">unsigned</span> <span class="type">int</span> m)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> result = <span class="number">1</span>;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> power = a % m;</span><br><span class="line">	<span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">binary</span><span class="params">(<span class="number">100</span>)</span></span>; </span><br><span class="line">	<span class="type">long</span> <span class="type">long</span> i = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">while</span> (e &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (e % <span class="number">2</span> == <span class="number">1</span>) &#123;</span><br><span class="line">			binary[i] = <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (e % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">			binary[i] = <span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		i++;</span><br><span class="line">		e /= <span class="number">2</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	i--;</span><br><span class="line">	<span class="keyword">for</span> (; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">		result = (result * result) % m; </span><br><span class="line">		<span class="keyword">if</span> (binary[i] == <span class="number">1</span>) &#123;</span><br><span class="line">			result = (result * power) % m;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h3 id="1-2-素性检测"><a href="#1-2-素性检测" class="headerlink" title="1.2 素性检测"></a>1.2 素性检测</h3><h4 id="1-2-1-确定性素性检测"><a href="#1-2-1-确定性素性检测" class="headerlink" title="1.2.1 确定性素性检测"></a>1.2.1 确定性素性检测</h4><h5 id="Eratosthenes素数筛选法"><a href="#Eratosthenes素数筛选法" class="headerlink" title="Eratosthenes素数筛选法"></a>Eratosthenes素数筛选法</h5><p>埃式筛法；如果一个数是素数，将它本身所有的倍数都删去；</p>
 <p>每个数最大的素因子都$\sqrt{n}$，所以从2枚举到$\sqrt{n}$。</p>
 <p><strong>代码</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">prime_test</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">0</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">1</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">2</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; &#125;<br>	<span class="hljs-type">double</span> n_sqr = <span class="hljs-built_in">sqrt</span>(a);<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> n_sqr_ceil =(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>) (n_sqr)+<span class="hljs-number">1</span>;<br>	<span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">flag</span><span class="hljs-params">(<span class="hljs-number">70000</span>)</span></span>;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i, j, detect;<br>	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">2</span>; i &lt;= n_sqr_ceil; i++) &#123;<br>		j = i*i;<br>		<span class="hljs-keyword">while</span> (j&lt;=n_sqr_ceil)&#123;<br>			flag[j] = <span class="hljs-number">1</span>;<br>			j += i;<br>		&#125;<br>	&#125;<br>	i = <span class="hljs-number">2</span>;<br>	<span class="hljs-keyword">while</span> (flag[i] == <span class="hljs-number">0</span> &amp;&amp; i &lt;= n_sqr_ceil) &#123;<br>		detect = a % i;<br>		<span class="hljs-keyword">if</span> (detect == <span class="hljs-number">0</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>		i++;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">prime_test</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (a == <span class="number">0</span>) &#123; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">	<span class="keyword">if</span> (a == <span class="number">1</span>) &#123; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">	<span class="keyword">if</span> (a == <span class="number">2</span>) &#123; <span class="keyword">return</span> <span class="literal">true</span>; &#125;</span><br><span class="line">	<span class="type">double</span> n_sqr = <span class="built_in">sqrt</span>(a);</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> n_sqr_ceil =(<span class="type">unsigned</span> <span class="type">int</span>) (n_sqr)+<span class="number">1</span>;</span><br><span class="line">	<span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">flag</span><span class="params">(<span class="number">70000</span>)</span></span>;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> i, j, detect;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">2</span>; i &lt;= n_sqr_ceil; i++) &#123;</span><br><span class="line">		j = i*i;</span><br><span class="line">		<span class="keyword">while</span> (j&lt;=n_sqr_ceil)&#123;</span><br><span class="line">			flag[j] = <span class="number">1</span>;</span><br><span class="line">			j += i;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	i = <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">while</span> (flag[i] == <span class="number">0</span> &amp;&amp; i &lt;= n_sqr_ceil) &#123;</span><br><span class="line">		detect = a % i;</span><br><span class="line">		<span class="keyword">if</span> (detect == <span class="number">0</span>) &#123; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">		i++;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 <h5 id="欧拉筛法（线性筛法）"><a href="#欧拉筛法（线性筛法）" class="headerlink" title="欧拉筛法（线性筛法）"></a>欧拉筛法（线性筛法）</h5><p>让每个合数只被最小的素数筛掉</p>
 <p><strong>代码</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">bool</span> <span class="hljs-title">prime_test</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">0</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">1</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; &#125;<br>	<span class="hljs-keyword">if</span> (a == <span class="hljs-number">2</span>) &#123; <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>; &#125;<br>	<span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">flag</span><span class="hljs-params">(<span class="hljs-number">70000</span>)</span></span>;<br>    <span class="hljs-function">std::vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">primes</span><span class="hljs-params">(<span class="hljs-number">70000</span>)</span></span>;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> i, j, detect, cnt = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">2</span>; i &lt;= n; i++) &#123;<br>        <span class="hljs-keyword">if</span> (flag[i] == <span class="hljs-number">0</span>)&#123;<br>            primes[cnt] = i;<br>            cnt ++;<br>        &#125;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">0</span>; j &lt;= cnt &amp;&amp; primes[j] &lt;= a / i; j++)&#123;<br>            flag[primes[j] * i] = <span class="hljs-number">1</span>;<br>            <span class="hljs-keyword">if</span> (i % primes[j] == <span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;<br>        &#125;<br>	&#125;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> k = <span class="hljs-number">0</span> ;k &lt;= cnt ; k++)<br>        <span class="hljs-keyword">if</span> (a % primes[k] == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">prime_test</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> a)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (a == <span class="number">0</span>) &#123; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">	<span class="keyword">if</span> (a == <span class="number">1</span>) &#123; <span class="keyword">return</span> <span class="literal">false</span>; &#125;</span><br><span class="line">	<span class="keyword">if</span> (a == <span class="number">2</span>) &#123; <span class="keyword">return</span> <span class="literal">true</span>; &#125;</span><br><span class="line">	<span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">flag</span><span class="params">(<span class="number">70000</span>)</span></span>;</span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">primes</span><span class="params">(<span class="number">70000</span>)</span></span>;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> i, j, detect, cnt = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">2</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (flag[i] == <span class="number">0</span>)&#123;</span><br><span class="line">            primes[cnt] = i;</span><br><span class="line">            cnt ++;</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt;= cnt &amp;&amp; primes[j] &lt;= a / i; j++)&#123;</span><br><span class="line">            flag[primes[j] * i] = <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (i % primes[j] == <span class="number">0</span>) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> k = <span class="number">0</span> ;k &lt;= cnt ; k++)</span><br><span class="line">        <span class="keyword">if</span> (a % primes[k] == <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -332,28 +192,28 @@
 <p>如果数n满足上述条件，n不一定是素数；</p>
 <p>如果数n不满足上述条件，n一定是合数。</p>
 <p><strong>代码</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">std::string <span class="hljs-title">miller_rabin_prime_test</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> n, <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> a)</span> </span>&#123;<br>	<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">2</span>||n%<span class="hljs-number">2</span>==<span class="hljs-number">0</span>)<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;not_prime&quot;</span>;<br>	<span class="hljs-keyword">if</span>(a&lt;<span class="hljs-number">2</span>||a&gt;=n<span class="hljs-number">-1</span>)<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;error&quot;</span>;<br>	<span class="hljs-type">int</span> q=n<span class="hljs-number">-1</span>;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> temp1;<br>    <span class="hljs-comment">//求出q值</span><br>	<span class="hljs-keyword">while</span>(!(q&amp;<span class="hljs-number">1</span>))<br>	&#123;<br>		q&gt;&gt;=<span class="hljs-number">1</span>;<br>	&#125;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">1</span>;i&lt;q;i++)&#123;<br>		temp1 = (<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span>) (temp1*a) % n;<br>	&#125;<br>	<span class="hljs-keyword">if</span> (temp1==<span class="hljs-number">1</span> || temp1==n<span class="hljs-number">-1</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;uncertain&quot;</span>;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>;i&lt;k&amp;&amp;temp1!=(n<span class="hljs-number">-1</span>);i++)&#123;<br>		temp1 = (<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span>)(temp1*temp1)%n<br>		<span class="hljs-keyword">if</span> (temp1==n<span class="hljs-number">-1</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;uncertain&quot;</span>;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;not_prime&quot;</span>;	<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">std::string <span class="title">miller_rabin_prime_test</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> n, <span class="type">unsigned</span> <span class="type">int</span> a)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(n&lt;<span class="number">2</span>||n%<span class="number">2</span>==<span class="number">0</span>)<span class="keyword">return</span> <span class="string">&quot;not_prime&quot;</span>;</span><br><span class="line">	<span class="keyword">if</span>(a&lt;<span class="number">2</span>||a&gt;=n<span class="number">-1</span>)<span class="keyword">return</span> <span class="string">&quot;error&quot;</span>;</span><br><span class="line">	<span class="type">int</span> q=n<span class="number">-1</span>;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">long</span> <span class="type">long</span> temp1;</span><br><span class="line">    <span class="comment">//求出q值</span></span><br><span class="line">	<span class="keyword">while</span>(!(q&amp;<span class="number">1</span>))</span><br><span class="line">	&#123;</span><br><span class="line">		q&gt;&gt;=<span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">1</span>;i&lt;q;i++)&#123;</span><br><span class="line">		temp1 = (<span class="type">unsigned</span> <span class="type">long</span> <span class="type">long</span>) (temp1*a) % n;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (temp1==<span class="number">1</span> || temp1==n<span class="number">-1</span>) <span class="keyword">return</span> <span class="string">&quot;uncertain&quot;</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>;i&lt;k&amp;&amp;temp1!=(n<span class="number">-1</span>);i++)&#123;</span><br><span class="line">		temp1 = (<span class="type">unsigned</span> <span class="type">long</span> <span class="type">long</span>)(temp1*temp1)%n</span><br><span class="line">		<span class="keyword">if</span> (temp1==n<span class="number">-1</span>) <span class="keyword">return</span> <span class="string">&quot;uncertain&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">&quot;not_prime&quot;</span>;	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 <p><strong>基于大数库的版本</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function">BIGNUM* <span class="hljs-title">gcd_exp</span><span class="hljs-params">(BIGNUM* a,BIGNUM* b,BIGNUM* x,BIGNUM* y,BN_CTX* ctx)</span></span>&#123;<br>	<span class="hljs-keyword">if</span> (<span class="hljs-built_in">BN_is_zero</span>(b))&#123;<br>		<span class="hljs-built_in">BN_zero</span>(y);<span class="hljs-built_in">BN_one</span>(x);<br>		<span class="hljs-keyword">return</span> a;<br>	&#125;<br>	BIGNUM* mod_;BIGNUM* dv;BIGNUM* rem;BIGNUM* mult;<br>	mod_=<span class="hljs-built_in">BN_new</span>();dv=<span class="hljs-built_in">BN_new</span>();rem=<span class="hljs-built_in">BN_new</span>();mult=<span class="hljs-built_in">BN_new</span>();<br>	<span class="hljs-built_in">BN_mod</span>(mod_,a,b,ctx);<br>	BIGNUM* temp = <span class="hljs-built_in">BN_new</span>();<br>	temp = <span class="hljs-built_in">gcd_exp</span>(b,mod_,y,x,ctx);<br>	<span class="hljs-built_in">BN_div</span>(dv,rem,a,b,ctx);<br>	<span class="hljs-built_in">BN_mul</span>(mult,dv,x,ctx);<br>	<span class="hljs-built_in">BN_sub</span>(y,mult);<br>	<br>	<span class="hljs-built_in">BN_CTX_end</span>(ctx);<br>	<span class="hljs-built_in">BN_CTX_free</span>(ctx);<br>	<span class="hljs-built_in">BN_free</span>(mod_);<span class="hljs-built_in">BN_free</span>(dv);<span class="hljs-built_in">BN_free</span>(rem);<span class="hljs-built_in">BN_free</span>(mult);<span class="hljs-built_in">BN_free</span>(temp);<br>	<span class="hljs-keyword">return</span> temp<br>&#125;<br><br>string <span class="hljs-built_in">mod_inverse</span>(string a, string m) &#123;<br>	BIGNUM* a1;BIGNUM* m1;BIGNUM* x;BIGNUM* y;BIGNUM* r1;<br>	<span class="hljs-type">const</span> <span class="hljs-type">char</span>* a_=a.<span class="hljs-built_in">data</span>();<br>	<span class="hljs-type">const</span> <span class="hljs-type">char</span>* m_=m.<span class="hljs-built_in">data</span>();<br>	string res=<span class="hljs-string">&quot;&quot;</span>;<br>	a1=<span class="hljs-built_in">BN_new</span>();m1=<span class="hljs-built_in">BN_new</span>();x=<span class="hljs-built_in">BN_new</span>();y=<span class="hljs-built_in">BN_new</span>();r1=<span class="hljs-built_in">BN_new</span>();<br>	BN_CTX *ctx=<span class="hljs-literal">NULL</span>;<br>	ctx=<span class="hljs-built_in">BN_CTX_new</span>();<br>	<span class="hljs-built_in">BN_CTX_start</span>(ctx);<br>	<span class="hljs-built_in">BN_dec2bn</span>(&amp;a1,a_);<span class="hljs-built_in">BN_dec2bn</span>(&amp;m1,m_);<br>	r1 = <span class="hljs-built_in">gcd_exp</span>(a1,m1,x,y,ctx);	<br>		<br>	<span class="hljs-keyword">if</span>(<span class="hljs-built_in">BN_is_one</span>(r1)) res=<span class="hljs-built_in">BN_bn2dec</span>(x);<br>	<span class="hljs-built_in">BN_CTX_end</span>(ctx);<br>	<span class="hljs-built_in">BN_CTX_free</span>(ctx);<br>	<span class="hljs-built_in">BN_free</span>(a1);<span class="hljs-built_in">BN_free</span>(m1);<span class="hljs-built_in">BN_free</span>(r1);<span class="hljs-built_in">BN_free</span>(x);<span class="hljs-built_in">BN_free</span>(y);<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">BIGNUM* <span class="title">gcd_exp</span><span class="params">(BIGNUM* a,BIGNUM* b,BIGNUM* x,BIGNUM* y,BN_CTX* ctx)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">BN_is_zero</span>(b))&#123;</span><br><span class="line">		<span class="built_in">BN_zero</span>(y);<span class="built_in">BN_one</span>(x);</span><br><span class="line">		<span class="keyword">return</span> a;</span><br><span class="line">	&#125;</span><br><span class="line">	BIGNUM* mod_;BIGNUM* dv;BIGNUM* rem;BIGNUM* mult;</span><br><span class="line">	mod_=<span class="built_in">BN_new</span>();dv=<span class="built_in">BN_new</span>();rem=<span class="built_in">BN_new</span>();mult=<span class="built_in">BN_new</span>();</span><br><span class="line">	<span class="built_in">BN_mod</span>(mod_,a,b,ctx);</span><br><span class="line">	BIGNUM* temp = <span class="built_in">BN_new</span>();</span><br><span class="line">	temp = <span class="built_in">gcd_exp</span>(b,mod_,y,x,ctx);</span><br><span class="line">	<span class="built_in">BN_div</span>(dv,rem,a,b,ctx);</span><br><span class="line">	<span class="built_in">BN_mul</span>(mult,dv,x,ctx);</span><br><span class="line">	<span class="built_in">BN_sub</span>(y,mult);</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">BN_CTX_end</span>(ctx);</span><br><span class="line">	<span class="built_in">BN_CTX_free</span>(ctx);</span><br><span class="line">	<span class="built_in">BN_free</span>(mod_);<span class="built_in">BN_free</span>(dv);<span class="built_in">BN_free</span>(rem);<span class="built_in">BN_free</span>(mult);<span class="built_in">BN_free</span>(temp);</span><br><span class="line">	<span class="keyword">return</span> temp</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">string <span class="built_in">mod_inverse</span>(string a, string m) &#123;</span><br><span class="line">	BIGNUM* a1;BIGNUM* m1;BIGNUM* x;BIGNUM* y;BIGNUM* r1;</span><br><span class="line">	<span class="type">const</span> <span class="type">char</span>* a_=a.<span class="built_in">data</span>();</span><br><span class="line">	<span class="type">const</span> <span class="type">char</span>* m_=m.<span class="built_in">data</span>();</span><br><span class="line">	string res=<span class="string">&quot;&quot;</span>;</span><br><span class="line">	a1=<span class="built_in">BN_new</span>();m1=<span class="built_in">BN_new</span>();x=<span class="built_in">BN_new</span>();y=<span class="built_in">BN_new</span>();r1=<span class="built_in">BN_new</span>();</span><br><span class="line">	BN_CTX *ctx=<span class="literal">NULL</span>;</span><br><span class="line">	ctx=<span class="built_in">BN_CTX_new</span>();</span><br><span class="line">	<span class="built_in">BN_CTX_start</span>(ctx);</span><br><span class="line">	<span class="built_in">BN_dec2bn</span>(&amp;a1,a_);<span class="built_in">BN_dec2bn</span>(&amp;m1,m_);</span><br><span class="line">	r1 = <span class="built_in">gcd_exp</span>(a1,m1,x,y,ctx);	</span><br><span class="line">		</span><br><span class="line">	<span class="keyword">if</span>(<span class="built_in">BN_is_one</span>(r1)) res=<span class="built_in">BN_bn2dec</span>(x);</span><br><span class="line">	<span class="built_in">BN_CTX_end</span>(ctx);</span><br><span class="line">	<span class="built_in">BN_CTX_free</span>(ctx);</span><br><span class="line">	<span class="built_in">BN_free</span>(a1);<span class="built_in">BN_free</span>(m1);<span class="built_in">BN_free</span>(r1);<span class="built_in">BN_free</span>(x);<span class="built_in">BN_free</span>(y);</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h3 id="1-3-乘法逆元"><a href="#1-3-乘法逆元" class="headerlink" title="1.3 乘法逆元"></a>1.3 乘法逆元</h3><p>使用扩展欧几里得算法求解；</p>
 <p>欧几里得算法用于求两个数的最大公因数；<br>$$<br>gcd(a, b)&#x3D;1,\quad ax+by&#x3D;1</p>
 <p> \implies b\cdot y &#x3D; 1 \quad mod\quad x<br>$$<br><strong>代码</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">euclid_mod_reverse</span><span class="hljs-params">(<span class="hljs-type">int</span> a, <span class="hljs-type">int</span> m)</span> </span>&#123;<br>  <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> a * x = 1(mod m)，求a的逆元x并返回x</span><br>  	<span class="hljs-keyword">if</span>(a&lt;<span class="hljs-number">0</span>||m&lt;=<span class="hljs-number">0</span>)<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>  	<span class="hljs-type">int</span> y=<span class="hljs-number">0</span>,x=<span class="hljs-number">1</span>,r=a%m;<br>  	<span class="hljs-type">int</span> q,temp;<br>  	<span class="hljs-type">int</span> m1=m;<br> 	<span class="hljs-keyword">if</span>(r&lt;<span class="hljs-number">0</span>)r=r+m;<br> 	<span class="hljs-keyword">while</span>((m%r)!=<span class="hljs-number">0</span>) <span class="hljs-comment">//已计算完第i步，如果还需要计算第i+1步</span><br> 	&#123;<br> 		 a=m;m=r;<br>  		 q=a/m,r=a%m;<br> 		 temp=x;<br>		 x=y-x*q;<br>		 y=temp;<br> 	&#125;<br> 	<span class="hljs-keyword">if</span>(r!=<span class="hljs-number">1</span>)<span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br> 	<span class="hljs-keyword">if</span>(x&lt;<span class="hljs-number">0</span>)x=x+m1;<br> 	<span class="hljs-keyword">return</span> x;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">euclid_mod_reverse</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> m)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// <span class="doctag">TODO:</span> a * x = 1(mod m)，求a的逆元x并返回x</span></span><br><span class="line">  	<span class="keyword">if</span>(a&lt;<span class="number">0</span>||m&lt;=<span class="number">0</span>)<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">  	<span class="type">int</span> y=<span class="number">0</span>,x=<span class="number">1</span>,r=a%m;</span><br><span class="line">  	<span class="type">int</span> q,temp;</span><br><span class="line">  	<span class="type">int</span> m1=m;</span><br><span class="line"> 	<span class="keyword">if</span>(r&lt;<span class="number">0</span>)r=r+m;</span><br><span class="line"> 	<span class="keyword">while</span>((m%r)!=<span class="number">0</span>) <span class="comment">//已计算完第i步，如果还需要计算第i+1步</span></span><br><span class="line"> 	&#123;</span><br><span class="line"> 		 a=m;m=r;</span><br><span class="line">  		 q=a/m,r=a%m;</span><br><span class="line"> 		 temp=x;</span><br><span class="line">		 x=y-x*q;</span><br><span class="line">		 y=temp;</span><br><span class="line"> 	&#125;</span><br><span class="line"> 	<span class="keyword">if</span>(r!=<span class="number">1</span>)<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line"> 	<span class="keyword">if</span>(x&lt;<span class="number">0</span>)x=x+m1;</span><br><span class="line"> 	<span class="keyword">return</span> x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 <p><strong>大数库版本</strong></p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><code class="hljs C++"><span class="hljs-comment">//大数库自带的函数</span><br><span class="hljs-comment">/* string mod_inverse(string a, string m) &#123;</span><br><span class="hljs-comment">	BIGNUM* a1;BIGNUM* m1;BIGNUM* r1;</span><br><span class="hljs-comment">	const char* a_=a.data();</span><br><span class="hljs-comment">	const char* m_=m.data();</span><br><span class="hljs-comment">	string res=&quot;&quot;;</span><br><span class="hljs-comment">	a1=BN_new();m1=BN_new();r1=BN_new();</span><br><span class="hljs-comment">	BN_CTX *ctx=NULL;</span><br><span class="hljs-comment">	ctx=BN_CTX_new();</span><br><span class="hljs-comment">	BN_CTX_start(ctx);</span><br><span class="hljs-comment">	if(BN_dec2bn(&amp;a1,a_)&amp;&amp;BN_dec2bn(&amp;m1,m_))&#123;</span><br><span class="hljs-comment">		</span><br><span class="hljs-comment">		r1=BN_mod_inverse(r1,a1,m1,ctx);</span><br><span class="hljs-comment">	&#125;</span><br><span class="hljs-comment">	if(r1!=NULL)res=BN_bn2dec(r1);</span><br><span class="hljs-comment">	BN_CTX_end(ctx);</span><br><span class="hljs-comment">	BN_CTX_free(ctx);</span><br><span class="hljs-comment">	BN_free(a1);BN_free(m1);BN_free(r1);</span><br><span class="hljs-comment">	return res;</span><br><span class="hljs-comment">&#125; */</span><br><br><span class="hljs-comment">//基于大数基本函数进行的改写</span><br><span class="hljs-function">BIGNUM* <span class="hljs-title">gcd_exp</span><span class="hljs-params">(BIGNUM* a,BIGNUM* b,BIGNUM* x,BIGNUM* y,BN_CTX* ctx)</span></span>&#123;<br>	<span class="hljs-keyword">if</span> (<span class="hljs-built_in">BN_is_zero</span>(b))&#123;<br>		<span class="hljs-built_in">BN_zero</span>(y);<span class="hljs-built_in">BN_one</span>(x);<br>		<span class="hljs-keyword">return</span> a;<br>	&#125;<br>	BIGNUM* mod_;BIGNUM* dv;BIGNUM* rem;BIGNUM* mult;<br>	mod_=<span class="hljs-built_in">BN_new</span>();dv=<span class="hljs-built_in">BN_new</span>();rem=<span class="hljs-built_in">BN_new</span>();mult=<span class="hljs-built_in">BN_new</span>();<br>	<span class="hljs-built_in">BN_mod</span>(mod_,a,b,ctx);<br>	BIGNUM* temp = <span class="hljs-built_in">BN_new</span>();<br>	temp = <span class="hljs-built_in">gcd_exp</span>(b,mod_,y,x,ctx);<br>	<span class="hljs-built_in">BN_div</span>(dv,rem,a,b,ctx);<br>	<span class="hljs-built_in">BN_mul</span>(mult,dv,x,ctx);<br>	<span class="hljs-built_in">BN_sub</span>(y,mult);<br>	<br>	<span class="hljs-built_in">BN_CTX_end</span>(ctx);<br>	<span class="hljs-built_in">BN_CTX_free</span>(ctx);<br>	<span class="hljs-built_in">BN_free</span>(mod_);<span class="hljs-built_in">BN_free</span>(dv);<span class="hljs-built_in">BN_free</span>(rem);<span class="hljs-built_in">BN_free</span>(mult);<span class="hljs-built_in">BN_free</span>(temp);<br>	<span class="hljs-keyword">return</span> temp<br>&#125;<br><br>string <span class="hljs-built_in">mod_inverse</span>(string a, string m) &#123;<br>	BIGNUM* a1;BIGNUM* m1;BIGNUM* x;BIGNUM* y;BIGNUM* r1;<br>	<span class="hljs-type">const</span> <span class="hljs-type">char</span>* a_=a.<span class="hljs-built_in">data</span>();<br>	<span class="hljs-type">const</span> <span class="hljs-type">char</span>* m_=m.<span class="hljs-built_in">data</span>();<br>	string res=<span class="hljs-string">&quot;&quot;</span>;<br>	a1=<span class="hljs-built_in">BN_new</span>();m1=<span class="hljs-built_in">BN_new</span>();x=<span class="hljs-built_in">BN_new</span>();y=<span class="hljs-built_in">BN_new</span>();r1=<span class="hljs-built_in">BN_new</span>();<br>	BN_CTX *ctx=<span class="hljs-literal">NULL</span>;<br>	ctx=<span class="hljs-built_in">BN_CTX_new</span>();<br>	<span class="hljs-built_in">BN_CTX_start</span>(ctx);<br>	<span class="hljs-built_in">BN_dec2bn</span>(&amp;a1,a_);<span class="hljs-built_in">BN_dec2bn</span>(&amp;m1,m_);<br>	r1 = <span class="hljs-built_in">gcd_exp</span>(a1,m1,x,y,ctx);	<br>		<br>	<span class="hljs-keyword">if</span>(<span class="hljs-built_in">BN_is_one</span>(r1)) res=<span class="hljs-built_in">BN_bn2dec</span>(x);<br>	<span class="hljs-built_in">BN_CTX_end</span>(ctx);<br>	<span class="hljs-built_in">BN_CTX_free</span>(ctx);<br>	<span class="hljs-built_in">BN_free</span>(a1);<span class="hljs-built_in">BN_free</span>(m1);<span class="hljs-built_in">BN_free</span>(r1);<span class="hljs-built_in">BN_free</span>(x);<span class="hljs-built_in">BN_free</span>(y);<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">//大数库自带的函数</span></span><br><span class="line"><span class="comment">/* string mod_inverse(string a, string m) &#123;</span></span><br><span class="line"><span class="comment">	BIGNUM* a1;BIGNUM* m1;BIGNUM* r1;</span></span><br><span class="line"><span class="comment">	const char* a_=a.data();</span></span><br><span class="line"><span class="comment">	const char* m_=m.data();</span></span><br><span class="line"><span class="comment">	string res=&quot;&quot;;</span></span><br><span class="line"><span class="comment">	a1=BN_new();m1=BN_new();r1=BN_new();</span></span><br><span class="line"><span class="comment">	BN_CTX *ctx=NULL;</span></span><br><span class="line"><span class="comment">	ctx=BN_CTX_new();</span></span><br><span class="line"><span class="comment">	BN_CTX_start(ctx);</span></span><br><span class="line"><span class="comment">	if(BN_dec2bn(&amp;a1,a_)&amp;&amp;BN_dec2bn(&amp;m1,m_))&#123;</span></span><br><span class="line"><span class="comment">		</span></span><br><span class="line"><span class="comment">		r1=BN_mod_inverse(r1,a1,m1,ctx);</span></span><br><span class="line"><span class="comment">	&#125;</span></span><br><span class="line"><span class="comment">	if(r1!=NULL)res=BN_bn2dec(r1);</span></span><br><span class="line"><span class="comment">	BN_CTX_end(ctx);</span></span><br><span class="line"><span class="comment">	BN_CTX_free(ctx);</span></span><br><span class="line"><span class="comment">	BN_free(a1);BN_free(m1);BN_free(r1);</span></span><br><span class="line"><span class="comment">	return res;</span></span><br><span class="line"><span class="comment">&#125; */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//基于大数基本函数进行的改写</span></span><br><span class="line"><span class="function">BIGNUM* <span class="title">gcd_exp</span><span class="params">(BIGNUM* a,BIGNUM* b,BIGNUM* x,BIGNUM* y,BN_CTX* ctx)</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (<span class="built_in">BN_is_zero</span>(b))&#123;</span><br><span class="line">		<span class="built_in">BN_zero</span>(y);<span class="built_in">BN_one</span>(x);</span><br><span class="line">		<span class="keyword">return</span> a;</span><br><span class="line">	&#125;</span><br><span class="line">	BIGNUM* mod_;BIGNUM* dv;BIGNUM* rem;BIGNUM* mult;</span><br><span class="line">	mod_=<span class="built_in">BN_new</span>();dv=<span class="built_in">BN_new</span>();rem=<span class="built_in">BN_new</span>();mult=<span class="built_in">BN_new</span>();</span><br><span class="line">	<span class="built_in">BN_mod</span>(mod_,a,b,ctx);</span><br><span class="line">	BIGNUM* temp = <span class="built_in">BN_new</span>();</span><br><span class="line">	temp = <span class="built_in">gcd_exp</span>(b,mod_,y,x,ctx);</span><br><span class="line">	<span class="built_in">BN_div</span>(dv,rem,a,b,ctx);</span><br><span class="line">	<span class="built_in">BN_mul</span>(mult,dv,x,ctx);</span><br><span class="line">	<span class="built_in">BN_sub</span>(y,mult);</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">BN_CTX_end</span>(ctx);</span><br><span class="line">	<span class="built_in">BN_CTX_free</span>(ctx);</span><br><span class="line">	<span class="built_in">BN_free</span>(mod_);<span class="built_in">BN_free</span>(dv);<span class="built_in">BN_free</span>(rem);<span class="built_in">BN_free</span>(mult);<span class="built_in">BN_free</span>(temp);</span><br><span class="line">	<span class="keyword">return</span> temp</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">string <span class="built_in">mod_inverse</span>(string a, string m) &#123;</span><br><span class="line">	BIGNUM* a1;BIGNUM* m1;BIGNUM* x;BIGNUM* y;BIGNUM* r1;</span><br><span class="line">	<span class="type">const</span> <span class="type">char</span>* a_=a.<span class="built_in">data</span>();</span><br><span class="line">	<span class="type">const</span> <span class="type">char</span>* m_=m.<span class="built_in">data</span>();</span><br><span class="line">	string res=<span class="string">&quot;&quot;</span>;</span><br><span class="line">	a1=<span class="built_in">BN_new</span>();m1=<span class="built_in">BN_new</span>();x=<span class="built_in">BN_new</span>();y=<span class="built_in">BN_new</span>();r1=<span class="built_in">BN_new</span>();</span><br><span class="line">	BN_CTX *ctx=<span class="literal">NULL</span>;</span><br><span class="line">	ctx=<span class="built_in">BN_CTX_new</span>();</span><br><span class="line">	<span class="built_in">BN_CTX_start</span>(ctx);</span><br><span class="line">	<span class="built_in">BN_dec2bn</span>(&amp;a1,a_);<span class="built_in">BN_dec2bn</span>(&amp;m1,m_);</span><br><span class="line">	r1 = <span class="built_in">gcd_exp</span>(a1,m1,x,y,ctx);	</span><br><span class="line">		</span><br><span class="line">	<span class="keyword">if</span>(<span class="built_in">BN_is_one</span>(r1)) res=<span class="built_in">BN_bn2dec</span>(x);</span><br><span class="line">	<span class="built_in">BN_CTX_end</span>(ctx);</span><br><span class="line">	<span class="built_in">BN_CTX_free</span>(ctx);</span><br><span class="line">	<span class="built_in">BN_free</span>(a1);<span class="built_in">BN_free</span>(m1);<span class="built_in">BN_free</span>(r1);<span class="built_in">BN_free</span>(x);<span class="built_in">BN_free</span>(y);</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h2 id="2-伪随机数生成器"><a href="#2-伪随机数生成器" class="headerlink" title="2. 伪随机数生成器"></a>2. 伪随机数生成器</h2><p>可以产生任意长度的伪随机序列；通过种子使用<strong>确定性的算法</strong>得到伪随机序列；</p>
 <p><strong>性质：</strong></p>
-<pre><code class="hljs">1. 伪随机性：与随机数不可区分
+<pre><code>1. 伪随机性：与随机数不可区分
  2. 可重现：相同种子产生相同序列
 </code></pre>
 <h3 id="2-0-伪随机数"><a href="#2-0-伪随机数" class="headerlink" title="2.0 伪随机数"></a>2.0 伪随机数</h3><p>随机数在密码算法和协议中广泛应用：认证协议、产生会话密钥、<br>流密码；<br>随机数具有随机性：均匀分布、难以重现；<br>伪随机数通过伪随机数生成器产生，近似随机数；</p>
@@ -368,14 +228,14 @@
 <h3 id="2-2-BBS伪随机数生成器"><a href="#2-2-BBS伪随机数生成器" class="headerlink" title="2.2 BBS伪随机数生成器"></a>2.2 BBS伪随机数生成器</h3><p>一种可证明安全的伪随机数生成器：BBS (Blum Blum Shub) 伪<br>随机数生成器</p>
 <p>选取素数p, q，满足$p \quad mod \quad 4 &#x3D;q \quad mod \quad 4 &#x3D; 3 $；$n&#x3D;pq$</p>
 <p>$$<br>x_{i} &#x3D; x_{i - 1}^{2}\quad mod\quad n<br>$$<br>每次产生一个随机bit（选择重要的bit位），通过循环多次生成一个随机数</p>
-<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> <span class="hljs-title function_">last_bit</span><span class="hljs-params">(x)</span>&#123;<br>    <span class="hljs-keyword">return</span> x&amp;<span class="hljs-number">0x1</span>;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">parity_even</span><span class="hljs-params">(x)</span>&#123;<br>    <span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (x)&#123;<br>        <span class="hljs-keyword">if</span> (x&amp;<span class="hljs-number">0x1</span>) count++;<br>        x &gt;&gt;= <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> count % <span class="hljs-number">2</span> == <span class="hljs-number">0</span> ? <span class="hljs-number">0</span> : <span class="hljs-number">1</span>;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">parity_odd</span><span class="hljs-params">(x)</span>&#123;<br>    reutrn <span class="hljs-number">1</span> - parity_even(x);<br>&#125;<br><br><span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> <span class="hljs-title function_">bbs_rand</span><span class="hljs-params">(<span class="hljs-type">int</span> flag)</span> &#123;<br>    <span class="hljs-type">int</span> b[<span class="hljs-number">32</span>] = &#123;<span class="hljs-number">0</span>&#125;, temp[<span class="hljs-number">1000</span>];<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> tmp=_bbs_seed;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> res = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">32</span>;i++)&#123;<br>        <span class="hljs-type">int</span> k = <span class="hljs-number">0</span>,count=<span class="hljs-number">0</span>;<br>    	tmp=(tmp*tmp)%_n;<br>        <span class="hljs-keyword">switch</span>(flag)&#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>: b[i] = last_bit(tmp);<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>: b[i] = parity_odd(tmp);<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>: b[i] = parity_even(tmp);<br>        &#125;<br>        <span class="hljs-comment">// unsigned long len = tmp;</span><br>    	<span class="hljs-comment">// while(len)&#123;</span><br>    	<span class="hljs-comment">// 	if(len%2==0)temp[k]=0;</span><br>    	<span class="hljs-comment">// 	if(len%2==1)&#123;</span><br>    	<span class="hljs-comment">// 		temp[k]=1;</span><br>        <span class="hljs-comment">//         count++;</span><br>    	<span class="hljs-comment">// 	&#125;</span><br>    	<span class="hljs-comment">// 	k++;</span><br>    	<span class="hljs-comment">// 	len/=2;</span><br>    	<span class="hljs-comment">// &#125;</span><br>    	<span class="hljs-comment">// if(flag==0)b[i]=temp[0];</span><br>    	<span class="hljs-comment">// if(flag==1)&#123;</span><br>    	<span class="hljs-comment">// 	if(count%2==1)b[i]=0;</span><br>    	<span class="hljs-comment">// 	if(count%2==0)b[i]=1;</span><br>    	<span class="hljs-comment">// &#125;</span><br>    	<span class="hljs-comment">// if(flag==2)&#123;</span><br>    	<span class="hljs-comment">// 	if(count%2==1)b[i]=1;</span><br>    	<span class="hljs-comment">// 	if(count%2==0)b[i]=0;</span><br>    	<span class="hljs-comment">// &#125;</span><br>        <span class="hljs-comment">// if (flag != 0 &amp;&amp; flag != 1 &amp;&amp; flag != 2)return res;</span><br>    &#125;<br>    <br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">32</span>;i++)&#123;<br>    	<span class="hljs-keyword">if</span>(b[i]==<span class="hljs-number">1</span>)&#123;<br>    		res+=<span class="hljs-built_in">exp</span>(<span class="hljs-number">2</span>,<span class="hljs-number">31</span>-i);   <br>    	&#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">last_bit</span><span class="params">(x)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x&amp;<span class="number">0x1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">parity_even</span><span class="params">(x)</span>&#123;</span><br><span class="line">    <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (x)&#123;</span><br><span class="line">        <span class="keyword">if</span> (x&amp;<span class="number">0x1</span>) count++;</span><br><span class="line">        x &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> count % <span class="number">2</span> == <span class="number">0</span> ? <span class="number">0</span> : <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">parity_odd</span><span class="params">(x)</span>&#123;</span><br><span class="line">    reutrn <span class="number">1</span> - parity_even(x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span> <span class="title function_">bbs_rand</span><span class="params">(<span class="type">int</span> flag)</span> &#123;</span><br><span class="line">    <span class="type">int</span> b[<span class="number">32</span>] = &#123;<span class="number">0</span>&#125;, temp[<span class="number">1000</span>];</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> tmp=_bbs_seed;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> res = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">32</span>;i++)&#123;</span><br><span class="line">        <span class="type">int</span> k = <span class="number">0</span>,count=<span class="number">0</span>;</span><br><span class="line">    	tmp=(tmp*tmp)%_n;</span><br><span class="line">        <span class="keyword">switch</span>(flag)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">0</span>: b[i] = last_bit(tmp);</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>: b[i] = parity_odd(tmp);</span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span>: b[i] = parity_even(tmp);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// unsigned long len = tmp;</span></span><br><span class="line">    	<span class="comment">// while(len)&#123;</span></span><br><span class="line">    	<span class="comment">// 	if(len%2==0)temp[k]=0;</span></span><br><span class="line">    	<span class="comment">// 	if(len%2==1)&#123;</span></span><br><span class="line">    	<span class="comment">// 		temp[k]=1;</span></span><br><span class="line">        <span class="comment">//         count++;</span></span><br><span class="line">    	<span class="comment">// 	&#125;</span></span><br><span class="line">    	<span class="comment">// 	k++;</span></span><br><span class="line">    	<span class="comment">// 	len/=2;</span></span><br><span class="line">    	<span class="comment">// &#125;</span></span><br><span class="line">    	<span class="comment">// if(flag==0)b[i]=temp[0];</span></span><br><span class="line">    	<span class="comment">// if(flag==1)&#123;</span></span><br><span class="line">    	<span class="comment">// 	if(count%2==1)b[i]=0;</span></span><br><span class="line">    	<span class="comment">// 	if(count%2==0)b[i]=1;</span></span><br><span class="line">    	<span class="comment">// &#125;</span></span><br><span class="line">    	<span class="comment">// if(flag==2)&#123;</span></span><br><span class="line">    	<span class="comment">// 	if(count%2==1)b[i]=1;</span></span><br><span class="line">    	<span class="comment">// 	if(count%2==0)b[i]=0;</span></span><br><span class="line">    	<span class="comment">// &#125;</span></span><br><span class="line">        <span class="comment">// if (flag != 0 &amp;&amp; flag != 1 &amp;&amp; flag != 2)return res;</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i=<span class="number">0</span>;i&lt;<span class="number">32</span>;i++)&#123;</span><br><span class="line">    	<span class="keyword">if</span>(b[i]==<span class="number">1</span>)&#123;</span><br><span class="line">    		res+=<span class="built_in">exp</span>(<span class="number">2</span>,<span class="number">31</span>-i);   </span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <hr>
 <h2 id="3-OpenSSL"><a href="#3-OpenSSL" class="headerlink" title="3.OpenSSL"></a>3.OpenSSL</h2><p>开源密码学库<br>安装：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt-get install libssl-dev<br></code></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo apt-get install libssl-dev</span><br></pre></td></tr></table></figure>
 
 <p>编译指令：(动态链接库)</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shel">gcc &lt;源文件&gt; -o &lt;可执行文件&gt; -lcrypto<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">gcc &lt;源文件&gt; -o &lt;可执行文件&gt; -lcrypto</span><br></pre></td></tr></table></figure>
 
 <p>大数运算库名称：crypto<br>头文件和库文件已在环境变量LD_LIBRARY_PATH和<br>CPLUS_INCLUDE_PATH（C_INCLUDE_PATH）搜索路径中</p>
 <hr>
@@ -384,38 +244,38 @@
 <h3 id="RC4"><a href="#RC4" class="headerlink" title="RC4"></a>RC4</h3><p>一种具有可变密钥长度的流密码（1~255 Bytes），一种对称加密算法，加解密双方（基于密钥）产生相同伪随机流，明文与伪随机流按<strong>bit位</strong>异或加密<br><strong>优点</strong>：低错误传播，硬件实现简单，适用于较高传输错误的通信环境<br><strong>缺点</strong>：扩散度低</p>
 <h4 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h4><p>基于256字节状态数组（初始化为单位数组）<br>• KSA算法：基于K置换状态数组<br>• PRNG算法：扩充状态数组，加密明文数据</p>
 <p>基本实现：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">void</span> <span class="hljs-title function_">swap</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>&amp; a, <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>&amp; b)</span> &#123;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> tmp = a;<br>	a = b;<br>	b = tmp;<br>&#125;<br><br><span class="hljs-comment">/// &lt;summary&gt;</span><br><span class="hljs-comment">///		KSA + PRGA生成RC4密钥流</span><br><span class="hljs-comment">/// &lt;/summary&gt;</span><br><span class="hljs-comment">/// &lt;param name=&quot;key&quot;&gt;用户输入的密钥&lt;/param&gt;</span><br><span class="hljs-comment">/// &lt;param name=&quot;data&quot;&gt;需要加密的数据&lt;/param&gt;</span><br><span class="hljs-comment">/// &lt;param name=&quot;k&quot;&gt;生成密钥流&lt;/param&gt;</span><br><span class="hljs-comment">/// &lt;returns&gt;数据长度&lt;/returns&gt;</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">RC4_KSA</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> key[], <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> data[], <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> k[])</span> &#123;<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> S[<span class="hljs-number">256</span>];<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> T[<span class="hljs-number">256</span>];<br><br>	<span class="hljs-type">int</span> keylen, datalen, i, j;<br>	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>;; i++) &#123;<br>		<span class="hljs-keyword">if</span> (key[i] == <span class="hljs-string">&#x27;\0&#x27;</span>) &#123;<br>			keylen = i;<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>;; i++) &#123;<br>		<span class="hljs-keyword">if</span> (data[i] == <span class="hljs-string">&#x27;\0&#x27;</span>) &#123;<br>			datalen = i;<br>			<span class="hljs-keyword">break</span>;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">256</span>; i++) S[i] = i;<br>	<span class="hljs-keyword">if</span> (keylen &gt; <span class="hljs-number">256</span>) &#123;<br>		<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">256</span>; i++) T[i] = key[i];<br>	&#125;<br>	<span class="hljs-keyword">else</span> &#123;<br>		j = <span class="hljs-number">0</span>;<br>		<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">256</span>; i++, j++) &#123;<br>			T[i] = key[j % keylen];<br>		&#125;<br>	&#125;<br><br>	i = <span class="hljs-number">0</span>; j = <span class="hljs-number">0</span>;<br>	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">256</span>; i++) &#123;<br>		j = (j + S[i] + T[i]) % <span class="hljs-number">256</span>;<br>		swap(S[i], S[j]);<br>	&#125;<br><br>	<span class="hljs-comment">//PRGA伪随机生成算法，生成密钥流</span><br>	<span class="hljs-type">int</span> times = datalen; <span class="hljs-type">int</span> m = <span class="hljs-number">0</span>; <span class="hljs-type">int</span> tmp;<br>	<span class="hljs-keyword">while</span> (times--)&#123;<br>		i = (i + <span class="hljs-number">1</span>) % <span class="hljs-number">256</span>;<br>		j = (j + S[i]) % <span class="hljs-number">256</span>;<br>		swap(S[i], S[j]);<br>		tmp = (S[i] + S[j]) % <span class="hljs-number">256</span>;<br>		k[m++] = S[tmp];<br>	&#125;<br>	<span class="hljs-keyword">return</span> datalen;<br>&#125;<br><span class="hljs-comment">/// &lt;summary&gt;</span><br><span class="hljs-comment">///		RC4异或加密明文</span><br><span class="hljs-comment">/// &lt;/summary&gt;</span><br><span class="hljs-comment">/// &lt;param name=&quot;data&quot;&gt;数据&lt;/param&gt;</span><br><span class="hljs-comment">/// &lt;param name=&quot;k&quot;&gt;生成的密钥&lt;/param&gt;</span><br><span class="hljs-comment">/// &lt;param name=&quot;datalen&quot;&gt;数据长度&lt;/param&gt;</span><br><span class="hljs-comment">/// &lt;returns&gt;生成密文的字符串&lt;/returns&gt;</span><br><span class="hljs-built_in">string</span> <span class="hljs-title function_">RC4_encrypt</span><span class="hljs-params">(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> data[], <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> k[], <span class="hljs-type">int</span> datalen)</span> &#123;<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; datalen; i++) &#123;<br>		data[i] ^= k[i];<br>	&#125;<br>	<span class="hljs-built_in">string</span> <span class="hljs-title function_">res</span><span class="hljs-params">((<span class="hljs-type">char</span>*)data, datalen)</span>;<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br><span class="hljs-comment">/// &lt;summary&gt;</span><br><span class="hljs-comment">///		RC4异或解密明文</span><br><span class="hljs-comment">/// &lt;/summary&gt;</span><br><span class="hljs-comment">/// &lt;param name=&quot;data&quot;&gt;数据&lt;/param&gt;</span><br><span class="hljs-comment">/// &lt;param name=&quot;k&quot;&gt;生成的密钥&lt;/param&gt;</span><br><span class="hljs-comment">/// &lt;param name=&quot;datalen&quot;&gt;数据长度&lt;/param&gt;</span><br><span class="hljs-comment">/// &lt;returns&gt;解密明文的字符串&lt;/returns&gt;</span><br><span class="hljs-built_in">string</span> <span class="hljs-title function_">RC4_decrypt</span><span class="hljs-params">(<span class="hljs-built_in">string</span> cipher, <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> k[], <span class="hljs-type">int</span> datalen)</span> &#123;<br>	<span class="hljs-type">char</span>* data = (<span class="hljs-type">char</span>*)cipher.c_str();<br>	<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; datalen; i++) &#123;<br>		data[i] ^= k[i];<br>	&#125;<br>	<span class="hljs-built_in">string</span> <span class="hljs-title function_">res</span><span class="hljs-params">((<span class="hljs-type">char</span>*)data, datalen)</span>;<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">swap</span><span class="params">(<span class="type">unsigned</span> <span class="type">char</span>&amp; a, <span class="type">unsigned</span> <span class="type">char</span>&amp; b)</span> &#123;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span> tmp = a;</span><br><span class="line">	a = b;</span><br><span class="line">	b = tmp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// &lt;summary&gt;</span></span><br><span class="line"><span class="comment">///		KSA + PRGA生成RC4密钥流</span></span><br><span class="line"><span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line"><span class="comment">/// &lt;param name=&quot;key&quot;&gt;用户输入的密钥&lt;/param&gt;</span></span><br><span class="line"><span class="comment">/// &lt;param name=&quot;data&quot;&gt;需要加密的数据&lt;/param&gt;</span></span><br><span class="line"><span class="comment">/// &lt;param name=&quot;k&quot;&gt;生成密钥流&lt;/param&gt;</span></span><br><span class="line"><span class="comment">/// &lt;returns&gt;数据长度&lt;/returns&gt;</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">RC4_KSA</span><span class="params">(<span class="type">unsigned</span> <span class="type">char</span> key[], <span class="type">unsigned</span> <span class="type">char</span> data[], <span class="type">unsigned</span> <span class="type">char</span> k[])</span> &#123;</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span> S[<span class="number">256</span>];</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span> T[<span class="number">256</span>];</span><br><span class="line"></span><br><span class="line">	<span class="type">int</span> keylen, datalen, i, j;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>;; i++) &#123;</span><br><span class="line">		<span class="keyword">if</span> (key[i] == <span class="string">&#x27;\0&#x27;</span>) &#123;</span><br><span class="line">			keylen = i;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>;; i++) &#123;</span><br><span class="line">		<span class="keyword">if</span> (data[i] == <span class="string">&#x27;\0&#x27;</span>) &#123;</span><br><span class="line">			datalen = i;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++) S[i] = i;</span><br><span class="line">	<span class="keyword">if</span> (keylen &gt; <span class="number">256</span>) &#123;</span><br><span class="line">		<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++) T[i] = key[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		j = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++, j++) &#123;</span><br><span class="line">			T[i] = key[j % keylen];</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	i = <span class="number">0</span>; j = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++) &#123;</span><br><span class="line">		j = (j + S[i] + T[i]) % <span class="number">256</span>;</span><br><span class="line">		swap(S[i], S[j]);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//PRGA伪随机生成算法，生成密钥流</span></span><br><span class="line">	<span class="type">int</span> times = datalen; <span class="type">int</span> m = <span class="number">0</span>; <span class="type">int</span> tmp;</span><br><span class="line">	<span class="keyword">while</span> (times--)&#123;</span><br><span class="line">		i = (i + <span class="number">1</span>) % <span class="number">256</span>;</span><br><span class="line">		j = (j + S[i]) % <span class="number">256</span>;</span><br><span class="line">		swap(S[i], S[j]);</span><br><span class="line">		tmp = (S[i] + S[j]) % <span class="number">256</span>;</span><br><span class="line">		k[m++] = S[tmp];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> datalen;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/// &lt;summary&gt;</span></span><br><span class="line"><span class="comment">///		RC4异或加密明文</span></span><br><span class="line"><span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line"><span class="comment">/// &lt;param name=&quot;data&quot;&gt;数据&lt;/param&gt;</span></span><br><span class="line"><span class="comment">/// &lt;param name=&quot;k&quot;&gt;生成的密钥&lt;/param&gt;</span></span><br><span class="line"><span class="comment">/// &lt;param name=&quot;datalen&quot;&gt;数据长度&lt;/param&gt;</span></span><br><span class="line"><span class="comment">/// &lt;returns&gt;生成密文的字符串&lt;/returns&gt;</span></span><br><span class="line"><span class="built_in">string</span> <span class="title function_">RC4_encrypt</span><span class="params">(<span class="type">unsigned</span> <span class="type">char</span> data[], <span class="type">unsigned</span> <span class="type">char</span> k[], <span class="type">int</span> datalen)</span> &#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; datalen; i++) &#123;</span><br><span class="line">		data[i] ^= k[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">string</span> <span class="title function_">res</span><span class="params">((<span class="type">char</span>*)data, datalen)</span>;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/// &lt;summary&gt;</span></span><br><span class="line"><span class="comment">///		RC4异或解密明文</span></span><br><span class="line"><span class="comment">/// &lt;/summary&gt;</span></span><br><span class="line"><span class="comment">/// &lt;param name=&quot;data&quot;&gt;数据&lt;/param&gt;</span></span><br><span class="line"><span class="comment">/// &lt;param name=&quot;k&quot;&gt;生成的密钥&lt;/param&gt;</span></span><br><span class="line"><span class="comment">/// &lt;param name=&quot;datalen&quot;&gt;数据长度&lt;/param&gt;</span></span><br><span class="line"><span class="comment">/// &lt;returns&gt;解密明文的字符串&lt;/returns&gt;</span></span><br><span class="line"><span class="built_in">string</span> <span class="title function_">RC4_decrypt</span><span class="params">(<span class="built_in">string</span> cipher, <span class="type">unsigned</span> <span class="type">char</span> k[], <span class="type">int</span> datalen)</span> &#123;</span><br><span class="line">	<span class="type">char</span>* data = (<span class="type">char</span>*)cipher.c_str();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; datalen; i++) &#123;</span><br><span class="line">		data[i] ^= k[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">string</span> <span class="title function_">res</span><span class="params">((<span class="type">char</span>*)data, datalen)</span>;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>大数库实现：</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// 该函数实现RC4解密算法功能</span><br><span class="hljs-comment">//  参数:</span><br><span class="hljs-comment">//      data - 输入的密文字符串</span><br><span class="hljs-comment">//      secret_key - 密钥</span><br><span class="hljs-comment">//  返回值:</span><br><span class="hljs-comment">//      string类型, 返回解密的结果。如果输入数据异常，则返回空字符串并退出</span><br><span class="hljs-built_in">string</span> <span class="hljs-title function_">rc4_decrypt</span><span class="hljs-params">(<span class="hljs-built_in">string</span> data, <span class="hljs-built_in">string</span> secret_key)</span> &#123;<br>    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> 在此处实现你的代码</span><br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>* output = (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>*)<span class="hljs-built_in">malloc</span>(data.length());<br>    <span class="hljs-keyword">if</span> (data.length()==<span class="hljs-number">0</span> || secret_key.length()==<span class="hljs-number">0</span>)<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>	RC4_KEY key;<br>	RC4_set_key(&amp;key,secret_key.length(),(<span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>*)secret_key.c_str());<br>	RC4(&amp;key,(<span class="hljs-type">unsigned</span> <span class="hljs-type">long</span>)data.length(),(<span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>*)data.c_str(),output);<br>    <span class="hljs-built_in">string</span> <span class="hljs-title function_">res</span><span class="hljs-params">((<span class="hljs-type">char</span>*)output,data.length())</span>;<br>	<span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 该函数实现RC4解密算法功能</span></span><br><span class="line"><span class="comment">//  参数:</span></span><br><span class="line"><span class="comment">//      data - 输入的密文字符串</span></span><br><span class="line"><span class="comment">//      secret_key - 密钥</span></span><br><span class="line"><span class="comment">//  返回值:</span></span><br><span class="line"><span class="comment">//      string类型, 返回解密的结果。如果输入数据异常，则返回空字符串并退出</span></span><br><span class="line"><span class="built_in">string</span> <span class="title function_">rc4_decrypt</span><span class="params">(<span class="built_in">string</span> data, <span class="built_in">string</span> secret_key)</span> &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> 在此处实现你的代码</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span>* output = (<span class="type">unsigned</span> <span class="type">char</span>*)<span class="built_in">malloc</span>(data.length());</span><br><span class="line">    <span class="keyword">if</span> (data.length()==<span class="number">0</span> || secret_key.length()==<span class="number">0</span>)<span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">	RC4_KEY key;</span><br><span class="line">	RC4_set_key(&amp;key,secret_key.length(),(<span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>*)secret_key.c_str());</span><br><span class="line">	RC4(&amp;key,(<span class="type">unsigned</span> <span class="type">long</span>)data.length(),(<span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>*)data.c_str(),output);</span><br><span class="line">    <span class="built_in">string</span> <span class="title function_">res</span><span class="params">((<span class="type">char</span>*)output,data.length())</span>;</span><br><span class="line">	<span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 <h3 id="DES分组密码"><a href="#DES分组密码" class="headerlink" title="DES分组密码"></a>DES分组密码</h3><p>一类对称加密算法：将明文进行分组，将每个明文分组作为整体进行加解密</p>
 <p>Feistel密码结构：一种用于构造分组密码的密码结构<br>• 扩散：明文每一位影响密文许多位<br>• 混淆：隐藏密文与密钥统计关系<br>• 加解密遵循相似运算流程</p>
 <p>分组长度64位，有效密钥长度56位（8位奇偶校验位）</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/des.png" srcset="/img/loading.gif" lazyload alt="流程"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://github.com/tom-jerr/MyblogImg/raw/main/src/des.png" alt="流程"></p>
 <h4 id="分组密码应用模式"><a href="#分组密码应用模式" class="headerlink" title="分组密码应用模式"></a>分组密码应用模式</h4><p>使用分组密码处理包含多个分组长度的数据的加解密操作</p>
 <ol>
 <li><p>ECB：并行加密、并行解密、随机访问</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/ecb.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://github.com/tom-jerr/MyblogImg/raw/main/src/ecb.png"></p>
 </li>
 <li><p>CBC：依赖初始向量IV（公开、随机）、串行加密、并行解密、随机访问</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/cbc.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://github.com/tom-jerr/MyblogImg/raw/main/src/cbc.png"></p>
 </li>
 <li><p>CTR：依赖Nonce（公开、随机、非重复）、并行加密、随机访问、预加密</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/ctr.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://github.com/tom-jerr/MyblogImg/raw/main/src/ctr.png"></p>
 </li>
 </ol>
-<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">/*</span><br><span class="hljs-comment">    ivec参数是8字节的初始向量（CFB,CBC,OFB）</span><br><span class="hljs-comment">    使用CBC模式进行加密时；length参数实际上是string.length()</span><br><span class="hljs-comment">    使用CBC模式解密时；length参数为加密时(length/8 + 1) * 8;</span><br><span class="hljs-comment">    CFB模式的numbits参数是每次加密的比特数    </span><br><span class="hljs-comment">*/</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">convert_string_to_des_block</span><span class="hljs-params">(<span class="hljs-built_in">string</span> str, DES_cblock &amp;output)</span> &#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">8</span>; ++i) &#123;<br>        output[i] = str[i];<br>    &#125;<br>&#125;<br><span class="hljs-built_in">string</span> <span class="hljs-title function_">des_encrypt</span><span class="hljs-params">(<span class="hljs-built_in">string</span> plain, <span class="hljs-built_in">string</span> secret_key)</span> &#123;<br>    <span class="hljs-comment">//DES-ECB模式</span><br>    DES_cblock key;<br>    DES_string_to_key((<span class="hljs-type">const</span> <span class="hljs-type">char</span>*)secret_key.c_str(),&amp;key);<br>    DES_key_schedule keys;<br>    DES_set_key_checked(&amp;key,&amp;keys);<br>    <br>    DES_cblock plaintext,output;<br>    convert_string_to_des_block(plain,plaintext);<br>    DES_ecb_encrypt(&amp;plaintext,&amp;output,&amp;keys,DES_ENCRYPT);<br> 	<br>    <span class="hljs-keyword">return</span> (<span class="hljs-type">char</span>*)output;<br>&#125;<br><span class="hljs-built_in">string</span> <span class="hljs-title function_">des_decrypt</span><span class="hljs-params">(<span class="hljs-built_in">string</span> cipher, <span class="hljs-built_in">string</span> secret_key)</span> &#123;<br>    DES_cblock key;<br>    DES_string_to_key((<span class="hljs-type">const</span> <span class="hljs-type">char</span>*)secret_key.c_str(),&amp;key);<br>    DES_key_schedule keys;<br>    DES_set_key_checked(&amp;key,&amp;keys);<br>    <br>    DES_cblock ciphertext,output;<br>    convert_string_to_des_block(cipher,ciphertext);<br>    DES_ecb_encrypt(&amp;ciphertext,&amp;output,&amp;keys,DES_DECRYPT);<br> 	<br> 	<span class="hljs-keyword">return</span> (<span class="hljs-type">char</span>*)output;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    ivec参数是8字节的初始向量（CFB,CBC,OFB）</span></span><br><span class="line"><span class="comment">    使用CBC模式进行加密时；length参数实际上是string.length()</span></span><br><span class="line"><span class="comment">    使用CBC模式解密时；length参数为加密时(length/8 + 1) * 8;</span></span><br><span class="line"><span class="comment">    CFB模式的numbits参数是每次加密的比特数    </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">convert_string_to_des_block</span><span class="params">(<span class="built_in">string</span> str, DES_cblock &amp;output)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; ++i) &#123;</span><br><span class="line">        output[i] = str[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">string</span> <span class="title function_">des_encrypt</span><span class="params">(<span class="built_in">string</span> plain, <span class="built_in">string</span> secret_key)</span> &#123;</span><br><span class="line">    <span class="comment">//DES-ECB模式</span></span><br><span class="line">    DES_cblock key;</span><br><span class="line">    DES_string_to_key((<span class="type">const</span> <span class="type">char</span>*)secret_key.c_str(),&amp;key);</span><br><span class="line">    DES_key_schedule keys;</span><br><span class="line">    DES_set_key_checked(&amp;key,&amp;keys);</span><br><span class="line">    </span><br><span class="line">    DES_cblock plaintext,output;</span><br><span class="line">    convert_string_to_des_block(plain,plaintext);</span><br><span class="line">    DES_ecb_encrypt(&amp;plaintext,&amp;output,&amp;keys,DES_ENCRYPT);</span><br><span class="line"> 	</span><br><span class="line">    <span class="keyword">return</span> (<span class="type">char</span>*)output;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">string</span> <span class="title function_">des_decrypt</span><span class="params">(<span class="built_in">string</span> cipher, <span class="built_in">string</span> secret_key)</span> &#123;</span><br><span class="line">    DES_cblock key;</span><br><span class="line">    DES_string_to_key((<span class="type">const</span> <span class="type">char</span>*)secret_key.c_str(),&amp;key);</span><br><span class="line">    DES_key_schedule keys;</span><br><span class="line">    DES_set_key_checked(&amp;key,&amp;keys);</span><br><span class="line">    </span><br><span class="line">    DES_cblock ciphertext,output;</span><br><span class="line">    convert_string_to_des_block(cipher,ciphertext);</span><br><span class="line">    DES_ecb_encrypt(&amp;ciphertext,&amp;output,&amp;keys,DES_DECRYPT);</span><br><span class="line"> 	</span><br><span class="line"> 	<span class="keyword">return</span> (<span class="type">char</span>*)output;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
 <h3 id="SHA1——哈希函数"><a href="#SHA1——哈希函数" class="headerlink" title="SHA1——哈希函数"></a>SHA1——哈希函数</h3><p>将<strong>任意长度</strong>数据内容映射为固定长度哈希值<br>• 特性：单向性、抗碰撞<br>• 应用：数据完整性检测（防篡改）</p>
-<p><img src="https://github.com/tom-jerr/MyblogImg/raw/main/src/sha1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://github.com/tom-jerr/MyblogImg/raw/main/src/sha1.png"></p>
 <h4 id="SHA-1算法"><a href="#SHA-1算法" class="headerlink" title="SHA-1算法"></a>SHA-1算法</h4><p>预处理：填充、分块；不足512n bit填充空白块，最后加上填充长度；<br>分割字：将每个分块分割并扩展，共计产生80个字，字长32比特位；最后一个字的输出即为哈希值；</p>
 <p>定义5个寄存器，基于字内容进行变换（经历4轮，每轮20步），最终形成SHA1哈希</p>
-<h4 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// 该函数实现SHA1 hash算法功能</span><br><span class="hljs-comment">//  参数:</span><br><span class="hljs-comment">//      msg - 输入的字符串</span><br><span class="hljs-comment">//  返回值:</span><br><span class="hljs-comment">//      string类型, 返回sha1消息摘要结果</span><br><span class="hljs-built_in">string</span> <span class="hljs-title function_">sha1_digest</span><span class="hljs-params">(<span class="hljs-built_in">string</span> msg)</span> &#123;<br>    <span class="hljs-comment">/*unsigned char buf[20];</span><br><span class="hljs-comment">    SHA1((const unsigned char*)msg.c_str(),msg.length(),buf);</span><br><span class="hljs-comment">    string res((char*)buf,20);*/</span><br>    SHA_CTX c;<br>    SHA1_Init(&amp;c);<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>];<br>    SHA1_Update(&amp;c, (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>*)msg.c_str(), msg.length());<br>    SHA1_Final(&amp;(buf[<span class="hljs-number">0</span>]), &amp;c);<br>    <span class="hljs-built_in">string</span> <span class="hljs-title function_">res</span><span class="hljs-params">((<span class="hljs-type">char</span>*)buf, <span class="hljs-number">20</span>)</span>;<br>    <span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 该函数实现SHA1 hash算法功能</span></span><br><span class="line"><span class="comment">//  参数:</span></span><br><span class="line"><span class="comment">//      msg - 输入的字符串</span></span><br><span class="line"><span class="comment">//  返回值:</span></span><br><span class="line"><span class="comment">//      string类型, 返回sha1消息摘要结果</span></span><br><span class="line"><span class="built_in">string</span> <span class="title function_">sha1_digest</span><span class="params">(<span class="built_in">string</span> msg)</span> &#123;</span><br><span class="line">    <span class="comment">/*unsigned char buf[20];</span></span><br><span class="line"><span class="comment">    SHA1((const unsigned char*)msg.c_str(),msg.length(),buf);</span></span><br><span class="line"><span class="comment">    string res((char*)buf,20);*/</span></span><br><span class="line">    SHA_CTX c;</span><br><span class="line">    SHA1_Init(&amp;c);</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> buf[<span class="number">20</span>];</span><br><span class="line">    SHA1_Update(&amp;c, (<span class="type">unsigned</span> <span class="type">char</span>*)msg.c_str(), msg.length());</span><br><span class="line">    SHA1_Final(&amp;(buf[<span class="number">0</span>]), &amp;c);</span><br><span class="line">    <span class="built_in">string</span> <span class="title function_">res</span><span class="params">((<span class="type">char</span>*)buf, <span class="number">20</span>)</span>;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -425,16 +285,16 @@
 <p>加密：$C&#x3D;M^{e} mod N$</p>
 <p>解密：$M&#x3D;C^{d}mod N$</p>
 <h3 id="密钥函数"><a href="#密钥函数" class="headerlink" title="密钥函数"></a>密钥函数</h3><p>密钥反序列化：OpenSSL私钥含有e</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs C">RSA* rsa = RSA_new();<br><span class="hljs-built_in">memcpy</span>(pk, <span class="hljs-number">4</span>, &amp;len_n); <span class="hljs-comment">// 前4个字节存储n的长度</span><br>BN_bin2bn(pk+<span class="hljs-number">4</span>, len_n, rsa-&gt;n); <span class="hljs-comment">/* 接下来len_n个字节存储n的值*/</span><br>Memcpy(pk+<span class="hljs-number">4</span>+len_n, <span class="hljs-number">4</span>, &amp;len_e);<br>BN_bin2bn(pk+len_n+<span class="hljs-number">8</span>, len_e, rsa-&gt;e);<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">RSA* rsa = RSA_new();</span><br><span class="line"><span class="built_in">memcpy</span>(pk, <span class="number">4</span>, &amp;len_n); <span class="comment">// 前4个字节存储n的长度</span></span><br><span class="line">BN_bin2bn(pk+<span class="number">4</span>, len_n, rsa-&gt;n); <span class="comment">/* 接下来len_n个字节存储n的值*/</span></span><br><span class="line">Memcpy(pk+<span class="number">4</span>+len_n, <span class="number">4</span>, &amp;len_e);</span><br><span class="line">BN_bin2bn(pk+len_n+<span class="number">8</span>, len_e, rsa-&gt;e);</span><br></pre></td></tr></table></figure>
 
 <h3 id="RSA加解密"><a href="#RSA加解密" class="headerlink" title="RSA加解密"></a>RSA加解密</h3><p>从文件中加载公私钥：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">bool</span> <span class="hljs-title function_">load_RSA_keys</span><span class="hljs-params">()</span> &#123;<br><br>    rsa_private_key = RSA_new();<br>    rsa_public_key = RSA_new();<br>    FILE *fpub = <span class="hljs-literal">NULL</span>;<br>    FILE *fpri = <span class="hljs-literal">NULL</span>;<br>    <br>    <span class="hljs-keyword">if</span> ((fpub = fopen(PUBLICKEY, <span class="hljs-string">&quot;r&quot;</span>)) == <span class="hljs-literal">NULL</span> ||(fpri = fopen(PRIVATEKEY, <span class="hljs-string">&quot;r&quot;</span>)) == <span class="hljs-literal">NULL</span>)&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>   <br>    rsa_public_key=PEM_read_RSA_PUBKEY(fpub, &amp;rsa_public_key,<span class="hljs-literal">NULL</span>,<span class="hljs-literal">NULL</span>);<br>    <span class="hljs-keyword">if</span> (rsa_public_key== <span class="hljs-literal">NULL</span>)&#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>   <br>    rsa_private_key=PEM_read_RSAPrivateKey(fpri,&amp;rsa_private_key,<span class="hljs-literal">NULL</span>,<span class="hljs-literal">NULL</span>); <br>    <span class="hljs-keyword">if</span> (rsa_private_key== <span class="hljs-literal">NULL</span>)&#123;<br>       <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br><br>    fclose(fpub);<br>    fclose(fpri);<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">bool</span> <span class="title function_">load_RSA_keys</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">    rsa_private_key = RSA_new();</span><br><span class="line">    rsa_public_key = RSA_new();</span><br><span class="line">    FILE *fpub = <span class="literal">NULL</span>;</span><br><span class="line">    FILE *fpri = <span class="literal">NULL</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> ((fpub = fopen(PUBLICKEY, <span class="string">&quot;r&quot;</span>)) == <span class="literal">NULL</span> ||(fpri = fopen(PRIVATEKEY, <span class="string">&quot;r&quot;</span>)) == <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    rsa_public_key=PEM_read_RSA_PUBKEY(fpub, &amp;rsa_public_key,<span class="literal">NULL</span>,<span class="literal">NULL</span>);</span><br><span class="line">    <span class="keyword">if</span> (rsa_public_key== <span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    rsa_private_key=PEM_read_RSAPrivateKey(fpri,&amp;rsa_private_key,<span class="literal">NULL</span>,<span class="literal">NULL</span>); </span><br><span class="line">    <span class="keyword">if</span> (rsa_private_key== <span class="literal">NULL</span>)&#123;</span><br><span class="line">       <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fclose(fpub);</span><br><span class="line">    fclose(fpri);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>利用大数库函数进行RSA加密和解密：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// 该函数用于进行rsa公钥加密</span><br><span class="hljs-comment">//  参数:</span><br><span class="hljs-comment">//      plaintext 代表输入的明文字符串</span><br><span class="hljs-comment">//  返回值:</span><br><span class="hljs-comment">//      string类型, 返回加密的结果</span><br><span class="hljs-built_in">string</span> <span class="hljs-title function_">RSA_Encryption</span><span class="hljs-params">(<span class="hljs-built_in">string</span> plaintext)</span><br>&#123;<br>    load_RSA_keys();<br><br>    <span class="hljs-type">char</span>* cipher = (<span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(RSA_size(rsa_public_key)); <br>    <span class="hljs-built_in">memset</span>(cipher, <span class="hljs-number">0</span>, RSA_size(rsa_public_key)); <br>    RSA_public_encrypt(plaintext.length(), (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)plaintext.c_str(), (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>*)cipher, rsa_public_key, RSA_PKCS1_OAEP_PADDING); <br>    <br>    <span class="hljs-built_in">string</span> <span class="hljs-title function_">res</span><span class="hljs-params">(cipher, plaintext.length())</span>; <br>    <span class="hljs-keyword">return</span> res; <br>&#125;<br><br><span class="hljs-comment">// 该函数用于进行rsa私钥解密</span><br><span class="hljs-comment">//  参数:</span><br><span class="hljs-comment">//      ciphertext 代表输入的密文字符串</span><br><span class="hljs-comment">//  返回值:</span><br><span class="hljs-comment">//      string类型, 返回解密的结果</span><br><span class="hljs-built_in">string</span> <span class="hljs-title function_">RSA_Decryption</span><span class="hljs-params">(<span class="hljs-built_in">string</span> ciphertext)</span><br>&#123;<br>    load_RSA_keys();<br><br>    <span class="hljs-type">char</span> * plain = (<span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(RSA_size(rsa_private_key));<br>    <span class="hljs-built_in">memset</span>(plain, <span class="hljs-number">0</span>, RSA_size(rsa_private_key));<br>    RSA_private_decrypt(RSA_size(rsa_private_key),(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)ciphertext.c_str(),(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)plain,rsa_private_key, RSA_PKCS1_OAEP_PADDING);<br>        <br><br>    <span class="hljs-built_in">string</span> <span class="hljs-title function_">res</span><span class="hljs-params">(plain, ciphertext.length())</span>;<br>    <span class="hljs-keyword">return</span> res;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 该函数用于进行rsa公钥加密</span></span><br><span class="line"><span class="comment">//  参数:</span></span><br><span class="line"><span class="comment">//      plaintext 代表输入的明文字符串</span></span><br><span class="line"><span class="comment">//  返回值:</span></span><br><span class="line"><span class="comment">//      string类型, 返回加密的结果</span></span><br><span class="line"><span class="built_in">string</span> <span class="title function_">RSA_Encryption</span><span class="params">(<span class="built_in">string</span> plaintext)</span></span><br><span class="line">&#123;</span><br><span class="line">    load_RSA_keys();</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span>* cipher = (<span class="type">char</span> *)<span class="built_in">malloc</span>(RSA_size(rsa_public_key)); </span><br><span class="line">    <span class="built_in">memset</span>(cipher, <span class="number">0</span>, RSA_size(rsa_public_key)); </span><br><span class="line">    RSA_public_encrypt(plaintext.length(), (<span class="type">unsigned</span> <span class="type">char</span> *)plaintext.c_str(), (<span class="type">unsigned</span> <span class="type">char</span>*)cipher, rsa_public_key, RSA_PKCS1_OAEP_PADDING); </span><br><span class="line">    </span><br><span class="line">    <span class="built_in">string</span> <span class="title function_">res</span><span class="params">(cipher, plaintext.length())</span>; </span><br><span class="line">    <span class="keyword">return</span> res; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该函数用于进行rsa私钥解密</span></span><br><span class="line"><span class="comment">//  参数:</span></span><br><span class="line"><span class="comment">//      ciphertext 代表输入的密文字符串</span></span><br><span class="line"><span class="comment">//  返回值:</span></span><br><span class="line"><span class="comment">//      string类型, 返回解密的结果</span></span><br><span class="line"><span class="built_in">string</span> <span class="title function_">RSA_Decryption</span><span class="params">(<span class="built_in">string</span> ciphertext)</span></span><br><span class="line">&#123;</span><br><span class="line">    load_RSA_keys();</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> * plain = (<span class="type">char</span> *)<span class="built_in">malloc</span>(RSA_size(rsa_private_key));</span><br><span class="line">    <span class="built_in">memset</span>(plain, <span class="number">0</span>, RSA_size(rsa_private_key));</span><br><span class="line">    RSA_private_decrypt(RSA_size(rsa_private_key),(<span class="type">unsigned</span> <span class="type">char</span> *)ciphertext.c_str(),(<span class="type">unsigned</span> <span class="type">char</span> *)plain,rsa_private_key, RSA_PKCS1_OAEP_PADDING);</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">    <span class="built_in">string</span> <span class="title function_">res</span><span class="params">(plain, ciphertext.length())</span>;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>使用BN库中函数实现RSA加密</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-type">int</span> <span class="hljs-title function_">zhuanhuan</span><span class="hljs-params">(<span class="hljs-type">int</span> a)</span><span class="hljs-comment">//将十六进制转换为十进制</span><br>&#123;<br>	<span class="hljs-keyword">if</span> (a &lt; <span class="hljs-number">60</span>)<br>	&#123;<br>		a = a - <span class="hljs-string">&#x27;0&#x27;</span>;<br>	&#125;<br>	<span class="hljs-keyword">if</span> (a &gt; <span class="hljs-number">64</span>)<br>	&#123;<br>		a = a - <span class="hljs-string">&#x27;A&#x27;</span> + <span class="hljs-number">10</span>;<br>	&#125;<br>	<span class="hljs-keyword">return</span> a;<br>&#125;<br><span class="hljs-type">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>	BIGNUM* p = BN_new();    <span class="hljs-comment">//大素数p</span><br>	BIGNUM* q = BN_new();  <span class="hljs-comment">//大素数q</span><br>	BIGNUM* n = BN_new();    <span class="hljs-comment">//n=p*q</span><br>	BIGNUM* fn = BN_new();   <span class="hljs-comment">//fn=(p-1)*(q-1)</span><br>	BIGNUM* d = BN_new();    <span class="hljs-comment">//d=e-1 mod (n)</span><br>	BIGNUM* e = BN_new();   <span class="hljs-comment">//整数e，1&lt;e&lt;fn且gcd(fn, e)=1</span><br>	BIGNUM* r = BN_new();<br>	BIGNUM* M = BN_new();    <span class="hljs-comment">//明文</span><br>	BIGNUM* C = BN_new();    <span class="hljs-comment">//密文</span><br>	BIGNUM* one = BN_new();  <span class="hljs-comment">//将one设置为1</span><br>	BN_one(one);<br>	<span class="hljs-type">int</span> length;<br>	<span class="hljs-type">char</span> str[<span class="hljs-number">100</span>] = <span class="hljs-string">&quot;0&quot;</span>;<br>	<span class="hljs-type">char</span>* show;<br>	<span class="hljs-type">int</span> bits = <span class="hljs-number">512</span>;     <span class="hljs-comment">//512bits</span><br>	<span class="hljs-type">int</span> i, j, t;<br>	<span class="hljs-type">int</span> sum = <span class="hljs-number">0</span>;<br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;请输入要加密的的明文：&quot;</span>);<br>	scanf_s(<span class="hljs-string">&quot;%s&quot;</span>, str, <span class="hljs-keyword">sizeof</span>(str));<br>	length = <span class="hljs-built_in">strlen</span>(str);                <span class="hljs-comment">//记录明文的长度</span><br>	BN_bin2bn((<span class="hljs-type">const</span> <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>*)str, length, M);            <span class="hljs-comment">//将明文以十六进制转换为大数</span><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;明文:%s\n&quot;</span>, str);<br>	BN_generate_prime(p, bits, <span class="hljs-number">1</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>);       <span class="hljs-comment">//生成512bits的大素数p</span><br>	BN_generate_prime(q, bits, <span class="hljs-number">1</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>);     <span class="hljs-comment">//生成512bits的大素数q</span><br>	BN_CTX* ctx = BN_CTX_new();         <span class="hljs-comment">//上下文结构		</span><br>	BN_mul(n, p, q, ctx);            <span class="hljs-comment">//n=p*q</span><br>	BN_sub(p, p, one);<br>	BN_sub(q, q, one);<br>	BN_mul(fn, p, q, ctx);           <span class="hljs-comment">//fn=(p-1)*(q-1)</span><br>	<span class="hljs-keyword">do</span><br>	&#123;<br>		BN_rand_range(e, fn); <span class="hljs-comment">//产生的0 &lt; e &lt; fn的随机数</span><br>		BN_gcd(r, e, fn, ctx); <span class="hljs-comment">//r = e, fn最大公约数</span><br>	&#125; <span class="hljs-keyword">while</span> (!BN_is_one(r)); <span class="hljs-comment">//判断r是否等于1</span><br>	BN_mod_inverse(d, e, fn, ctx);    <span class="hljs-comment">//模逆运算</span><br>	<span class="hljs-comment">//公钥加密 C = M^e mod n</span><br>	BN_mod_exp_simple(C, M, e, n, ctx);<br>	show = BN_bn2hex(C);     <span class="hljs-comment">//将密文转换为十六进制</span><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;密文:%s\n&quot;</span>, show);<br>	<span class="hljs-comment">//私钥解密 M = C^d mod n。</span><br>	BN_mod_exp_simple(M, C, d, n, ctx);<br>	show = BN_bn2hex(M);<br>	<span class="hljs-comment">//printf(&quot;%x&quot;,show);//测试</span><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n解密后的明文:%s&quot;</span>, show);  <span class="hljs-comment">//将解密后的明文转换为十六进制</span><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n解密后的明文:&quot;</span>);<br><br>	<span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; length; i++)  <span class="hljs-comment">//将解密后的明文转化为对应的ASCII的字符</span><br>	&#123;<br>		j = *(show + <span class="hljs-number">2</span> * i);   <span class="hljs-comment">//每两位为一个整体</span><br>		t = *(show + <span class="hljs-number">2</span> * i + <span class="hljs-number">1</span>);<br>		j = zhuanhuan(j);<br>		t = zhuanhuan(t);<br>		sum = j * <span class="hljs-number">16</span> + t;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%c&quot;</span>, sum); <span class="hljs-comment">//将ASCII的字符输出</span><br>	&#125;<br>	<span class="hljs-comment">//释放结构</span><br>	BN_CTX_free(ctx);<br>	BN_free(p);<br>	BN_free(q);<br>	BN_free(n);<br>	BN_free(fn);<br>	BN_free(d);<br>	BN_free(e);<br>	BN_free(r);<br>	BN_free(M);<br>	BN_free(C);<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">zhuanhuan</span><span class="params">(<span class="type">int</span> a)</span><span class="comment">//将十六进制转换为十进制</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (a &lt; <span class="number">60</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		a = a - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (a &gt; <span class="number">64</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		a = a - <span class="string">&#x27;A&#x27;</span> + <span class="number">10</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> a;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	BIGNUM* p = BN_new();    <span class="comment">//大素数p</span></span><br><span class="line">	BIGNUM* q = BN_new();  <span class="comment">//大素数q</span></span><br><span class="line">	BIGNUM* n = BN_new();    <span class="comment">//n=p*q</span></span><br><span class="line">	BIGNUM* fn = BN_new();   <span class="comment">//fn=(p-1)*(q-1)</span></span><br><span class="line">	BIGNUM* d = BN_new();    <span class="comment">//d=e-1 mod (n)</span></span><br><span class="line">	BIGNUM* e = BN_new();   <span class="comment">//整数e，1&lt;e&lt;fn且gcd(fn, e)=1</span></span><br><span class="line">	BIGNUM* r = BN_new();</span><br><span class="line">	BIGNUM* M = BN_new();    <span class="comment">//明文</span></span><br><span class="line">	BIGNUM* C = BN_new();    <span class="comment">//密文</span></span><br><span class="line">	BIGNUM* one = BN_new();  <span class="comment">//将one设置为1</span></span><br><span class="line">	BN_one(one);</span><br><span class="line">	<span class="type">int</span> length;</span><br><span class="line">	<span class="type">char</span> str[<span class="number">100</span>] = <span class="string">&quot;0&quot;</span>;</span><br><span class="line">	<span class="type">char</span>* show;</span><br><span class="line">	<span class="type">int</span> bits = <span class="number">512</span>;     <span class="comment">//512bits</span></span><br><span class="line">	<span class="type">int</span> i, j, t;</span><br><span class="line">	<span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;请输入要加密的的明文：&quot;</span>);</span><br><span class="line">	scanf_s(<span class="string">&quot;%s&quot;</span>, str, <span class="keyword">sizeof</span>(str));</span><br><span class="line">	length = <span class="built_in">strlen</span>(str);                <span class="comment">//记录明文的长度</span></span><br><span class="line">	BN_bin2bn((<span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>*)str, length, M);            <span class="comment">//将明文以十六进制转换为大数</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;明文:%s\n&quot;</span>, str);</span><br><span class="line">	BN_generate_prime(p, bits, <span class="number">1</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);       <span class="comment">//生成512bits的大素数p</span></span><br><span class="line">	BN_generate_prime(q, bits, <span class="number">1</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);     <span class="comment">//生成512bits的大素数q</span></span><br><span class="line">	BN_CTX* ctx = BN_CTX_new();         <span class="comment">//上下文结构		</span></span><br><span class="line">	BN_mul(n, p, q, ctx);            <span class="comment">//n=p*q</span></span><br><span class="line">	BN_sub(p, p, one);</span><br><span class="line">	BN_sub(q, q, one);</span><br><span class="line">	BN_mul(fn, p, q, ctx);           <span class="comment">//fn=(p-1)*(q-1)</span></span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">	&#123;</span><br><span class="line">		BN_rand_range(e, fn); <span class="comment">//产生的0 &lt; e &lt; fn的随机数</span></span><br><span class="line">		BN_gcd(r, e, fn, ctx); <span class="comment">//r = e, fn最大公约数</span></span><br><span class="line">	&#125; <span class="keyword">while</span> (!BN_is_one(r)); <span class="comment">//判断r是否等于1</span></span><br><span class="line">	BN_mod_inverse(d, e, fn, ctx);    <span class="comment">//模逆运算</span></span><br><span class="line">	<span class="comment">//公钥加密 C = M^e mod n</span></span><br><span class="line">	BN_mod_exp_simple(C, M, e, n, ctx);</span><br><span class="line">	show = BN_bn2hex(C);     <span class="comment">//将密文转换为十六进制</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;密文:%s\n&quot;</span>, show);</span><br><span class="line">	<span class="comment">//私钥解密 M = C^d mod n。</span></span><br><span class="line">	BN_mod_exp_simple(M, C, d, n, ctx);</span><br><span class="line">	show = BN_bn2hex(M);</span><br><span class="line">	<span class="comment">//printf(&quot;%x&quot;,show);//测试</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n解密后的明文:%s&quot;</span>, show);  <span class="comment">//将解密后的明文转换为十六进制</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;\n解密后的明文:&quot;</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++)  <span class="comment">//将解密后的明文转化为对应的ASCII的字符</span></span><br><span class="line">	&#123;</span><br><span class="line">		j = *(show + <span class="number">2</span> * i);   <span class="comment">//每两位为一个整体</span></span><br><span class="line">		t = *(show + <span class="number">2</span> * i + <span class="number">1</span>);</span><br><span class="line">		j = zhuanhuan(j);</span><br><span class="line">		t = zhuanhuan(t);</span><br><span class="line">		sum = j * <span class="number">16</span> + t;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">&quot;%c&quot;</span>, sum); <span class="comment">//将ASCII的字符输出</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//释放结构</span></span><br><span class="line">	BN_CTX_free(ctx);</span><br><span class="line">	BN_free(p);</span><br><span class="line">	BN_free(q);</span><br><span class="line">	BN_free(n);</span><br><span class="line">	BN_free(fn);</span><br><span class="line">	BN_free(d);</span><br><span class="line">	BN_free(e);</span><br><span class="line">	BN_free(r);</span><br><span class="line">	BN_free(M);</span><br><span class="line">	BN_free(C);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="RSA签名"><a href="#RSA签名" class="headerlink" title="RSA签名"></a>RSA签名</h3><p>$e*d \quad mod\quad (p-1)(q-1) &#x3D; 1$</p>
 <p>$PK &#x3D; (e, N)，	SK&#x3D;(d,N)$</p>
@@ -443,473 +303,8 @@
 <p>RSA签名可以使用RSA_sign或者RSA_private_encrypt；</p>
 <p>RSA验证签名可以使用RSA_vertify或者RSA_public_decrypt;</p>
 <p><strong>代码</strong></p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-comment">// 该函数用于进行rsa签名生成</span><br><span class="hljs-comment">//  参数:</span><br><span class="hljs-comment">//      input 代表输入的明文字符串</span><br><span class="hljs-comment">//  返回值:</span><br><span class="hljs-comment">//      string类型, 返回解密签名结果后的明文</span><br><span class="hljs-built_in">string</span> <span class="hljs-title function_">RSA_signature_signing</span><span class="hljs-params">(<span class="hljs-built_in">string</span> input)</span><br>&#123;<br>    load_RSA_keys();<br><br>    <span class="hljs-type">int</span> flag = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">char</span> * sign =(<span class="hljs-type">char</span>*)<span class="hljs-built_in">malloc</span>(RSA_size(rsa_private_key));<br>	<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> siglen = (<span class="hljs-type">unsigned</span> <span class="hljs-type">int</span>)RSA_size(rsa_private_key);<br>    flag = RSA_sign(NID_sha1,(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)input.c_str(),input.length(),(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)sign,&amp;siglen,rsa_private_key);<br>  <br>    <span class="hljs-built_in">string</span> <span class="hljs-title function_">res</span><span class="hljs-params">(sign,siglen)</span>;<br>    <span class="hljs-keyword">return</span> res;<br>&#125;<br><br><span class="hljs-comment">// 该函数用于进行rsa签名验证</span><br><span class="hljs-comment">//  参数:</span><br><span class="hljs-comment">//      message 代表输入的签名结果</span><br><span class="hljs-comment">//      signature 代表签名的结果</span><br><span class="hljs-comment">//  返回值:</span><br><span class="hljs-comment">//      bool类型, 返回签名的结果, 验证成功为返回true, 失败返回false</span><br><span class="hljs-type">bool</span> <span class="hljs-title function_">RSA_signature_verify</span><span class="hljs-params">(<span class="hljs-built_in">string</span> message, <span class="hljs-built_in">string</span> signature)</span><br>&#123;<br>    load_RSA_keys();<br>    <span class="hljs-type">bool</span> flag = RSA_verify(NID_sha1,(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)message.c_str(),message.length(),(<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> *)signature.c_str(),signature.length(),rsa_public_key);<br>    <span class="hljs-keyword">return</span> flag;<br>&#125;<br></code></pre></td></tr></table></figure>
-                
-              </div>
-            
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/" class="category-chain-item">信息安全</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/%E6%95%B0%E8%AE%BA/">#数论</a>
-      
-        <a href="/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">#信息安全</a>
-      
-        <a href="/tags/C-C/">#C & C++</a>
-      
-    </div>
-  
-</div>
-
-
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>信息安全基础实验知识点</div>
-      <div>http://tom-jerr.github.io/2023/02/20/信息安全基础实验/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>LZY</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2023年2月20日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-by"></i>
-                  </span>
-                </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2023/02/20/csapp/%E4%BF%A1%E6%81%AF%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%92%8C%E5%A4%84%E7%90%86/" title="CSAPP--datalab">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CSAPP--datalab</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2023/02/20/deeplearning/RCNN/" title="RCNN">
-                        <span class="hidden-mobile">RCNN</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-  
-  
-    <article id="comments">
-      
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"FykazgoleTaNb9vFaAPjgTy3-gzGzoHsz","appKey":"DVyxjO5OlVlaZZsbH2CMqVbF","path":"window.location.pathname","placeholder":"吐槽","avatar":"monsterid","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":true,"recordIP":false,"serverURLs":"https://fykazgol.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          var imgSelector = '#valine .vcontent img:not(.vemoji)';
-          Fluid.plugins.imageCaption(imgSelector);
-          Fluid.plugins.fancyBox(imgSelector);
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-    </article>
-  
-
-
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
-  </div>
-</div>
-
-
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-  
-  
-
-
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-    
-
-    
-      <div class="col-lg-7 mx-auto nopadding-x-md">
-        <div class="container custom mx-auto">
-          <link rel="stylesheet" href="/dist/APlayer.min.css"> <div id="aplayer"></div> <script type="text/javascript" src="/dist/APlayer.min.js"></script> <script type="text/javascript" src="/js/music.js"></script>
-        </div>
-      </div>
-    
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> <div>tom-jerr的个人博客 | 记录美好生活</div> 
-    </div>
-  
-  
-  
-  
-</div>
-
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    
-      <script  src="/js/img-lazyload.js" ></script>
-    
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
-    
-
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-  
-<script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-<script src="//cdn.jsdelivr.net/gh/metowolf/Metingjs@1.2/dist/Meting.min.js"></script>
-<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/xiantiao.js"></script>
-<script src="//cdn.jsdelivr.net/gh/bynotes/texiao/source/js/dianjichuzi.js"></script>
-<script src="/js/useaplayer.js"></script>
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
-  
-
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
-</body>
-</html>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 该函数用于进行rsa签名生成</span></span><br><span class="line"><span class="comment">//  参数:</span></span><br><span class="line"><span class="comment">//      input 代表输入的明文字符串</span></span><br><span class="line"><span class="comment">//  返回值:</span></span><br><span class="line"><span class="comment">//      string类型, 返回解密签名结果后的明文</span></span><br><span class="line"><span class="built_in">string</span> <span class="title function_">RSA_signature_signing</span><span class="params">(<span class="built_in">string</span> input)</span></span><br><span class="line">&#123;</span><br><span class="line">    load_RSA_keys();</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> flag = <span class="number">0</span>;</span><br><span class="line">    <span class="type">char</span> * sign =(<span class="type">char</span>*)<span class="built_in">malloc</span>(RSA_size(rsa_private_key));</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">int</span> siglen = (<span class="type">unsigned</span> <span class="type">int</span>)RSA_size(rsa_private_key);</span><br><span class="line">    flag = RSA_sign(NID_sha1,(<span class="type">unsigned</span> <span class="type">char</span> *)input.c_str(),input.length(),(<span class="type">unsigned</span> <span class="type">char</span> *)sign,&amp;siglen,rsa_private_key);</span><br><span class="line">  </span><br><span class="line">    <span class="built_in">string</span> <span class="title function_">res</span><span class="params">(sign,siglen)</span>;</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 该函数用于进行rsa签名验证</span></span><br><span class="line"><span class="comment">//  参数:</span></span><br><span class="line"><span class="comment">//      message 代表输入的签名结果</span></span><br><span class="line"><span class="comment">//      signature 代表签名的结果</span></span><br><span class="line"><span class="comment">//  返回值:</span></span><br><span class="line"><span class="comment">//      bool类型, 返回签名的结果, 验证成功为返回true, 失败返回false</span></span><br><span class="line"><span class="type">bool</span> <span class="title function_">RSA_signature_verify</span><span class="params">(<span class="built_in">string</span> message, <span class="built_in">string</span> signature)</span></span><br><span class="line">&#123;</span><br><span class="line">    load_RSA_keys();</span><br><span class="line">    <span class="type">bool</span> flag = RSA_verify(NID_sha1,(<span class="type">unsigned</span> <span class="type">char</span> *)message.c_str(),message.length(),(<span class="type">unsigned</span> <span class="type">char</span> *)signature.c_str(),signature.length(),rsa_public_key);</span><br><span class="line">    <span class="keyword">return</span> flag;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2023/02/20/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/">http://tom-jerr.github.io/2023/02/20/信息安全基础实验/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">tom-jerr的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%B0%E8%AE%BA/">数论</a><a class="post-meta__tags" href="/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/">信息安全</a><a class="post-meta__tags" href="/tags/C-C/">C &amp; C++</a></div><div class="post_share"><div class="addthis_inline_share_toolbox"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=null" async="async"></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2020/08/28/%E6%AF%9B%E6%A6%82%E5%A4%8D%E4%B9%A0/" title="毛概复习"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">毛概复习</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2584074296&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:lzy_cs_ln@163.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C"><span class="toc-number">2.</span> <span class="toc-text">信息安全基础实验</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%95%B0%E8%AE%BA%E5%9F%BA%E7%A1%80"><span class="toc-number">2.1.</span> <span class="toc-text">1. 数论基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%A8%A1%E6%8C%87%E6%95%B0%E8%BF%90%E7%AE%97"><span class="toc-number">2.1.1.</span> <span class="toc-text">1.1 模指数运算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%AA%E4%BB%A3%E7%A0%81%EF%BC%9A"><span class="toc-number">2.1.1.1.</span> <span class="toc-text">伪代码：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E4%BB%A3%E7%A0%81"><span class="toc-number">2.1.1.2.</span> <span class="toc-text">实验代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E7%B4%A0%E6%80%A7%E6%A3%80%E6%B5%8B"><span class="toc-number">2.1.2.</span> <span class="toc-text">1.2 素性检测</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-%E7%A1%AE%E5%AE%9A%E6%80%A7%E7%B4%A0%E6%80%A7%E6%A3%80%E6%B5%8B"><span class="toc-number">2.1.2.1.</span> <span class="toc-text">1.2.1 确定性素性检测</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Eratosthenes%E7%B4%A0%E6%95%B0%E7%AD%9B%E9%80%89%E6%B3%95"><span class="toc-number">2.1.2.1.1.</span> <span class="toc-text">Eratosthenes素数筛选法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AC%A7%E6%8B%89%E7%AD%9B%E6%B3%95%EF%BC%88%E7%BA%BF%E6%80%A7%E7%AD%9B%E6%B3%95%EF%BC%89"><span class="toc-number">2.1.2.1.2.</span> <span class="toc-text">欧拉筛法（线性筛法）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-%E9%9D%9E%E7%A1%AE%E5%AE%9A%E6%80%A7%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95%EF%BC%88Miller-Rabin%EF%BC%89"><span class="toc-number">2.1.2.2.</span> <span class="toc-text">1.2.2 非确定性检测算法（Miller-Rabin）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E4%B9%98%E6%B3%95%E9%80%86%E5%85%83"><span class="toc-number">2.1.3.</span> <span class="toc-text">1.3 乘法逆元</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">2. 伪随机数生成器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-0-%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.0 伪随机数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-LCG%EF%BC%88%E7%BA%BF%E6%80%A7%E5%90%8C%E4%BD%99%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%89"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.1 LCG（线性同余生成器）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">安全性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-BBS%E4%BC%AA%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%94%9F%E6%88%90%E5%99%A8"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.2 BBS伪随机数生成器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.3.1.</span> <span class="toc-text">代码实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-OpenSSL"><span class="toc-number">2.3.</span> <span class="toc-text">3.OpenSSL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81"><span class="toc-number">2.4.</span> <span class="toc-text">4. 对称密码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RC4"><span class="toc-number">2.4.1.</span> <span class="toc-text">RC4</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">2.4.1.1.</span> <span class="toc-text">实现方式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DES%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81"><span class="toc-number">2.4.2.</span> <span class="toc-text">DES分组密码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E5%BA%94%E7%94%A8%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.4.2.1.</span> <span class="toc-text">分组密码应用模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-1"><span class="toc-number">2.4.2.2.</span> <span class="toc-text">代码实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SHA1%E2%80%94%E2%80%94%E5%93%88%E5%B8%8C%E5%87%BD%E6%95%B0"><span class="toc-number">2.4.3.</span> <span class="toc-text">SHA1——哈希函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SHA-1%E7%AE%97%E6%B3%95"><span class="toc-number">2.4.3.1.</span> <span class="toc-text">SHA-1算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0-2"><span class="toc-number">2.4.3.2.</span> <span class="toc-text">代码实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%AF%86%E7%A0%81"><span class="toc-number">2.5.</span> <span class="toc-text">5. 非对称密码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA%E5%8A%A0%E5%AF%86"><span class="toc-number">2.5.1.</span> <span class="toc-text">RSA加密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%86%E9%92%A5%E5%87%BD%E6%95%B0"><span class="toc-number">2.5.2.</span> <span class="toc-text">密钥函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA%E5%8A%A0%E8%A7%A3%E5%AF%86"><span class="toc-number">2.5.3.</span> <span class="toc-text">RSA加解密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RSA%E7%AD%BE%E5%90%8D"><span class="toc-number">2.5.4.</span> <span class="toc-text">RSA签名</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/02/20/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/" title="信息安全基础实验知识点"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="信息安全基础实验知识点"/></a><div class="content"><a class="title" href="/2023/02/20/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%E5%9F%BA%E7%A1%80%E5%AE%9E%E9%AA%8C/" title="信息安全基础实验知识点">信息安全基础实验知识点</a><time datetime="2023-02-19T16:38:16.529Z" title="发表于 2023-02-20 00:38:16">2023-02-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/08/28/%E6%AF%9B%E6%A6%82%E5%A4%8D%E4%B9%A0/" title="毛概复习"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="毛概复习"/></a><div class="content"><a class="title" href="/2020/08/28/%E6%AF%9B%E6%A6%82%E5%A4%8D%E4%B9%A0/" title="毛概复习">毛概复习</a><time datetime="2020-08-28T06:17:49.000Z" title="发表于 2020-08-28 14:17:49">2020-08-28</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = ture;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
