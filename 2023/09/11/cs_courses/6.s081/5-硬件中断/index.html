@@ -1,0 +1,266 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>5-硬件中断 | tom-jerr的个人博客</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Interrupts 中断与系统调用区别 asynchronous，异步，与当前运行在 CPU 的进程无关 concurrency，CPU 和产生中断的设备并行运行 program device，需要关注外部设备    中断处理——硬件 PLIC 会通知当前有一个待处理的中断 其中一个 CPU 核会 Claim 接收中断，这样 PLIC 就不会把中断发给其他的 CPU 处理 CPU 核处理完中断之">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5-硬件中断">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/09/11/cs_courses/6.s081/5-%E7%A1%AC%E4%BB%B6%E4%B8%AD%E6%96%AD/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="Interrupts 中断与系统调用区别 asynchronous，异步，与当前运行在 CPU 的进程无关 concurrency，CPU 和产生中断的设备并行运行 program device，需要关注外部设备    中断处理——硬件 PLIC 会通知当前有一个待处理的中断 其中一个 CPU 核会 Claim 接收中断，这样 PLIC 就不会把中断发给其他的 CPU 处理 CPU 核处理完中断之">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-09-11T14:17:49.000Z">
+<meta property="article:modified_time" content="2023-09-11T11:13:05.767Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="6.s081">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2023/09/11/cs_courses/6.s081/5-%E7%A1%AC%E4%BB%B6%E4%B8%AD%E6%96%AD/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '5-硬件中断',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-11 19:13:05'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="tom-jerr的个人博客"><span class="site-name">tom-jerr的个人博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">5-硬件中断</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-11T11:13:05.767Z" title="更新于 2023-09-11 19:13:05">2023-09-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CS-COURSE/">CS_COURSE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="5-硬件中断"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Interrupts"><a href="#Interrupts" class="headerlink" title="Interrupts"></a>Interrupts</h1><ul>
+<li>中断与系统调用区别<ul>
+<li>asynchronous，异步，与当前运行在 CPU 的进程无关</li>
+<li>concurrency，CPU 和产生中断的设备并行运行</li>
+<li>program device，需要关注外部设备</li>
+</ul>
+</li>
+</ul>
+<h2 id="中断处理——硬件"><a href="#中断处理——硬件" class="headerlink" title="中断处理——硬件"></a>中断处理——硬件</h2><ul>
+<li>PLIC 会通知当前有一个待处理的中断</li>
+<li>其中一个 CPU 核会 Claim 接收中断，这样 PLIC 就不会把中断发给其他的 CPU 处理</li>
+<li>CPU 核处理完中断之后，CPU 会通知 PLIC</li>
+<li>PLIC 将不再保存中断的信息</li>
+</ul>
+<h2 id="中断处理——软件"><a href="#中断处理——软件" class="headerlink" title="中断处理——软件"></a>中断处理——软件</h2><p>使用驱动管理设备</p>
+<ul>
+<li><p>bottom：通常是 Interrupt handler。当一个中断送到了 CPU，并且 CPU 设置接收这个中断，CPU 会调用相应的 Interrupt handler。Interrupt handler 并不运行在任何特定进程的 context 中，它只是处理中断。</p>
+</li>
+<li><p>top：是用户进程，或者内核的其他部分调用的接口。对于 UART 来说，这里有 read&#x2F;write 接口，这些接口可以被更高层级的代码调用。</p>
+</li>
+<li><p>驱动中会有一些队列（或者说 buffer），top 部分的代码会从队列中读写数据，而 Interrupt handler（bottom 部分）同时也会向队列中读写数据。这里的队列可以将并行运行的设备和 CPU 解耦开来</p>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\MIT\6.s081\uart.png"></p>
+<ul>
+<li>我们通过 load 将数据写入到 Transmit Holding Register 中，之后 UART 芯片会通过串口线将这个 Byte 送出。当完成了发送，UART 会生成一个中断给内核，这个时候才能再次写入下一个数据。</li>
+<li>所以内核和设备之间需要遵守一些协议才能确保一切工作正常。上图中的 UART 芯片会有一个容量是 16 的 FIFO，但是你还是要小心，因为如果阻塞了 16 个 Byte 之后再次写入还是会造成数据覆盖</li>
+</ul>
+<h2 id="键入字符中断过程"><a href="#键入字符中断过程" class="headerlink" title="键入字符中断过程"></a>键入字符中断过程</h2><ul>
+<li>用户输入的字符。键盘连接到了 UART 的输入线路，当你在键盘上按下一个按键，UART 芯片会将按键字符通过串口线发送到另一端的 UART 芯片。</li>
+<li>另一端的 UART 芯片先将数据 bit 合并成一个 Byte，之后再产生一个中断，并告诉处理器说这里有一个来自于键盘的字符。之后 Interrupt handler 会处理来自于 UART 的字符。</li>
+</ul>
+<h3 id="中断相关寄存器"><a href="#中断相关寄存器" class="headerlink" title="中断相关寄存器"></a>中断相关寄存器</h3><ul>
+<li><p>SIE，寄存器中有一个 bit（E）专门针对例如 UART 的外部设备的中断；有一个 bit（S）专门针对软件中断，软件中断可能由一个 CPU 核触发给另一个 CPU 核；还有一个 bit（T）专门针对定时器中断</p>
+</li>
+<li><p>SSTATUS：有一个 bit 来打开或者关闭中断。每一个 CPU 核都有独立的 SIE 和 SSTATUS 寄存器，除了通过 SIE 寄存器来单独控制特定的中断，还可以通过 SSTATUS 寄存器中的一个 bit 来控制所有的中断。</p>
+</li>
+<li><p>SIP（Supervisor Interrupt Pending）寄存器。当发生中断时，处理器可以通过查看这个寄存器知道当前是什么类型的中断。</p>
+</li>
+<li><p>SCAUSE 寄存器，这个寄存器我们之前看过很多次。它会表明当前状态的原因。</p>
+</li>
+<li><p>STVEC 寄存器，它会保存当 trap，page fault 或者中断发生时，CPU 运行的用户程序的程序计数器，这样才能在稍后恢复程序的运行。</p>
+</li>
+</ul>
+<h3 id="控制台初始化"><a href="#控制台初始化" class="headerlink" title="控制台初始化"></a>控制台初始化</h3><ul>
+<li><p>uartinit 函数，关闭中断，设置波特率，设置字符长度为 8bit，重置 FIFO，最后重新打开中断</p>
+</li>
+<li><p>需要让中断被 CPU 感知，需要调用 plicinit 函数</p>
+<ul>
+<li>PLIC 与外设一样，也占用了一个 I&#x2F;O 地址（0xC000_0000</li>
+</ul>
+</li>
+<li><p>plicinithart 函数。</p>
+<ul>
+<li><p>plicinit 是由 0 号 CPU 运行，之后，每个 CPU 的核都需要调用 plicinithart 函数表明对于哪些外设中断感兴趣。</p>
+</li>
+<li><p>每个 CPU 的核都表明自己对来自于 UART 和 VIRTIO 的中断感兴趣。因为我们忽略中断的优先级，所以我们将优先级设置为 0</p>
+</li>
+</ul>
+</li>
+<li><p>设置 SSTATUS 寄存器，接收中断</p>
+<ul>
+<li>scheduler 函数中开中断</li>
+</ul>
+</li>
+</ul>
+<h2 id="uart-driver-top"><a href="#uart-driver-top" class="headerlink" title="uart driver top"></a>uart driver top</h2><ul>
+<li><p>consolewrite()</p>
+<ul>
+<li>either_copyin 将字符拷入，之后调用 uartputc 函数。uartputc 函数将字符写入给 UART 设备，所以你可以认为 consolewrite 是一个 UART 驱动的 top 部分</li>
+</ul>
+</li>
+<li><p>在 UART 的内部会有一个 buffer 用来发送数据，buffer 的大小是 32 个字符。同时还有一个为 consumer 提供的读指针和为 producer 提供的写指针，来构建一个环形的 buffer</p>
+</li>
+<li><p>uartstart()</p>
+<ul>
+<li>首先是检查当前设备是否空闲，如果空闲的话，我们会从 buffer 中读出数据，然后将数据写入到 THR（Transmission Holding Register）发送寄存器。这里相当于告诉设备，我这里有一个字节需要你来发送。</li>
+</ul>
+</li>
+</ul>
+<h2 id="uart-driver-bottom"><a href="#uart-driver-bottom" class="headerlink" title="uart driver bottom"></a>uart driver bottom</h2><ul>
+<li><p>plic_claim 函数位于 plic.c 文件中。在这个函数中，当前 CPU 核会告知 PLIC，自己要处理中断，PLIC_SCLAIM 会将中断号返回，对于 UART 来说，返回的中断号是 10。</p>
+</li>
+<li><p>位于 uart.c 文件的 uartintr 函数，会从 UART 的接受寄存器中读取数据，之后将获取到的数据传递给 consoleintr 函数。没有通过键盘输入任何数据，所以 UART 的接受寄存器为空，调用 uartstart 将 buffer 中的字符送出</p>
+</li>
+</ul>
+<h2 id="中断并发"><a href="#中断并发" class="headerlink" title="中断并发"></a>中断并发</h2><ul>
+<li>设备和 CPU 并行，当 UART 向 Console 发送字符的时候，CPU 会返回执行 Shell，而 Shell 可能会再执行一次系统调用，向 buffer 中写入另一个字符，这些都是在并行的执行。这里的并行称为 producer-consumer 并行。</li>
+<li>中断停止运行当前程序，如果不能在执行期间被中断，这时内核需要临时关闭中断，来确保这段代码的原子性</li>
+<li>驱动的 top 和 bottom 部分是并行运行的，所以一个驱动的 top 和 bottom 部分可以并行的在不同的 CPU 上运行。这里我们通过 lock 来管理并行。因为这里有共享的数据，我们想要 buffer 在一个时间只被一个 CPU 核所操作</li>
+</ul>
+<h3 id="producer-consumer-并发"><a href="#producer-consumer-并发" class="headerlink" title="producer-consumer 并发"></a>producer-consumer 并发</h3><ul>
+<li><p>producer 可以一直写入数据，直到写指针 + 1 等于读指针</p>
+</li>
+<li><p>uartintr 函数是 consumer，每当有一个中断，并且读指针落后于写指针，uartintr 函数就会从读指针中读取一个字符再通过 UART 设备发送，并且将读指针加 1</p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2023/09/11/cs_courses/6.s081/5-%E7%A1%AC%E4%BB%B6%E4%B8%AD%E6%96%AD/">http://tom-jerr.github.io/2023/09/11/cs_courses/6.s081/5-硬件中断/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">tom-jerr的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/6-s081/">6.s081</a></div><div class="post_share"><div class="addthis_inline_share_toolbox"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=null" async="async"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/09/11/cs_courses/6.s081/4-%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD/" title="4-缺页中断"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">4-缺页中断</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/11/cs_courses/6.s081/6-%E5%A4%9A%E6%A0%B8%E5%92%8C%E9%94%81/" title="6-多核和锁"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">6-多核和锁</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/09/11/cs_courses/6.s081/2-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%AE%9E%E7%8E%B0/" title="2-虚拟内存的实现"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">2-虚拟内存的实现</div></div></a></div><div><a href="/2023/09/11/cs_courses/6.s081/1-OS%E7%9A%84%E9%9A%94%E7%A6%BB%E6%80%A7/" title="1-OS的隔离性"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">1-OS的隔离性</div></div></a></div><div><a href="/2023/09/11/cs_courses/6.s081/3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E9%99%B7%E5%85%A5/" title="3-系统调用和陷入"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">3-系统调用和陷入</div></div></a></div><div><a href="/2023/09/11/cs_courses/6.s081/4-%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD/" title="4-缺页中断"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">4-缺页中断</div></div></a></div><div><a href="/2023/09/11/cs_courses/6.s081/6-%E5%A4%9A%E6%A0%B8%E5%92%8C%E9%94%81/" title="6-多核和锁"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">6-多核和锁</div></div></a></div><div><a href="/2023/09/11/cs_courses/6.s081/7-%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/" title="7-进程切换"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">7-进程切换</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2584074296&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:lzy_cs_ln@163.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Interrupts"><span class="toc-number">1.</span> <span class="toc-text">Interrupts</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E2%80%94%E2%80%94%E7%A1%AC%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">中断处理——硬件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E2%80%94%E2%80%94%E8%BD%AF%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">中断处理——软件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%AE%E5%85%A5%E5%AD%97%E7%AC%A6%E4%B8%AD%E6%96%AD%E8%BF%87%E7%A8%8B"><span class="toc-number">1.3.</span> <span class="toc-text">键入字符中断过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E7%9B%B8%E5%85%B3%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">中断相关寄存器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%8F%B0%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">1.3.2.</span> <span class="toc-text">控制台初始化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#uart-driver-top"><span class="toc-number">1.4.</span> <span class="toc-text">uart driver top</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#uart-driver-bottom"><span class="toc-number">1.5.</span> <span class="toc-text">uart driver bottom</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E5%B9%B6%E5%8F%91"><span class="toc-number">1.6.</span> <span class="toc-text">中断并发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#producer-consumer-%E5%B9%B6%E5%8F%91"><span class="toc-number">1.6.1.</span> <span class="toc-text">producer-consumer 并发</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/09/11/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0911/" title="9月11日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月11日记录"/></a><div class="content"><a class="title" href="/2023/09/11/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0911/" title="9月11日记录">9月11日记录</a><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/11/cs_courses/cs61c/lecture10_Combinational%20Logic/" title="lecture10_Combinational_Logic"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture10_Combinational_Logic"/></a><div class="content"><a class="title" href="/2023/09/11/cs_courses/cs61c/lecture10_Combinational%20Logic/" title="lecture10_Combinational_Logic">lecture10_Combinational_Logic</a><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/11/cs_courses/cs61c/lecture15_Data-LevelParallelism/" title="lecture15_Data_Level_Parallelism"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture15_Data_Level_Parallelism"/></a><div class="content"><a class="title" href="/2023/09/11/cs_courses/cs61c/lecture15_Data-LevelParallelism/" title="lecture15_Data_Level_Parallelism">lecture15_Data_Level_Parallelism</a><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/11/cs_courses/cs61c/lecture16_Thread-LevelParallelism/" title="lecture16_Thread_Level_Parallelism"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture16_Thread_Level_Parallelism"/></a><div class="content"><a class="title" href="/2023/09/11/cs_courses/cs61c/lecture16_Thread-LevelParallelism/" title="lecture16_Thread_Level_Parallelism">lecture16_Thread_Level_Parallelism</a><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/11/cs_courses/cs61c/lecture11_FSMs/" title="lecture11_FSMs"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture11_FSMs"/></a><div class="content"><a class="title" href="/2023/09/11/cs_courses/cs61c/lecture11_FSMs/" title="lecture11_FSMs">lecture11_FSMs</a><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = ture;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
