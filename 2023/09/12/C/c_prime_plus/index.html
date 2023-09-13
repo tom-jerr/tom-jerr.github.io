@@ -1,0 +1,504 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C Prime Plus | tom-jerr的个人博客</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="C Prime Plus 复习单词类型 标识符，运算符，分隔符，常量，注释符，关键字 关键字：auto, extern, register, static  C 预处理器指令 #inlcude 在编译前对源代码进行一些预处理 #include &lt;头文件&gt;会将头文件的内容在引用该头文件的源文件中展开；避免重复引用，头文件要条件编译或#pragma once  数据类型整数溢出 如果表示的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C Prime Plus">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/09/12/C/c_prime_plus/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="C Prime Plus 复习单词类型 标识符，运算符，分隔符，常量，注释符，关键字 关键字：auto, extern, register, static  C 预处理器指令 #inlcude 在编译前对源代码进行一些预处理 #include &lt;头文件&gt;会将头文件的内容在引用该头文件的源文件中展开；避免重复引用，头文件要条件编译或#pragma once  数据类型整数溢出 如果表示的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-09-12T14:17:49.000Z">
+<meta property="article:modified_time" content="2023-09-13T15:43:47.643Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="Books">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2023/09/12/C/c_prime_plus/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C Prime Plus',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-13 23:43:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="tom-jerr的个人博客"><span class="site-name">tom-jerr的个人博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">C Prime Plus</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-12T14:17:49.000Z" title="发表于 2023-09-12 22:17:49">2023-09-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-13T15:43:47.643Z" title="更新于 2023-09-13 23:43:47">2023-09-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/">C</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="C Prime Plus"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="C-Prime-Plus-复习"><a href="#C-Prime-Plus-复习" class="headerlink" title="C Prime Plus 复习"></a>C Prime Plus 复习</h1><h2 id="单词类型"><a href="#单词类型" class="headerlink" title="单词类型"></a>单词类型</h2><ul>
+<li>标识符，运算符，分隔符，常量，注释符，关键字</li>
+<li>关键字：auto, extern, register, static</li>
+</ul>
+<h2 id="C-预处理器指令"><a href="#C-预处理器指令" class="headerlink" title="C 预处理器指令"></a>C 预处理器指令</h2><ul>
+<li>#inlcude 在编译前对源代码进行一些预处理</li>
+<li>#include &lt;头文件&gt;会将头文件的内容在引用该头文件的源文件中展开；避免重复引用，头文件要条件编译或<code>#pragma once</code></li>
+</ul>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><h3 id="整数溢出"><a href="#整数溢出" class="headerlink" title="整数溢出"></a>整数溢出</h3><ul>
+<li>如果表示的值超过相应的取值范围，会重新从最小值开始计算</li>
+<li>溢出是 C 语言未定义行为，结果取决于编译器</li>
+</ul>
+<h3 id="char-类型"><a href="#char-类型" class="headerlink" title="char 类型"></a>char 类型</h3><ul>
+<li>存储字符，但从技术上看，char 类型存储的实际上是整数不是字符</li>
+<li>表示范围取决于编译器；可能是有符号，也可能是无符号</li>
+</ul>
+<h3 id="Bool-类型"><a href="#Bool-类型" class="headerlink" title="_Bool 类型"></a>_Bool 类型</h3><ul>
+<li>C99 标准添加了_Bool 类型；用于表示布尔值；实际上也是整数类型</li>
+</ul>
+<h3 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h3><ul>
+<li>上溢：赋一个无穷大的特定值</li>
+<li>下溢：计算过程中损失了原来末尾有效位上的数字</li>
+<li>特殊值：NAN</li>
+</ul>
+<h3 id="复数和虚数"><a href="#复数和虚数" class="headerlink" title="复数和虚数"></a>复数和虚数</h3><ul>
+<li>两个值，分别表示实部和虚部：float _Complex, double _Complex, long double _Complex</li>
+<li>表示虚部：float _Imaginary, double _Imaginary, long double _Imaginary</li>
+</ul>
+<h3 id="刷新输出-console"><a href="#刷新输出-console" class="headerlink" title="刷新输出 (console)"></a>刷新输出 (console)</h3><ul>
+<li>控制台是行缓冲，最后打印换行符就能打印整行数据</li>
+<li>fflush 刷新缓冲区，打印字符</li>
+</ul>
+<h2 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h2><ul>
+<li>char 数组存放字符串；字符数组末位加’\0’</li>
+<li>sizeof 计算末尾空字符；strlen 不计算末尾空字符</li>
+<li>存放在常量区，.rodata 段，一般不能修改</li>
+</ul>
+<h3 id="printf"><a href="#printf" class="headerlink" title="printf()"></a>printf()</h3><ul>
+<li>“%-20s”：从字段的左侧打印该项</li>
+<li>“%#o”：把结果转换为另一种形式</li>
+<li>“%010d”：对于数值格式，用前导 0 代替空格填充字段宽度</li>
+</ul>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><ul>
+<li><p>sizeof()返回 size_t 类型的值，是一个无符号整数类型</p>
+</li>
+<li><p>递增和递减运算符的优先级只比()小；只能影响一个变量；<code>(x*n)++</code>是无效的</p>
+</li>
+<li><p>在函数中出现多个相同变量，使用递增或递减；可能出现错误，因为编译器执行的顺序未知</p>
+<ul>
+<li>一个变量出现在一个函数的多个参数中，不要对该变量使用递增或递减</li>
+<li>一个变量多次出现在一个表达式中，不要对该变量使用递增或递减</li>
+</ul>
+</li>
+<li><p>C 并未指明在子表达式求值后递增还是整个表达式求值后递增</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">y = (<span class="number">4</span> + n++) + (<span class="number">6</span> + n++);</span><br></pre></td></tr></table></figure>
+
+<h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><ul>
+<li>+，-，++，–，sizeof 是从右向左结合</li>
+<li>&#x3D;是从右向左结合</li>
+<li>.和-&gt;还有[]优先级比*高；++，–优先级比*高</li>
+</ul>
+<h2 id="分支和跳转"><a href="#分支和跳转" class="headerlink" title="分支和跳转"></a>分支和跳转</h2><ul>
+<li>为了提高效率，应该将情况大概率发生的语句放在 if 中<ul>
+<li>因为现代 CPU 流水线结构存在分支错误惩罚，其代价接近 19 个时钟周期</li>
+</ul>
+</li>
+<li>switch 语句比 if-else 执行效率更高<ul>
+<li>编译时将跳转地址存储在.rodata 中</li>
+<li>符合条件后直接跳转到该指令处，不再继续执行 if 判断</li>
+<li>switch 不使用浮点数判断；因为浮点数在计算机中的表示并不精确；不能被转化为正确的二进制数</li>
+<li>switch 不支持字符串作为比较条件，该语句被设计为处理数值或特定的枚举类型</li>
+</ul>
+</li>
+</ul>
+<h2 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h2><ul>
+<li>字符输出存在缓冲区<ul>
+<li>行缓冲：控制台输出，输入换行符后，打印缓冲区的内容</li>
+<li>全缓冲：缓冲区全满后，才将缓冲区的所有内容输出</li>
+</ul>
+</li>
+</ul>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><ul>
+<li>实际上是将关闭待执行命令的 stdin，将其替换成输入文件的 fd；或者是关闭待执行命令的 stdout，将其替换成输出文件的 fd</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">dup, dup2 <span class="comment">// 复制文件描述符</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="尾递归"><a href="#尾递归" class="headerlink" title="尾递归"></a>尾递归</h3><ul>
+<li>递归形式与函数定义相同；编译器会将其优化成循环结构</li>
+</ul>
+<h2 id="数组和指针"><a href="#数组和指针" class="headerlink" title="数组和指针"></a>数组和指针</h2><h3 id="指定初始化器"><a href="#指定初始化器" class="headerlink" title="指定初始化器"></a>指定初始化器</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// old standard</span></span><br><span class="line"><span class="type">int</span> arrr[<span class="number">3</span>] = &#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>&#125;;</span><br><span class="line"><span class="comment">// C99 standard</span></span><br><span class="line"><span class="type">int</span> arr[<span class="number">3</span>] = &#123;[<span class="number">2</span>] = <span class="number">5</span>&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>数组初始化可以用花括号，但是赋值不行</li>
+</ul>
+<h3 id="变长数组-VLA"><a href="#变长数组-VLA" class="headerlink" title="变长数组 VLA"></a>变长数组 VLA</h3><ul>
+<li>普通数组是静态分配内存；但是 VLA 可以动态分配内存</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sumwd</span><span class="params">(<span class="type">int</span> rows, <span class="type">int</span> cols, <span class="type">int</span> arr[rows][cols])</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="复合字面量-C99"><a href="#复合字面量-C99" class="headerlink" title="复合字面量 (C99)"></a>复合字面量 (C99)</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> diva[<span class="number">2</span>] = &#123;<span class="number">10</span>,<span class="number">20</span>&#125;;</span><br><span class="line">(<span class="type">int</span> [<span class="number">2</span>]) = &#123;<span class="number">10</span>,<span class="number">20</span>&#125;;  <span class="comment">// 创建了一个和diva相同的匿名数组</span></span><br><span class="line">sum((<span class="type">int</span> [])&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;, <span class="number">4</span>);  <span class="comment">// 复合字面量作为参数传递</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="伸缩型数组成员-C99"><a href="#伸缩型数组成员-C99" class="headerlink" title="伸缩型数组成员 (C99)"></a>伸缩型数组成员 (C99)</h3><ul>
+<li>该数组不会立即存在</li>
+<li>在为结构体动态分配内存时分配<br>规则</li>
+<li>必须是结构体最后一个成员</li>
+<li>结构中必须有一个以上的成员</li>
+<li>声明类似普通数组, 只是方括号是空的</li>
+</ul>
+<h3 id="union"><a href="#union" class="headerlink" title="union"></a>union</h3><ul>
+<li>联合结构, 在同一个内存空间中存储不同的数据类型 (不是同时存储)</li>
+<li>联合结构中只能定义一个值</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">hold</span> &#123;</span></span><br><span class="line">  <span class="type">int</span> a;</span><br><span class="line">  <span class="type">double</span> b;</span><br><span class="line">  <span class="type">char</span> c;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">hold</span> <span class="title">h1</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">hold</span> <span class="title">h2</span>;</span></span><br><span class="line"></span><br><span class="line">h1.a = <span class="number">4</span>;</span><br><span class="line">h2.c = <span class="string">&#x27;a&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="enum"><a href="#enum" class="headerlink" title="enum"></a>enum</h3><ul>
+<li>枚举类型</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">spectrum</span> &#123;</span>red, blue, orange&#125;;</span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">spectrum</span> <span class="title">color</span>;</span></span><br><span class="line">color = blue;</span><br><span class="line">color++;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>从技术上来看, 本身是 int 类型的常量</li>
+</ul>
+<h2 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h2><ul>
+<li>用字符串常量初始化 char 数组；该数组得到的是字符串常量的副本</li>
+</ul>
+<h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><ul>
+<li>在一个字符串中查找一个特定的字符<ul>
+<li>strchr 查找第一个匹配的位置</li>
+<li>strrchr 查找最后一个匹配的位置</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strchr</span><span class="params">(<span class="type">char</span> <span class="type">const</span> *str, <span class="type">int</span> ch)</span>;</span><br><span class="line"><span class="type">char</span> *<span class="title function_">strrchr</span><span class="params">(<span class="type">char</span> <span class="type">const</span> *str, <span class="type">int</span> ch)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查找一组字符中任意一个出现的第一个位置</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strpbrk</span><span class="params">(<span class="type">char</span> <span class="type">const</span> *str, <span class="type">char</span> <span class="type">const</span> *group)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查找一个子串</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strstr</span><span class="params">(<span class="type">char</span> <span class="type">const</span> *s1, <span class="type">char</span> <span class="type">const</span> *s2)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查找一个字符串前缀<ul>
+<li>group 指定一个或多个字符，返回 str 起始部分匹配的任意字符的字符数</li>
+<li>group 指定一个或多个字符，返回 str 起始部分不与 group 匹配的任意字符的字符数</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">size_t</span> <span class="title function_">strspn</span><span class="params">(<span class="type">char</span> <span class="type">const</span> *str, <span class="type">char</span> <span class="type">const</span> *group)</span>;</span><br><span class="line"><span class="type">size_t</span> <span class="title function_">strcspn</span><span class="params">(<span class="type">char</span> <span class="type">const</span> *str, <span class="type">char</span> <span class="type">const</span> *group)</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查找标记：隔离各个单独的部分（token 标记），丢弃分隔符</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strtok</span><span class="params">(<span class="type">char</span> *str, <span class="type">char</span> <span class="type">const</span> *sep)</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">()</span> &#123;</span><br><span class="line">   <span class="type">char</span> str[<span class="number">80</span>] = <span class="string">&quot;This is - www.runoob.com - website&quot;</span>;</span><br><span class="line">   <span class="type">const</span> <span class="type">char</span> s[<span class="number">2</span>] = <span class="string">&quot;-&quot;</span>;</span><br><span class="line">   <span class="type">char</span> *token;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/* 获取第一个子字符串 */</span></span><br><span class="line">   token = strtok(str, s);</span><br><span class="line"></span><br><span class="line">   <span class="comment">/* 继续获取其他的子字符串 */</span></span><br><span class="line">   <span class="keyword">while</span>( token != <span class="literal">NULL</span> ) &#123;</span><br><span class="line">      <span class="built_in">printf</span>( <span class="string">&quot;%s\n&quot;</span>, token );</span><br><span class="line"></span><br><span class="line">      token = strtok(<span class="literal">NULL</span>, s);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>错误信息：将 OS 设置的 errno 返回（全局的变量）</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">char</span> *<span class="title function_">strerror</span><span class="params">(<span class="type">int</span> error_number)</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="存储类别和链接"><a href="#存储类别和链接" class="headerlink" title="存储类别和链接"></a>存储类别和链接</h2><ul>
+<li>编译单元：一个源文件以及它所包含的头文件为一个编译单元</li>
+</ul>
+<h3 id="存储期"><a href="#存储期" class="headerlink" title="存储期"></a>存储期</h3><ul>
+<li>静态存储期：程序执行期间一直在</li>
+<li>自动变量有自动存储期，块作用域，无链接</li>
+<li>寄存器变量是向系统请求使用寄存器来存变量；有自动存储期，块作用域，无链接</li>
+<li>多文件下，变量只有一个定义；其他文件引用该变量声明时，使用 extern</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> units = <span class="number">10</span>; <span class="comment">// define</span></span><br><span class="line"><span class="keyword">extern</span> <span class="type">int</span> units; <span class="comment">// declare in other file</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>全局变量是外部链接的静态变量</li>
+<li>内部链接的静态变量：只能用于本文件</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">int</span> stayhome = <span class="number">1</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">extern</span> <span class="type">int</span> stayhome;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>静态存储类别所用的内存数量在编译时确定存在全局（静态）存储区；</li>
+<li>自动变量一般存在栈上</li>
+</ul>
+<h2 id="ANSI-C-类型限定符"><a href="#ANSI-C-类型限定符" class="headerlink" title="ANSI C 类型限定符"></a>ANSI C 类型限定符</h2><ul>
+<li>volatile：告知编译器每次取变量从内存中取，用于多线程共享</li>
+<li>restrict：只用于指针，表明该指针式访问数据对象的唯一且初始的方式；即两个指针不会指向同一块内存，编译器可以优化程序</li>
+</ul>
+<h2 id="文件-I-x2F-O"><a href="#文件-I-x2F-O" class="headerlink" title="文件 I&#x2F;O"></a>文件 I&#x2F;O</h2><h3 id="getc-amp-putc"><a href="#getc-amp-putc" class="headerlink" title="getc() &amp; putc()"></a>getc() &amp; putc()</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">getc</span><span class="params">(FILE *stream)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>从指定的流 stream 获取下一个字符（一个无符号字符），并把位置标识符往前移动。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">getchar</span><span class="params">(<span class="type">void</span>)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>从标准输入 stdin 获取一个字符（一个无符号字符）。这等同于 <strong>getc</strong> 带有 stdin 作为参数。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">putc</span><span class="params">(<span class="type">int</span> <span class="type">char</span>, FILE *stream)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>把参数 <strong>char</strong> 指定的字符（一个无符号字符）写入到指定的流 stream 中，并把位置标识符往前移动。</li>
+</ul>
+<h3 id="fseek-amp-ftell"><a href="#fseek-amp-ftell" class="headerlink" title="fseek() &amp; ftell()"></a>fseek() &amp; ftell()</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">fseek</span><span class="params">(FILE *stream, <span class="type">long</span> <span class="type">int</span> offset, <span class="type">int</span> whence)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>设置流 <strong>stream</strong> 的文件位置为给定的偏移 <strong>offset</strong>，参数 offset 意味着从给定的 <strong>whence</strong> 位置查找的字节数。</li>
+<li>如果成功，则该函数返回零，否则返回非零值。</li>
+</ul>
+<p><strong>参数</strong></p>
+<ul>
+<li><strong>stream</strong> – 这是指向 FILE 对象的指针，该 FILE 对象标识了流。</li>
+<li><strong>offset</strong> – 这是相对 whence 的偏移量，以字节为单位。</li>
+<li><strong>whence</strong> – 这是表示开始添加偏移 offset 的位置。它一般指定为下列常量之一：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>常量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SEEK_CUR</td>
+<td>文件指针的当前位置</td>
+</tr>
+<tr>
+<td>SEEK_END</td>
+<td>文件的末尾</td>
+</tr>
+<tr>
+<td>SEEK_SET</td>
+<td>文件的开头</td>
+</tr>
+</tbody></table>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">long</span> <span class="type">int</span> <span class="title function_">ftell</span><span class="params">(FILE *stream)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>返回给定流 stream 的当前文件位置。</li>
+<li>距离文件开始处的字节数</li>
+</ul>
+<h3 id="ungetc"><a href="#ungetc" class="headerlink" title="ungetc()"></a>ungetc()</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">ungetc</span><span class="params">(<span class="type">int</span> <span class="type">char</span>, FILE *stream)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>把字符 <strong>char</strong>（一个无符号字符）推入到指定的流 <strong>stream</strong> 中，以便它是下一个被读取到的字符。</li>
+<li>如果成功，则返回被推入的字符，否则返回 EOF，且流 stream 保持不变。</li>
+</ul>
+<h3 id="fflush"><a href="#fflush" class="headerlink" title="fflush()"></a>fflush()</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">fflush</span><span class="params">(FILE *stream)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>刷新流 stream 的输出缓冲区。（将所有未写入数据发送到指定文件中）</li>
+<li>如果成功，该函数返回零值。如果发生错误，则返回 EOF，且设置错误标识符（即 feof）。</li>
+</ul>
+<h3 id="setvbuf"><a href="#setvbuf" class="headerlink" title="setvbuf()"></a>setvbuf()</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">setvbuf</span><span class="params">(FILE *stream, <span class="type">char</span> *buffer, <span class="type">int</span> mode, <span class="type">size_t</span> size)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>定义流 stream 应如何缓冲</li>
+</ul>
+<p><strong>参数</strong></p>
+<ul>
+<li><strong>stream</strong> – 这是指向 FILE 对象的指针，该 FILE 对象标识了一个打开的流。</li>
+<li><strong>buffer</strong> – 这是分配给用户的缓冲。如果设置为 NULL，该函数会自动分配一个指定大小的缓冲。</li>
+<li><strong>mode</strong> – 这指定了文件缓冲的模式：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">模式</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">_IOFBF</td>
+<td align="left"><strong>全缓冲</strong>：对于输出，数据在缓冲填满时被一次性写入。对于输入，缓冲会在请求输入且缓冲为空时被填充。</td>
+</tr>
+<tr>
+<td align="left">_IOLBF</td>
+<td align="left"><strong>行缓冲</strong>：对于输出，数据在遇到换行符或者在缓冲填满时被写入，具体视情况而定。对于输入，缓冲会在请求输入且缓冲为空时被填充，直到遇到下一个换行符。</td>
+</tr>
+<tr>
+<td align="left">_IONBF</td>
+<td align="left"><strong>无缓冲</strong>：不使用缓冲。每个 I&#x2F;O 操作都被即时写入。buffer 和 size 参数被忽略。</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>size</strong> –这是缓冲的大小，以字节为单位。</li>
+</ul>
+<h3 id="fread-amp-fwrite"><a href="#fread-amp-fwrite" class="headerlink" title="fread() &amp; fwrite()"></a>fread() &amp; fwrite()</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">size_t</span> <span class="title function_">fread</span><span class="params">(<span class="type">void</span> *ptr, <span class="type">size_t</span> size, <span class="type">size_t</span> nmemb, FILE *stream)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>从给定流 <strong>stream</strong> 读取数据到 <strong>ptr</strong> 所指向的数组中。</li>
+</ul>
+<p><strong>参数</strong></p>
+<ul>
+<li><strong>ptr</strong> – 这是指向带有最小尺寸 <em>size*nmemb</em> 字节的内存块的指针。</li>
+<li><strong>size</strong> – 这是要读取的每个元素的大小，以字节为单位。</li>
+<li><strong>nmemb</strong> – 这是元素的个数，每个元素的大小为 size 字节。</li>
+<li><strong>stream</strong> – 这是指向 FILE 对象的指针，该 FILE 对象指定了一个输入流。</li>
+</ul>
+<p><strong>返回值</strong></p>
+<ul>
+<li>成功读取的元素总数会以 size_t 对象返回，size_t 对象是一个整型数据类型。如果总数与 nmemb 参数不同，则可能发生了一个错误或者到达了文件末尾。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">size_t</span> <span class="title function_">fwrite</span><span class="params">(<span class="type">const</span> <span class="type">void</span> *ptr, <span class="type">size_t</span> size, <span class="type">size_t</span> nmemb, FILE *stream)</span></span><br></pre></td></tr></table></figure>
+
+<p>把 <strong>ptr</strong> 所指向的数组中的数据写入到给定流 <strong>stream</strong> 中。</p>
+<h2 id="结构体分配内存"><a href="#结构体分配内存" class="headerlink" title="结构体分配内存"></a>结构体分配内存</h2><ul>
+<li>结构体的首址一定是第一个数据类型的地址</li>
+<li>依据结构体中内存最大的数据和#pragma pack(n)中的 n 二者取最小值最为内存对齐的粒度</li>
+<li>最终结构体的大小是粒度的整数倍</li>
+</ul>
+<h2 id="C-预处理器"><a href="#C-预处理器" class="headerlink" title="C 预处理器"></a>C 预处理器</h2><h3 id="可变参数列表"><a href="#可变参数列表" class="headerlink" title="可变参数列表"></a>可变参数列表</h3><ul>
+<li>stdarg 宏</li>
+<li>可变参数必须从头到尾按顺序访问</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdarg.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">	计算指定数量的值的平均值</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="type">float</span></span><br><span class="line"><span class="title function_">average</span><span class="params">(<span class="type">int</span> n_val, ...)</span></span><br><span class="line">&#123;</span><br><span class="line">    va_list var_arg;</span><br><span class="line">    <span class="type">int</span> count;</span><br><span class="line">    <span class="type">float</span> sum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 访问可变参数</span></span><br><span class="line">    va_start(var_arg, n_val);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//添加可变参数列表的值</span></span><br><span class="line">    <span class="keyword">for</span> (count = <span class="number">0</span>; count &lt; n_val; count += <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        sum += va_arg(var_arg, <span class="type">int</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 完成处理可变参数</span></span><br><span class="line">    va_end(var_arg);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> sum / n_val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="退出函数"><a href="#退出函数" class="headerlink" title="退出函数"></a>退出函数</h3><h4 id="abort"><a href="#abort" class="headerlink" title="abort()"></a>abort()</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">abort</span><span class="params">(<span class="type">void</span>)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>中止程序执行，直接从调用的地方跳出。</li>
+</ul>
+<h4 id="atexit"><a href="#atexit" class="headerlink" title="atexit()"></a>atexit()</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">atexit</span><span class="params">(<span class="type">void</span> (*func)(<span class="type">void</span>))</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>当程序正常终止时，调用指定的函数 <strong>func</strong>。您可以在任何地方注册你的终止函数，但它会在程序终止的时候被调用。</li>
+</ul>
+<h4 id="exit"><a href="#exit" class="headerlink" title="exit()"></a>exit()</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">exit</span><span class="params">(<span class="type">int</span> status)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>立即终止调用进程。任何属于该进程的打开的文件描述符都会被关闭，该进程的子进程由进程 1 继承，初始化，且会向父进程发送一个 SIGCHLD 信号。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2023/09/12/C/c_prime_plus/">http://tom-jerr.github.io/2023/09/12/C/c_prime_plus/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">tom-jerr的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C</a><a class="post-meta__tags" href="/tags/Books/">Books</a></div><div class="post_share"><div class="addthis_inline_share_toolbox"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=null" async="async"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/09/12/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0912/" title="9月12日记录"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">9月12日记录</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/12/cs_courses/csapp/6-%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" title="csapp-6-存储器层次结构"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">csapp-6-存储器层次结构</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2584074296&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:lzy_cs_ln@163.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-Prime-Plus-%E5%A4%8D%E4%B9%A0"><span class="toc-number">1.</span> <span class="toc-text">C Prime Plus 复习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%95%E8%AF%8D%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">单词类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8%E6%8C%87%E4%BB%A4"><span class="toc-number">1.2.</span> <span class="toc-text">C 预处理器指令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E6%95%B0%E6%BA%A2%E5%87%BA"><span class="toc-number">1.3.1.</span> <span class="toc-text">整数溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#char-%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.2.</span> <span class="toc-text">char 类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bool-%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.3.</span> <span class="toc-text">_Bool 类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="toc-number">1.3.4.</span> <span class="toc-text">浮点数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E6%95%B0%E5%92%8C%E8%99%9A%E6%95%B0"><span class="toc-number">1.3.5.</span> <span class="toc-text">复数和虚数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%B7%E6%96%B0%E8%BE%93%E5%87%BA-console"><span class="toc-number">1.3.6.</span> <span class="toc-text">刷新输出 (console)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">1.4.</span> <span class="toc-text">字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#printf"><span class="toc-number">1.4.1.</span> <span class="toc-text">printf()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.5.</span> <span class="toc-text">运算符</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">1.5.1.</span> <span class="toc-text">优先级</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E5%92%8C%E8%B7%B3%E8%BD%AC"><span class="toc-number">1.6.</span> <span class="toc-text">分支和跳转</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IO"><span class="toc-number">1.7.</span> <span class="toc-text">IO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">1.7.1.</span> <span class="toc-text">重定向</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-number">1.8.</span> <span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%BE%E9%80%92%E5%BD%92"><span class="toc-number">1.8.1.</span> <span class="toc-text">尾递归</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E7%BB%84%E5%92%8C%E6%8C%87%E9%92%88"><span class="toc-number">1.9.</span> <span class="toc-text">数组和指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E5%88%9D%E5%A7%8B%E5%8C%96%E5%99%A8"><span class="toc-number">1.9.1.</span> <span class="toc-text">指定初始化器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%95%BF%E6%95%B0%E7%BB%84-VLA"><span class="toc-number">1.9.2.</span> <span class="toc-text">变长数组 VLA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%90%88%E5%AD%97%E9%9D%A2%E9%87%8F-C99"><span class="toc-number">1.9.3.</span> <span class="toc-text">复合字面量 (C99)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%B8%E7%BC%A9%E5%9E%8B%E6%95%B0%E7%BB%84%E6%88%90%E5%91%98-C99"><span class="toc-number">1.9.4.</span> <span class="toc-text">伸缩型数组成员 (C99)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#union"><span class="toc-number">1.9.5.</span> <span class="toc-text">union</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#enum"><span class="toc-number">1.9.6.</span> <span class="toc-text">enum</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="toc-number">1.10.</span> <span class="toc-text">字符串函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E6%89%BE"><span class="toc-number">1.10.1.</span> <span class="toc-text">查找</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E7%B1%BB%E5%88%AB%E5%92%8C%E9%93%BE%E6%8E%A5"><span class="toc-number">1.11.</span> <span class="toc-text">存储类别和链接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E6%9C%9F"><span class="toc-number">1.11.1.</span> <span class="toc-text">存储期</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ANSI-C-%E7%B1%BB%E5%9E%8B%E9%99%90%E5%AE%9A%E7%AC%A6"><span class="toc-number">1.12.</span> <span class="toc-text">ANSI C 类型限定符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6-I-x2F-O"><span class="toc-number">1.13.</span> <span class="toc-text">文件 I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#getc-amp-putc"><span class="toc-number">1.13.1.</span> <span class="toc-text">getc() &amp; putc()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fseek-amp-ftell"><span class="toc-number">1.13.2.</span> <span class="toc-text">fseek() &amp; ftell()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ungetc"><span class="toc-number">1.13.3.</span> <span class="toc-text">ungetc()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fflush"><span class="toc-number">1.13.4.</span> <span class="toc-text">fflush()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setvbuf"><span class="toc-number">1.13.5.</span> <span class="toc-text">setvbuf()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fread-amp-fwrite"><span class="toc-number">1.13.6.</span> <span class="toc-text">fread() &amp; fwrite()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="toc-number">1.14.</span> <span class="toc-text">结构体分配内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-%E9%A2%84%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">1.15.</span> <span class="toc-text">C 预处理器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%88%97%E8%A1%A8"><span class="toc-number">1.15.1.</span> <span class="toc-text">可变参数列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%80%E5%87%BA%E5%87%BD%E6%95%B0"><span class="toc-number">1.15.2.</span> <span class="toc-text">退出函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#abort"><span class="toc-number">1.15.2.1.</span> <span class="toc-text">abort()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#atexit"><span class="toc-number">1.15.2.2.</span> <span class="toc-text">atexit()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#exit"><span class="toc-number">1.15.2.3.</span> <span class="toc-text">exit()</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/09/13/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0913/" title="9月13日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月13日记录"/></a><div class="content"><a class="title" href="/2023/09/13/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0913/" title="9月13日记录">9月13日记录</a><time datetime="2023-09-13T15:44:49.000Z" title="发表于 2023-09-13 23:44:49">2023-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/12/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0912/" title="9月12日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月12日记录"/></a><div class="content"><a class="title" href="/2023/09/12/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0912/" title="9月12日记录">9月12日记录</a><time datetime="2023-09-12T15:17:49.000Z" title="发表于 2023-09-12 23:17:49">2023-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/12/C/c_prime_plus/" title="C Prime Plus"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C Prime Plus"/></a><div class="content"><a class="title" href="/2023/09/12/C/c_prime_plus/" title="C Prime Plus">C Prime Plus</a><time datetime="2023-09-12T14:17:49.000Z" title="发表于 2023-09-12 22:17:49">2023-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/12/cs_courses/csapp/6-%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" title="csapp-6-存储器层次结构"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="csapp-6-存储器层次结构"/></a><div class="content"><a class="title" href="/2023/09/12/cs_courses/csapp/6-%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" title="csapp-6-存储器层次结构">csapp-6-存储器层次结构</a><time datetime="2023-09-12T14:17:49.000Z" title="发表于 2023-09-12 22:17:49">2023-09-12</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/12/cs_courses/csapp/5-%E4%BC%98%E5%8C%96%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD/" title="csapp-5-优化程序性能"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="csapp-5-优化程序性能"/></a><div class="content"><a class="title" href="/2023/09/12/cs_courses/csapp/5-%E4%BC%98%E5%8C%96%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD/" title="csapp-5-优化程序性能">csapp-5-优化程序性能</a><time datetime="2023-09-12T11:49:49.000Z" title="发表于 2023-09-12 19:49:49">2023-09-12</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = ture;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
