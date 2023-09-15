@@ -1,0 +1,335 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>3_Database_Storage I | tom-jerr的个人博客</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="3-Database Storage I1 DISK-BASED ARCHITECTURE 易失性存储和非易失性存储相结合 Volatile：Random Access Byte-Addressable （DRAM之上） Non-Volatile：Sequential Access Block-Addressable（SSD之下 ） SSD以下只能按块来存取   顺序访问和随机访问 非易失性存储中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3_Database_Storage I">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/09/11/cs_courses/cmu15445/3-Database%20Storage/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="3-Database Storage I1 DISK-BASED ARCHITECTURE 易失性存储和非易失性存储相结合 Volatile：Random Access Byte-Addressable （DRAM之上） Non-Volatile：Sequential Access Block-Addressable（SSD之下 ） SSD以下只能按块来存取   顺序访问和随机访问 非易失性存储中">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-09-11T14:17:49.000Z">
+<meta property="article:modified_time" content="2023-09-15T15:49:36.734Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="CMU15445">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2023/09/11/cs_courses/cmu15445/3-Database%20Storage/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '3_Database_Storage I',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-15 23:49:36'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="tom-jerr的个人博客"><span class="site-name">tom-jerr的个人博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">3_Database_Storage I</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-15T15:49:36.734Z" title="更新于 2023-09-15 23:49:36">2023-09-15</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CS-COURSE/">CS_COURSE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="3_Database_Storage I"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="3-Database-Storage-I"><a href="#3-Database-Storage-I" class="headerlink" title="3-Database Storage I"></a>3-Database Storage I</h1><h2 id="1-DISK-BASED-ARCHITECTURE"><a href="#1-DISK-BASED-ARCHITECTURE" class="headerlink" title="1 DISK-BASED ARCHITECTURE"></a>1 DISK-BASED ARCHITECTURE</h2><ul>
+<li>易失性存储和非易失性存储相结合</li>
+<li>Volatile：Random Access Byte-Addressable （DRAM之上）</li>
+<li>Non-Volatile：Sequential Access Block-Addressable（SSD之下 ）</li>
+<li>SSD以下只能按块来存取</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\storage.png"></p>
+<h3 id="顺序访问和随机访问"><a href="#顺序访问和随机访问" class="headerlink" title="顺序访问和随机访问"></a>顺序访问和随机访问</h3><ul>
+<li>非易失性存储中顺序访问比随机访问快得多</li>
+<li>一般数据存储在连续的块中，同时分配多个物理页叫区</li>
+</ul>
+<h2 id="2-DBMS-设计目标"><a href="#2-DBMS-设计目标" class="headerlink" title="2 DBMS 设计目标"></a>2 DBMS 设计目标</h2><ul>
+<li>允许管理比可用内存大的数据库</li>
+<li>读写磁盘代价高昂，尽可能避免大的停顿和性能下降</li>
+<li>DBMS 希望最大化顺序读写</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\DBMS_DISK.png"></p>
+<h2 id="3-为什么不使用-OS"><a href="#3-为什么不使用-OS" class="headerlink" title="3 为什么不使用 OS"></a>3 为什么不使用 OS</h2><ul>
+<li><p>The DBMS can use memory mapping (<strong>mmap</strong>) to store the contents of a file into the address space of a program.</p>
+</li>
+<li><p>The OS is responsible for moving the pages of the file in and out of memory, so the DBMS doesn’t need to worry about it.</p>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\mmap.png"></p>
+<h3 id="使用OS可能出现问题"><a href="#使用OS可能出现问题" class="headerlink" title="使用OS可能出现问题"></a>使用OS可能出现问题</h3><ul>
+<li>如果此时物理内存已经占满，需要淘汰一个物理页，造成阻塞</li>
+<li>多线程并发读写可能出现问题</li>
+<li>错误处理</li>
+<li>性能问题：OS的结构成为性能瓶颈</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\MMAP_PRO.png"></p>
+<h3 id="OS-解决方案"><a href="#OS-解决方案" class="headerlink" title="OS 解决方案"></a>OS 解决方案</h3><ul>
+<li>按正确的顺序将脏页刷新到磁盘中</li>
+<li>特殊的预缓存情况，这样执行器就不用等待特定的页加载到缓冲池中</li>
+<li>缓冲替换策略</li>
+<li>线程、进程调度</li>
+</ul>
+<h2 id="4-File-Storage"><a href="#4-File-Storage" class="headerlink" title="4 File Storage"></a>4 File Storage</h2><ul>
+<li><p>Table 可以看为是 tuple 的集合，在磁盘中与之对应的单位是文件。一个文件中会保存多个 page，而 page 中会存储多个 tuple。</p>
+</li>
+<li><p>DBMS 在磁盘上，用一个或多个文件，以特定的格式存储数据库</p>
+<ul>
+<li>OS 不关心也不知道这些文件的内容</li>
+</ul>
+</li>
+<li><p>1980 年代的 一些 DBMS 在原始存储（Raw Storage）上使用自定义的文件系统</p>
+<ul>
+<li>现在的一些商业 DBMS 还在这么干</li>
+<li>大多数新出来的 DBMS 不这么做了</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-storage-manager"><a href="#4-1-storage-manager" class="headerlink" title="4.1  storage manager"></a>4.1  storage manager</h3><ul>
+<li>调度读写操作提高空间和时间局部性</li>
+<li>将文件组织成页的集合<ul>
+<li>跟踪已经读和写的页</li>
+<li>跟踪空闲页</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-Database-Pages"><a href="#4-2-Database-Pages" class="headerlink" title="4.2 Database Pages"></a>4.2 Database Pages</h3><p>因为数据库文件可能很大，需要切分成多个块</p>
+<ul>
+<li><p>一页是很多个 block 组成的集合</p>
+<ul>
+<li>页里可能存着元组、元数据、索引、日志记录…</li>
+<li>大多数系统对于页的使用都是固定的，比如存储索引的页不会用来存数据</li>
+<li>大多数系统需要页是自组织（self-contained）的，也就是说页的 Header 里标识了这个页的类型</li>
+</ul>
+</li>
+<li><p>每个页都有一个独特的标识符</p>
+<ul>
+<li>DBMS 使用非直接的层来把 page id 映射到物理位置硬盘页</li>
+<li>最小能保证原子操作的单位</li>
+</ul>
+</li>
+</ul>
+<h4 id="不同的页概念"><a href="#不同的页概念" class="headerlink" title="不同的页概念"></a>不同的页概念</h4><ul>
+<li><p>硬件页（如坏块）：4KB</p>
+</li>
+<li><p>操作系统页（一般为 4kb）操作系统读写硬盘的最小单位</p>
+</li>
+<li><p>数据库页（512b ~ 16kb）</p>
+</li>
+</ul>
+<h3 id="4-3-Page-Storage-Architecture"><a href="#4-3-Page-Storage-Architecture" class="headerlink" title="4.3 Page Storage Architecture"></a>4.3 Page Storage Architecture</h3><ul>
+<li>heap file organization</li>
+<li>tree file organization</li>
+<li>sequential&#x2F;sorted file organization (ISAM)</li>
+<li>hashing file organization</li>
+</ul>
+<h4 id="heap-file"><a href="#heap-file" class="headerlink" title="heap file"></a>heap file</h4><ul>
+<li>无序存放页，容易寻找单个文件</li>
+<li>可以create, get, write, delete 页</li>
+<li>必须支持迭代所有的页</li>
+</ul>
+<h4 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h4><ul>
+<li><p><strong>page directory</strong> (设置一页为 directory)</p>
+<ul>
+<li>pagedirectory 和 data page 要同步更新</li>
+<li>The directory also records meta-data about available space:<br>→ The number of free slots per page.<br>→ List of free &#x2F; empty pages</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\page-dic.png"></p>
+</li>
+<li><p><strong>linked list</strong></p>
+<ul>
+<li>一个 header page，维护两个链表头节点；free page list, data page list</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\linked-list.png"></p>
+</li>
+</ul>
+<h3 id="4-4-page-layout"><a href="#4-4-page-layout" class="headerlink" title="4.4  page layout"></a>4.4  page layout</h3><h4 id="page-header"><a href="#page-header" class="headerlink" title="page header"></a>page header</h4><ul>
+<li>page 内容的元信息<ul>
+<li>page size</li>
+<li>checknum（页的校验和）</li>
+<li>DBMS version</li>
+<li>Transaction Visibility（并发是否锁住该页）</li>
+<li>Compression Information（压缩信息）</li>
+</ul>
+</li>
+</ul>
+<h4 id="data-inside-of-the-page"><a href="#data-inside-of-the-page" class="headerlink" title="data inside of the page"></a>data inside of the page</h4><ul>
+<li>tuple-oriented</li>
+<li>Log-strctured</li>
+</ul>
+<h5 id="1-tuple-storage-in-page"><a href="#1-tuple-storage-in-page" class="headerlink" title="1 tuple storage in page"></a>1 tuple storage in page</h5><ul>
+<li>Keep track of the number of tuples in a page and then just append a new tuple to the end.</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\tuple.png"></p>
+<ul>
+<li>上图所示的是一种朴素的做法，类似数组的方式去存储，header 维护一个数组的信息。</li>
+<li>主要问题：删除时产生内存碎片，文件的不连续等等（如果是<strong>变长的 tuple</strong> 将会有更多问题），tuple 的查找也是一个很大的开销</li>
+</ul>
+<h5 id="2-slotted-pages（页槽）"><a href="#2-slotted-pages（页槽）" class="headerlink" title="2 slotted pages（页槽）"></a>2 slotted pages（页槽）</h5><ul>
+<li>将特定 slot 映射到 page 某个特定偏移量上的数据结构，这样一个元组就是由一个 page id 和 slot id 来唯一定位，并且 tuple 是倒序存储的。这样当然可能会在中间有部分数据的浪费，但是为了支持变长的元素我们不得不这么做。当然，有办法去应对，<strong>可以去整理或者压缩</strong></li>
+<li>header keeps track of<ul>
+<li>used slots</li>
+<li>the offset of the starting location of the last slot used</li>
+</ul>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\slotted_pages.png"></p>
+<ul>
+<li>每个 tuple 需要一个独一无二的记录号：page_id + offset&#x2F;slot</li>
+<li>用户不能使用record ID来使用</li>
+</ul>
+<h3 id="4-5-tuple-layout"><a href="#4-5-tuple-layout" class="headerlink" title="4.5 tuple layout"></a>4.5 tuple layout</h3><ul>
+<li>tuple是磁盘上的二进制流数据</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\tuple2.png"></p>
+<ul>
+<li>header contaions meta-data about tuple<ul>
+<li>visibility info (concurrency control)</li>
+<li>Bit Map for <strong>NULL</strong> values</li>
+</ul>
+</li>
+<li>存储数据无分隔符，需要记录NULL信息</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\tuple3.png"></p>
+<h4 id="denormalized-tuple-data"><a href="#denormalized-tuple-data" class="headerlink" title="denormalized tuple data"></a>denormalized tuple data</h4><ul>
+<li>物理存储上反规范化，将有关联的元组存储在同一页上；相当于提前将表关联join</li>
+<li>减少 IO 数量</li>
+<li>更新的代价巨大</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\denormalize.png"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\denormalize1.png"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\DB\denormalize2.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2023/09/11/cs_courses/cmu15445/3-Database%20Storage/">http://tom-jerr.github.io/2023/09/11/cs_courses/cmu15445/3-Database Storage/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">tom-jerr的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CMU15445/">CMU15445</a></div><div class="post_share"><div class="addthis_inline_share_toolbox"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=null" async="async"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/09/11/cs_courses/6.s081/7-%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/" title="7-进程切换"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">7-进程切换</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/11/cs_courses/6.s081/xv6/" title=""><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info"></div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/09/15/cs_courses/cmu15445/4-Database_Storage_II/" title="4_Database_Storage II"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-15</div><div class="title">4_Database_Storage II</div></div></a></div><div><a href="/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/" title="5_Database_Storage"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-16</div><div class="title">5_Database_Storage</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2584074296&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:lzy_cs_ln@163.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Database-Storage-I"><span class="toc-number">1.</span> <span class="toc-text">3-Database Storage I</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-DISK-BASED-ARCHITECTURE"><span class="toc-number">1.1.</span> <span class="toc-text">1 DISK-BASED ARCHITECTURE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%BA%E5%BA%8F%E8%AE%BF%E9%97%AE%E5%92%8C%E9%9A%8F%E6%9C%BA%E8%AE%BF%E9%97%AE"><span class="toc-number">1.1.1.</span> <span class="toc-text">顺序访问和随机访问</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-DBMS-%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.</span> <span class="toc-text">2 DBMS 设计目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E4%BD%BF%E7%94%A8-OS"><span class="toc-number">1.3.</span> <span class="toc-text">3 为什么不使用 OS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8OS%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E9%97%AE%E9%A2%98"><span class="toc-number">1.3.1.</span> <span class="toc-text">使用OS可能出现问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OS-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.3.2.</span> <span class="toc-text">OS 解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-File-Storage"><span class="toc-number">1.4.</span> <span class="toc-text">4 File Storage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-storage-manager"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1  storage manager</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-Database-Pages"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 Database Pages</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E7%9A%84%E9%A1%B5%E6%A6%82%E5%BF%B5"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">不同的页概念</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-Page-Storage-Architecture"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 Page Storage Architecture</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#heap-file"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">heap file</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">实现方式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-page-layout"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.4  page layout</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#page-header"><span class="toc-number">1.4.4.1.</span> <span class="toc-text">page header</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#data-inside-of-the-page"><span class="toc-number">1.4.4.2.</span> <span class="toc-text">data inside of the page</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-tuple-storage-in-page"><span class="toc-number">1.4.4.2.1.</span> <span class="toc-text">1 tuple storage in page</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-slotted-pages%EF%BC%88%E9%A1%B5%E6%A7%BD%EF%BC%89"><span class="toc-number">1.4.4.2.2.</span> <span class="toc-text">2 slotted pages（页槽）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-tuple-layout"><span class="toc-number">1.4.5.</span> <span class="toc-text">4.5 tuple layout</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#denormalized-tuple-data"><span class="toc-number">1.4.5.1.</span> <span class="toc-text">denormalized tuple data</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/" title="5_Database_Storage"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="5_Database_Storage"/></a><div class="content"><a class="title" href="/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/" title="5_Database_Storage">5_Database_Storage</a><time datetime="2023-09-16T14:17:49.000Z" title="发表于 2023-09-16 22:17:49">2023-09-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/15/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0915/" title="9月14日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月14日记录"/></a><div class="content"><a class="title" href="/2023/09/15/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0915/" title="9月14日记录">9月14日记录</a><time datetime="2023-09-15T15:52:49.000Z" title="发表于 2023-09-15 23:52:49">2023-09-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/15/cs_courses/cmu15445/4-Database_Storage_II/" title="4_Database_Storage II"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="4_Database_Storage II"/></a><div class="content"><a class="title" href="/2023/09/15/cs_courses/cmu15445/4-Database_Storage_II/" title="4_Database_Storage II">4_Database_Storage II</a><time datetime="2023-09-15T15:49:49.000Z" title="发表于 2023-09-15 23:49:49">2023-09-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/14/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0914/" title="9月14日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月14日记录"/></a><div class="content"><a class="title" href="/2023/09/14/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0914/" title="9月14日记录">9月14日记录</a><time datetime="2023-09-14T15:44:49.000Z" title="发表于 2023-09-14 23:44:49">2023-09-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/13/cs_courses/cmu15445/B+Tree/" title="无题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2023/09/13/cs_courses/cmu15445/B+Tree/" title="无题">无题</a><time datetime="2023-09-13T15:53:47.130Z" title="发表于 2023-09-13 23:53:47">2023-09-13</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = ture;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
