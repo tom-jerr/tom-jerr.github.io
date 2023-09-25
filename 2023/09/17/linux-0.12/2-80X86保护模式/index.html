@@ -1,0 +1,325 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2-保护模式 | tom-jerr的个人博客</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="2 保护模式2.1 内存管理寄存器 处理器提供了4个内存管理寄存器（GDTR、LDTR、IDTR和TR），用于指定内存分段管理所用系统表的基地址 GDTR、IDTR和LDTR用于寻址存放描述符表的段。TR用于寻址一个特殊的任务状态段TSS（Task State Segment）。TSS段中包含着当前执行任务的重要信息   2.1.1 全局描述符表寄存器GDTR GDTR 寄存器中用于存放全局描述符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2-保护模式">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/09/17/linux-0.12/2-80X86%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="2 保护模式2.1 内存管理寄存器 处理器提供了4个内存管理寄存器（GDTR、LDTR、IDTR和TR），用于指定内存分段管理所用系统表的基地址 GDTR、IDTR和LDTR用于寻址存放描述符表的段。TR用于寻址一个特殊的任务状态段TSS（Task State Segment）。TSS段中包含着当前执行任务的重要信息   2.1.1 全局描述符表寄存器GDTR GDTR 寄存器中用于存放全局描述符">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-09-17T14:17:49.000Z">
+<meta property="article:modified_time" content="2023-09-17T16:21:24.457Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="内核">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2023/09/17/linux-0.12/2-80X86%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2-保护模式',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-18 00:21:24'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="tom-jerr的个人博客"><span class="site-name">tom-jerr的个人博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">2-保护模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-17T14:17:49.000Z" title="发表于 2023-09-17 22:17:49">2023-09-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-17T16:21:24.457Z" title="更新于 2023-09-18 00:21:24">2023-09-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/linux/">linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="2-保护模式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="2-保护模式"><a href="#2-保护模式" class="headerlink" title="2 保护模式"></a>2 保护模式</h1><h2 id="2-1-内存管理寄存器"><a href="#2-1-内存管理寄存器" class="headerlink" title="2.1 内存管理寄存器"></a>2.1 内存管理寄存器</h2><ul>
+<li>处理器提供了4个内存管理寄存器（GDTR、LDTR、IDTR和TR），用于指定内存分段管理所用系统表的基地址</li>
+<li>GDTR、IDTR和LDTR用于寻址存放描述符表的段。TR用于寻址一个特殊的任务状态段TSS（Task State Segment）。TSS段中包含着当前执行任务的重要信息</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\mem_manager.png"></p>
+<h3 id="2-1-1-全局描述符表寄存器GDTR"><a href="#2-1-1-全局描述符表寄存器GDTR" class="headerlink" title="2.1.1 全局描述符表寄存器GDTR"></a>2.1.1 全局描述符表寄存器GDTR</h3><ul>
+<li>GDTR 寄存器中用于存放<strong>全局描述符表GDT的32位的线性基地址和16位的表限长值</strong>。基地址指定<br>GDT表中字节0在线性地址空间中的地址，表长度指明GDT表的字节长度值。</li>
+<li>指令LGDT和SGDT分别用于加载和保存GDTR寄存器的内容。在机器刚加电或处理器复位后，基地址被默认地设置为0，而长度值被设置成0xFFFF。在保护模式初始化过程中必须给GDTR加载一个新值。</li>
+</ul>
+<h3 id="2-1-2-中断描述符表寄存器IDTR"><a href="#2-1-2-中断描述符表寄存器IDTR" class="headerlink" title="2.1.2 中断描述符表寄存器IDTR"></a>2.1.2 中断描述符表寄存器IDTR</h3><ul>
+<li>与GDTR的作用类似，IDTR寄存器用于存放<strong>中断描述符表IDT的32位线性基地址和16位表长度值</strong>。<br>指令LIDT和SIDT分别用于加载和保存IDTR寄存器的内容。在机器刚加电或处理器复位后，基地址被默认地设置为0，而长度值被设置成0xFFFF。</li>
+</ul>
+<h3 id="2-1-3-局部描述符表寄存器LDTR"><a href="#2-1-3-局部描述符表寄存器LDTR" class="headerlink" title="2.1.3 局部描述符表寄存器LDTR"></a>2.1.3 局部描述符表寄存器LDTR</h3><ul>
+<li>LDTR寄存器中用于存放<strong>局部描述符表LDT的32位线性基地址、16位段限长和描述符属性值</strong>。指令<br>LLDT 和SLDT分别用于加载和保存LDTR寄存器的段描述符部分。</li>
+<li>包含LDT表的段必须在GDT表中有一个段描述符项。当使用LLDT指令把含有LDT表段的选择符加载进LDTR时，LDT段描述符的段基地址、段限长度以及描述符属性会被自动地加载到 LDTR 中。当进行任务切换时，处理器会把新任务 LDT的段选择符和段描述符自动地加载进LDTR中。在机器加电或处理器复位后，段选择符和基地址被默认地设置为0，而段长度被设置成0xFFFF。</li>
+</ul>
+<h3 id="2-1-4-任务寄存器TR"><a href="#2-1-4-任务寄存器TR" class="headerlink" title="2.1.4 任务寄存器TR"></a>2.1.4 任务寄存器TR</h3><ul>
+<li>TR 寄存器用于存放当前任务<strong>TSS段的16位段选择符、32位基地址、16位段长度和描述符属性值</strong>。<br>它引用GDT表中的一个TSS类型的描述符。指令LTR和STR分别用于加载和保存TR寄存器的段选择符<br>部分。</li>
+<li>当使用LTR指令把选择符加载进任务寄存器时，TSS描述符中的段基地址、段限长度以及描述符属<br>性会被自动地加载到任务寄存器中。当执行任务切换时，处理器会把新任务的TSS的段选择符和段描述符自动地加载进任务寄存器TR中。</li>
+</ul>
+<h2 id="2-2-控制寄存器"><a href="#2-2-控制寄存器" class="headerlink" title="2.2 控制寄存器"></a>2.2 控制寄存器</h2><ul>
+<li>CR2 和CR3用于分页机制。CR3含有存放页目录表页面的物理地址，因此CR3也被称为PDBR。</li>
+<li>页目录表页面是页对齐的，<strong>所以该寄存器只有高20位是有效的</strong>。而低12位保留供更高级处理器使用，因此在往CR3中加载一个新值时低12位必须设置为0。</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\control_reg.png"></p>
+<h2 id="2-3-保护模式内存管理"><a href="#2-3-保护模式内存管理" class="headerlink" title="2.3 保护模式内存管理"></a>2.3 保护模式内存管理</h2><ul>
+<li>虚拟地址（逻辑地址）空间可包含最多16K的段，而每个段最长可达4GB，使得虚拟地址空间<br>容量达到64TB</li>
+<li>线性地址空间和物理地址空间都是4GB；实际上，如果禁用分页机制，那么线性地址空间就是物理地址空间。</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\addr_change.png"></p>
+<h3 id="2-3-1-保护"><a href="#2-3-1-保护" class="headerlink" title="2.3.1 保护"></a>2.3.1 保护</h3><ul>
+<li><p>任务之间的保护：</p>
+<ul>
+<li><p>80X86使用的方法是通过把每个任务放置在不同的虚拟地址空间中，并给予每个任务不同的逻辑地址到物理地址的变换映射。每个任务中的地址变换功能被定义成一个任务中的逻辑地址映射到物理内存的一部分区域，而另一个任务中的逻辑地址映射到物理内存中的不同区域中</p>
+</li>
+<li><p>每个任务唯一的虚拟地址空间部分被称为局部地址空间（Local address space）。局部地址空间含有需要与系统中其他任务区别开的私有的代码和数据</p>
+</li>
+<li><p>所有任务在全局地址空间中对相同虚拟地址的引用将被转换到同一个物理地址处。这给公共代码和数据（例如操作系统）的共享提供了支持。</p>
+</li>
+</ul>
+</li>
+<li><p>特权级保护：</p>
+<ul>
+<li>特权级用数字0到3表示，0具有最高特权级，而3则是最低特权级。每个内存段都与一个特权级相关联。</li>
+<li>当前特权级（Current Privilege Level），即CPL就是当前活动代码段的特权级，并且它定<br>义了当前所执行程序的特权级别。CPL确定了哪些段能够被程序访问。 每当程序企图访问一个段时，当前特权级就会与段的特权级进行比较，以确定是否有访问许可。在给定CPL级别上执行的程序允许访问同级别或低级别的数据段。任何对高级别段的引用都是非法的，并且会<br>引发一个异常来通知操作系统。 </li>
+<li><strong>每个特权级都有自己的程序栈</strong>，以避免使用共享栈带来的保护问题。当程序从一个特权级切换到另一个特权级上执行时，堆栈段也随之改换到新级别的堆栈中。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-2-段描述符表"><a href="#2-3-2-段描述符表" class="headerlink" title="2.3.2 段描述符表"></a>2.3.2 段描述符表</h3><ul>
+<li>全局描述符表GDT</li>
+<li>局部描述符表LDT</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\segment_descriptor.png"></p>
+<ul>
+<li>虚拟地址空间被分割成大小相等的两半。一半由GDT来映射变换到线性地址，另一半则由LDT来映射。</li>
+</ul>
+<h3 id="2-3-3-段选择符"><a href="#2-3-3-段选择符" class="headerlink" title="2.3.3 段选择符"></a>2.3.3 段选择符</h3><ul>
+<li><p>请求特权级RPL，表指示标志TI，索引值</p>
+</li>
+<li><p>处理器不使用GDT表中的第1项。指向GDT该项的选择符（即索引值为0，TI标志为0的选择符）用作为“空选择符”</p>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\segment_reg.png"></p>
+<ul>
+<li>堆栈段必须是可读&#x2F;写的数据段。若使用不可写数据段的选择符加载到SS寄存器中，将导致一个一般保护异常。如果堆栈段的长度需要动态地改变，那么堆栈段可以是一个向下扩展的数据段（扩展方向标志置位）。这里，动态改变段限长将导致栈空间被添加到栈底部。</li>
+</ul>
+<h3 id="2-3-4-中断门，陷阱门，调用门"><a href="#2-3-4-中断门，陷阱门，调用门" class="headerlink" title="2.3.4 中断门，陷阱门，调用门"></a>2.3.4 中断门，陷阱门，调用门</h3><ul>
+<li><p>中断门</p>
+<ul>
+<li>一个中断源就会产生一个中断向量，每个中断向量都对应中断描述符表中的一个门描述符，任何中断源都通过中断向量对应到中断描述符表中的门描述符，通过该门描述符就找到了对应的中断处理程序。</li>
+</ul>
+</li>
+<li><p>调用门</p>
+<ul>
+<li>调用门，是CPU提供给我们的一个功能，它允许 3 环程序（CPL&#x3D;3）通过这扇“门”达到修改 cs 段寄存器的目的，同时达到提权的目的。</li>
+<li>使用 call far + 调用门描述符的段选择子，跨段到 0x0008 指向的代码段</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\diaoyong_door.png"></p>
+</li>
+<li><p>陷阱门</p>
+<ul>
+<li>进入中断门，CPU会把EFLAGS中的IF位置1，而进入陷阱门，CPU并不修改 IF 位。</li>
+</ul>
+</li>
+<li><p>不同特权级内核堆栈切换</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/"></p>
+</li>
+</ul>
+<h2 id="2-4-虚拟存储"><a href="#2-4-虚拟存储" class="headerlink" title="2.4 虚拟存储"></a>2.4 虚拟存储</h2><ul>
+<li>目录和页表表项中的存在标志P为使用分页技术的虚拟存储提供了必要的支持。若线性地址空间中<br>的页面存在于物理内存中，则对应表项中的标志P&#x3D;1，并且该表项中含有相应物理地址。页面不在物理内存中的表项其标志P &#x3D; 0。</li>
+<li>如果程序访问物理内存中不存在的页面，处理器就会产生一个缺页异常。此时操作系统就可以利用这个异常处理过程把缺少的页面从磁盘上调入物理内存中，并把相应物理地址存放在表项中。最后在返回程序重新执行引起异常的指令之前设置标志P&#x3D;1。</li>
+</ul>
+<h2 id="2-5-中断和异常处理"><a href="#2-5-中断和异常处理" class="headerlink" title="2.5 中断和异常处理"></a>2.5 中断和异常处理</h2><ul>
+<li>允许的向量号范围是0到255。其中0到31保留用作80X86处理器定义的异常和中断，不过目前该范围内的向量号并非每个都已定义了功能，未定义功能的向量号将留作今后使用。 </li>
+<li>范围在32到255的向量号用于用户定义的中断。这些中断通常用于外部I&#x2F;O设备，使得这些设备可以通过外部硬件中断机制向处理器发送中断</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\interrupt.png"></p>
+<h3 id="中断源"><a href="#中断源" class="headerlink" title="中断源"></a>中断源</h3><ul>
+<li>硬件中断<ul>
+<li>外部中断通过处理器芯片上两个引脚（INTR和NMI）接收。当引脚INTR接收到外部发生的中断信号时，处理器就会从系统总线上读取外部中段控制器（例如8259A）提供的中断向量号。</li>
+<li>当引脚NMI接收到信号时，就产生一个非屏蔽中断。它使用固定的中断向量号2。</li>
+<li>任何通过处理器INTR引脚接收的外部中断都被称为可屏蔽硬件中断，包括中断向量号0到255。标志寄存器EFLAGS中的IF标志可用来屏蔽所有这些硬件中断。</li>
+</ul>
+</li>
+<li>软件产生的中断<ul>
+<li>通过在指令操作数中提供中断向量号，INT n指令可用于从软件中产生中断</li>
+<li>注意，EFLAGS中的IF标志不能够屏蔽使用INT指令从软件中产生的中断</li>
+</ul>
+</li>
+</ul>
+<h3 id="异常源"><a href="#异常源" class="headerlink" title="异常源"></a>异常源</h3><ul>
+<li><p>处理器检测到的程序错误异常</p>
+</li>
+<li><p>软件产生的异常</p>
+</li>
+</ul>
+<h3 id="异常分类"><a href="#异常分类" class="headerlink" title="异常分类"></a>异常分类</h3><ul>
+<li>Fault<ul>
+<li>一种通常可以被纠正的异常，并且一旦被纠正程序就可以继续运行。当出现一个 Fault，<br>处理器会把机器状态恢复到产生 Fault 的指令之前的状态。此时异常处理程序的返回地址会指向产生Fault 的指令，而不是其后面一条指令。因此在返回后产生Fault的指令将被重新执行</li>
+</ul>
+</li>
+<li>Trap <ul>
+<li>是一个引起陷阱的指令被执行后立刻会报告的异常。Trap也能够让程序或任务连贯地执行Trap 处理程序的返回地址指向引起陷阱指令的随后一条指令，因此在返回后会执行下一条指令。</li>
+</ul>
+</li>
+<li>Abort <ul>
+<li>是一种不会总是报告导致异常的指令的精确位置的异常，并且不允许导致异常的程序重新继续执行。Abort用于报告严重错误，例如硬件错误以及系统表中存在不一致性或非法值。</li>
+</ul>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\trap_prior.png"></p>
+<h3 id="中断过程调用"><a href="#中断过程调用" class="headerlink" title="中断过程调用"></a>中断过程调用</h3><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\interrupt_call.png"></p>
+<ul>
+<li>中断调用的堆栈变化</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\interrupt_stack.png"></p>
+<h3 id="中断处理任务"><a href="#中断处理任务" class="headerlink" title="中断处理任务"></a>中断处理任务</h3><ul>
+<li>优势<ul>
+<li>被中断任务的完整上下文会被自动保存</li>
+<li>在处理异常或中断时，新的TSS可以允许处理过程使用新特权级0的堆栈。在当前特权级0的堆<br>栈已毁坏时如果发生了一个异常或中断，那么在为中断过程提供一个新特权级 0 的堆栈条件下，通过任务门访问中断处理过程能够防止系统崩溃； </li>
+<li>通过使用单独的LDT给中断或异常处理任务独立的地址空间，可以把它与其他任务隔离开来。</li>
+</ul>
+</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\assignment_door.png"></p>
+<h3 id="任务结构"><a href="#任务结构" class="headerlink" title="任务结构"></a>任务结构</h3><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\task.png"></p>
+<ul>
+<li>任务状态结构（TSS）</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\TSS.png"></p>
+<ul>
+<li>任务切换</li>
+</ul>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\exchange_task.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2023/09/17/linux-0.12/2-80X86%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F/">http://tom-jerr.github.io/2023/09/17/linux-0.12/2-80X86保护模式/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">tom-jerr的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/OS/">OS</a><a class="post-meta__tags" href="/tags/%E5%86%85%E6%A0%B8/">内核</a></div><div class="post_share"><div class="addthis_inline_share_toolbox"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=null" async="async"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/09/17/linux-0.12/1-%E5%86%85%E6%A0%B8%E7%BB%93%E6%9E%84/" title="1-内核结构"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">1-内核结构</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/16/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0916/" title="9月16日记录"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">9月16日记录</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/09/17/linux-0.12/1-%E5%86%85%E6%A0%B8%E7%BB%93%E6%9E%84/" title="1-内核结构"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-17</div><div class="title">1-内核结构</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2584074296&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:lzy_cs_ln@163.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">2 保护模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.1.</span> <span class="toc-text">2.1 内存管理寄存器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-%E5%85%A8%E5%B1%80%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8%E5%AF%84%E5%AD%98%E5%99%A8GDTR"><span class="toc-number">1.1.1.</span> <span class="toc-text">2.1.1 全局描述符表寄存器GDTR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-%E4%B8%AD%E6%96%AD%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8%E5%AF%84%E5%AD%98%E5%99%A8IDTR"><span class="toc-number">1.1.2.</span> <span class="toc-text">2.1.2 中断描述符表寄存器IDTR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-%E5%B1%80%E9%83%A8%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8%E5%AF%84%E5%AD%98%E5%99%A8LDTR"><span class="toc-number">1.1.3.</span> <span class="toc-text">2.1.3 局部描述符表寄存器LDTR</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-4-%E4%BB%BB%E5%8A%A1%E5%AF%84%E5%AD%98%E5%99%A8TR"><span class="toc-number">1.1.4.</span> <span class="toc-text">2.1.4 任务寄存器TR</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E6%8E%A7%E5%88%B6%E5%AF%84%E5%AD%98%E5%99%A8"><span class="toc-number">1.2.</span> <span class="toc-text">2.2 控制寄存器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">1.3.</span> <span class="toc-text">2.3 保护模式内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1-%E4%BF%9D%E6%8A%A4"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.3.1 保护</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-2-%E6%AE%B5%E6%8F%8F%E8%BF%B0%E7%AC%A6%E8%A1%A8"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.3.2 段描述符表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-3-%E6%AE%B5%E9%80%89%E6%8B%A9%E7%AC%A6"><span class="toc-number">1.3.3.</span> <span class="toc-text">2.3.3 段选择符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-4-%E4%B8%AD%E6%96%AD%E9%97%A8%EF%BC%8C%E9%99%B7%E9%98%B1%E9%97%A8%EF%BC%8C%E8%B0%83%E7%94%A8%E9%97%A8"><span class="toc-number">1.3.4.</span> <span class="toc-text">2.3.4 中断门，陷阱门，调用门</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8"><span class="toc-number">1.4.</span> <span class="toc-text">2.4 虚拟存储</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-%E4%B8%AD%E6%96%AD%E5%92%8C%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">1.5.</span> <span class="toc-text">2.5 中断和异常处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E6%BA%90"><span class="toc-number">1.5.1.</span> <span class="toc-text">中断源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E6%BA%90"><span class="toc-number">1.5.2.</span> <span class="toc-text">异常源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E5%B8%B8%E5%88%86%E7%B1%BB"><span class="toc-number">1.5.3.</span> <span class="toc-text">异常分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E8%BF%87%E7%A8%8B%E8%B0%83%E7%94%A8"><span class="toc-number">1.5.4.</span> <span class="toc-text">中断过程调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%AD%E5%A4%84%E7%90%86%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.5.5.</span> <span class="toc-text">中断处理任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E7%BB%93%E6%9E%84"><span class="toc-number">1.5.6.</span> <span class="toc-text">任务结构</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/09/25/C++/new&amp;malloc/" title="C Prime Plus"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C Prime Plus"/></a><div class="content"><a class="title" href="/2023/09/25/C++/new&amp;malloc/" title="C Prime Plus">C Prime Plus</a><time datetime="2023-09-25T10:42:49.000Z" title="发表于 2023-09-25 18:42:49">2023-09-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/" title="9月19日~23日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月19日~23日记录"/></a><div class="content"><a class="title" href="/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/" title="9月19日~23日记录">9月19日~23日记录</a><time datetime="2023-09-23T06:50:49.000Z" title="发表于 2023-09-23 14:50:49">2023-09-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/" title="6_Hash_Table"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="6_Hash_Table"/></a><div class="content"><a class="title" href="/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/" title="6_Hash_Table">6_Hash_Table</a><time datetime="2023-09-21T14:17:49.000Z" title="发表于 2023-09-21 22:17:49">2023-09-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/" title="9月18日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月18日记录"/></a><div class="content"><a class="title" href="/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/" title="9月18日记录">9月18日记录</a><time datetime="2023-09-18T15:58:49.000Z" title="发表于 2023-09-18 23:58:49">2023-09-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" title="csapp-8-异常控制流"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="csapp-8-异常控制流"/></a><div class="content"><a class="title" href="/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" title="csapp-8-异常控制流">csapp-8-异常控制流</a><time datetime="2023-09-18T14:17:49.000Z" title="发表于 2023-09-18 22:17:49">2023-09-18</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = ture;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

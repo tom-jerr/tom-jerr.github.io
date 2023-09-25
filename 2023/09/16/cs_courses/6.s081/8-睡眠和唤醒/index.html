@@ -1,0 +1,231 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>8-Coordination | tom-jerr的个人博客</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Coordination1 进程切换过程 一个进程出于某种原因想要进入休眠状态，比如说出让 CPU 或者等待数据，它会先获取自己的锁； 之后进程将自己的状态从 RUNNING 设置为 RUNNABLE； 之后进程调用 switch 函数，其实是调用 sched 函数在 sched 函数中再调用的 switch 函数； switch 函数将当前的线程切换到调度器线程； 调度器线程之前也调用了 swi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="8-Coordination">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/09/16/cs_courses/6.s081/8-%E7%9D%A1%E7%9C%A0%E5%92%8C%E5%94%A4%E9%86%92/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="Coordination1 进程切换过程 一个进程出于某种原因想要进入休眠状态，比如说出让 CPU 或者等待数据，它会先获取自己的锁； 之后进程将自己的状态从 RUNNING 设置为 RUNNABLE； 之后进程调用 switch 函数，其实是调用 sched 函数在 sched 函数中再调用的 switch 函数； switch 函数将当前的线程切换到调度器线程； 调度器线程之前也调用了 swi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-09-16T14:17:49.000Z">
+<meta property="article:modified_time" content="2023-09-16T05:31:37.943Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="6.s081">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2023/09/16/cs_courses/6.s081/8-%E7%9D%A1%E7%9C%A0%E5%92%8C%E5%94%A4%E9%86%92/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '8-Coordination',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-16 13:31:37'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="tom-jerr的个人博客"><span class="site-name">tom-jerr的个人博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">8-Coordination</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-16T14:17:49.000Z" title="发表于 2023-09-16 22:17:49">2023-09-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-16T05:31:37.943Z" title="更新于 2023-09-16 13:31:37">2023-09-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CS-COURSE/">CS_COURSE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="8-Coordination"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Coordination"><a href="#Coordination" class="headerlink" title="Coordination"></a>Coordination</h1><h2 id="1-进程切换过程"><a href="#1-进程切换过程" class="headerlink" title="1 进程切换过程"></a>1 进程切换过程</h2><ol>
+<li>一个进程出于某种原因想要进入休眠状态，比如说出让 CPU 或者等待数据，它会先获取自己的锁；</li>
+<li>之后进程将自己的状态从 RUNNING 设置为 RUNNABLE；</li>
+<li>之后进程调用 switch 函数，其实是调用 sched 函数在 sched 函数中再调用的 switch 函数；</li>
+<li>switch 函数将当前的线程切换到调度器线程；</li>
+<li>调度器线程之前也调用了 switch 函数，现在恢复执行会从自己的 switch 函数返回；</li>
+<li>返回之后，调度器线程会释放刚刚出让了 CPU 的进程的锁</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 需要切换的进程</span></span><br><span class="line">acquire(&amp;p-&gt;lock);</span><br><span class="line">p-&gt;state = RUNNABLE;</span><br><span class="line">swtch();</span><br><span class="line"><span class="comment">// 调度器进程</span></span><br><span class="line">swtch();</span><br><span class="line">release(&amp;p-&gt;lock);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在进程切换的最开始，进程先获取自己的锁，并且直到调用 swtch 函数时也不释放锁。而另一个线程，也就是调度器线程会在进程的线程完全停止使用自己的栈之后，再释放进程的锁。</p>
+<ul>
+<li>如果在 swtch()前释放锁，可能有另一个 CPU 核心运行同样的进程；会造成程序崩溃</li>
+</ul>
+</li>
+<li><p>XV6 中，不允许进程在执行 switch 函数的过程中，持有任何其他的锁。</p>
+<ul>
+<li>如果 p1 持有另一个锁 l1，当 p1 切换到 p2 时；p1 的 l1 未释放，而如果 p2 需要 l1；会造成死锁：p2 需要 l1 来进行进程切换，p1 拥有 l1，但不能进行进程切换</li>
+<li>我们不能在等待锁的时候处理中断；所以定时器中断 (调用 yield，让进程出让 CPU) 不能打破死锁</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-Sleep-amp-Wakeup"><a href="#2-Sleep-amp-Wakeup" class="headerlink" title="2 Sleep &amp; Wakeup"></a>2 Sleep &amp; Wakeup</h2><ul>
+<li>通过循环等待硬件设备在现在等待的时间是不可接受的；</li>
+<li>xv6 中通过 uart 硬件进行读取字符到控制台；当写入一个字符后写入进程 sleep，触发中断 uartintr；中断判断是否已经写入完成，如果写入完成，唤醒写入进程进行下一次写入</li>
+<li>sleep 和 wakeup 需要特定的参数一个 channel；sleep 需要传递一个锁</li>
+</ul>
+<h3 id="2-1-lose-wakeup"><a href="#2-1-lose-wakeup" class="headerlink" title="2.1 lose wakeup"></a>2.1 lose wakeup</h3><ul>
+<li>使用下面的 sleep 和 wakeup；会造成丢失唤醒问题</li>
+<li>可能在进程未 sleep 前，中断例程执行成功，wakeup 未唤醒任何进程</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">broken_sleep</span><span class="params">(chan)</span> &#123;</span><br><span class="line">  p-&gt;state = SLEEPING;</span><br><span class="line">  p-&gt;chan = chan;</span><br><span class="line">  swtch();</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">wakeup</span><span class="params">(chan)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span>(each p in prics[]) &#123;</span><br><span class="line">    <span class="keyword">if</span>(p-&gt;state == SLEEPING&amp;&amp;p-&gt;chan == chan) &#123;</span><br><span class="line">      p-&gt;state = RUNNABLE;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">uartwrite</span><span class="params">(buf)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> each c in buf:</span><br><span class="line">    lock;</span><br><span class="line">    <span class="keyword">while</span> not done;</span><br><span class="line">      unlock;</span><br><span class="line">      <span class="comment">// 中断发生地</span></span><br><span class="line">      sleep(&amp;tx_chan);</span><br><span class="line">      <span class="comment">// 再次获得锁进行下一步操作</span></span><br><span class="line">      lock</span><br><span class="line">    send c;</span><br><span class="line">    done = <span class="number">0</span>;</span><br><span class="line">    unlock;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">uartintr</span><span class="params">()</span> &#123;</span><br><span class="line">  lock;</span><br><span class="line">  done = <span class="number">1</span>;</span><br><span class="line">  wakeup(&amp;tx_chan);</span><br><span class="line">  unlock;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>sleep 需要传入一个保护条件的锁；调用 sleep 时，锁被当前线程持有，之后这个锁被传递给 sleep</li>
+<li>wakeup 必须在持有条件锁（进程的锁）时才能唤醒进程</li>
+</ul>
+<h3 id="2-2-exit"><a href="#2-2-exit" class="headerlink" title="2.2 exit"></a>2.2 exit</h3><ul>
+<li>关闭所有打开的文件；父进程退出，子进程由 init 进程管理；将自己变为僵尸进程；进入 sched()函数</li>
+<li>一个进程 exit 后，父进程如果调用了 wait，父进程会返回子进程退出值<ul>
+<li>扫描进程表，找到子进程为僵尸进程的进程；调用 freeproc()</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span></span><br><span class="line"><span class="title function_">freeproc</span><span class="params">(<span class="keyword">struct</span> proc *p)</span> &#123;</span><br><span class="line">  <span class="keyword">if</span>(p-&gt;trapframe)</span><br><span class="line">    kfree((<span class="type">void</span>*)p-&gt;trapframe);</span><br><span class="line">  p-&gt;trapframe = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">if</span>(p-&gt;pagetable)</span><br><span class="line">    proc_freepagetable(p-&gt;pagetable, p-&gt;sz);</span><br><span class="line">  p-&gt;pagetable = <span class="number">0</span>;</span><br><span class="line">  p-&gt;sz = <span class="number">0</span>;</span><br><span class="line">  p-&gt;pid = <span class="number">0</span>;</span><br><span class="line">  p-&gt;parent = <span class="number">0</span>;</span><br><span class="line">  p-&gt;name[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">  p-&gt;chan = <span class="number">0</span>;</span><br><span class="line">  p-&gt;killed = <span class="number">0</span>;</span><br><span class="line">  p-&gt;xstate = <span class="number">0</span>;</span><br><span class="line">  p-&gt;state = UNUSED;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在 Unix 中，对于每一个退出的进程，都需要有一个对应的 wait 系统调用</li>
+</ul>
+<h3 id="2-3-kill"><a href="#2-3-kill" class="headerlink" title="2.3 kill"></a>2.3 kill</h3><ul>
+<li>Unix 中的一个进程可以将另一个进程的 ID 传递给 kill 系统调用，并让另一个进程停止运行</li>
+<li>它先扫描进程表单，找到目标进程。然后只是将进程的 proc 结构体中 killed 标志位设置为 1。如果进程正在 SLEEPING 状态，将其设置为 RUNNABLE。这里只是将 killed 标志位设置为 1，并没有停止进程的运行。所以 kill 系统调用本身还是很温和的。</li>
+<li>而目标进程运行到内核代码中能安全停止运行的位置时，会检查自己的 killed 标志位，如果设置为 1，目标进程会自愿的执行 exit 系统调用</li>
+<li><strong>如果进程在用户空间，那么下一次它执行系统调用它就会退出，又或者目标进程正在执行用户代码，当时下一次定时器中断或者其他中断触发了，进程才会退出。所以从一个进程调用 kill，到另一个进程真正退出，中间可能有很明显的延时</strong><ul>
+<li>在内核态 kill 进程，会将进程唤醒；在 sleep 循环中进行 killed 标志位的检查</li>
+<li>在驱动中，我们期望文件操作不会中断；所以不会在 sleep 循环中进行 killed 标志位的检查</li>
+</ul>
+</li>
+<li>init 进程的目标就是不退出，它就是在一个循环中不停的调用 wait。如果 init 进程退出了，我认为这是一个 Fatal 级别的错误，然后系统会崩溃。在 exit 函数的最开始就会有如下检查</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">exit</span><span class="params">(<span class="type">int</span> status)</span> &#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">proc</span> *<span class="title">p</span> =</span> myproc();</span><br><span class="line">  <span class="keyword">if</span>(p == initproc)</span><br><span class="line">    panic(<span class="string">&quot;init exiting&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2023/09/16/cs_courses/6.s081/8-%E7%9D%A1%E7%9C%A0%E5%92%8C%E5%94%A4%E9%86%92/">http://tom-jerr.github.io/2023/09/16/cs_courses/6.s081/8-睡眠和唤醒/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">tom-jerr的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/6-s081/">6.s081</a></div><div class="post_share"><div class="addthis_inline_share_toolbox"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=null" async="async"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/" title="5_Database_Storage"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">5_Database_Storage</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/15/chcore/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="util lab"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">util lab</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/09/11/cs_courses/6.s081/2-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%AE%9E%E7%8E%B0/" title="2-虚拟内存的实现"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">2-虚拟内存的实现</div></div></a></div><div><a href="/2023/09/11/cs_courses/6.s081/1-OS%E7%9A%84%E9%9A%94%E7%A6%BB%E6%80%A7/" title="1-OS的隔离性"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">1-OS的隔离性</div></div></a></div><div><a href="/2023/09/11/cs_courses/6.s081/3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E9%99%B7%E5%85%A5/" title="3-系统调用和陷入"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">3-系统调用和陷入</div></div></a></div><div><a href="/2023/09/11/cs_courses/6.s081/4-%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD/" title="4-缺页中断"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">4-缺页中断</div></div></a></div><div><a href="/2023/09/11/cs_courses/6.s081/5-%E7%A1%AC%E4%BB%B6%E4%B8%AD%E6%96%AD/" title="5-硬件中断"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">5-硬件中断</div></div></a></div><div><a href="/2023/09/11/cs_courses/6.s081/6-%E5%A4%9A%E6%A0%B8%E5%92%8C%E9%94%81/" title="6-多核和锁"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">6-多核和锁</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2584074296&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:lzy_cs_ln@163.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Coordination"><span class="toc-number">1.</span> <span class="toc-text">Coordination</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2%E8%BF%87%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1 进程切换过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Sleep-amp-Wakeup"><span class="toc-number">1.2.</span> <span class="toc-text">2 Sleep &amp; Wakeup</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-lose-wakeup"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 lose wakeup</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-exit"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2 exit</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-kill"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 kill</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/09/25/C++/new&amp;malloc/" title="C Prime Plus"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C Prime Plus"/></a><div class="content"><a class="title" href="/2023/09/25/C++/new&amp;malloc/" title="C Prime Plus">C Prime Plus</a><time datetime="2023-09-25T10:42:49.000Z" title="发表于 2023-09-25 18:42:49">2023-09-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/" title="9月19日~23日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月19日~23日记录"/></a><div class="content"><a class="title" href="/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/" title="9月19日~23日记录">9月19日~23日记录</a><time datetime="2023-09-23T06:50:49.000Z" title="发表于 2023-09-23 14:50:49">2023-09-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/" title="6_Hash_Table"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="6_Hash_Table"/></a><div class="content"><a class="title" href="/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/" title="6_Hash_Table">6_Hash_Table</a><time datetime="2023-09-21T14:17:49.000Z" title="发表于 2023-09-21 22:17:49">2023-09-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/" title="9月18日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月18日记录"/></a><div class="content"><a class="title" href="/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/" title="9月18日记录">9月18日记录</a><time datetime="2023-09-18T15:58:49.000Z" title="发表于 2023-09-18 23:58:49">2023-09-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" title="csapp-8-异常控制流"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="csapp-8-异常控制流"/></a><div class="content"><a class="title" href="/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" title="csapp-8-异常控制流">csapp-8-异常控制流</a><time datetime="2023-09-18T14:17:49.000Z" title="发表于 2023-09-18 22:17:49">2023-09-18</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = ture;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

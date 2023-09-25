@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>util lab | tom-jerr的个人博客</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="内存管理伙伴系统 系统中分配大页面使用伙伴系统 (Buddy System)  设置内存池phys_mem_pool，每个内存池存放元数据，起始地址，存放的内存大小，存放页面的大小，有一个空闲链表数组（以order来组织） struct free_list &amp;#123;        struct list_head free_list;        u64 nr_free;&amp;#125;;str">
+<meta property="og:type" content="article">
+<meta property="og:title" content="util lab">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/09/15/chcore/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="tom-jerr的个人博客">
+<meta property="og:description" content="内存管理伙伴系统 系统中分配大页面使用伙伴系统 (Buddy System)  设置内存池phys_mem_pool，每个内存池存放元数据，起始地址，存放的内存大小，存放页面的大小，有一个空闲链表数组（以order来组织） struct free_list &amp;#123;        struct list_head free_list;        u64 nr_free;&amp;#125;;str">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2023-09-15T15:57:49.000Z">
+<meta property="article:modified_time" content="2023-09-25T05:01:28.457Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="chcore">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2023/09/15/chcore/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'util lab',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-25 13:01:28'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="tom-jerr的个人博客"><span class="site-name">tom-jerr的个人博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">util lab</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-15T15:57:49.000Z" title="发表于 2023-09-15 23:57:49">2023-09-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-25T05:01:28.457Z" title="更新于 2023-09-25 13:01:28">2023-09-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/OS/">OS</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">944</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="util lab"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><h2 id="伙伴系统"><a href="#伙伴系统" class="headerlink" title="伙伴系统"></a>伙伴系统</h2><ul>
+<li><p>系统中分配大页面使用伙伴系统 (Buddy System)</p>
+</li>
+<li><p>设置内存池<code>phys_mem_pool</code>，每个内存池存放元数据，起始地址，存放的内存大小，存放页面的大小，有一个空闲链表数组（以order来组织）</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">free_list</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">free_list</span>;</span></span><br><span class="line">        u64 nr_free;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">phys_mem_pool</span> &#123;</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * The start virtual address (for used in kernel) of</span></span><br><span class="line"><span class="comment">         * this physical memory pool.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        u64 pool_start_addr;</span><br><span class="line">        u64 pool_mem_size;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * This field is only used in ChCore unit test.</span></span><br><span class="line"><span class="comment">         * The number of (4k) physical pages in this physical memory pool.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        u64 pool_phys_page_num;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * The start virtual address (for used in kernel) of</span></span><br><span class="line"><span class="comment">         * the metadata area of this pool.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span> *<span class="title">page_metadata</span>;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/* The free list of different free-memory-chunk orders. */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">free_list</span> <span class="title">free_lists</span>[<span class="title">BUDDY_MAX_ORDER</span>];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="获取伙伴页面"><a href="#获取伙伴页面" class="headerlink" title="获取伙伴页面"></a>获取伙伴页面</h3><ul>
+<li>获取一个页面的伙伴页面；通过页面对应的地址来计算伙伴系统的地址（地址xor当前页的大小）；将地址转化为页</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="keyword">struct</span> page *<span class="title function_">get_buddy_chunk</span><span class="params">(<span class="keyword">struct</span> phys_mem_pool *pool,</span></span><br><span class="line"><span class="params">                                    <span class="keyword">struct</span> page *chunk)</span></span><br><span class="line">&#123;</span><br><span class="line">        u64 chunk_addr;</span><br><span class="line">        u64 buddy_chunk_addr;</span><br><span class="line">        <span class="type">int</span> order;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Get the address of the chunk. */</span></span><br><span class="line">        chunk_addr = (u64)page_to_virt(chunk);</span><br><span class="line">        order = chunk-&gt;order;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Calculate the address of the buddy chunk according to the address</span></span><br><span class="line"><span class="comment"> * relationship between buddies.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BUDDY_PAGE_SIZE_ORDER (12)</span></span><br><span class="line">        buddy_chunk_addr = chunk_addr</span><br><span class="line">                           ^ (<span class="number">1UL</span> &lt;&lt; (order + BUDDY_PAGE_SIZE_ORDER));</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Check whether the buddy_chunk_addr belongs to pool. */</span></span><br><span class="line">        <span class="keyword">if</span> ((buddy_chunk_addr &lt; pool-&gt;pool_start_addr)</span><br><span class="line">            || (buddy_chunk_addr</span><br><span class="line">                &gt;= (pool-&gt;pool_start_addr + pool-&gt;pool_mem_size))) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> virt_to_page((<span class="type">void</span> *)buddy_chunk_addr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="分配页面"><a href="#分配页面" class="headerlink" title="分配页面"></a>分配页面</h3><ul>
+<li>获取对应order的页面，从空闲链表数组中，按order从小至大的顺序寻找空闲页（避免后续使用大内存找不到，造成申请大内存进程饥饿）</li>
+<li>申请到空闲页面后，进行分页</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="keyword">struct</span> page *<span class="title function_">split_page</span><span class="params">(<span class="keyword">struct</span> phys_mem_pool *pool, u64 order,</span></span><br><span class="line"><span class="params">                               <span class="keyword">struct</span> page *page)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 BEGIN */</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Hint: Recursively put the buddy of current chunk into</span></span><br><span class="line"><span class="comment">         * a suitable free list.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        BUG_ON(page-&gt;order &lt; order);</span><br><span class="line">        <span class="keyword">if</span>(page-&gt;order == order) &#123;</span><br><span class="line">                page-&gt;allocated = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">return</span> page;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// page size becomes smaller</span></span><br><span class="line">        u64 tmporder = page-&gt;order - <span class="number">1</span>;</span><br><span class="line">        page-&gt;order = tmporder;</span><br><span class="line">        page-&gt;allocated = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span>* <span class="title">newpage</span> =</span> get_buddy_chunk(pool, page);</span><br><span class="line">        BUG_ON(newpage==<span class="literal">NULL</span>);</span><br><span class="line">        newpage-&gt;order = tmporder;</span><br><span class="line">        newpage-&gt;allocated = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// insert newpage into freelist</span></span><br><span class="line">        list_add(&amp;(newpage-&gt;node),&amp;(pool-&gt;free_lists[tmporder].free_list));</span><br><span class="line">        pool-&gt;free_lists[tmporder].nr_free++;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> split_page(pool, order, page);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 END */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> page *<span class="title function_">buddy_get_pages</span><span class="params">(<span class="keyword">struct</span> phys_mem_pool *pool, u64 order)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 BEGIN */</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Hint: Find a chunk that satisfies the order requirement</span></span><br><span class="line"><span class="comment">         * in the free lists, then split it if necessary.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// find from small to big free list</span></span><br><span class="line">        u64 index = order;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span>* <span class="title">ptr</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">for</span>(; index &lt; BUDDY_MAX_ORDER; ++index) &#123;</span><br><span class="line">                <span class="keyword">if</span>(pool-&gt;free_lists[index].nr_free &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                        ptr = pool-&gt;free_lists[index].free_list.next;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(ptr == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">        list_del(ptr);</span><br><span class="line">        pool-&gt;free_lists[index].nr_free--;</span><br><span class="line">        <span class="comment">// get page form node (addr page = address of ptr - node offset)</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span>* <span class="title">page</span> =</span> list_entry(ptr, <span class="keyword">struct</span> page, node);</span><br><span class="line">        <span class="comment">// split page</span></span><br><span class="line">        <span class="keyword">return</span> split_page(pool, order, page);</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 END */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="释放页面"><a href="#释放页面" class="headerlink" title="释放页面"></a>释放页面</h3><ul>
+<li>如果释放的页面可以进行合并，直接合并，直到不能合并为止</li>
+<li>合并地址计算时，两个页面具有相同的页大小，仅仅是页大小前的最后一位不同，所以新页的起始地址应该是二者地址之与</li>
+<li>将合并后的页面插入空闲链表数组</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="keyword">struct</span> page *<span class="title function_">merge_page</span><span class="params">(<span class="keyword">struct</span> phys_mem_pool *pool, <span class="keyword">struct</span> page *page)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 BEGIN */</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Hint: Recursively merge current chunk with its buddy</span></span><br><span class="line"><span class="comment">         * if possible.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// if page-&gt;order is max order</span></span><br><span class="line">        <span class="keyword">if</span>(page-&gt;order == BUDDY_MAX_ORDER <span class="number">-1</span>) </span><br><span class="line">                <span class="keyword">return</span> page;</span><br><span class="line">        </span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span>* <span class="title">buddy</span> =</span> get_buddy_chunk(pool, page);</span><br><span class="line">        <span class="keyword">if</span>(buddy == <span class="literal">NULL</span> || buddy-&gt;allocated == <span class="number">1</span> || buddy-&gt;order != page-&gt;order) <span class="keyword">return</span> page;</span><br><span class="line">        list_del(&amp;(buddy-&gt;node));</span><br><span class="line">        pool-&gt;free_lists[buddy-&gt;order].nr_free--;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// calculate new page</span></span><br><span class="line">        u64 addr = (u64)page_to_virt(page) &amp; (u64)page_to_virt(buddy);</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span>* <span class="title">upper_page</span> =</span> virt_to_page((<span class="type">void</span>*)addr);</span><br><span class="line">        upper_page-&gt;order = page-&gt;order + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> merge_page(pool, upper_page);</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 END */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">buddy_free_pages</span><span class="params">(<span class="keyword">struct</span> phys_mem_pool *pool, <span class="keyword">struct</span> page *page)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 BEGIN */</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Hint: Merge the chunk with its buddy and put it into</span></span><br><span class="line"><span class="comment">         * a suitable free list.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        page-&gt;allocated = <span class="number">0</span>;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span>* <span class="title">newpage</span> =</span> merge_page(pool, page);</span><br><span class="line">        newpage-&gt;allocated = <span class="number">0</span>;</span><br><span class="line">        list_add(&amp;(newpage-&gt;node), &amp;(pool-&gt;free_lists[newpage-&gt;order].free_list));</span><br><span class="line">        pool-&gt;free_lists[newpage-&gt;order].nr_free++;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 END */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="SLAB内存分配器"><a href="#SLAB内存分配器" class="headerlink" title="SLAB内存分配器"></a>SLAB内存分配器</h2><ul>
+<li>伙伴系统按4K大小分配空间，分配小对象内存碎片过多</li>
+<li>SLAB可以快速分配小内存对象<ul>
+<li>从buddy system中分配大块内存</li>
+<li>建立一个空闲链表数组，分配链表中结点的大小按16，32，64字节分配</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2023/09/15/chcore/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">http://tom-jerr.github.io/2023/09/15/chcore/内存管理/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">tom-jerr的个人博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C</a><a class="post-meta__tags" href="/tags/chcore/">chcore</a></div><div class="post_share"><div class="addthis_inline_share_toolbox"></div><script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=null" async="async"></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/09/16/cs_courses/6.s081/8-%E7%9D%A1%E7%9C%A0%E5%92%8C%E5%94%A4%E9%86%92/" title="8-Coordination"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">8-Coordination</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/15/cs_courses/6.s081/labs/lab1-util/" title="util lab"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">util lab</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/09/12/C/c_prime_plus/" title="C Prime Plus"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">C Prime Plus</div></div></a></div><div><a href="/2023/09/25/C++/new&malloc/" title="C Prime Plus"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-25</div><div class="title">C Prime Plus</div></div></a></div><div><a href="/2023/09/15/cs_courses/6.s081/labs/lab1-util/" title="util lab"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-15</div><div class="title">util lab</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2584074296&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:lzy_cs_ln@163.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">内存管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%99%E4%BC%B4%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.1.</span> <span class="toc-text">伙伴系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E4%BC%99%E4%BC%B4%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.1.1.</span> <span class="toc-text">获取伙伴页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E9%85%8D%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.1.2.</span> <span class="toc-text">分配页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8A%E6%94%BE%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.1.3.</span> <span class="toc-text">释放页面</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SLAB%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%99%A8"><span class="toc-number">1.2.</span> <span class="toc-text">SLAB内存分配器</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/09/25/C++/new&amp;malloc/" title="C Prime Plus"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C Prime Plus"/></a><div class="content"><a class="title" href="/2023/09/25/C++/new&amp;malloc/" title="C Prime Plus">C Prime Plus</a><time datetime="2023-09-25T10:42:49.000Z" title="发表于 2023-09-25 18:42:49">2023-09-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/" title="9月19日~23日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月19日~23日记录"/></a><div class="content"><a class="title" href="/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/" title="9月19日~23日记录">9月19日~23日记录</a><time datetime="2023-09-23T06:50:49.000Z" title="发表于 2023-09-23 14:50:49">2023-09-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/" title="6_Hash_Table"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="6_Hash_Table"/></a><div class="content"><a class="title" href="/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/" title="6_Hash_Table">6_Hash_Table</a><time datetime="2023-09-21T14:17:49.000Z" title="发表于 2023-09-21 22:17:49">2023-09-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/" title="9月18日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月18日记录"/></a><div class="content"><a class="title" href="/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/" title="9月18日记录">9月18日记录</a><time datetime="2023-09-18T15:58:49.000Z" title="发表于 2023-09-18 23:58:49">2023-09-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" title="csapp-8-异常控制流"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="csapp-8-异常控制流"/></a><div class="content"><a class="title" href="/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" title="csapp-8-异常控制流">csapp-8-异常控制流</a><time datetime="2023-09-18T14:17:49.000Z" title="发表于 2023-09-18 22:17:49">2023-09-18</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"></div><canvas class="fireworks" mobile="true"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script defer="defer" id="fluttering_ribbon" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = ture;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

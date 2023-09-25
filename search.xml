@@ -4,11 +4,57 @@
   
     
     <entry>
-      <title>5_Database_Storage</title>
-      <link href="/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/"/>
-      <url>/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/</url>
+      <title>C Prime Plus</title>
+      <link href="/2023/09/25/C++/new&amp;malloc/"/>
+      <url>/2023/09/25/C++/new&amp;malloc/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="5-Buffer-Pool"><a href="#5-Buffer-Pool" class="headerlink" title="5 Buffer Pool"></a>5 Buffer Pool</h1><h2 id="LRU-K算法"><a href="#LRU-K算法" class="headerlink" title="LRU-K算法"></a>LRU-K算法</h2><ul><li>最近K次访问最少；数据在访问历史列表里后没有达到K次访问，则按照一定规则（<a href="https://so.csdn.net/so/search?q=FIFO&spm=1001.2101.3001.7020">FIFO</a>，LRU）淘汰；历史队列中的数据访问次数达到K次后，将数据索引从历史队列删除，将数据移到缓存队列中，并缓存此数据，缓存队列重新按照时间排序；淘汰缓存队列末尾的元素</li><li>LRU-K需要多维护一个队列，用于记录所有缓存数据被访问的历史。只有当数据的访问次数达到K次的时候，才将数据放入缓存</li><li>使用List进行数据删除时，使用erase需要list的迭代器；同时需要一个map进行迭代器的存储</li></ul>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="new-与-malloc-的区别"><a href="#new-与-malloc-的区别" class="headerlink" title="new 与 malloc 的区别"></a>new 与 malloc 的区别</h1><h2 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h2><ul><li>new&#x2F;delete 是 C++关键字，需要编译器的支持</li><li>malloc&#x2F;free 是库函数，需要引用对应的库</li></ul><h2 id="使用区别"><a href="#使用区别" class="headerlink" title="使用区别"></a>使用区别</h2><ul><li>无需显示填入申请内存的大小，会根据申请的类型进行动态分配内存</li><li>malloc 分配内存需要显示填入申请内存的大小</li></ul><h2 id="内存位置差别"><a href="#内存位置差别" class="headerlink" title="内存位置差别"></a>内存位置差别</h2><ul><li>malloc 在堆上分配</li><li>new 在自由存储区中分配，一般实现是堆，也可以重载成在静态存储区中分配</li></ul><h2 id="返回类型区别"><a href="#返回类型区别" class="headerlink" title="返回类型区别"></a>返回类型区别</h2><ul><li>new 返回成功时返回对象类型的指针，类型严格与对象匹配</li><li>malloc 返回 void*，需要自己强制转换</li></ul><h2 id="分配失败区别"><a href="#分配失败区别" class="headerlink" title="分配失败区别"></a>分配失败区别</h2><ul><li>new 抛出 std::bad_alloc 异常</li><li>malloc 分配内存失败返回 NULL (一般为(void*)0)</li></ul><h2 id="分配过程区别"><a href="#分配过程区别" class="headerlink" title="分配过程区别"></a>分配过程区别</h2><p>new 操作符</p><ul><li>调用 operator new 分配一块足够用的内存（底层默认 malloc 实现）</li><li>编译器运行相应的构造函数构造对象并传入初始值</li><li>返回指针</li></ul><h2 id="扩张内存的区别"><a href="#扩张内存的区别" class="headerlink" title="扩张内存的区别"></a>扩张内存的区别</h2><ul><li>malloc 内存后，发现不够用，可以调用 realloc 函数进行再次分配内存</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> C++ </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> C </tag>
+            
+            <tag> C++ </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>9月19日~23日记录</title>
+      <link href="/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/"/>
+      <url>/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="9-月-18-日学习记录"><a href="#9-月-18-日学习记录" class="headerlink" title="9 月 18 日学习记录"></a>9 月 18 日学习记录</h1><ul><li>CMU15445 Buffer Pool stage 1</li><li>chcore lab 1 and 2 finished</li><li>6.s081 lab 2 and challange finished</li><li>B+树并发读锁实现，写锁初步流程</li></ul><h1 id="一些想法"><a href="#一些想法" class="headerlink" title="一些想法"></a>一些想法</h1><p>每天记录可能有点太细粒度了，尽可能一周一次或者两次记录吧</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 记录 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>6_Hash_Table</title>
+      <link href="/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/"/>
+      <url>/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="6-Hash-Table"><a href="#6-Hash-Table" class="headerlink" title="6 Hash Table"></a>6 Hash Table</h1><p>使用范围</p><ul><li>Internal Meta-data</li><li>Core Data Storage</li><li>Temporary Data Structures (join联表查询)</li><li>Table Indexes</li></ul><h2 id="6-1-Design-Decisions"><a href="#6-1-Design-Decisions" class="headerlink" title="6.1 Design Decisions"></a>6.1 Design Decisions</h2><ul><li><p>Data Organization</p></li><li><p>Concurrency</p></li><li><p>Hash Function</p><ul><li>计算速度和碰撞率的取舍</li></ul></li><li><p>Hashing Scheme</p><ul><li>静态哈希表</li><li>可扩展哈希表</li></ul></li></ul><h2 id="6-2-static-Hashing-Schemes"><a href="#6-2-static-Hashing-Schemes" class="headerlink" title="6.2 static Hashing Schemes"></a>6.2 static Hashing Schemes</h2><ul><li><p>Linear probe hashing (线性探测哈希)</p><ul><li><p>如果碰撞，存放到下一个空闲的槽；可能出现原来存在冲突的值被删除</p><ul><li>Tombstone (墓碑)：标记该位置有值被删除</li><li>Movement：将空槽之后的数据进行整理</li></ul></li><li><p>重复的键问题</p><ul><li>Separate Linked List：把每个键对应的键值存在特殊结构中，hash表中存放指向该结构的指针</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\DB\separate_linked_list.png"></p><ul><li>Redundant Keys：将键值一起作为键，存放在哈希表中</li></ul></li></ul></li><li></li><li></li></ul>]]></content>
       
       
       <categories>
@@ -29,7 +75,276 @@
     
     
     <entry>
-      <title>9月14日记录</title>
+      <title>9月18日记录</title>
+      <link href="/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/"/>
+      <url>/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="9-月-18-日学习记录"><a href="#9-月-18-日学习记录" class="headerlink" title="9 月 18 日学习记录"></a>9 月 18 日学习记录</h1><ul><li>CMU15445 课程学习，Buffer Pool 开启</li><li>CSAPP 第二部分复习结束</li><li>B+树并发算法示例观看完毕，有了基本思路</li></ul><h1 id="一些想法"><a href="#一些想法" class="headerlink" title="一些想法"></a>一些想法</h1><p>加油，CMU15445 高低给它拿下</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 记录 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>csapp-8-异常控制流</title>
+      <link href="/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/"/>
+      <url>/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="Chapter-8-异常控制流"><a href="#Chapter-8-异常控制流" class="headerlink" title="Chapter 8 异常控制流"></a>Chapter 8 异常控制流</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> CS_COURSE </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CMU15-213 </tag>
+            
+            <tag> CSAPP </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>csapp-7-链接</title>
+      <link href="/2023/09/18/cs_courses/csapp/7-%E9%93%BE%E6%8E%A5/"/>
+      <url>/2023/09/18/cs_courses/csapp/7-%E9%93%BE%E6%8E%A5/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="Chapter-7-链接"><a href="#Chapter-7-链接" class="headerlink" title="Chapter 7 链接"></a>Chapter 7 链接</h1><h2 id="静态链接"><a href="#静态链接" class="headerlink" title="静态链接"></a>静态链接</h2><ul><li>符号解析</li><li>重定位<ul><li>编译器和汇编器生成.text和.data</li><li>链接器通过把每个符号定义和一个内存位置关联，对这些节进行<strong>重定位</strong>；修改引用，让符号指向这个内存位置</li></ul></li></ul><h2 id="可重定位目标文件"><a href="#可重定位目标文件" class="headerlink" title="可重定位目标文件"></a>可重定位目标文件</h2><ul><li>.rel.*：不同节的重定位信息</li><li>.line：原始C程序和.text节中机器指令的映射，”-g”得到</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\csapp\ELF.png"></p><ul><li>.bss：未初始化的静态变量，以及初始化为0的全局或静态变量</li><li>COMMON：未初始化的全局变量</li></ul><h3 id="解析多重定义符号"><a href="#解析多重定义符号" class="headerlink" title="解析多重定义符号"></a>解析多重定义符号</h3><ul><li>不允许有多个同名的强符号（定义并初始化）</li><li>强弱同在，选强符号</li><li>只有弱符号，随便选一个弱符号</li></ul><h3 id="重定位"><a href="#重定位" class="headerlink" title="重定位"></a>重定位</h3><ul><li>重定位节和符号定义<ul><li>将相同类型的节合并为同一类型的新的聚合节</li><li>每条指令和全局变量有唯一的运行时内存地址</li></ul></li><li>重定位节的符号引用<ul><li>修改代码节和数据节中的对符号的引用，指向正确的运行时地址</li></ul></li></ul><h3 id="重定位算法"><a href="#重定位算法" class="headerlink" title="重定位算法"></a>重定位算法</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// relocation entry</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    <span class="type">long</span> offset;<span class="comment">// 重定位的偏移</span></span><br><span class="line">    <span class="type">long</span> type:<span class="number">32</span>,<span class="comment">// 重定位类型</span></span><br><span class="line">    symbol:<span class="number">32</span>;<span class="comment">// 符号表索引</span></span><br><span class="line">    <span class="type">long</span> addend;<span class="comment">// 有符号常数，用于偏移调整</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><p><img src="C:\Users\我\Desktop\MyblogImg\csapp\relocate.png"></p><h2 id="可执行目标文件"><a href="#可执行目标文件" class="headerlink" title="可执行目标文件"></a>可执行目标文件</h2><p><img src="C:\Users\我\Desktop\MyblogImg\csapp\exe.png"></p><h2 id="位置无关代码"><a href="#位置无关代码" class="headerlink" title="位置无关代码"></a>位置无关代码</h2><ul><li>加载但是不需要重定位代码——位置无关代码（PIC）</li><li>gcc -fpic，共享库编译需要使用</li><li>基于.text和.data的距离总是保持不变</li></ul><h3 id="PIC数据引用"><a href="#PIC数据引用" class="headerlink" title="PIC数据引用"></a>PIC数据引用</h3><ul><li>在数据段开始创建一个表，全局偏移量表（Global Offset Table）</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\csapp\PIC_DATA.png"></p><h3 id="PIC函数调用"><a href="#PIC函数调用" class="headerlink" title="PIC函数调用"></a>PIC函数调用</h3><ul><li>延迟绑定，将过程地址的绑定推迟到第一次调用该过程时</li><li>通过GOT和PLT（过程链接表）来实现；PLT是代码段的表，GOT是数据段的表</li><li>通过两个表的跳转，将函数的ID和动态链接器的参数压入栈中，进入动态链接器进行重定位和修复符号执行的地址<ul><li>第一条PLT指令通过GOT[4]进行间接跳转；跳转只是跳到下一条指令</li></ul></li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\csapp\PLT.png"></p><h2 id="库打桩机制"><a href="#库打桩机制" class="headerlink" title="库打桩机制"></a>库打桩机制</h2><ul><li>运行截获对共享库函数的调用，用自己的函数进行取代</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> CS_COURSE </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CMU15-213 </tag>
+            
+            <tag> CSAPP </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>9月17日记录</title>
+      <link href="/2023/09/17/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0917/"/>
+      <url>/2023/09/17/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0917/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="9-月-17-日学习记录"><a href="#9-月-17-日学习记录" class="headerlink" title="9 月 17 日学习记录"></a>9 月 17 日学习记录</h1><ul><li>xv6 再学习，lab1 optional challange 做了几个</li><li>阅读 linux 0.12 源码剖析的书；对保护模式编程有了更深的理解</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 记录 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>1-内核结构</title>
+      <link href="/2023/09/17/linux-0.12/1-%E5%86%85%E6%A0%B8%E7%BB%93%E6%9E%84/"/>
+      <url>/2023/09/17/linux-0.12/1-%E5%86%85%E6%A0%B8%E7%BB%93%E6%9E%84/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="1-内核结构"><a href="#1-内核结构" class="headerlink" title="1-内核结构"></a>1-内核结构</h1><h2 id="1-1-虚拟地址空间"><a href="#1-1-虚拟地址空间" class="headerlink" title="1.1 虚拟地址空间"></a>1.1 虚拟地址空间</h2><ul><li>用户地址空间从0x00000000~0xBFFFFFFF，共占据3GB空间</li><li>内核空间占据剩余1GB空间</li><li>.rodata段是常量区；<strong>数组初始化的字符串常量</strong>是没有放入常量区的，另外用<strong>const修饰的全局变量</strong>是放入常量区的；<strong>使用const修饰的局部变量</strong>仅仅是设置为仅仅读起到防止改动的效果，没有放入常量区</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\mem_structure.png"></p><h3 id="1-1-1-目标文件格式"><a href="#1-1-1-目标文件格式" class="headerlink" title="1.1.1 目标文件格式"></a>1.1.1 目标文件格式</h3><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\a_out.png"></p><ul><li>目标文件的链接<ul><li>任何具有非零值的未解析的外部符号都将作为<strong>公共块（common）</strong>来看待，并且把它们分配存储在bss段的末尾处</li></ul></li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\ld.png"></p><h3 id="1-1-2-链接程序预定义变量"><a href="#1-1-2-链接程序预定义变量" class="headerlink" title="1.1.2 链接程序预定义变量"></a>1.1.2 链接程序预定义变量</h3><ul><li><p>链接器预定义的外部变量通常至少有etext、_etext、edata、_edata、end和_end</p></li><li><p>变量名_etext和etext的地址是程序正文段结束后的第1个地址；_edata和edata的地址是初始化数据区后面的第1个地址；_end和end的地址是未初始化数据区（bss）后的第1个地址位置</p></li></ul><h3 id="1-1-3-目标地址内存地址映像信息"><a href="#1-1-3-目标地址内存地址映像信息" class="headerlink" title="1.1.3 目标地址内存地址映像信息"></a>1.1.3 目标地址内存地址映像信息</h3><ul><li>当运行GNU链接器gld（ld）时若使用了’-M’选项，或者使用nm命令，则会在标准输出设备（通常<br>是屏幕）上打印出链接映像（link map）信息，即是指由连接程序产生的目标程序内存地址映像信息</li><li>其中每行说明一个符号，第1栏指明符号值（地址）；第2栏是符号类型，指明符号位于目标文件的<br>哪个区（sections）或其属性；第3栏是对应的符号名称</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\systemmap.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> OS </tag>
+            
+            <tag> 内核 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>2-保护模式</title>
+      <link href="/2023/09/17/linux-0.12/2-80X86%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F/"/>
+      <url>/2023/09/17/linux-0.12/2-80X86%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="2-保护模式"><a href="#2-保护模式" class="headerlink" title="2 保护模式"></a>2 保护模式</h1><h2 id="2-1-内存管理寄存器"><a href="#2-1-内存管理寄存器" class="headerlink" title="2.1 内存管理寄存器"></a>2.1 内存管理寄存器</h2><ul><li>处理器提供了4个内存管理寄存器（GDTR、LDTR、IDTR和TR），用于指定内存分段管理所用系统表的基地址</li><li>GDTR、IDTR和LDTR用于寻址存放描述符表的段。TR用于寻址一个特殊的任务状态段TSS（Task State Segment）。TSS段中包含着当前执行任务的重要信息</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\mem_manager.png"></p><h3 id="2-1-1-全局描述符表寄存器GDTR"><a href="#2-1-1-全局描述符表寄存器GDTR" class="headerlink" title="2.1.1 全局描述符表寄存器GDTR"></a>2.1.1 全局描述符表寄存器GDTR</h3><ul><li>GDTR 寄存器中用于存放<strong>全局描述符表GDT的32位的线性基地址和16位的表限长值</strong>。基地址指定<br>GDT表中字节0在线性地址空间中的地址，表长度指明GDT表的字节长度值。</li><li>指令LGDT和SGDT分别用于加载和保存GDTR寄存器的内容。在机器刚加电或处理器复位后，基地址被默认地设置为0，而长度值被设置成0xFFFF。在保护模式初始化过程中必须给GDTR加载一个新值。</li></ul><h3 id="2-1-2-中断描述符表寄存器IDTR"><a href="#2-1-2-中断描述符表寄存器IDTR" class="headerlink" title="2.1.2 中断描述符表寄存器IDTR"></a>2.1.2 中断描述符表寄存器IDTR</h3><ul><li>与GDTR的作用类似，IDTR寄存器用于存放<strong>中断描述符表IDT的32位线性基地址和16位表长度值</strong>。<br>指令LIDT和SIDT分别用于加载和保存IDTR寄存器的内容。在机器刚加电或处理器复位后，基地址被默认地设置为0，而长度值被设置成0xFFFF。</li></ul><h3 id="2-1-3-局部描述符表寄存器LDTR"><a href="#2-1-3-局部描述符表寄存器LDTR" class="headerlink" title="2.1.3 局部描述符表寄存器LDTR"></a>2.1.3 局部描述符表寄存器LDTR</h3><ul><li>LDTR寄存器中用于存放<strong>局部描述符表LDT的32位线性基地址、16位段限长和描述符属性值</strong>。指令<br>LLDT 和SLDT分别用于加载和保存LDTR寄存器的段描述符部分。</li><li>包含LDT表的段必须在GDT表中有一个段描述符项。当使用LLDT指令把含有LDT表段的选择符加载进LDTR时，LDT段描述符的段基地址、段限长度以及描述符属性会被自动地加载到 LDTR 中。当进行任务切换时，处理器会把新任务 LDT的段选择符和段描述符自动地加载进LDTR中。在机器加电或处理器复位后，段选择符和基地址被默认地设置为0，而段长度被设置成0xFFFF。</li></ul><h3 id="2-1-4-任务寄存器TR"><a href="#2-1-4-任务寄存器TR" class="headerlink" title="2.1.4 任务寄存器TR"></a>2.1.4 任务寄存器TR</h3><ul><li>TR 寄存器用于存放当前任务<strong>TSS段的16位段选择符、32位基地址、16位段长度和描述符属性值</strong>。<br>它引用GDT表中的一个TSS类型的描述符。指令LTR和STR分别用于加载和保存TR寄存器的段选择符<br>部分。</li><li>当使用LTR指令把选择符加载进任务寄存器时，TSS描述符中的段基地址、段限长度以及描述符属<br>性会被自动地加载到任务寄存器中。当执行任务切换时，处理器会把新任务的TSS的段选择符和段描述符自动地加载进任务寄存器TR中。</li></ul><h2 id="2-2-控制寄存器"><a href="#2-2-控制寄存器" class="headerlink" title="2.2 控制寄存器"></a>2.2 控制寄存器</h2><ul><li>CR2 和CR3用于分页机制。CR3含有存放页目录表页面的物理地址，因此CR3也被称为PDBR。</li><li>页目录表页面是页对齐的，<strong>所以该寄存器只有高20位是有效的</strong>。而低12位保留供更高级处理器使用，因此在往CR3中加载一个新值时低12位必须设置为0。</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\control_reg.png"></p><h2 id="2-3-保护模式内存管理"><a href="#2-3-保护模式内存管理" class="headerlink" title="2.3 保护模式内存管理"></a>2.3 保护模式内存管理</h2><ul><li>虚拟地址（逻辑地址）空间可包含最多16K的段，而每个段最长可达4GB，使得虚拟地址空间<br>容量达到64TB</li><li>线性地址空间和物理地址空间都是4GB；实际上，如果禁用分页机制，那么线性地址空间就是物理地址空间。</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\addr_change.png"></p><h3 id="2-3-1-保护"><a href="#2-3-1-保护" class="headerlink" title="2.3.1 保护"></a>2.3.1 保护</h3><ul><li><p>任务之间的保护：</p><ul><li><p>80X86使用的方法是通过把每个任务放置在不同的虚拟地址空间中，并给予每个任务不同的逻辑地址到物理地址的变换映射。每个任务中的地址变换功能被定义成一个任务中的逻辑地址映射到物理内存的一部分区域，而另一个任务中的逻辑地址映射到物理内存中的不同区域中</p></li><li><p>每个任务唯一的虚拟地址空间部分被称为局部地址空间（Local address space）。局部地址空间含有需要与系统中其他任务区别开的私有的代码和数据</p></li><li><p>所有任务在全局地址空间中对相同虚拟地址的引用将被转换到同一个物理地址处。这给公共代码和数据（例如操作系统）的共享提供了支持。</p></li></ul></li><li><p>特权级保护：</p><ul><li>特权级用数字0到3表示，0具有最高特权级，而3则是最低特权级。每个内存段都与一个特权级相关联。</li><li>当前特权级（Current Privilege Level），即CPL就是当前活动代码段的特权级，并且它定<br>义了当前所执行程序的特权级别。CPL确定了哪些段能够被程序访问。 每当程序企图访问一个段时，当前特权级就会与段的特权级进行比较，以确定是否有访问许可。在给定CPL级别上执行的程序允许访问同级别或低级别的数据段。任何对高级别段的引用都是非法的，并且会<br>引发一个异常来通知操作系统。 </li><li><strong>每个特权级都有自己的程序栈</strong>，以避免使用共享栈带来的保护问题。当程序从一个特权级切换到另一个特权级上执行时，堆栈段也随之改换到新级别的堆栈中。</li></ul></li></ul><h3 id="2-3-2-段描述符表"><a href="#2-3-2-段描述符表" class="headerlink" title="2.3.2 段描述符表"></a>2.3.2 段描述符表</h3><ul><li>全局描述符表GDT</li><li>局部描述符表LDT</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\segment_descriptor.png"></p><ul><li>虚拟地址空间被分割成大小相等的两半。一半由GDT来映射变换到线性地址，另一半则由LDT来映射。</li></ul><h3 id="2-3-3-段选择符"><a href="#2-3-3-段选择符" class="headerlink" title="2.3.3 段选择符"></a>2.3.3 段选择符</h3><ul><li><p>请求特权级RPL，表指示标志TI，索引值</p></li><li><p>处理器不使用GDT表中的第1项。指向GDT该项的选择符（即索引值为0，TI标志为0的选择符）用作为“空选择符”</p></li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\segment_reg.png"></p><ul><li>堆栈段必须是可读&#x2F;写的数据段。若使用不可写数据段的选择符加载到SS寄存器中，将导致一个一般保护异常。如果堆栈段的长度需要动态地改变，那么堆栈段可以是一个向下扩展的数据段（扩展方向标志置位）。这里，动态改变段限长将导致栈空间被添加到栈底部。</li></ul><h3 id="2-3-4-中断门，陷阱门，调用门"><a href="#2-3-4-中断门，陷阱门，调用门" class="headerlink" title="2.3.4 中断门，陷阱门，调用门"></a>2.3.4 中断门，陷阱门，调用门</h3><ul><li><p>中断门</p><ul><li>一个中断源就会产生一个中断向量，每个中断向量都对应中断描述符表中的一个门描述符，任何中断源都通过中断向量对应到中断描述符表中的门描述符，通过该门描述符就找到了对应的中断处理程序。</li></ul></li><li><p>调用门</p><ul><li>调用门，是CPU提供给我们的一个功能，它允许 3 环程序（CPL&#x3D;3）通过这扇“门”达到修改 cs 段寄存器的目的，同时达到提权的目的。</li><li>使用 call far + 调用门描述符的段选择子，跨段到 0x0008 指向的代码段</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\diaoyong_door.png"></p></li><li><p>陷阱门</p><ul><li>进入中断门，CPU会把EFLAGS中的IF位置1，而进入陷阱门，CPU并不修改 IF 位。</li></ul></li><li><p>不同特权级内核堆栈切换</p><p><img src="/"></p></li></ul><h2 id="2-4-虚拟存储"><a href="#2-4-虚拟存储" class="headerlink" title="2.4 虚拟存储"></a>2.4 虚拟存储</h2><ul><li>目录和页表表项中的存在标志P为使用分页技术的虚拟存储提供了必要的支持。若线性地址空间中<br>的页面存在于物理内存中，则对应表项中的标志P&#x3D;1，并且该表项中含有相应物理地址。页面不在物理内存中的表项其标志P &#x3D; 0。</li><li>如果程序访问物理内存中不存在的页面，处理器就会产生一个缺页异常。此时操作系统就可以利用这个异常处理过程把缺少的页面从磁盘上调入物理内存中，并把相应物理地址存放在表项中。最后在返回程序重新执行引起异常的指令之前设置标志P&#x3D;1。</li></ul><h2 id="2-5-中断和异常处理"><a href="#2-5-中断和异常处理" class="headerlink" title="2.5 中断和异常处理"></a>2.5 中断和异常处理</h2><ul><li>允许的向量号范围是0到255。其中0到31保留用作80X86处理器定义的异常和中断，不过目前该范围内的向量号并非每个都已定义了功能，未定义功能的向量号将留作今后使用。 </li><li>范围在32到255的向量号用于用户定义的中断。这些中断通常用于外部I&#x2F;O设备，使得这些设备可以通过外部硬件中断机制向处理器发送中断</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\interrupt.png"></p><h3 id="中断源"><a href="#中断源" class="headerlink" title="中断源"></a>中断源</h3><ul><li>硬件中断<ul><li>外部中断通过处理器芯片上两个引脚（INTR和NMI）接收。当引脚INTR接收到外部发生的中断信号时，处理器就会从系统总线上读取外部中段控制器（例如8259A）提供的中断向量号。</li><li>当引脚NMI接收到信号时，就产生一个非屏蔽中断。它使用固定的中断向量号2。</li><li>任何通过处理器INTR引脚接收的外部中断都被称为可屏蔽硬件中断，包括中断向量号0到255。标志寄存器EFLAGS中的IF标志可用来屏蔽所有这些硬件中断。</li></ul></li><li>软件产生的中断<ul><li>通过在指令操作数中提供中断向量号，INT n指令可用于从软件中产生中断</li><li>注意，EFLAGS中的IF标志不能够屏蔽使用INT指令从软件中产生的中断</li></ul></li></ul><h3 id="异常源"><a href="#异常源" class="headerlink" title="异常源"></a>异常源</h3><ul><li><p>处理器检测到的程序错误异常</p></li><li><p>软件产生的异常</p></li></ul><h3 id="异常分类"><a href="#异常分类" class="headerlink" title="异常分类"></a>异常分类</h3><ul><li>Fault<ul><li>一种通常可以被纠正的异常，并且一旦被纠正程序就可以继续运行。当出现一个 Fault，<br>处理器会把机器状态恢复到产生 Fault 的指令之前的状态。此时异常处理程序的返回地址会指向产生Fault 的指令，而不是其后面一条指令。因此在返回后产生Fault的指令将被重新执行</li></ul></li><li>Trap <ul><li>是一个引起陷阱的指令被执行后立刻会报告的异常。Trap也能够让程序或任务连贯地执行Trap 处理程序的返回地址指向引起陷阱指令的随后一条指令，因此在返回后会执行下一条指令。</li></ul></li><li>Abort <ul><li>是一种不会总是报告导致异常的指令的精确位置的异常，并且不允许导致异常的程序重新继续执行。Abort用于报告严重错误，例如硬件错误以及系统表中存在不一致性或非法值。</li></ul></li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\trap_prior.png"></p><h3 id="中断过程调用"><a href="#中断过程调用" class="headerlink" title="中断过程调用"></a>中断过程调用</h3><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\interrupt_call.png"></p><ul><li>中断调用的堆栈变化</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\interrupt_stack.png"></p><h3 id="中断处理任务"><a href="#中断处理任务" class="headerlink" title="中断处理任务"></a>中断处理任务</h3><ul><li>优势<ul><li>被中断任务的完整上下文会被自动保存</li><li>在处理异常或中断时，新的TSS可以允许处理过程使用新特权级0的堆栈。在当前特权级0的堆<br>栈已毁坏时如果发生了一个异常或中断，那么在为中断过程提供一个新特权级 0 的堆栈条件下，通过任务门访问中断处理过程能够防止系统崩溃； </li><li>通过使用单独的LDT给中断或异常处理任务独立的地址空间，可以把它与其他任务隔离开来。</li></ul></li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\assignment_door.png"></p><h3 id="任务结构"><a href="#任务结构" class="headerlink" title="任务结构"></a>任务结构</h3><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\task.png"></p><ul><li>任务状态结构（TSS）</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\TSS.png"></p><ul><li>任务切换</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\linux\linux0.12\exchange_task.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> linux </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> OS </tag>
+            
+            <tag> 内核 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>9月16日记录</title>
+      <link href="/2023/09/16/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0916/"/>
+      <url>/2023/09/16/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0916/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="9-月-16-日学习记录"><a href="#9-月-16-日学习记录" class="headerlink" title="9 月 16 日学习记录"></a>9 月 16 日学习记录</h1><ul><li>CMU15445 lab1 前置课程学习，明天准备开 Buffer Pool</li><li>xv6 再学习，lab1 optional challange 做了几个</li><li>阅读 linux 0.12 源码</li><li>用 C++写算法导论中的算法</li></ul><h1 id="一些想法"><a href="#一些想法" class="headerlink" title="一些想法"></a>一些想法</h1><p>今日锻炼打卡成功；感觉膝盖可能又需要养一养，太难过了</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 记录 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>5_Database_Storage</title>
+      <link href="/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/"/>
+      <url>/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="5-Buffer-Pool"><a href="#5-Buffer-Pool" class="headerlink" title="5 Buffer Pool"></a>5 Buffer Pool</h1><ul><li>在磁盘中将文件切成一个个页</li><li>在内存中开辟一个缓存池；加快对页的访问</li></ul><h2 id="5-1-Buffer-Pool"><a href="#5-1-Buffer-Pool" class="headerlink" title="5.1 Buffer Pool"></a>5.1 Buffer Pool</h2><h3 id="Organization"><a href="#Organization" class="headerlink" title="Organization"></a>Organization</h3><ul><li><p>是一个有着固定页数的数组；每个数组元素叫 frame (帧)</p></li><li><p>通过page table去索引内存池中的页</p></li><li><p>page table可以pin某个页，也可以锁住某个索引</p></li></ul><h3 id="Mete-Data"><a href="#Mete-Data" class="headerlink" title="Mete-Data"></a>Mete-Data</h3><ul><li><p>页表跟踪现在在内存中的页</p></li><li><p>Dirty flag</p></li><li><p>Pin&#x2F;Reference Counter</p></li></ul><h3 id="locks-vs-latches"><a href="#locks-vs-latches" class="headerlink" title="locks vs latches"></a>locks vs latches</h3><ul><li>locks<ul><li>保护事务中的内容</li><li>在事务期间持有锁</li><li>需要回滚</li></ul></li><li>latches<ul><li>保护临界区数据结构</li><li>在操作期间持有锁</li><li>不必回滚改变</li></ul></li></ul><h3 id="page-dictionary-vs-page-table"><a href="#page-dictionary-vs-page-table" class="headerlink" title="page dictionary vs. page table"></a>page dictionary vs. page table</h3><ul><li>page dic<ul><li>在磁盘中，标记每个页在那个文件中</li></ul></li><li>page table<ul><li>在内存中，标记页在Buffer Pool的什么位置</li></ul></li></ul><h2 id="5-2-Allocation-Policies"><a href="#5-2-Allocation-Policies" class="headerlink" title="5.2 Allocation Policies"></a>5.2 Allocation Policies</h2><ul><li>全局：同一安排空间</li><li>局部：为某个线程分配帧不考虑并发的其他线程</li></ul><h2 id="5-3-Buffer-Pool-Optimizations"><a href="#5-3-Buffer-Pool-Optimizations" class="headerlink" title="5.3 Buffer Pool Optimizations"></a>5.3 Buffer Pool Optimizations</h2><h3 id="Multiple-Buffer-Pool"><a href="#Multiple-Buffer-Pool" class="headerlink" title="Multiple Buffer Pool"></a>Multiple Buffer Pool</h3><ul><li>多缓存池<ul><li>Per-database buffer pool</li><li>Per-page type buffer pool</li><li>减少锁的冲突同时提高局部性</li></ul></li><li>策略<ul><li>使用Object Id</li><li>使用Hashing</li></ul></li></ul><h3 id="Pre-Fetching"><a href="#Pre-Fetching" class="headerlink" title="Pre-Fetching"></a>Pre-Fetching</h3><ul><li>根据查询安排来预取一些页<ul><li>Sequential Scans（扫全表）</li><li>Index Scans（index-page）</li></ul></li></ul><h3 id="Scan-Sharing"><a href="#Scan-Sharing" class="headerlink" title="Scan Sharing"></a>Scan Sharing</h3><ul><li>同步扫描，与结果缓存不同</li><li>相同的查询路径，后者先跟前者一起scan，最后再scan自己没有经过的page</li></ul><h3 id="Buffer-Pool-Bypass"><a href="#Buffer-Pool-Bypass" class="headerlink" title="Buffer Pool Bypass"></a>Buffer Pool Bypass</h3><ul><li>扫描的page绕过内存池，直接进入内存中</li><li>sorting, joins的中间结果不进入内存池</li></ul><h3 id="OS-Page-Cache"><a href="#OS-Page-Cache" class="headerlink" title="OS Page Cache"></a>OS Page Cache</h3><ul><li>操作系统存在缓存；需要绕过OS的页缓存</li><li>DBMS使用direct I&#x2F;O (O_DIRECT)</li></ul><h2 id="5-4-Buffer-Replacement-Policies"><a href="#5-4-Buffer-Replacement-Policies" class="headerlink" title="5.4 Buffer Replacement Policies"></a>5.4 Buffer Replacement Policies</h2><p>目标：正确、准确、快速、更新元数据</p><h3 id="Least-recently-Used"><a href="#Least-recently-Used" class="headerlink" title="Least-recently Used"></a>Least-recently Used</h3><ul><li>保存每个页最近访问的时间戳</li><li>查询洪泛问题<ul><li>热点页多次被换入换出</li></ul></li></ul><h3 id="Clock"><a href="#Clock" class="headerlink" title="Clock"></a>Clock</h3><ul><li>模糊的LRU不需要每个页有时间戳<ul><li>每个页有一个引用位</li><li>当一个页被访问了，引用位置为1</li></ul></li><li>扫描整个缓存池；如果ref bit &#x3D; 1，置为0；如果ref bit &#x3D; 0，直接驱逐</li></ul><h3 id="Better-polices-LRU-K"><a href="#Better-polices-LRU-K" class="headerlink" title="Better polices: LRU-K"></a>Better polices: LRU-K</h3><ul><li>最近 K 次访问最少；数据在访问历史列表里后没有达到 K 次访问，则按照一定规则（<a href="https://so.csdn.net/so/search?q=FIFO&spm=1001.2101.3001.7020">FIFO</a>，LRU）淘汰；历史队列中的数据访问次数达到 K 次后，将数据索引从历史队列删除，将数据移到缓存队列中，并缓存此数据，缓存队列重新按照时间排序；淘汰缓存队列末尾的元素</li><li>LRU-K 需要多维护一个队列，用于记录所有缓存数据被访问的历史。只有当数据的访问次数达到 K 次的时候，才将数据放入缓存</li><li>使用 List 进行数据删除时，使用 erase 需要 list 的迭代器；同时需要一个 map 进行迭代器的存储</li></ul><h3 id="Better-polices-Localization"><a href="#Better-polices-Localization" class="headerlink" title="Better polices: Localization"></a>Better polices: Localization</h3><ul><li>只驱逐自己使用的页，如果别人也使用该页，不会驱逐</li></ul><h3 id="Better-polices-Priority-Hints"><a href="#Better-polices-Priority-Hints" class="headerlink" title="Better polices: Priority Hints"></a>Better polices: Priority Hints</h3><ul><li>在查询执行过程中，了解每个页的内容</li><li>提供hint去判断内存池中页是否重要</li><li>现代数据库一般启动时将根结点加入内存池</li></ul><h2 id="5-5-Dirty-pages"><a href="#5-5-Dirty-pages" class="headerlink" title="5.5 Dirty pages"></a>5.5 Dirty pages</h2><ul><li>一般不直接回写磁盘，磁盘IO速度太慢</li><li>WAL：先写日志到磁盘，再将脏页写入磁盘（使用dirty flag）</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> CS_COURSE </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CMU15445 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>8-Coordination</title>
+      <link href="/2023/09/16/cs_courses/6.s081/8-%E7%9D%A1%E7%9C%A0%E5%92%8C%E5%94%A4%E9%86%92/"/>
+      <url>/2023/09/16/cs_courses/6.s081/8-%E7%9D%A1%E7%9C%A0%E5%92%8C%E5%94%A4%E9%86%92/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="Coordination"><a href="#Coordination" class="headerlink" title="Coordination"></a>Coordination</h1><h2 id="1-进程切换过程"><a href="#1-进程切换过程" class="headerlink" title="1 进程切换过程"></a>1 进程切换过程</h2><ol><li>一个进程出于某种原因想要进入休眠状态，比如说出让 CPU 或者等待数据，它会先获取自己的锁；</li><li>之后进程将自己的状态从 RUNNING 设置为 RUNNABLE；</li><li>之后进程调用 switch 函数，其实是调用 sched 函数在 sched 函数中再调用的 switch 函数；</li><li>switch 函数将当前的线程切换到调度器线程；</li><li>调度器线程之前也调用了 switch 函数，现在恢复执行会从自己的 switch 函数返回；</li><li>返回之后，调度器线程会释放刚刚出让了 CPU 的进程的锁</li></ol><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 需要切换的进程</span></span><br><span class="line">acquire(&amp;p-&gt;lock);</span><br><span class="line">p-&gt;state = RUNNABLE;</span><br><span class="line">swtch();</span><br><span class="line"><span class="comment">// 调度器进程</span></span><br><span class="line">swtch();</span><br><span class="line">release(&amp;p-&gt;lock);</span><br></pre></td></tr></table></figure><ul><li><p>在进程切换的最开始，进程先获取自己的锁，并且直到调用 swtch 函数时也不释放锁。而另一个线程，也就是调度器线程会在进程的线程完全停止使用自己的栈之后，再释放进程的锁。</p><ul><li>如果在 swtch()前释放锁，可能有另一个 CPU 核心运行同样的进程；会造成程序崩溃</li></ul></li><li><p>XV6 中，不允许进程在执行 switch 函数的过程中，持有任何其他的锁。</p><ul><li>如果 p1 持有另一个锁 l1，当 p1 切换到 p2 时；p1 的 l1 未释放，而如果 p2 需要 l1；会造成死锁：p2 需要 l1 来进行进程切换，p1 拥有 l1，但不能进行进程切换</li><li>我们不能在等待锁的时候处理中断；所以定时器中断 (调用 yield，让进程出让 CPU) 不能打破死锁</li></ul></li></ul><h2 id="2-Sleep-amp-Wakeup"><a href="#2-Sleep-amp-Wakeup" class="headerlink" title="2 Sleep &amp; Wakeup"></a>2 Sleep &amp; Wakeup</h2><ul><li>通过循环等待硬件设备在现在等待的时间是不可接受的；</li><li>xv6 中通过 uart 硬件进行读取字符到控制台；当写入一个字符后写入进程 sleep，触发中断 uartintr；中断判断是否已经写入完成，如果写入完成，唤醒写入进程进行下一次写入</li><li>sleep 和 wakeup 需要特定的参数一个 channel；sleep 需要传递一个锁</li></ul><h3 id="2-1-lose-wakeup"><a href="#2-1-lose-wakeup" class="headerlink" title="2.1 lose wakeup"></a>2.1 lose wakeup</h3><ul><li>使用下面的 sleep 和 wakeup；会造成丢失唤醒问题</li><li>可能在进程未 sleep 前，中断例程执行成功，wakeup 未唤醒任何进程</li></ul><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">broken_sleep</span><span class="params">(chan)</span> &#123;</span><br><span class="line">  p-&gt;state = SLEEPING;</span><br><span class="line">  p-&gt;chan = chan;</span><br><span class="line">  swtch();</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">wakeup</span><span class="params">(chan)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span>(each p in prics[]) &#123;</span><br><span class="line">    <span class="keyword">if</span>(p-&gt;state == SLEEPING&amp;&amp;p-&gt;chan == chan) &#123;</span><br><span class="line">      p-&gt;state = RUNNABLE;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">uartwrite</span><span class="params">(buf)</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> each c in buf:</span><br><span class="line">    lock;</span><br><span class="line">    <span class="keyword">while</span> not done;</span><br><span class="line">      unlock;</span><br><span class="line">      <span class="comment">// 中断发生地</span></span><br><span class="line">      sleep(&amp;tx_chan);</span><br><span class="line">      <span class="comment">// 再次获得锁进行下一步操作</span></span><br><span class="line">      lock</span><br><span class="line">    send c;</span><br><span class="line">    done = <span class="number">0</span>;</span><br><span class="line">    unlock;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">uartintr</span><span class="params">()</span> &#123;</span><br><span class="line">  lock;</span><br><span class="line">  done = <span class="number">1</span>;</span><br><span class="line">  wakeup(&amp;tx_chan);</span><br><span class="line">  unlock;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li>sleep 需要传入一个保护条件的锁；调用 sleep 时，锁被当前线程持有，之后这个锁被传递给 sleep</li><li>wakeup 必须在持有条件锁（进程的锁）时才能唤醒进程</li></ul><h3 id="2-2-exit"><a href="#2-2-exit" class="headerlink" title="2.2 exit"></a>2.2 exit</h3><ul><li>关闭所有打开的文件；父进程退出，子进程由 init 进程管理；将自己变为僵尸进程；进入 sched()函数</li><li>一个进程 exit 后，父进程如果调用了 wait，父进程会返回子进程退出值<ul><li>扫描进程表，找到子进程为僵尸进程的进程；调用 freeproc()</li></ul></li></ul><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">void</span></span><br><span class="line"><span class="title function_">freeproc</span><span class="params">(<span class="keyword">struct</span> proc *p)</span> &#123;</span><br><span class="line">  <span class="keyword">if</span>(p-&gt;trapframe)</span><br><span class="line">    kfree((<span class="type">void</span>*)p-&gt;trapframe);</span><br><span class="line">  p-&gt;trapframe = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">if</span>(p-&gt;pagetable)</span><br><span class="line">    proc_freepagetable(p-&gt;pagetable, p-&gt;sz);</span><br><span class="line">  p-&gt;pagetable = <span class="number">0</span>;</span><br><span class="line">  p-&gt;sz = <span class="number">0</span>;</span><br><span class="line">  p-&gt;pid = <span class="number">0</span>;</span><br><span class="line">  p-&gt;parent = <span class="number">0</span>;</span><br><span class="line">  p-&gt;name[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">  p-&gt;chan = <span class="number">0</span>;</span><br><span class="line">  p-&gt;killed = <span class="number">0</span>;</span><br><span class="line">  p-&gt;xstate = <span class="number">0</span>;</span><br><span class="line">  p-&gt;state = UNUSED;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li>在 Unix 中，对于每一个退出的进程，都需要有一个对应的 wait 系统调用</li></ul><h3 id="2-3-kill"><a href="#2-3-kill" class="headerlink" title="2.3 kill"></a>2.3 kill</h3><ul><li>Unix 中的一个进程可以将另一个进程的 ID 传递给 kill 系统调用，并让另一个进程停止运行</li><li>它先扫描进程表单，找到目标进程。然后只是将进程的 proc 结构体中 killed 标志位设置为 1。如果进程正在 SLEEPING 状态，将其设置为 RUNNABLE。这里只是将 killed 标志位设置为 1，并没有停止进程的运行。所以 kill 系统调用本身还是很温和的。</li><li>而目标进程运行到内核代码中能安全停止运行的位置时，会检查自己的 killed 标志位，如果设置为 1，目标进程会自愿的执行 exit 系统调用</li><li><strong>如果进程在用户空间，那么下一次它执行系统调用它就会退出，又或者目标进程正在执行用户代码，当时下一次定时器中断或者其他中断触发了，进程才会退出。所以从一个进程调用 kill，到另一个进程真正退出，中间可能有很明显的延时</strong><ul><li>在内核态 kill 进程，会将进程唤醒；在 sleep 循环中进行 killed 标志位的检查</li><li>在驱动中，我们期望文件操作不会中断；所以不会在 sleep 循环中进行 killed 标志位的检查</li></ul></li><li>init 进程的目标就是不退出，它就是在一个循环中不停的调用 wait。如果 init 进程退出了，我认为这是一个 Fatal 级别的错误，然后系统会崩溃。在 exit 函数的最开始就会有如下检查</li></ul><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">exit</span><span class="params">(<span class="type">int</span> status)</span> &#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">proc</span> *<span class="title">p</span> =</span> myproc();</span><br><span class="line">  <span class="keyword">if</span>(p == initproc)</span><br><span class="line">    panic(<span class="string">&quot;init exiting&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> CS_COURSE </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 6.s081 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>util lab</title>
+      <link href="/2023/09/15/chcore/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
+      <url>/2023/09/15/chcore/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><h2 id="伙伴系统"><a href="#伙伴系统" class="headerlink" title="伙伴系统"></a>伙伴系统</h2><ul><li><p>系统中分配大页面使用伙伴系统 (Buddy System)</p></li><li><p>设置内存池<code>phys_mem_pool</code>，每个内存池存放元数据，起始地址，存放的内存大小，存放页面的大小，有一个空闲链表数组（以order来组织）</p><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">free_list</span> &#123;</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span> <span class="title">free_list</span>;</span></span><br><span class="line">        u64 nr_free;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">phys_mem_pool</span> &#123;</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * The start virtual address (for used in kernel) of</span></span><br><span class="line"><span class="comment">         * this physical memory pool.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        u64 pool_start_addr;</span><br><span class="line">        u64 pool_mem_size;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * This field is only used in ChCore unit test.</span></span><br><span class="line"><span class="comment">         * The number of (4k) physical pages in this physical memory pool.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        u64 pool_phys_page_num;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * The start virtual address (for used in kernel) of</span></span><br><span class="line"><span class="comment">         * the metadata area of this pool.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span> *<span class="title">page_metadata</span>;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/* The free list of different free-memory-chunk orders. */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">free_list</span> <span class="title">free_lists</span>[<span class="title">BUDDY_MAX_ORDER</span>];</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li></ul><h3 id="获取伙伴页面"><a href="#获取伙伴页面" class="headerlink" title="获取伙伴页面"></a>获取伙伴页面</h3><ul><li>获取一个页面的伙伴页面；通过页面对应的地址来计算伙伴系统的地址（地址xor当前页的大小）；将地址转化为页</li></ul><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="keyword">struct</span> page *<span class="title function_">get_buddy_chunk</span><span class="params">(<span class="keyword">struct</span> phys_mem_pool *pool,</span></span><br><span class="line"><span class="params">                                    <span class="keyword">struct</span> page *chunk)</span></span><br><span class="line">&#123;</span><br><span class="line">        u64 chunk_addr;</span><br><span class="line">        u64 buddy_chunk_addr;</span><br><span class="line">        <span class="type">int</span> order;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Get the address of the chunk. */</span></span><br><span class="line">        chunk_addr = (u64)page_to_virt(chunk);</span><br><span class="line">        order = chunk-&gt;order;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Calculate the address of the buddy chunk according to the address</span></span><br><span class="line"><span class="comment"> * relationship between buddies.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BUDDY_PAGE_SIZE_ORDER (12)</span></span><br><span class="line">        buddy_chunk_addr = chunk_addr</span><br><span class="line">                           ^ (<span class="number">1UL</span> &lt;&lt; (order + BUDDY_PAGE_SIZE_ORDER));</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Check whether the buddy_chunk_addr belongs to pool. */</span></span><br><span class="line">        <span class="keyword">if</span> ((buddy_chunk_addr &lt; pool-&gt;pool_start_addr)</span><br><span class="line">            || (buddy_chunk_addr</span><br><span class="line">                &gt;= (pool-&gt;pool_start_addr + pool-&gt;pool_mem_size))) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> virt_to_page((<span class="type">void</span> *)buddy_chunk_addr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="分配页面"><a href="#分配页面" class="headerlink" title="分配页面"></a>分配页面</h3><ul><li>获取对应order的页面，从空闲链表数组中，按order从小至大的顺序寻找空闲页（避免后续使用大内存找不到，造成申请大内存进程饥饿）</li><li>申请到空闲页面后，进行分页</li></ul><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="keyword">struct</span> page *<span class="title function_">split_page</span><span class="params">(<span class="keyword">struct</span> phys_mem_pool *pool, u64 order,</span></span><br><span class="line"><span class="params">                               <span class="keyword">struct</span> page *page)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 BEGIN */</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Hint: Recursively put the buddy of current chunk into</span></span><br><span class="line"><span class="comment">         * a suitable free list.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        BUG_ON(page-&gt;order &lt; order);</span><br><span class="line">        <span class="keyword">if</span>(page-&gt;order == order) &#123;</span><br><span class="line">                page-&gt;allocated = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">return</span> page;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// page size becomes smaller</span></span><br><span class="line">        u64 tmporder = page-&gt;order - <span class="number">1</span>;</span><br><span class="line">        page-&gt;order = tmporder;</span><br><span class="line">        page-&gt;allocated = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span>* <span class="title">newpage</span> =</span> get_buddy_chunk(pool, page);</span><br><span class="line">        BUG_ON(newpage==<span class="literal">NULL</span>);</span><br><span class="line">        newpage-&gt;order = tmporder;</span><br><span class="line">        newpage-&gt;allocated = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// insert newpage into freelist</span></span><br><span class="line">        list_add(&amp;(newpage-&gt;node),&amp;(pool-&gt;free_lists[tmporder].free_list));</span><br><span class="line">        pool-&gt;free_lists[tmporder].nr_free++;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> split_page(pool, order, page);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 END */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> page *<span class="title function_">buddy_get_pages</span><span class="params">(<span class="keyword">struct</span> phys_mem_pool *pool, u64 order)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 BEGIN */</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Hint: Find a chunk that satisfies the order requirement</span></span><br><span class="line"><span class="comment">         * in the free lists, then split it if necessary.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// find from small to big free list</span></span><br><span class="line">        u64 index = order;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">list_head</span>* <span class="title">ptr</span> =</span> <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">for</span>(; index &lt; BUDDY_MAX_ORDER; ++index) &#123;</span><br><span class="line">                <span class="keyword">if</span>(pool-&gt;free_lists[index].nr_free &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                        ptr = pool-&gt;free_lists[index].free_list.next;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(ptr == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">        list_del(ptr);</span><br><span class="line">        pool-&gt;free_lists[index].nr_free--;</span><br><span class="line">        <span class="comment">// get page form node (addr page = address of ptr - node offset)</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span>* <span class="title">page</span> =</span> list_entry(ptr, <span class="keyword">struct</span> page, node);</span><br><span class="line">        <span class="comment">// split page</span></span><br><span class="line">        <span class="keyword">return</span> split_page(pool, order, page);</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 END */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h3 id="释放页面"><a href="#释放页面" class="headerlink" title="释放页面"></a>释放页面</h3><ul><li>如果释放的页面可以进行合并，直接合并，直到不能合并为止</li><li>合并地址计算时，两个页面具有相同的页大小，仅仅是页大小前的最后一位不同，所以新页的起始地址应该是二者地址之与</li><li>将合并后的页面插入空闲链表数组</li></ul><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">static</span> <span class="keyword">struct</span> page *<span class="title function_">merge_page</span><span class="params">(<span class="keyword">struct</span> phys_mem_pool *pool, <span class="keyword">struct</span> page *page)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 BEGIN */</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Hint: Recursively merge current chunk with its buddy</span></span><br><span class="line"><span class="comment">         * if possible.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="comment">// if page-&gt;order is max order</span></span><br><span class="line">        <span class="keyword">if</span>(page-&gt;order == BUDDY_MAX_ORDER <span class="number">-1</span>) </span><br><span class="line">                <span class="keyword">return</span> page;</span><br><span class="line">        </span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span>* <span class="title">buddy</span> =</span> get_buddy_chunk(pool, page);</span><br><span class="line">        <span class="keyword">if</span>(buddy == <span class="literal">NULL</span> || buddy-&gt;allocated == <span class="number">1</span> || buddy-&gt;order != page-&gt;order) <span class="keyword">return</span> page;</span><br><span class="line">        list_del(&amp;(buddy-&gt;node));</span><br><span class="line">        pool-&gt;free_lists[buddy-&gt;order].nr_free--;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// calculate new page</span></span><br><span class="line">        u64 addr = (u64)page_to_virt(page) &amp; (u64)page_to_virt(buddy);</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span>* <span class="title">upper_page</span> =</span> virt_to_page((<span class="type">void</span>*)addr);</span><br><span class="line">        upper_page-&gt;order = page-&gt;order + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> merge_page(pool, upper_page);</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 END */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">buddy_free_pages</span><span class="params">(<span class="keyword">struct</span> phys_mem_pool *pool, <span class="keyword">struct</span> page *page)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 BEGIN */</span></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Hint: Merge the chunk with its buddy and put it into</span></span><br><span class="line"><span class="comment">         * a suitable free list.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        page-&gt;allocated = <span class="number">0</span>;</span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">page</span>* <span class="title">newpage</span> =</span> merge_page(pool, page);</span><br><span class="line">        newpage-&gt;allocated = <span class="number">0</span>;</span><br><span class="line">        list_add(&amp;(newpage-&gt;node), &amp;(pool-&gt;free_lists[newpage-&gt;order].free_list));</span><br><span class="line">        pool-&gt;free_lists[newpage-&gt;order].nr_free++;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="comment">/* LAB 2 TODO 2 END */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="SLAB内存分配器"><a href="#SLAB内存分配器" class="headerlink" title="SLAB内存分配器"></a>SLAB内存分配器</h2><ul><li>伙伴系统按4K大小分配空间，分配小对象内存碎片过多</li><li>SLAB可以快速分配小内存对象<ul><li>从buddy system中分配大块内存</li><li>建立一个空闲链表数组，分配链表中结点的大小按16，32，64字节分配</li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> OS </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> C </tag>
+            
+            <tag> chcore </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>util lab</title>
+      <link href="/2023/09/15/cs_courses/6.s081/labs/lab1-util/"/>
+      <url>/2023/09/15/cs_courses/6.s081/labs/lab1-util/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="Lab1-Util"><a href="#Lab1-Util" class="headerlink" title="Lab1 Util"></a>Lab1 Util</h1><h2 id="1-sleep"><a href="#1-sleep" class="headerlink" title="1 sleep"></a>1 sleep</h2><h2 id="2"><a href="#2" class="headerlink" title="2"></a>2</h2><h2 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">== Test sleep, no arguments == </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make qemu-gdb</span></span><br><span class="line">sleep, no arguments: OK (5.1s) </span><br><span class="line">== Test sleep, returns == </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make qemu-gdb</span></span><br><span class="line">sleep, returns: OK (0.8s) </span><br><span class="line">== Test sleep, makes syscall == </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make qemu-gdb</span></span><br><span class="line">sleep, makes syscall: OK (1.0s) </span><br><span class="line">== Test pingpong == </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make qemu-gdb</span></span><br><span class="line">pingpong: OK (1.0s) </span><br><span class="line">== Test primes == </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make qemu-gdb</span></span><br><span class="line">primes: OK (1.1s) </span><br><span class="line">== Test find, in current directory == </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make qemu-gdb</span></span><br><span class="line">find, in current directory: OK (1.0s) </span><br><span class="line">== Test find, recursive == </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make qemu-gdb</span></span><br><span class="line">find, recursive: OK (1.2s) </span><br><span class="line">== Test xargs == </span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make qemu-gdb</span></span><br><span class="line">xargs: OK (1.1s) </span><br><span class="line">== Test time == </span><br><span class="line">time: OK </span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Lab </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 6.s081 </tag>
+            
+            <tag> C </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>9月15日记录</title>
       <link href="/2023/09/15/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0915/"/>
       <url>/2023/09/15/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0915/</url>
       
@@ -65,6 +380,31 @@
         <tags>
             
             <tag> CMU15445 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>7-进程切换</title>
+      <link href="/2023/09/15/cs_courses/6.s081/7-%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/"/>
+      <url>/2023/09/15/cs_courses/6.s081/7-%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="进程切换"><a href="#进程切换" class="headerlink" title="进程切换"></a>进程切换</h1><ul><li><p>P1 进入内核，切换到调度器进程，调度器进程切换到 P2</p></li><li><p>核心函数为 swtch()函数；该函数保存并加载部分寄存器的值（RISC-V 中存在调用者保存并恢复的寄存器（caller-saved registers），不需要保存全部寄存器）</p></li></ul><h2 id="切换过程"><a href="#切换过程" class="headerlink" title="切换过程"></a>切换过程</h2><ul><li><p>yield 调用了 sched 函数</p></li><li><p>sched 函数进行合理性检查，最后调用 swtch 函数交换当前进程的上下文和 CPU 调度线程的上下文，返回地址为切换后上下文的 ra 寄存器存的值；实际上是 scheduler 函数</p><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">sched</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> intena;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">proc</span> *<span class="title">p</span> =</span> myproc();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(!holding(&amp;p-&gt;lock))</span><br><span class="line">    panic(<span class="string">&quot;sched p-&gt;lock&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span>(mycpu()-&gt;noff != <span class="number">1</span>)</span><br><span class="line">    panic(<span class="string">&quot;sched locks&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span>(p-&gt;state == RUNNING)</span><br><span class="line">    panic(<span class="string">&quot;sched running&quot;</span>);</span><br><span class="line">  <span class="keyword">if</span>(intr_get())</span><br><span class="line">    panic(<span class="string">&quot;sched interruptible&quot;</span>);</span><br><span class="line"></span><br><span class="line">  intena = mycpu()-&gt;intena;</span><br><span class="line">  swtch(&amp;p-&gt;context, &amp;mycpu()-&gt;context);</span><br><span class="line">  mycpu()-&gt;intena = intena;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>调度器找到一个可运行的进程，再次运行swtch函数切换上下文， 此时的 ra 寄存器是之前是被定时器中断通过 sched 函数挂起的</p><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">scheduler</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">proc</span> *<span class="title">p</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">cpu</span> *<span class="title">c</span> =</span> mycpu();</span><br><span class="line"></span><br><span class="line">  c-&gt;proc = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span>(;;)&#123;</span><br><span class="line">    <span class="comment">// The most recent process to run may have had interrupts</span></span><br><span class="line">    <span class="comment">// turned off; enable them to avoid a deadlock if all</span></span><br><span class="line">    <span class="comment">// processes are waiting.</span></span><br><span class="line">    intr_on();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span>(p = proc; p &lt; &amp;proc[NPROC]; p++) &#123;</span><br><span class="line">      acquire(&amp;p-&gt;lock);</span><br><span class="line">      <span class="keyword">if</span>(p-&gt;state == RUNNABLE) &#123;</span><br><span class="line">        <span class="comment">// Switch to chosen process.  It is the process&#x27;s job</span></span><br><span class="line">        <span class="comment">// to release its lock and then reacquire it</span></span><br><span class="line">        <span class="comment">// before jumping back to us.</span></span><br><span class="line">        p-&gt;state = RUNNING;</span><br><span class="line">        c-&gt;proc = p;</span><br><span class="line">        swtch(&amp;c-&gt;context, &amp;p-&gt;context);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Process is done running for now.</span></span><br><span class="line">        <span class="comment">// It should have changed its p-&gt;state before coming back.</span></span><br><span class="line">        c-&gt;proc = <span class="number">0</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      release(&amp;p-&gt;lock);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>第一次切换进程时，构造一个 forkret，allocproc 设置了 ra 和 sp 寄存器，forkret 本身只释放锁，调用 usertrapret</p></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> CS_COURSE </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 6.s081 </tag>
             
         </tags>
       
@@ -213,7 +553,7 @@
       <link href="/2023/09/12/cs_courses/csapp/6-%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/"/>
       <url>/2023/09/12/cs_courses/csapp/6-%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="Chapter-6-存储器层次结构"><a href="#Chapter-6-存储器层次结构" class="headerlink" title="Chapter 6 存储器层次结构"></a>Chapter 6 存储器层次结构</h1><h2 id="RAM（随机访问存储器）"><a href="#RAM（随机访问存储器）" class="headerlink" title="RAM（随机访问存储器）"></a>RAM（随机访问存储器）</h2><ul><li>SRAM：快但贵；作为高速缓存</li><li>DRAM：作为主存</li></ul>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="Chapter-6-存储器层次结构"><a href="#Chapter-6-存储器层次结构" class="headerlink" title="Chapter 6 存储器层次结构"></a>Chapter 6 存储器层次结构</h1><h2 id="RAM（随机访问存储器）"><a href="#RAM（随机访问存储器）" class="headerlink" title="RAM（随机访问存储器）"></a>RAM（随机访问存储器）</h2><ul><li>SRAM：快但贵；作为高速缓存</li><li>DRAM：作为主存<ul><li>分时复用地址线；减少引脚数量，增加访问时间</li><li>首先将一整行复制到一个内部行缓冲区；接着再从行缓冲区中复制出一个单元</li></ul></li></ul><h2 id="非易失性存储器"><a href="#非易失性存储器" class="headerlink" title="非易失性存储器"></a>非易失性存储器</h2><ul><li>主要是 ROM，但是 ROM 中有的类型实际上既可以读也可以写</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\csapp\bus.png"></p><h2 id="固态硬盘"><a href="#固态硬盘" class="headerlink" title="固态硬盘"></a>固态硬盘</h2><ul><li>Solid State Disk (SSD)，是基于闪存的存储技术<ul><li>闪存芯片替代传统旋转磁盘中的机械驱动器</li><li>闪存翻译层是一个硬件&#x2F;固件设备，将对逻辑块的请求翻译成对底层物理设备的访问</li><li>SSD以页为读写单位</li><li>将擦除平均分布到所有的块上</li></ul></li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\csapp\SSD.png"></p><ul><li>随机写很慢的原因<ul><li>擦除块需要相对较长的时间</li><li>如果需要修改数据，需要把所有带有用数据的页复制到一个新的块上后；重新进行读写</li></ul></li></ul><h2 id="存储器存储结构"><a href="#存储器存储结构" class="headerlink" title="存储器存储结构"></a>存储器存储结构</h2><p><img src="C:\Users\我\Desktop\MyblogImg\csapp\storage_structure.png"></p><h3 id="cache"><a href="#cache" class="headerlink" title="cache"></a>cache</h3><ul><li>在CPU寄存器和主存中插入了一个小的SRAM高速缓存存储器，称为L1 cache；4 clock</li><li>在L1 cache和 main memory中插入L2 cache，10 clock</li><li>在L2 cache和L3 cache中插入L3 cache，50 clock</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\csapp\cache_structure.png"></p><ul><li>使用中间的位来索引；如果用高位来索引，相邻的块基本会被映射到同一个cache行，cache命中大大减少</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\csapp\cache_index.png"></p><h4 id="core中的cache"><a href="#core中的cache" class="headerlink" title="core中的cache"></a>core中的cache</h4><p><img src="C:\Users\我\Desktop\MyblogImg\csapp\core_cache.png"></p><h2 id="编写高速缓存友好的代码"><a href="#编写高速缓存友好的代码" class="headerlink" title="编写高速缓存友好的代码"></a>编写高速缓存友好的代码</h2><ul><li>让最常见的情况运行得快</li><li>尽量减少每个循环内部的缓存不命中数量</li></ul>]]></content>
       
       
       <categories>
@@ -511,7 +851,7 @@
       <link href="/2023/09/11/cs_courses/cs61c/lecture21_Virtual_Memory/"/>
       <url>/2023/09/11/cs_courses/cs61c/lecture21_Virtual_Memory/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="Virtual-Memory"><a href="#Virtual-Memory" class="headerlink" title="Virtual Memory"></a>Virtual Memory</h1><p>直接使用物理内存问题</p><ul><li>没有足够空间；RISC-V 只提供 32bit 空间即 4GB</li><li>地址空间有空洞</li><li>不能保证其他程序不访问同一块内存</li></ul>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="Virtual-Memory"><a href="#Virtual-Memory" class="headerlink" title="Virtual Memory"></a>Virtual Memory</h1><p>直接使用物理内存问题</p><ul><li>没有足够空间；RISC-V 只提供 32bit 空间即 4GB</li><li>地址空间有空洞</li><li>不能保证其他程序不访问同一块内存</li></ul><h3 id="Benefits"><a href="#Benefits" class="headerlink" title="Benefits"></a>Benefits</h3><ul><li><p>允许运行自身大小比主存大得多的程序；只有工作的页放在主存，其他页放在磁盘；由OS进行页的请求和置换</p></li><li><p>OS可以共享内存并实现程序的互相保护</p></li><li><p>隐藏机器级的不同</p></li></ul>]]></content>
       
       
       <categories>
@@ -686,7 +1026,7 @@
       <link href="/2023/09/11/cs_courses/6.s081/3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E9%99%B7%E5%85%A5/"/>
       <url>/2023/09/11/cs_courses/6.s081/3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E9%99%B7%E5%85%A5/</url>
       
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="System-calls-and-Trap"><a href="#System-calls-and-Trap" class="headerlink" title="System calls and Trap"></a>System calls and Trap</h1><ul><li>用户态和内核态的切换（trap）<ul><li>程序执行系统调用（System call）</li><li>程序出现了类似 page fault、除 0 等异常（软件中断）</li><li>硬件中断（IO 设备）</li></ul></li><li>RISC-V 寄存器<ul><li>32 个通用寄存器</li><li>PC（程序计数器）</li><li>Mode（表明位于何种状态 user or supervisor）</li><li>SATP（指向页表的物理地址）</li><li>SEPC（指向 trap 指令的起始地址）</li><li>STVEC （也就是处理 trap 的内核指令地址）</li><li>SSRATCH（交换页表和 a0 地址）</li></ul></li><li>内核态权限<ul><li>读写控制寄存器：SATP、STVEC、SEPC</li><li>它可以使用 PTE_U 标志位为 0 的 PTE</li><li>supervisor mode 中的代码并不能读写任意物理地址，通过 page table 访问内存</li></ul></li><li>用户态跳入内核态前<ul><li>保存用户态 32 个寄存器</li><li>保存 PC</li><li>改变 Mode 为 Supervisor</li><li>改变 SATP 寄存器指向内核页表</li><li>将堆栈寄存器指向内核的地址</li></ul></li></ul><h2 id="Trap-执行流程"><a href="#Trap-执行流程" class="headerlink" title="Trap 执行流程"></a>Trap 执行流程</h2><ul><li><p>在从内核空间进入到用户空间之前，内核会设置好 STVEC 寄存器指向 trampoline page</p></li><li><p>ecall（CPU 指令）切换到 Supervisor mode</p><ul><li>此时并未切换 page table，仍然是用户页表，代码正在 trampoline page 的最开始</li><li>保存 PC 到 SEPC 寄存器</li><li>ecall 会跳转到 STVEC 寄存器指向的指令</li></ul><blockquote><p>RISC-V 秉持了这样一个观点：ecall 只完成尽量少必须要完成的工作，其他的工作都交给软件完成。这里的原因是，RISC-V 设计者想要为软件和操作系统的程序员提供最大的灵活性，这样他们就能按照他们想要的方式开发操作系统</p></blockquote></li><li><p>uservec</p></li><li><p>汇编语言代码，trampoline.s 文件的一部分</p><ul><li><p>内核会将 trapframe page 的地址保存 SSCRATCH 寄存器</p><blockquote><p>用户映射了 trapframe page，每个进程有自己的 trapframe page；用该结构保存 32 个用户寄存器</p></blockquote><blockquote><p>在内核前一次切换回用户空间时，内核会执行 set sscratch 指令，将这个寄存器的内容设置为 0x3fffffe000，也就是 trapframe page 的虚拟地址</p></blockquote><blockquote><p>在返回用户空间前，设置 a0 为 trapframe page 的虚拟地址，同时切换页表为用户页表</p></blockquote><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">uint64 fn = TRAMPOLINE + (userret - trampoline);</span><br><span class="line">((<span class="type">void</span>(*)(uint64,uint64))fn)(TRAPFRAME, satp);</span><br></pre></td></tr></table></figure></li><li><p>切换到内核页表；因为二者映射的物理地址相同，切换后可以正常运行而不崩溃</p><blockquote><p>trampoline page 在 user page table 中的映射与 kernel page table 中的映射是完全一样的。这两个 page table 中其他所有的映射都是不同的，只有 trampoline page 的映射是一样的，因此我们在切换 page table 时，寻址的结果不会改变，我们实际上就可以继续在同一个代码序列中执行程序而不崩溃</p></blockquote></li><li><p>跳入 usertrap 函数</p></li></ul></li><li><p>usertrap</p><ul><li><p>先将 STVEC 指向了 kernelvec 变量，这是内核空间 trap 处理代码的位置</p><blockquote><p>我们需要知道当前运行的是什么进程，我们通过调用 myproc 函数来做到这一点。myproc 函数实际上会查找一个根据当前 CPU 核的编号索引的数组，CPU 核的编号是 hartid，如果你还记得，我们之前在 uservec 函数中将它存在了 tp 寄存器。这是 myproc 函数找出当前运行进程的方法。</p></blockquote></li><li><p>当程序还在内核中执行时，我们可能切换到另一个进程，并进入到那个程序的用户空间，然后那个进程可能再调用一个系统调用进而导致 SEPC 寄存器的内容被覆盖。所以，我们需要保存当前进程的 SEPC 寄存器到一个与该进程关联的内存中</p><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">p-&gt;trapframe-epc = r_sepc();</span><br></pre></td></tr></table></figure></li></ul></li><li><p>syscall</p><ul><li>根据系统调用的编号查找相应的系统调用函数。Shell 调用的 write 函数将 a7 设置成了系统调用编号 16</li><li>向 trapframe 中的 a0 赋值，所有的系统调用都有一个返回值</li></ul></li><li><p>usertrapret</p><ul><li>关闭中断</li><li>设置了 STVEC 寄存器指向 trampoline 代码，在那里最终会执行 sret 指令返回到用户空间</li><li>设置 trapframe 参数供下一次 trap 使用<ul><li>存储了 kernel page table 的指针</li><li>存储了当前用户进程的 kernel stack</li><li>存储了 usertrap 函数的指针，这样 trampoline 代码才能跳转到这个函数</li><li>从 tp 寄存器中读取当前的 CPU 核编号，并存储在 trapframe 中，这样 trampoline 代码才能恢复这个数字，因为用户代码可能会修改这个数字</li></ul></li><li>设置 SSTATUS 寄存器</li><li>SEPC 寄存器的值设置成之前保存的用户程序计数器的值</li><li>根据 user page table 地址生成相应的 SATP 值</li><li>trapframe 地址作为第一个参数；将 page table 指针准备好，并将这个指针作为第二个参数传递给汇编代码，这个参数会出现在 a1 寄存器；fn 为函数跳转位置</li></ul><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">uint64 fn = TRAMPOLINE + (userret - trampoline);</span><br><span class="line">((<span class="type">void</span>(*)(uint64,uint64))fn)(TRAPFRAME, satp);</span><br></pre></td></tr></table></figure></li><li><p>userret，位于 trampoline.s 文件</p><ul><li><p>切换为用户页表</p></li><li><p>之前保存的寄存器的值加载到对应的各个寄存器中</p></li><li><p>交换 SSCRATCH 寄存器和 a0 寄存器的值，保证 SSCRATCH 持有的是 trapframe 的地址</p></li><li><p>sret</p><ul><li>程序切换为 user mode</li><li>SEPC 的值拷贝到 PC</li><li>开中断</li></ul></li></ul></li></ul><blockquote><ul><li>硬件和软件需要协同工作，你可能需要重新设计 XV6，重新设计 RISC-V 来使得这里的处理流程更加简单，更加快速。</li><li>另一个需要时刻记住的问题是，恶意软件是否能滥用这里的机制来打破隔离性。</li></ul></blockquote>]]></content>
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="System-calls-and-Trap"><a href="#System-calls-and-Trap" class="headerlink" title="System calls and Trap"></a>System calls and Trap</h1><ul><li>用户态和内核态的切换（trap）<ul><li>程序执行系统调用（System call）</li><li>程序出现了类似 page fault、除 0 等异常（软件中断）</li><li>硬件中断（IO 设备）</li></ul></li><li>RISC-V 寄存器<ul><li>32 个通用寄存器</li><li>PC（程序计数器）</li><li>Mode（表明位于何种状态 user or supervisor）</li><li>SATP（指向页表的物理地址）</li><li>SEPC（指向 trap 指令的起始地址）</li><li>STVEC （也就是处理 trap 的内核指令地址）</li><li>SSRATCH（交换页表和 a0 地址）</li></ul></li><li>内核态权限<ul><li>读写控制寄存器：SATP、STVEC、SEPC</li><li>它可以使用 PTE_U 标志位为 0 的 PTE</li><li>supervisor mode 中的代码并不能读写任意物理地址，通过 page table 访问内存</li></ul></li><li>用户态跳入内核态前<ul><li>保存用户态 32 个寄存器</li><li>保存 PC</li><li>改变 Mode 为 Supervisor</li><li>改变 SATP 寄存器指向内核页表</li><li>将堆栈寄存器指向内核的地址</li></ul></li></ul><h2 id="Trap-执行流程"><a href="#Trap-执行流程" class="headerlink" title="Trap 执行流程"></a>Trap 执行流程</h2><ul><li><p>在从用户空间进入到内核空间之前，内核会设置好 STVEC 寄存器指向 trampoline page</p></li><li><p>ecall（CPU 指令）切换到 Supervisor mode</p><ul><li>此时并未切换 page table，仍然是用户页表，代码正在 trampoline page 的最开始</li><li>保存 PC 到 SEPC 寄存器</li><li>ecall 会跳转到 STVEC 寄存器指向的指令</li></ul><blockquote><p>RISC-V 秉持了这样一个观点：ecall 只完成尽量少必须要完成的工作，其他的工作都交给软件完成。这里的原因是，RISC-V 设计者想要为软件和操作系统的程序员提供最大的灵活性，这样他们就能按照他们想要的方式开发操作系统</p></blockquote></li><li><p>uservec：汇编语言代码，trampoline.s 文件的一部分</p><ul><li><p>内核会将 trapframe page 的地址保存 SSCRATCH 寄存器</p><blockquote><p>用户映射了 trapframe page，每个进程有自己的 trapframe page；用该结构保存 32 个用户寄存器</p></blockquote><blockquote><p>在内核前一次切换回用户空间时，内核会执行 set sscratch 指令，将这个寄存器的内容设置为 0x3fffffe000，也就是 trapframe page 的虚拟地址</p></blockquote><blockquote><p>在返回用户空间前，设置 a0 为 trapframe page 的虚拟地址，同时切换页表为用户页表</p></blockquote><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">uint64 fn = TRAMPOLINE + (userret - trampoline);</span><br><span class="line">((<span class="type">void</span>(*)(uint64,uint64))fn)(TRAPFRAME, satp);</span><br></pre></td></tr></table></figure></li><li><p>切换到内核页表；因为二者映射的物理地址相同，切换后可以正常运行而不崩溃</p><blockquote><p>trampoline page 在 user page table 中的映射与 kernel page table 中的映射是完全一样的。这两个 page table 中其他所有的映射都是不同的，只有 trampoline page 的映射是一样的，因此我们在切换 page table 时，寻址的结果不会改变，我们实际上就可以继续在同一个代码序列中执行程序而不崩溃</p></blockquote></li><li><p>跳入 usertrap 函数</p></li></ul></li><li><p>usertrap</p><ul><li><p>先将 STVEC 指向了 kernelvec 变量，这是内核空间 trap 处理代码的位置</p><blockquote><p>我们需要知道当前运行的是什么进程，我们通过调用 myproc 函数来做到这一点。myproc 函数实际上会查找一个根据当前 CPU 核的编号索引的数组，CPU 核的编号是 hartid，如果你还记得，我们之前在 uservec 函数中将它存在了 tp 寄存器。这是 myproc 函数找出当前运行进程的方法。</p></blockquote></li><li><p>当程序还在内核中执行时，我们可能切换到另一个进程，并进入到那个程序的用户空间，然后那个进程可能再调用一个系统调用进而导致 SEPC 寄存器的内容被覆盖。所以，我们需要保存当前进程的 SEPC 寄存器到一个与该进程关联的内存中</p><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">p-&gt;trapframe-epc = r_sepc();</span><br></pre></td></tr></table></figure></li></ul></li><li><p>syscall</p><ul><li>根据系统调用的编号查找相应的系统调用函数。Shell 调用的 write 函数将 a7 设置成了系统调用编号 16</li><li>向 trapframe 中的 a0 赋值，所有的系统调用都有一个返回值</li></ul></li><li><p>usertrapret</p><ul><li>关闭中断</li><li>设置了 STVEC 寄存器指向 trampoline 代码，在那里最终会执行 sret 指令返回到用户空间</li><li>设置 trapframe 参数供下一次 trap 使用<ul><li>存储了 kernel page table 的指针</li><li>存储了当前用户进程的 kernel stack</li><li>存储了 usertrap 函数的指针，这样 trampoline 代码才能跳转到这个函数</li><li>从 tp 寄存器中读取当前的 CPU 核编号，并存储在 trapframe 中，这样 trampoline 代码才能恢复这个数字，因为用户代码可能会修改这个数字</li></ul></li><li>设置 SSTATUS 寄存器</li><li>SEPC 寄存器的值设置成之前保存的用户程序计数器的值</li><li>根据 user page table 地址生成相应的 SATP 值</li><li>trapframe 地址作为第一个参数；将 page table 指针准备好，并将这个指针作为第二个参数传递给汇编代码，这个参数会出现在 a1 寄存器；fn 为函数跳转位置</li></ul><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">uint64 fn = TRAMPOLINE + (userret - trampoline);</span><br><span class="line">((<span class="type">void</span>(*)(uint64,uint64))fn)(TRAPFRAME, satp);</span><br></pre></td></tr></table></figure></li><li><p>userret，位于 trampoline.s 文件</p><ul><li><p>切换为用户页表</p></li><li><p>之前保存的寄存器的值加载到对应的各个寄存器中</p></li><li><p>交换 SSCRATCH 寄存器和 a0 寄存器的值，保证 SSCRATCH 持有的是 trapframe 的地址</p></li><li><p>sret</p><ul><li>程序切换为 user mode</li><li>SEPC 的值拷贝到 PC</li><li>开中断</li></ul></li></ul></li></ul><blockquote><ul><li>硬件和软件需要协同工作，你可能需要重新设计 XV6，重新设计 RISC-V 来使得这里的处理流程更加简单，更加快速。</li><li>另一个需要时刻记住的问题是，恶意软件是否能滥用这里的机制来打破隔离性。</li></ul></blockquote>]]></content>
       
       
       <categories>
@@ -782,31 +1122,6 @@
     
     
     <entry>
-      <title>7-进程切换</title>
-      <link href="/2023/09/11/cs_courses/6.s081/7-%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/"/>
-      <url>/2023/09/11/cs_courses/6.s081/7-%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/</url>
-      
-        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="进程切换"><a href="#进程切换" class="headerlink" title="进程切换"></a>进程切换</h1><ul><li><p>P1 进入内核，切换到调度器进程，调度器进程切换到 P2</p></li><li><p>核心函数为 swtch()函数；该函数保存并加载部分寄存器的值（RISC-V 中存在调用者保存并恢复的寄存器（caller-saved registers），不需要保存全部寄存器）</p></li></ul><h2 id="切换过程"><a href="#切换过程" class="headerlink" title="切换过程"></a>切换过程</h2><ul><li><p>yield 调用了 sched 函数</p></li><li><p>sched 函数进行合理性检查，最后调用 swtch 函数交换当前进程的上下文和 CPU 调度线程的上下文，返回地址为切换后上下文的 ra 寄存器存的值；实际上是 scheduler 函数</p></li><li><p>调度器找到一个可运行的进程，切换上下文， 此时的 ra 寄存器是之前是被定时器中断通过 sched 函数挂起的</p></li><li><p>第一次切换进程时，构造一个 forkret，allocproc 设置了 ra 和 sp 寄存器，forkret 本身只释放锁，调用 usertrapret</p></li></ul>]]></content>
-      
-      
-      <categories>
-          
-          <category> CS_COURSE </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> 6.s081 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>3_Database_Storage I</title>
       <link href="/2023/09/11/cs_courses/cmu15445/3-Database%20Storage/"/>
       <url>/2023/09/11/cs_courses/cmu15445/3-Database%20Storage/</url>
@@ -824,6 +1139,56 @@
         <tags>
             
             <tag> CMU15445 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>2-Microcoding</title>
+      <link href="/2023/09/11/cs_courses/cs152/2-Microcoding/"/>
+      <url>/2023/09/11/cs_courses/cs152/2-Microcoding/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="Microcoding"><a href="#Microcoding" class="headerlink" title="Microcoding"></a>Microcoding</h1><ul><li><p>主要运用于x86架构，现在新型架构的处理器已经不再使用该技术</p></li><li><p>之前的架构，需要使用一个大型的控制部件来控制逻辑，但是成本过于高昂；将每条指令分解为更小的微指令，每个微指令以一个时钟周期 </p></li><li><p>address bits (index to the ROM)</p><ul><li>微指令的位数+字节码的位数+1+1</li></ul></li><li><p>data bits</p><ul><li>微指令位数+控制信号的位数 (18)</li></ul></li><li><p>ROM size</p><ul><li>2^(address bits) * data bits</li></ul></li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\cs152\pureROM.png"></p><ul><li>指令仍然存储在指令存储器中，微指令只是解码上的操作，需要在芯片上构建新的内存来实现微指令解码</li></ul><h2 id="2-1-Pure-ROM-Contents"><a href="#2-1-Pure-ROM-Contents" class="headerlink" title="2.1 Pure ROM Contents"></a>2.1 Pure ROM Contents</h2><ul><li>fetch2的情况中，只选择一行进行执行</li><li>最后执行完毕后，回到开始取指令的状态</li><li>每条微指令需要一个时钟周期 (Busy表示内存正在取数据)</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\cs152\pureROMcon.png"></p><h3 id="RISC-V-ROM-Size"><a href="#RISC-V-ROM-Size" class="headerlink" title="RISC-V ROM Size"></a>RISC-V ROM Size</h3><p><img src="C:\Users\我\Desktop\MyblogImg\cs152\ROMsize.png"></p><h2 id="2-2-Single-Bus-RISC-V-Microcode-Engine"><a href="#2-2-Single-Bus-RISC-V-Microcode-Engine" class="headerlink" title="2.2 Single-Bus RISC-V Microcode Engine"></a>2.2 Single-Bus RISC-V Microcode Engine</h2><ul><li>左侧FSM判断控制条件</li><li>dispatch是检查opcode，执行不同的命令</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\cs152\RISCVMicro.png"></p><h3 id="Encoded-ROM-Contents"><a href="#Encoded-ROM-Contents" class="headerlink" title="Encoded ROM Contents"></a>Encoded ROM Contents</h3><ul><li>分支预测指令<ul><li>预测成功修改PC为新的值</li><li>预测失败恢复原来的PC</li></ul></li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\cs152\encodedROM.png"></p><p><img src="C:\Users\我\Desktop\MyblogImg\cs152\lw.png"></p><h3 id="Datapath"><a href="#Datapath" class="headerlink" title="Datapath"></a>Datapath</h3><p><img src="C:\Users\我\Desktop\MyblogImg\cs152\singlebusDATApath.png"></p><h2 id="2-3-Nanocoding"><a href="#2-3-Nanocoding" class="headerlink" title="2.3 Nanocoding"></a>2.3 Nanocoding</h2><ul><li>进行两级查找；最下面的数据很宽，可以控制最多的操作</li></ul><p><img src="C:\Users\我\Desktop\MyblogImg\cs152\nanocoding.png"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CS_COURSE </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CS162 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>3-Pipelining</title>
+      <link href="/2023/09/11/cs_courses/cs152/3-Pipelining/"/>
+      <url>/2023/09/11/cs_courses/cs152/3-Pipelining/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><script class="meting-secondary-script-marker" src="\assets\js\Meting.min.js"></script><h1 id="3-Pipelining"><a href="#3-Pipelining" class="headerlink" title="3 Pipelining"></a>3 Pipelining</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> CS_COURSE </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CS162 </tag>
             
         </tags>
       

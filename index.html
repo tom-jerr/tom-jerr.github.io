@@ -53,7 +53,7 @@
   isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2023-09-15 23:56:18'
+  postUpdate: '2023-09-25 18:44:18'
 }</script><noscript><style type="text/css">
   #nav {
     opacity: 1
@@ -157,167 +157,179 @@
       }
     }
     detectApple()
-    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/img/background.png')"><nav id="nav"><span id="blog-info"><a href="/" title="tom-jerr的个人博客"><span class="site-name">tom-jerr的个人博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">tom-jerr的个人博客</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2584074296&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:lzy_cs_ln@163.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/" title="5_Database_Storage"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="5_Database_Storage"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/" title="5_Database_Storage">5_Database_Storage</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-16T14:17:49.000Z" title="发表于 2023-09-16 22:17:49">2023-09-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span></div><div class="content">5 Buffer PoolLRU-K算法
-最近K次访问最少；数据在访问历史列表里后没有达到K次访问，则按照一定规则（FIFO，LRU）淘汰；历史队列中的数据访问次数达到K次后，将数据索引从历史队列删除，将数据移到缓存队列中，并缓存此数据，缓存队列重新按照时间排序；淘汰缓存队列末尾的元素
-LRU-K需要多维护一个队列，用于记录所有缓存数据被访问的历史。只有当数据的访问次数达到K次的时候，才将数据放入缓存
-使用List进行数据删除时，使用erase需要list的迭代器；同时需要一个map进行迭代器的存储
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url('/img/background.png')"><nav id="nav"><span id="blog-info"><a href="/" title="tom-jerr的个人博客"><span class="site-name">tom-jerr的个人博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/suibi/"><i class="fa-fw fas fa-video"></i><span> 生活</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">tom-jerr的个人博客</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2584074296&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:lzy_cs_ln@163.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/25/C++/new&amp;malloc/" title="C Prime Plus"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C Prime Plus"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/25/C++/new&amp;malloc/" title="C Prime Plus">C Prime Plus</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-25T10:42:49.000Z" title="发表于 2023-09-25 18:42:49">2023-09-25</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C/">C++</a></span></div><div class="content">new 与 malloc 的区别属性
+new&#x2F;delete 是 C++关键字，需要编译器的支持
+malloc&#x2F;free 是库函数，需要引用对应的库
 
-</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/15/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0915/" title="9月14日记录"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月14日记录"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/15/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0915/" title="9月14日记录">9月14日记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-15T15:52:49.000Z" title="发表于 2023-09-15 23:52:49">2023-09-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%B0%E5%BD%95/">记录</a></span></div><div class="content">9 月 15 日学习记录
-B+树优化测试；加入对不同度数的测试，增加与 RB Tree 插入的比较
-CMU15445 p0 完成，学习 Database Storage
-数据库系统概念相关章节的阅读
-学到了修改 github 个人主页的方法，感觉有点意思
-听了 CMU15445，感觉数据库确实是 CS 的集大成者，对存储文件的功力要求相当高
-xv6 再学习
+使用区别
+无需显示填入申请内存的大小，会根据申请的类型进行动态分配内存
+malloc 分配内存需要显示填入申请内存的大小
 
-一些想法今日锻炼打卡成功
-</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/15/cs_courses/cmu15445/4-Database_Storage_II/" title="4_Database_Storage II"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="4_Database_Storage II"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/15/cs_courses/cmu15445/4-Database_Storage_II/" title="4_Database_Storage II">4_Database_Storage II</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-15T15:49:49.000Z" title="发表于 2023-09-15 23:49:49">2023-09-15</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span></div><div class="content">4 Database Storage II
-数据库负责将非易失性存储中的数据和内存进行交互
+内存位置差别
+malloc 在堆上分配
+new 在自由存储区中分配，一般实现是堆，也可以重载成在静态存储区中分配
 
-4.1 problem with slotted page design
-Fragmentation (碎片)
-Useless Disk I&#x2F;O
-Random Disk I&#x2F;O (update 20 tuples on 20 pages)
+返回类型区别
+new 返回成功时返回对象类型的指针，类型严格与对象匹配
+malloc 返回 void*，需要自己强制转换
 
-4.2 Log-structed storage更多使用KV数据库上，只有一个键一个值
+分配失败区别
+new 抛出 std::bad_alloc 异常
+malloc 分配内存失败返回 NULL (一般为(void*)0)
 
-不存数据，存放数据的操作（insert, delete, update）
+分配过程区别new 操作符
 
-直接在后面加上新操作，不检查前面的所有操作是否正确
+调用 operator new 分配一块足够用的内存（底层默认 malloc 实现）
+编译器运行相应的构造函数构造对象并传入初始值
+返回指针
 
+扩张内存的区别
+malloc 内存后，发现不够用，可以调用 realloc 函数进行再次分配内存
 
+</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/" title="9月19日~23日记录"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月19日~23日记录"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/" title="9月19日~23日记录">9月19日~23日记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-23T06:50:49.000Z" title="发表于 2023-09-23 14:50:49">2023-09-23</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%B0%E5%BD%95/">记录</a></span></div><div class="content">9 月 18 日学习记录
+CMU15445 Buffer Pool stage 1
+chcore lab 1 and 2 finished
+6.s081 lab 2 and challange finished
+B+树并发读锁实现，写锁初步流程
 
+一些想法每天记录可能有点太细粒度了，尽可能一周一次或者两次记录吧
+</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/" title="6_Hash_Table"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="6_Hash_Table"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/" title="6_Hash_Table">6_Hash_Table</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-21T14:17:49.000Z" title="发表于 2023-09-21 22:17:49">2023-09-21</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span></div><div class="content">6 Hash Table使用范围
 
-读取一个记录，从后向前进行扫描记录；找到需要的数据
+Internal Meta-data
+Core Data Storage
+Temporary Data Structures (join联表查询)
+Table Indexes
 
+6.1 Design Decisions
+Data Organization
 
+Concurrency
 
-考虑对相同id的log record进行索引
+Hash Function
 
-
-
-因为Log数据会非常大，需要周期性对页内进行压缩
-
-
-Log-Structured Compaction
-Level Compaction
-
-将不同的块中记录连接起来，将压缩后的结果存入下一层
-从level0开始向下读，一直到最后一层
-
-
-
-Universal Compaction
-
-尽可能将周边的块合并； ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/14/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0914/" title="9月14日记录"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月14日记录"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/14/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0914/" title="9月14日记录">9月14日记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-14T15:44:49.000Z" title="发表于 2023-09-14 23:44:49">2023-09-14</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%B0%E5%BD%95/">记录</a></span></div><div class="content">9 月 14 日学习记录
-B+树序列化、反序列化 BFS 代码测试；优化测试
-CMU15445 p0 stage1
-算法导论排序，二分，堆，栈，队列章节阅读
-
-一些想法需要把每天锻炼提上日程
-决定了 XV6 和 CMU15445 都要搞，加油，干就完了~~~
-</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/13/cs_courses/cmu15445/B+Tree/" title="无题"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/13/cs_courses/cmu15445/B+Tree/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-13T15:53:47.130Z" title="发表于 2023-09-13 23:53:47">2023-09-13</time></span></div><div class="content">B+TreeTree Indexes
-表索引，就是表中属性子集的一个副本，以有序的方式存储，服务于高效地查找。数据库管理系统会确保表和索引在逻辑上是保持同步的。
-
-B+Tree
-B for balanced, 意为“自平衡”。这是一种插入、删除均为O(log n)的数据结构。相比Hash Table，最好的性能是O(1)，最差时退化到O(n)。因为平衡，所以任意一个叶子结点到根结点的时间复杂度均为O(log n)
-
-与B树相比，B+树额外维护了最底层叶子结点间的指针，当根据某个条件访问到叶子结点时，就可以沿着这些指针循序扫描过去，直到找到需要的结点。
-
-B+树中，只有叶子结点保存着数据+key，其他结点保存着儿子结点指针+key；而B树可以在任何结点保存value。这会造成两点不同：
-
-B树不会出现重复的key，而B+树由于非叶子结点保存路标，key可能重复(比如下图中有2个’9’）
-删除B树的一个key时，这个key就不再存在在树中；当B+树删除一个key时，会从叶子结点中删除，而可能不会删除非叶子结点的key，这取决于是否要重新平衡B+树
+计算速度和碰撞率的取舍
 
 
-B树在存储时会更节省空间，但最终B+树 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/13/cs_courses/cmu15445/labs/lab1_buffer_pool/" title="无题"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/13/cs_courses/cmu15445/labs/lab1_buffer_pool/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-13T15:53:47.117Z" title="发表于 2023-09-13 23:53:47">2023-09-13</time></span></div><div class="content">Buffer PoolTask 1 Extendible Hash Table基本概念
-全局深度（global depth），局部深度（local depth）以及桶（bucket）。
-桶就是存记录（records）的地方，我可以往桶里放一条，两条，三条。但要规定好最多能装几条。这个例子里我们规定最多能装2条。在图里你能看到bucket 1只有两行。下图这个就是可拓展哈希的初始状态。
+Hashing Scheme
 
-
-插入数据。
-插入Comp.Sci和Finance这两条。现在还不涉及全局深度和局部深度的改变。两条新记录（record）就直接往里放就行。
+静态哈希表
+可扩展哈希表
 
 
 
-插入Music。这时一个桶的条数大于它的上限（2条），所以要开始分裂。如何分裂是根据哈希值（hash value）决定的。取哈希值第一位。哈希值是二进制数，第一位只有两种可能，0和1。Comp.Sci是1，Finance是1，Music是0。很简单的把是1的放在一个桶（bucket）里，是0的放在另一个桶（bucket）里。由于我们用了哈希值的第一位，所以全局深度（global depth）变成1。这里做一下全局深度和局部深度的区分。两个都表示用了几位哈希值 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/13/cs_courses/cmu15445/Memory%20Management/" title="无题"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/13/cs_courses/cmu15445/Memory%20Management/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-13T15:53:47.104Z" title="发表于 2023-09-13 23:53:47">2023-09-13</time></span></div><div class="content">Memory Managementmoving data back-and-forth from the disk
-Spatial Control :
-refers to where pages are physically written on disk. The goal of spatial control is to keep pages that are used together often as physically close together as possible on disk.
+6.2 static Hashing Schemes
+Linear probe hashing (线性探测哈希)
 
-Temporal Control :
-refers to when to read pages into memory and when to write them to disk. Temporal control aims to minimize the number of stalls from having to read data from disk
+如果碰撞，存放到下一个空闲的槽；可能出现原来存在冲突的值被删除
 
-
-Buffer Pool
-内存管理一个多页的数组，每个数组元素是一个frame
-When the DBMS requests ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/13/cs_courses/cmu15445/Hash%20Table/" title="无题"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/13/cs_courses/cmu15445/Hash%20Table/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-13T15:53:47.094Z" title="发表于 2023-09-13 23:53:47">2023-09-13</time></span></div><div class="content">Hash TableData StructuresInternal Meta-dataCore Data StorageTemporary Data StructuresTable Indexes
-static hash table
-To find an entry, mod the key by the number of elements to find the offset in the array.
-
-Linear Prone Hashing:
-线性探测哈希&#x2F;开放地址哈希. 一个很大的数组来存各种哈希槽, 发生碰撞时把内容存到下一个可用的槽中
+Tombstone (墓碑)：标记该位置有值被删除
+Movement：将空槽之后的数据进行整理
 
 
-Tombstone&#x2F;movement: 即删除元素时会出问题, 可以留一个”墓碑”(指示你向下找)&#x2F;把元素上移
+重复的键问题
 
-重复的键的问题: db是可能出现重复的key,即单个key对应多个value. 解决方案:
+Separate Linked List：把每个键对应的键值存在特殊结构中，hash表中存放指向该结构的指针
 
 
-Separate Linked List
-Redundant Keys
+
+Redundant Keys：将键值一起作为键，存放在哈希表中
 
 
 
 
 
 
-Robin Hood hashing基于开放地址哈希的改进版,基本思路是”劫富济贫”, 记录每个元素的偏移量. 每 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/13/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0913/" title="9月13日记录"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月13日记录"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/13/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0913/" title="9月13日记录">9月13日记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-13T15:44:49.000Z" title="发表于 2023-09-13 23:44:49">2023-09-13</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%B0%E5%BD%95/">记录</a></span></div><div class="content">9 月 13 日学习记录
-B+树序列化、反序列化测试；优化测试
-C Prime Plus 复习
-进行推免加分答辩
 
-一些想法damn it, 答辩发现证件忘带了，拼命骑车回来拿，感觉体力比之前差了好多；确实需要加强锻炼了
-通过别人的分享，学到了很多东西；boost 的反序列化库感觉确实很神奇
-今天准备 PPT 花了好久，明天开始 CS 网课要开始推进度了，冲！！！
+</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/" title="9月18日记录"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月18日记录"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/" title="9月18日记录">9月18日记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-18T15:58:49.000Z" title="发表于 2023-09-18 23:58:49">2023-09-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%B0%E5%BD%95/">记录</a></span></div><div class="content">9 月 18 日学习记录
+CMU15445 课程学习，Buffer Pool 开启
+CSAPP 第二部分复习结束
+B+树并发算法示例观看完毕，有了基本思路
 
-ps:想好好读书，必须要有个好身体！！！
-
-</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/12/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0912/" title="9月12日记录"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月12日记录"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/12/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0912/" title="9月12日记录">9月12日记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-12T15:17:49.000Z" title="发表于 2023-09-12 23:17:49">2023-09-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%B0%E5%BD%95/">记录</a></span></div><div class="content">9 月 12 日学习记录
-B+树优化，性能测试、单元测试
-发现 B+树内存泄漏的 BUG，现已经改正
-上了 Linux 高级编程，重新听了一遍学习路线，决定把之前因为时间原因放下的书在读一遍
-C Prime Plus
-C 陷阱和指针
-算法导论
-CSAPP
-计算机体系结构量化研究方法
-UNIX 环境高级编程
+一些想法加油，CMU15445 高低给它拿下
+</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" title="csapp-8-异常控制流"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="csapp-8-异常控制流"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" title="csapp-8-异常控制流">csapp-8-异常控制流</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-18T14:17:49.000Z" title="发表于 2023-09-18 22:17:49">2023-09-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span></div><div class="content">Chapter 8 异常控制流</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/18/cs_courses/csapp/7-%E9%93%BE%E6%8E%A5/" title="csapp-7-链接"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="csapp-7-链接"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/18/cs_courses/csapp/7-%E9%93%BE%E6%8E%A5/" title="csapp-7-链接">csapp-7-链接</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-18T14:17:49.000Z" title="发表于 2023-09-18 22:17:49">2023-09-18</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span></div><div class="content">Chapter 7 链接静态链接
+符号解析
+重定位
+编译器和汇编器生成.text和.data
+链接器通过把每个符号定义和一个内存位置关联，对这些节进行重定位；修改引用，让符号指向这个内存位置
 
 
-未来的实验安排
-CS61C
-6.s081
-rust 学习
-体系结构相关学习
-cuda 编程
+
+可重定位目标文件
+.rel.*：不同节的重定位信息
+.line：原始C程序和.text节中机器指令的映射，”-g”得到
 
 
-CSAPP 第五章阅读
 
-一些想法本来以为大四的生活会轻松一些，但是系统方向确实需要下苦工；为了饭碗，直接冲！！！
-Unix 内核，Unix 环境下的编程和网络编程，算法导论，体系结构的知识都得学，都给爷学
-不水了，看 CSAPP 去了
+.bss：未初始化的静态变量，以及初始化为0的全局或静态变量
+COMMON：未初始化的全局变量
 
-ps:劝告后来人，大学多学点专业知识，研究生应该会好过不少
+解析多重定义符号
+不允许有多个同名的强符号（定义并初始化）
+强弱同在，选强符号
+只有弱符号，随便选一个弱符号
 
-</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/#content-inner">4</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">39</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2584074296&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:lzy_cs_ln@163.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/" title="5_Database_Storage"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="5_Database_Storage"/></a><div class="content"><a class="title" href="/2023/09/16/cs_courses/cmu15445/5-Buffer%20Pool/" title="5_Database_Storage">5_Database_Storage</a><time datetime="2023-09-16T14:17:49.000Z" title="发表于 2023-09-16 22:17:49">2023-09-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/15/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0915/" title="9月14日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月14日记录"/></a><div class="content"><a class="title" href="/2023/09/15/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0915/" title="9月14日记录">9月14日记录</a><time datetime="2023-09-15T15:52:49.000Z" title="发表于 2023-09-15 23:52:49">2023-09-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/15/cs_courses/cmu15445/4-Database_Storage_II/" title="4_Database_Storage II"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="4_Database_Storage II"/></a><div class="content"><a class="title" href="/2023/09/15/cs_courses/cmu15445/4-Database_Storage_II/" title="4_Database_Storage II">4_Database_Storage II</a><time datetime="2023-09-15T15:49:49.000Z" title="发表于 2023-09-15 23:49:49">2023-09-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/14/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0914/" title="9月14日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月14日记录"/></a><div class="content"><a class="title" href="/2023/09/14/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0914/" title="9月14日记录">9月14日记录</a><time datetime="2023-09-14T15:44:49.000Z" title="发表于 2023-09-14 23:44:49">2023-09-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/13/cs_courses/cmu15445/B+Tree/" title="无题"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2023/09/13/cs_courses/cmu15445/B+Tree/" title="无题">无题</a><time datetime="2023-09-13T15:53:47.130Z" title="发表于 2023-09-13 23:53:47">2023-09-13</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+重定位
+重定位节和符号定义
+将相同类型的节合并为同一类型的新的聚合节
+每条指令和全局变量有唯一的运行时内存地址
+
+
+重定位节的符号引用
+修改代码节和数据节中的对符号的引用，指向正确的运行时地址
+
+
+
+重定位算法// relocation entrytypedef struct &#123;    long offset;	// 重定位的偏移    long type:32,	// 重定位类型    	symbol:32;	// 符号表索引    long add ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/17/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0917/" title="9月17日记录"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月17日记录"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/17/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0917/" title="9月17日记录">9月17日记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-17T14:58:49.000Z" title="发表于 2023-09-17 22:58:49">2023-09-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%B0%E5%BD%95/">记录</a></span></div><div class="content">9 月 17 日学习记录
+xv6 再学习，lab1 optional challange 做了几个
+阅读 linux 0.12 源码剖析的书；对保护模式编程有了更深的理解
+
+</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/17/linux-0.12/1-%E5%86%85%E6%A0%B8%E7%BB%93%E6%9E%84/" title="1-内核结构"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="1-内核结构"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/17/linux-0.12/1-%E5%86%85%E6%A0%B8%E7%BB%93%E6%9E%84/" title="1-内核结构">1-内核结构</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-17T14:17:49.000Z" title="发表于 2023-09-17 22:17:49">2023-09-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/linux/">linux</a></span></div><div class="content">1-内核结构1.1 虚拟地址空间
+用户地址空间从0x00000000~0xBFFFFFFF，共占据3GB空间
+内核空间占据剩余1GB空间
+.rodata段是常量区；数组初始化的字符串常量是没有放入常量区的，另外用const修饰的全局变量是放入常量区的；使用const修饰的局部变量仅仅是设置为仅仅读起到防止改动的效果，没有放入常量区
+
+
+1.1.1 目标文件格式
+
+目标文件的链接
+任何具有非零值的未解析的外部符号都将作为公共块（common）来看待，并且把它们分配存储在bss段的末尾处
+
+
+
+
+1.1.2 链接程序预定义变量
+链接器预定义的外部变量通常至少有etext、_etext、edata、_edata、end和_end
+
+变量名_etext和etext的地址是程序正文段结束后的第1个地址；_edata和edata的地址是初始化数据区后面的第1个地址；_end和end的地址是未初始化数据区（bss）后的第1个地址位置
+
+
+1.1.3 目标地址内存地址映像信息
+当运行GNU链接器gld（ld）时若使用了’-M’选项，或者使用nm命令，则会在标准输出设备（通常是屏幕）上打印出链接映像（l ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/17/linux-0.12/2-80X86%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F/" title="2-保护模式"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2-保护模式"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/17/linux-0.12/2-80X86%E4%BF%9D%E6%8A%A4%E6%A8%A1%E5%BC%8F/" title="2-保护模式">2-保护模式</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-17T14:17:49.000Z" title="发表于 2023-09-17 22:17:49">2023-09-17</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/linux/">linux</a></span></div><div class="content">2 保护模式2.1 内存管理寄存器
+处理器提供了4个内存管理寄存器（GDTR、LDTR、IDTR和TR），用于指定内存分段管理所用系统表的基地址
+GDTR、IDTR和LDTR用于寻址存放描述符表的段。TR用于寻址一个特殊的任务状态段TSS（Task State Segment）。TSS段中包含着当前执行任务的重要信息
+
+
+2.1.1 全局描述符表寄存器GDTR
+GDTR 寄存器中用于存放全局描述符表GDT的32位的线性基地址和16位的表限长值。基地址指定GDT表中字节0在线性地址空间中的地址，表长度指明GDT表的字节长度值。
+指令LGDT和SGDT分别用于加载和保存GDTR寄存器的内容。在机器刚加电或处理器复位后，基地址被默认地设置为0，而长度值被设置成0xFFFF。在保护模式初始化过程中必须给GDTR加载一个新值。
+
+2.1.2 中断描述符表寄存器IDTR
+与GDTR的作用类似，IDTR寄存器用于存放中断描述符表IDT的32位线性基地址和16位表长度值。指令LIDT和SIDT分别用于加载和保存IDTR寄存器的内容。在机器刚加电或处理器复位后，基地址被默认地设置为0，而长度值被设置成0 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/16/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0916/" title="9月16日记录"><img class="post-bg" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月16日记录"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/16/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0916/" title="9月16日记录">9月16日记录</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-16T14:58:49.000Z" title="发表于 2023-09-16 22:58:49">2023-09-16</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E8%AE%B0%E5%BD%95/">记录</a></span></div><div class="content">9 月 16 日学习记录
+CMU15445 lab1 前置课程学习，明天准备开 Buffer Pool
+xv6 再学习，lab1 optional challange 做了几个
+阅读 linux 0.12 源码
+用 C++写算法导论中的算法
+
+一些想法今日锻炼打卡成功；感觉膝盖可能又需要养一养，太难过了
+</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/#content-inner">6</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">54</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">18</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="http://wpa.qq.com/msgrd?v=3&amp;uin=2584074296&amp;site=qq&amp;menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="mailto:lzy_cs_ln@163.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/09/25/C++/new&amp;malloc/" title="C Prime Plus"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C Prime Plus"/></a><div class="content"><a class="title" href="/2023/09/25/C++/new&amp;malloc/" title="C Prime Plus">C Prime Plus</a><time datetime="2023-09-25T10:42:49.000Z" title="发表于 2023-09-25 18:42:49">2023-09-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/" title="9月19日~23日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月19日~23日记录"/></a><div class="content"><a class="title" href="/2023/09/23/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0919-0923/" title="9月19日~23日记录">9月19日~23日记录</a><time datetime="2023-09-23T06:50:49.000Z" title="发表于 2023-09-23 14:50:49">2023-09-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/" title="6_Hash_Table"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="6_Hash_Table"/></a><div class="content"><a class="title" href="/2023/09/21/cs_courses/cmu15445/6-Hash%20Table/" title="6_Hash_Table">6_Hash_Table</a><time datetime="2023-09-21T14:17:49.000Z" title="发表于 2023-09-21 22:17:49">2023-09-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/" title="9月18日记录"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="9月18日记录"/></a><div class="content"><a class="title" href="/2023/09/18/2023%E8%AE%B0%E5%BD%95/9%E6%9C%88/0918/" title="9月18日记录">9月18日记录</a><time datetime="2023-09-18T15:58:49.000Z" title="发表于 2023-09-18 23:58:49">2023-09-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" title="csapp-8-异常控制流"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="csapp-8-异常控制流"/></a><div class="content"><a class="title" href="/2023/09/18/cs_courses/csapp/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" title="csapp-8-异常控制流">csapp-8-异常控制流</a><time datetime="2023-09-18T14:17:49.000Z" title="发表于 2023-09-18 22:17:49">2023-09-18</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
             <i class="fas fa-folder-open"></i>
             <span>分类</span>
-            
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+    <i class="fas fa-angle-right"></i></a>
             </div>
             <ul class="card-category-list" id="aside-cat-list">
-            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C/"><span class="card-category-list-name">C</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CS-COURSE/"><span class="card-category-list-name">CS_COURSE</span><span class="card-category-list-count">22</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/OS/"><span class="card-category-list-name">OS</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"><span class="card-category-list-name">信息安全</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AE%B0%E5%BD%95/"><span class="card-category-list-name">记录</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AF%BE%E7%A8%8B%E5%A4%8D%E4%B9%A0/"><span class="card-category-list-name">课程复习</span><span class="card-category-list-count">1</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/xv6/" style="font-size: 1.34em; color: #99a3b0">xv6</a> <a href="/tags/C-C/" style="font-size: 1.1em; color: #999">C & C++</a> <a href="/tags/CS61C/" style="font-size: 1.5em; color: #99a9bf">CS61C</a> <a href="/tags/%E6%94%BF%E6%B2%BB/" style="font-size: 1.1em; color: #999">政治</a> <a href="/tags/C/" style="font-size: 1.1em; color: #999">C</a> <a href="/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/" style="font-size: 1.1em; color: #999">信息安全</a> <a href="/tags/6-s081/" style="font-size: 1.42em; color: #99a6b7">6.s081</a> <a href="/tags/%E6%95%B0%E8%AE%BA/" style="font-size: 1.1em; color: #999">数论</a> <a href="/tags/Books/" style="font-size: 1.1em; color: #999">Books</a> <a href="/tags/CMU15-213/" style="font-size: 1.18em; color: #999ca1">CMU15-213</a> <a href="/tags/CSAPP/" style="font-size: 1.18em; color: #999ca1">CSAPP</a> <a href="/tags/%E6%AF%9B%E4%B8%AD%E7%89%B9/" style="font-size: 1.1em; color: #999">毛中特</a> <a href="/tags/CMU15445/" style="font-size: 1.26em; color: #999fa8">CMU15445</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">九月 2023</span><span class="card-archive-list-count">37</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/08/"><span class="card-archive-list-date">八月 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/07/"><span class="card-archive-list-date">七月 2022</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">39</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">34.9k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-09-15T15:56:18.085Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C/"><span class="card-category-list-name">C</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C/"><span class="card-category-list-name">C++</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CS-COURSE/"><span class="card-category-list-name">CS_COURSE</span><span class="card-category-list-count">28</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Lab/"><span class="card-category-list-name">Lab</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/OS/"><span class="card-category-list-name">OS</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/linux/"><span class="card-category-list-name">linux</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/"><span class="card-category-list-name">信息安全</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AE%B0%E5%BD%95/"><span class="card-category-list-name">记录</span><span class="card-category-list-count">9</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/C/" style="font-size: 1.3em; color: #99a1ac">C</a> <a href="/tags/CSAPP/" style="font-size: 1.3em; color: #99a1ac">CSAPP</a> <a href="/tags/C-C/" style="font-size: 1.1em; color: #999">C & C++</a> <a href="/tags/CS162/" style="font-size: 1.2em; color: #999da3">CS162</a> <a href="/tags/CMU15-213/" style="font-size: 1.3em; color: #99a1ac">CMU15-213</a> <a href="/tags/C/" style="font-size: 1.1em; color: #999">C++</a> <a href="/tags/%E6%AF%9B%E4%B8%AD%E7%89%B9/" style="font-size: 1.1em; color: #999">毛中特</a> <a href="/tags/OS/" style="font-size: 1.2em; color: #999da3">OS</a> <a href="/tags/6-s081/" style="font-size: 1.4em; color: #99a5b6">6.s081</a> <a href="/tags/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8/" style="font-size: 1.1em; color: #999">信息安全</a> <a href="/tags/Books/" style="font-size: 1.1em; color: #999">Books</a> <a href="/tags/CS61C/" style="font-size: 1.5em; color: #99a9bf">CS61C</a> <a href="/tags/chcore/" style="font-size: 1.1em; color: #999">chcore</a> <a href="/tags/%E6%94%BF%E6%B2%BB/" style="font-size: 1.1em; color: #999">政治</a> <a href="/tags/CMU15445/" style="font-size: 1.3em; color: #99a1ac">CMU15445</a> <a href="/tags/%E6%95%B0%E8%AE%BA/" style="font-size: 1.1em; color: #999">数论</a> <a href="/tags/xv6/" style="font-size: 1.3em; color: #99a1ac">xv6</a> <a href="/tags/%E5%86%85%E6%A0%B8/" style="font-size: 1.2em; color: #999da3">内核</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">九月 2023</span><span class="card-archive-list-count">52</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/08/"><span class="card-archive-list-date">八月 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/07/"><span class="card-archive-list-date">七月 2022</span><span class="card-archive-list-count">1</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">54</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">43.5k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2023-09-25T10:44:18.607Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>window.typedJSFn = {
   init: (str) => {
     window.typed = new Typed('#subtitle', Object.assign({
       strings: str,
