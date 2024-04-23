@@ -1,0 +1,225 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>rustlings | LZY的Code生活</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="rustlings中使用的rust技巧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rustlings">
+<meta property="og:url" content="http://tom-jerr.github.io/2024/04/09/Rust/rustlings/index.html">
+<meta property="og:site_name" content="LZY的Code生活">
+<meta property="og:description" content="rustlings中使用的rust技巧">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/work.png">
+<meta property="article:published_time" content="2024-04-09T15:07:41.982Z">
+<meta property="article:modified_time" content="2024-04-10T11:24:02.677Z">
+<meta property="article:author" content="LZY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/work.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2024/04/09/Rust/rustlings/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'rustlings',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-10 19:24:02'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/work.png')"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">rustlings</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-09T15:07:41.982Z" title="发表于 2024-04-09 23:07:41">2024-04-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-10T11:24:02.677Z" title="更新于 2024-04-10 19:24:02">2024-04-10</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="rustlings"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Rustlings"><a href="#Rustlings" class="headerlink" title="Rustlings"></a>Rustlings</h1><h2 id="Option2"><a href="#Option2" class="headerlink" title="Option2"></a>Option2</h2><ul>
+<li>调用·<code>vec</code>的<code>pop</code> 方法时，它会从数组的末尾移除一个元素，并返回被移除的元素作为 <code>Option&lt;T&gt;</code>。因此，在这个例子中，由于数组的类型是 <code>Vec&lt;Option&lt;i8&gt;&gt;</code>，所以 <code>pop</code> 方法返回的类型是 <code>Option&lt;Option&lt;i8&gt;&gt;</code></li>
+</ul>
+<h2 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h2><ul>
+<li><code>Result&lt;String, String&gt;</code>：第一个类型是<code>Ok()</code>中的数据类型，第二个类型是<code>Err()</code>中的类型</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">use</span> std::fmt::Error;</span><br><span class="line"></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">generate_nametag_text</span>(name: <span class="type">String</span>) <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> name.<span class="title function_ invoke__">is_empty</span>() &#123;</span><br><span class="line">        <span class="comment">// Empty names aren&#x27;t allowed.</span></span><br><span class="line">        <span class="title function_ invoke__">Err</span>(<span class="string">&quot;`name` was empty; it must be nonempty.&quot;</span>.<span class="title function_ invoke__">into</span>())</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_ invoke__">Ok</span>(<span class="built_in">format!</span>(<span class="string">&quot;Hi! My name is &#123;&#125;&quot;</span>, name))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>?</code>相当于如下<code>match</code>匹配代码；调用<code>?</code>的函数返回值必须为<code>Result</code>或<code>Option</code>类型，有时候需要改写<code>main</code>函数返回值类型</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">x</span> = <span class="keyword">match</span> qty &#123;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(x) =&gt; x * cost_per_item + processing_fee,</span><br><span class="line">    <span class="title function_ invoke__">Err</span>(e) =&gt; <span class="keyword">return</span> <span class="title function_ invoke__">Err</span>(e),</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title function_ invoke__">Ok</span>(x)</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;(), ParseIntError&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">tokens</span> = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">pretend_user_input</span> = <span class="string">&quot;8&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="variable">cost</span> = <span class="title function_ invoke__">total_cost</span>(pretend_user_input)?;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> cost &gt; tokens &#123;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;You can&#x27;t afford that many!&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        tokens -= cost;</span><br><span class="line">        <span class="built_in">println!</span>(<span class="string">&quot;You now have &#123;&#125; tokens.&quot;</span>, tokens);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_ invoke__">Ok</span>(())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Test"><a href="#Test" class="headerlink" title="Test"></a>Test</h2><ul>
+<li><code> #[should_panic]</code>特性，允许测试代码出现Panic而不终止运行。</li>
+</ul>
+<h2 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h2><ul>
+<li>消费者适配器是消费掉迭代器，然后返回一个值。那么迭代器适配器，顾名思义，会返回一个新的迭代器，这是实现链式方法调用的关键：<code>v.iter().map().filter()...</code>。</li>
+<li>与消费者适配器不同，迭代器适配器是惰性的，意味着你<strong>需要一个消费者适配器来收尾，最终将迭代器转换成一个具体的值</strong></li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="variable">v1</span>: <span class="type">Vec</span>&lt;<span class="type">i32</span>&gt; = <span class="built_in">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="variable">v2</span>: <span class="type">Vec</span>&lt;_&gt; = v1.<span class="title function_ invoke__">iter</span>().<span class="title function_ invoke__">map</span>(|x| x + <span class="number">1</span>).<span class="title function_ invoke__">collect</span>();</span><br><span class="line"></span><br><span class="line"><span class="built_in">assert_eq!</span>(v2, <span class="built_in">vec!</span>[<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>collect</code>会自动根据指定类型对数据进行收集</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Complete the function and return a value of the correct type so the test</span></span><br><span class="line"><span class="comment">// passes.</span></span><br><span class="line"><span class="comment">// Desired output: Ok([1, 11, 1426, 3])</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">result_with_list</span>() <span class="punctuation">-&gt;</span> <span class="type">Result</span>&lt;<span class="type">Vec</span>&lt;<span class="type">i32</span>&gt;, DivisionError&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">numbers</span> = <span class="built_in">vec!</span>[<span class="number">27</span>, <span class="number">297</span>, <span class="number">38502</span>, <span class="number">81</span>];</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">division_results</span> = numbers.<span class="title function_ invoke__">into_iter</span>().<span class="title function_ invoke__">map</span>(|n| <span class="title function_ invoke__">divide</span>(n, <span class="number">27</span>)).<span class="title function_ invoke__">collect</span>();</span><br><span class="line">    division_results</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Complete the function and return a value of the correct type so the test</span></span><br><span class="line"><span class="comment">// passes.</span></span><br><span class="line"><span class="comment">// Desired output: [Ok(1), Ok(11), Ok(1426), Ok(3)]</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">list_of_results</span>() <span class="punctuation">-&gt;</span> <span class="type">Vec</span>&lt;<span class="type">Result</span>&lt;<span class="type">i32</span>, DivisionError&gt;&gt; &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">numbers</span> = <span class="built_in">vec!</span>[<span class="number">27</span>, <span class="number">297</span>, <span class="number">38502</span>, <span class="number">81</span>];</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">division_results</span> = numbers.<span class="title function_ invoke__">into_iter</span>().<span class="title function_ invoke__">map</span>(|n| <span class="title function_ invoke__">divide</span>(n, <span class="number">27</span>)).<span class="title function_ invoke__">collect</span>();</span><br><span class="line">    division_results</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>product</code>直接将迭代器元素相乘，返回一个迭代器</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">factorial</span>(num: <span class="type">u64</span>) <span class="punctuation">-&gt;</span> <span class="type">u64</span> &#123;</span><br><span class="line">    <span class="comment">// Complete this function to return the factorial of num</span></span><br><span class="line">    <span class="comment">// Do not use:</span></span><br><span class="line">    <span class="comment">// - return</span></span><br><span class="line">    <span class="comment">// Try not to use:</span></span><br><span class="line">    <span class="comment">// - imperative style loops (for, while)</span></span><br><span class="line">    <span class="comment">// - additional variables</span></span><br><span class="line">    <span class="comment">// For an extra challenge, don&#x27;t use:</span></span><br><span class="line">    <span class="comment">// - recursion</span></span><br><span class="line">    <span class="comment">// Execute `rustlings hint iterators4` for hints.</span></span><br><span class="line">    (<span class="number">1</span>..num + <span class="number">1</span>).<span class="title function_ invoke__">product</span>()</span><br><span class="line">&#125;<span class="comment">// 实现阶乘</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>flat_map</code>将对应的元素展平成为新的迭代器</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">count_collection_iterator</span>(collection: &amp;[HashMap&lt;<span class="type">String</span>, Progress&gt;], value: Progress) <span class="punctuation">-&gt;</span> <span class="type">usize</span> &#123;</span><br><span class="line">    <span class="comment">// collection is a slice of hashmaps.</span></span><br><span class="line">    <span class="comment">// collection = [&#123; &quot;variables1&quot;: Complete, &quot;from_str&quot;: None, ... &#125;,</span></span><br><span class="line">    <span class="comment">//     &#123; &quot;variables2&quot;: Complete, ... &#125;, ... ]</span></span><br><span class="line">    collection</span><br><span class="line">        .<span class="title function_ invoke__">into_iter</span>()</span><br><span class="line">        .<span class="title function_ invoke__">flat_map</span>(|x| x.<span class="title function_ invoke__">values</span>()) <span class="comment">// 这里是Vec&lt;&amp;Progress&gt;</span></span><br><span class="line">        .<span class="title function_ invoke__">filter</span>(|&amp;progress| *progress == value)</span><br><span class="line">        .<span class="title function_ invoke__">count</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Threads"><a href="#Threads" class="headerlink" title="Threads"></a>Threads</h2><h3 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h3><ul>
+<li>发送者会获取tx所有权，多发送者的线程需要拷贝tx</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">fn</span> <span class="title function_">send_tx</span>(q: Queue, tx: mpsc::Sender&lt;<span class="type">u32</span>&gt;) <span class="punctuation">-&gt;</span> () &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">qc</span> = Arc::<span class="title function_ invoke__">new</span>(q);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">qc1</span> = Arc::<span class="title function_ invoke__">clone</span>(&amp;qc);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">qc2</span> = Arc::<span class="title function_ invoke__">clone</span>(&amp;qc);</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">tx1</span> = tx.<span class="title function_ invoke__">clone</span>();</span><br><span class="line">    thread::<span class="title function_ invoke__">spawn</span>(<span class="keyword">move</span> || &#123;</span><br><span class="line">        <span class="keyword">for</span> <span class="variable">val</span> <span class="keyword">in</span> &amp;qc1.first_half &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;sending &#123;:?&#125;&quot;</span>, val);</span><br><span class="line">            tx.<span class="title function_ invoke__">send</span>(*val).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">            thread::<span class="title function_ invoke__">sleep</span>(Duration::<span class="title function_ invoke__">from_secs</span>(<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    thread::<span class="title function_ invoke__">spawn</span>(<span class="keyword">move</span> || &#123;</span><br><span class="line">        <span class="keyword">for</span> <span class="variable">val</span> <span class="keyword">in</span> &amp;qc2.second_half &#123;</span><br><span class="line">            <span class="built_in">println!</span>(<span class="string">&quot;sending &#123;:?&#125;&quot;</span>, val);</span><br><span class="line">            tx1.<span class="title function_ invoke__">send</span>(*val).<span class="title function_ invoke__">unwrap</span>();</span><br><span class="line">            thread::<span class="title function_ invoke__">sleep</span>(Duration::<span class="title function_ invoke__">from_secs</span>(<span class="number">1</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="as-ref-mut"><a href="#as-ref-mut" class="headerlink" title="as_ref_mut"></a>as_ref_mut</h2><ul>
+<li>AsRef 的主要作用是允许我们以统一的方式处理不同类型之间的转换。通过实现 AsRef trait，我们可以定义一个类型转换函数，该函数将一个类型转换为另一个类型的引用，而不是拥有新的所有权。</li>
+<li>具体来说，如果我们有一个类型 T，并且希望将其转换为类型 U 的引用，我们可以实现 AsRef <code>&lt;U&gt;</code> trait 来完成这个转换。在实现中，我们需要提供一个名为 as_ref 的方法，该方法返回类型 &amp;U。这样，我们就可以使用 as_ref 方法来将 T 转换为 U 的引用。</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Obtain the number of bytes (not characters) in the given argument.</span></span><br><span class="line"><span class="comment">// <span class="doctag">TODO:</span> Add the AsRef trait appropriately as a trait bound.</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">byte_counter</span>&lt;T: <span class="built_in">AsRef</span>&lt;<span class="type">str</span>&gt;&gt;(arg: T) <span class="punctuation">-&gt;</span> <span class="type">usize</span> &#123;</span><br><span class="line">    arg.<span class="title function_ invoke__">as_ref</span>().<span class="title function_ invoke__">as_bytes</span>().<span class="title function_ invoke__">len</span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Obtain the number of characters (not bytes) in the given argument.</span></span><br><span class="line"><span class="comment">// <span class="doctag">TODO:</span> Add the AsRef trait appropriately as a trait bound.</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">char_counter</span>&lt;T: <span class="built_in">AsRef</span>&lt;<span class="type">str</span>&gt;&gt;(arg: T) <span class="punctuation">-&gt;</span> <span class="type">usize</span> &#123;</span><br><span class="line">    arg.<span class="title function_ invoke__">as_ref</span>().<span class="title function_ invoke__">chars</span>().<span class="title function_ invoke__">count</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>当我们在代码中需要将一个类型转换为另一个类型的引用时，可以使用 as_ref 方法来进行转换。这对于接受不同类型引用参数的函数或方法非常有用，因为它使得我们可以使用相同的代码来处理不同的类型。</li>
+<li>AsMut <code>&lt;T&gt;</code> 是一个标准库中定义的 trait，它将类型 T 转换为一个指向其内部值的可变引用。当我们在泛型函数中使用 T: AsMut <code>&lt;u32&gt;</code> 这个 trait bound 时，我们告诉编译器要求 T 类型必须具备将其内部值作为 u32 类型的可变引用的能力</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Squares a number using as_mut().</span></span><br><span class="line"><span class="comment">// <span class="doctag">TODO:</span> Add the appropriate trait bound.</span></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">num_sq</span>&lt;T: <span class="built_in">AsMut</span>&lt;<span class="type">u32</span>&gt;&gt;(arg: &amp;<span class="keyword">mut</span> T) &#123;</span><br><span class="line">    <span class="comment">// <span class="doctag">TODO:</span> Implement the function body.</span></span><br><span class="line">    *arg.<span class="title function_ invoke__">as_mut</span>()*=*arg.<span class="title function_ invoke__">as_mut</span>()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="编译成库"><a href="#编译成库" class="headerlink" title="编译成库"></a>编译成库</h2><ul>
+<li><code>#[no_mangle]</code>保证rust编译时函数名不改变</li>
+<li><code>#[link_name=&quot;str&quot;]</code>在外部块内，通过属性link_name，指定原生库中函数或静态对象的名称，编译器根据它可以为外部块链接原生库并导入该名称定义的函数或静态对象</li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 标准库&lt;stdlib.h&gt;内置的abs函数</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span> &#123;</span><br><span class="line">    <span class="meta">#[link_name = <span class="string">&quot;abs&quot;</span>]</span></span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">abs_in_rust</span>(input: <span class="type">i32</span>) <span class="punctuation">-&gt;</span> <span class="type">i32</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;Rust&quot;</span> &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">my_demo_function</span>(a: <span class="type">u32</span>) <span class="punctuation">-&gt;</span> <span class="type">u32</span>;</span><br><span class="line">    <span class="meta">#[link_name = <span class="string">&quot;my_demo_function&quot;</span>]</span></span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">my_demo_function_alias</span>(a: <span class="type">u32</span>) <span class="punctuation">-&gt;</span> <span class="type">u32</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">mod</span> Foo &#123;</span><br><span class="line">    <span class="comment">// No `extern` equals `extern &quot;Rust&quot;`.</span></span><br><span class="line">    <span class="meta">#[no_mangle]</span></span><br><span class="line">    <span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">my_demo_function</span>(a: <span class="type">u32</span>) <span class="punctuation">-&gt;</span> <span class="type">u32</span> &#123;</span><br><span class="line">        a</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="反转双向链表"><a href="#反转双向链表" class="headerlink" title="反转双向链表"></a>反转双向链表</h2><ul>
+<li>从头开始遍历结点，对每个结点交换<code>prev</code>和<code>next</code>指针</li>
+<li>最后对整个链表交换<code>start</code>和<code>end</code></li>
+</ul>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">pub</span> <span class="keyword">fn</span> <span class="title function_">reverse</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>) &#123;</span><br><span class="line">    <span class="comment">// TODO</span></span><br><span class="line">    <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">current_ptr</span> = <span class="keyword">self</span>.start;</span><br><span class="line">    <span class="keyword">while</span> <span class="keyword">let</span> <span class="variable">Some</span>(node_ptr) = current_ptr &#123;</span><br><span class="line">        <span class="keyword">let</span> <span class="keyword">mut </span><span class="variable">node</span> = <span class="keyword">unsafe</span> &#123; *node_ptr.<span class="title function_ invoke__">as_ptr</span>().<span class="title function_ invoke__">as_mut</span>().<span class="title function_ invoke__">unwrap</span>() &#125;;</span><br><span class="line">        std::mem::<span class="title function_ invoke__">swap</span>(&amp;<span class="keyword">mut</span> node.prev, &amp;<span class="keyword">mut</span> node.next);</span><br><span class="line">        current_ptr = node.prev;</span><br><span class="line">    &#125;</span><br><span class="line">    std::mem::<span class="title function_ invoke__">swap</span>(&amp;<span class="keyword">mut</span> <span class="keyword">self</span>.start, &amp;<span class="keyword">mut</span> <span class="keyword">self</span>.end);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2024/04/09/Rust/rustlings/">http://tom-jerr.github.io/2024/04/09/Rust/rustlings/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">LZY的Code生活</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/work.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/04/16/CS144/lab1/" title="CS144 lab1"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">CS144 lab1</div></div></a></div><div class="next-post pull-right"><a href="/2024/04/09/C++20/C++%E5%86%85%E5%AD%98%E5%BA%8F/" title="C++内存序"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">C++内存序</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">即将进入研究生生涯，珍惜最后的大学时光</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Rustlings"><span class="toc-number">1.</span> <span class="toc-text">Rustlings</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Option2"><span class="toc-number">1.1.</span> <span class="toc-text">Option2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">错误处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Test"><span class="toc-number">1.3.</span> <span class="toc-text">Test</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-number">1.4.</span> <span class="toc-text">迭代器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Threads"><span class="toc-number">1.5.</span> <span class="toc-text">Threads</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Channel"><span class="toc-number">1.5.1.</span> <span class="toc-text">Channel</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#as-ref-mut"><span class="toc-number">1.6.</span> <span class="toc-text">as_ref_mut</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E6%88%90%E5%BA%93"><span class="toc-number">1.7.</span> <span class="toc-text">编译成库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E8%BD%AC%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8"><span class="toc-number">1.8.</span> <span class="toc-text">反转双向链表</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TimesharingOS"/></a><div class="content"><a class="title" href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS">TimesharingOS</a><time datetime="2024-04-23T15:09:05.623Z" title="发表于 2024-04-23 23:09:05">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hash Index -- CMU15445"/></a><div class="content"><a class="title" href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445">Hash Index -- CMU15445</a><time datetime="2024-04-23T14:18:32.877Z" title="发表于 2024-04-23 22:18:32">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/CMU15445/BufferPool/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/04/23/CMU15445/BufferPool/" title="无题">无题</a><time datetime="2024-04-23T14:18:23.717Z" title="发表于 2024-04-23 22:18:23">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/22/CS144/CS144/" title="CS144-TCP协议简单实现"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CS144-TCP协议简单实现"/></a><div class="content"><a class="title" href="/2024/04/22/CS144/CS144/" title="CS144-TCP协议简单实现">CS144-TCP协议简单实现</a><time datetime="2024-04-22T05:55:23.079Z" title="发表于 2024-04-22 13:55:23">2024-04-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/20/perfbook/Hardware_and_its_habits/" title="Hardware and its habits"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hardware and its habits"/></a><div class="content"><a class="title" href="/2024/04/20/perfbook/Hardware_and_its_habits/" title="Hardware and its habits">Hardware and its habits</a><time datetime="2024-04-20T15:27:00.000Z" title="发表于 2024-04-20 23:27:00">2024-04-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>futex | LZY的Code生活</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="futex机制介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="futex">
+<meta property="og:url" content="http://tom-jerr.github.io/2024/04/18/linux/futex/index.html">
+<meta property="og:site_name" content="LZY的Code生活">
+<meta property="og:description" content="futex机制介绍">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/work.png">
+<meta property="article:published_time" content="2024-04-18T11:29:00.000Z">
+<meta property="article:modified_time" content="2024-04-18T15:14:19.882Z">
+<meta property="article:author" content="LZY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/work.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2024/04/18/linux/futex/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'futex',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-18 23:14:19'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/work.png')"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">futex</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-18T11:29:00.000Z" title="发表于 2024-04-18 19:29:00">2024-04-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-18T15:14:19.882Z" title="更新于 2024-04-18 23:14:19">2024-04-18</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="futex"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Futex"><a href="#Futex" class="headerlink" title="Futex"></a>Futex</h1><ul>
+<li><p><code>Futex</code>(<code>Fast userspace mutex</code>，用户态快速互斥锁) ，是一种用户态与内核态共同作用的锁，其<strong>用户态部分负责锁逻辑</strong>，内核态部分负责锁调度。</p>
+</li>
+<li><p>当用户态线程请求锁时，先在用户态进行锁状态的判断维护</p>
+<ul>
+<li>若此时不产生锁的竞争，则直接在用户态进行上锁返回；</li>
+<li>反之，则需要进行线程的挂起操作，通过<code>Futex</code>系统调用<strong>请求内核介入来挂起线程</strong>，并维护阻塞队列。</li>
+</ul>
+</li>
+<li><p>当用户态线程释放锁时，先在用户态进行锁状态的判断维护</p>
+<ul>
+<li>若此时没有其他线程被该锁阻塞，则直接在用户态进行解锁返回；</li>
+<li>反之，则需要进行阻塞线程的唤醒操作，通过<code>Futex</code>系统调用请求内核介入来<strong>唤醒阻塞队列中的线程</strong>。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/// 快速系统调用</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">futex</span><span class="params">(<span class="type">uint32_t</span> *uaddr, <span class="type">int</span> futex_op, <span class="type">uint32_t</span> val,</span></span><br><span class="line"><span class="params">                 <span class="type">const</span> <span class="keyword">struct</span> timespec *timeout, <span class="type">uint32_t</span> *uaddr2,</span></span><br><span class="line"><span class="params">                 <span class="type">uint32_t</span> val3)</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> syscall(SYS_futex, uaddr, futex_op, val, timeout, uaddr2, val3);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/// 申请快锁</span></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">fwait</span><span class="params">(<span class="type">uint32_t</span> *futexp)</span> &#123;</span><br><span class="line">  <span class="type">long</span> s;</span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">uint32_t</span> one = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (atomic_compare_exchange_strong(futexp, &amp;one, <span class="number">0</span>))</span><br><span class="line">      <span class="keyword">break</span>; <span class="comment">//申请快锁成功</span></span><br><span class="line">    <span class="comment">//申请快锁失败,需等待</span></span><br><span class="line">    s = futex(futexp, FUTEX_WAIT, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="number">-1</span> &amp;&amp; errno != EAGAIN)</span><br><span class="line">      errExit(<span class="string">&quot;futex-FUTEX_WAIT&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/// 释放快锁</span></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">fpost</span><span class="params">(<span class="type">uint32_t</span> *futexp)</span> &#123;</span><br><span class="line">  <span class="type">long</span> s;</span><br><span class="line">  <span class="type">const</span> <span class="type">uint32_t</span> zero = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">if</span> (atomic_compare_exchange_strong(futexp, &amp;zero, <span class="number">1</span>)) &#123; <span class="comment">//释放快锁成功</span></span><br><span class="line">    s = futex(futexp, FUTEX_WAKE, <span class="number">1</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="number">0</span>); <span class="comment">//唤醒等锁 进程/线程</span></span><br><span class="line">    <span class="keyword">if</span> (s == <span class="number">-1</span>)</span><br><span class="line">      errExit(<span class="string">&quot;futex-FUTEX_WAKE&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="内核结构"><a href="#内核结构" class="headerlink" title="内核结构"></a>内核结构</h2><ul>
+<li>内核并没有<strong>快锁</strong>这个结构体，<code>key</code>就是快锁，它们的关系是 <code>1:N</code> 的关系 ，快锁分成了 <strong>私有锁</strong> 和 <strong>共享锁</strong> 两种类型。用<code>key</code>表示唯一性。共享锁用物理地址 , 私有锁用虚拟地址。</li>
+</ul>
+<h3 id="Futex-Node"><a href="#Futex-Node" class="headerlink" title="Futex Node"></a>Futex Node</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    UINTPTR      key;           <span class="comment">/* private:uvaddr | 私有锁，用虚拟地址         shared:paddr | 共享锁，用物理地址 */</span></span><br><span class="line">    UINT32       index;         <span class="comment">/* hash bucket index | 哈希桶索引 OsFutexKeyToIndex */</span></span><br><span class="line">    UINT32       pid;           <span class="comment">/* private:process id   shared:OS_INVALID(-1) | 私有锁:进程ID     ， 共享锁为 -1 */</span></span><br><span class="line">    LOS_DL_LIST  pendList;      <span class="comment">/* point to pendList in TCB struct | 指向 TCB 结构中的 pendList, 通过它找到任务(TaskCB中含有该属性)*/</span></span><br><span class="line">    LOS_DL_LIST  queueList;     <span class="comment">/* thread list blocked by this lock | 挂等待这把锁的任务，其实这里挂到是FutexNode.queueList , 通过 queueList 可以找到 pendList ,通过 pendList又可以找到真正的任务*/</span></span><br><span class="line">    LOS_DL_LIST  futexList;     <span class="comment">/* point to the next FutexNode | 下一把快锁节点*/</span></span><br><span class="line">&#125; FutexNode;</span><br></pre></td></tr></table></figure>
+
+<h3 id="任务调度"><a href="#任务调度" class="headerlink" title="任务调度"></a>任务调度</h3><h4 id="Wait-Task"><a href="#Wait-Task" class="headerlink" title="Wait Task"></a>Wait Task</h4><ul>
+<li>找到对应的key，找到对应的hash bucket</li>
+<li>拷贝值到内核空间</li>
+<li>进行任务的调度</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/// 将当前任务挂入等待链表中</span></span><br><span class="line">STATIC INT32 <span class="title function_">OsFutexWaitTask</span><span class="params">(<span class="type">const</span> UINT32 *userVaddr, <span class="type">const</span> UINT32 flags, <span class="type">const</span> UINT32 val, <span class="type">const</span> UINT32 timeOut)</span></span><br><span class="line">&#123;</span><br><span class="line">    INT32 futexRet;</span><br><span class="line">    UINT32 intSave, lockVal;</span><br><span class="line">    LosTaskCB *taskCB = <span class="literal">NULL</span>;</span><br><span class="line">    FutexNode *node = <span class="literal">NULL</span>;</span><br><span class="line">    UINTPTR futexKey = OsFutexFlagsToKey(userVaddr, flags);<span class="comment">//通过地址和flags 找到 key</span></span><br><span class="line">    UINT32 index = OsFutexKeyToIndex(futexKey, flags);<span class="comment">//通过key找到哈希桶</span></span><br><span class="line">    FutexHash *hashNode = &amp;g_futexHash[index];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (OsFutexLock(&amp;hashNode-&gt;listLock)) &#123;<span class="comment">//操作快锁节点链表前先上互斥锁</span></span><br><span class="line">        <span class="keyword">return</span> LOS_EINVAL;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//userVaddr必须是用户空间虚拟地址</span></span><br><span class="line">    <span class="keyword">if</span> (LOS_ArchCopyFromUser(&amp;lockVal, userVaddr, <span class="keyword">sizeof</span>(UINT32))) &#123;<span class="comment">//将值拷贝到内核空间</span></span><br><span class="line">        PRINT_ERR(<span class="string">&quot;Futex wait param check failed! copy from user failed!\n&quot;</span>);</span><br><span class="line">        futexRet = LOS_EINVAL;</span><br><span class="line">        <span class="keyword">goto</span> EXIT_ERR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (lockVal != val) &#123;<span class="comment">//对参数内部逻辑检查</span></span><br><span class="line">        futexRet = LOS_EBADF;</span><br><span class="line">        <span class="keyword">goto</span> EXIT_ERR;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//注意第二个参数 FutexNode *node = NULL </span></span><br><span class="line">    <span class="keyword">if</span> (OsFutexInsertTaskToHash(&amp;taskCB, &amp;node, futexKey, flags)) &#123;<span class="comment">// node = taskCB-&gt;futex</span></span><br><span class="line">        futexRet = LOS_NOK;</span><br><span class="line">        <span class="keyword">goto</span> EXIT_ERR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    SCHEDULER_LOCK(intSave);</span><br><span class="line">    OsTaskWaitSetPendMask(OS_TASK_WAIT_FUTEX, futexKey, timeOut);</span><br><span class="line">    OsSchedTaskWait(&amp;(node-&gt;pendList), timeOut, FALSE);</span><br><span class="line">    OsSchedLock();</span><br><span class="line">    LOS_SpinUnlock(&amp;g_taskSpin);</span><br><span class="line"></span><br><span class="line">    futexRet = OsFutexUnlock(&amp;hashNode-&gt;listLock);</span><br><span class="line">    <span class="keyword">if</span> (futexRet) &#123;</span><br><span class="line">        OsSchedUnlock();</span><br><span class="line">        LOS_IntRestore(intSave);</span><br><span class="line">        <span class="keyword">goto</span> EXIT_UNLOCK_ERR;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    LOS_SpinLock(&amp;g_taskSpin);</span><br><span class="line">    OsSchedUnlock();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    * it will immediately do the scheduling, so there&#x27;s no need to release the</span></span><br><span class="line"><span class="comment">    * task spinlock. when this task&#x27;s been rescheduled, it will be holding the spinlock.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    OsSchedResched();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (taskCB-&gt;taskStatus &amp; OS_TASK_STATUS_TIMEOUT) &#123;</span><br><span class="line">        taskCB-&gt;taskStatus &amp;= ~OS_TASK_STATUS_TIMEOUT;</span><br><span class="line">        SCHEDULER_UNLOCK(intSave);</span><br><span class="line">        <span class="keyword">return</span> OsFutexDeleteTimeoutTaskNode(hashNode, node);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    SCHEDULER_UNLOCK(intSave);</span><br><span class="line">    <span class="keyword">return</span> LOS_OK;</span><br><span class="line"></span><br><span class="line">EXIT_ERR:</span><br><span class="line">    (VOID)OsFutexUnlock(&amp;hashNode-&gt;listLock);</span><br><span class="line">EXIT_UNLOCK_ERR:</span><br><span class="line">    <span class="keyword">return</span> futexRet;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Wake-Task"><a href="#Wake-Task" class="headerlink" title="Wake Task"></a>Wake Task</h4><ul>
+<li>构建临时futex node，在链表中寻找该结点</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">STATIC INT32 <span class="title function_">OsFutexWakeTask</span><span class="params">(UINTPTR futexKey, UINT32 flags, INT32 wakeNumber, FutexNode **newHeadNode, BOOL *wakeAny)</span></span><br><span class="line"> &#123;</span><br><span class="line">     UINT32 intSave;</span><br><span class="line">     FutexNode *node = <span class="literal">NULL</span>;</span><br><span class="line">     FutexNode *headNode = <span class="literal">NULL</span>;</span><br><span class="line">     UINT32 index = OsFutexKeyToIndex(futexKey, flags);</span><br><span class="line">     FutexHash *hashNode = &amp;g_futexHash[index];</span><br><span class="line">     FutexNode tempNode = &#123; <span class="comment">// 先组成一个临时快锁节点,目的是为了找到哈希桶中是否有这个节点</span></span><br><span class="line">         .key = futexKey,</span><br><span class="line">         .index = index,</span><br><span class="line">         .pid = (flags &amp; FUTEX_PRIVATE) ? LOS_GetCurrProcessID() : OS_INVALID,</span><br><span class="line">     &#125;;</span><br><span class="line"></span><br><span class="line">     node = OsFindFutexNode(&amp;tempNode);<span class="comment">// 找快锁节点</span></span><br><span class="line">     <span class="keyword">if</span> (node == <span class="literal">NULL</span>) &#123;</span><br><span class="line">         <span class="keyword">return</span> LOS_EBADF;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     headNode = node;</span><br><span class="line"></span><br><span class="line">     SCHEDULER_LOCK(intSave);</span><br><span class="line">     OsFutexCheckAndWakePendTask(headNode, wakeNumber, hashNode, newHeadNode, wakeAny);<span class="comment">// 再找到等这把锁的唤醒指向数量的任务</span></span><br><span class="line">     <span class="keyword">if</span> ((*newHeadNode) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">         OsFutexReplaceQueueListHeadNode(headNode, *newHeadNode);</span><br><span class="line">         OsFutexDeinitFutexNode(headNode);</span><br><span class="line">     &#125; <span class="keyword">else</span> <span class="keyword">if</span> (headNode-&gt;index &lt; FUTEX_INDEX_MAX) &#123;</span><br><span class="line">         OsFutexDeleteKeyFromFutexList(headNode);</span><br><span class="line">         OsFutexDeinitFutexNode(headNode);</span><br><span class="line">     &#125;</span><br><span class="line">     SCHEDULER_UNLOCK(intSave);</span><br><span class="line"></span><br><span class="line">     <span class="keyword">return</span> LOS_OK;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2024/04/18/linux/futex/">http://tom-jerr.github.io/2024/04/18/linux/futex/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">LZY的Code生活</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/work.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/04/19/C++20/C++20%E5%8D%8F%E7%A8%8B/" title="C++20协程"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">C++20协程</div></div></a></div><div class="next-post pull-right"><a href="/2024/04/18/C++20/MESI/" title="Why we need memory barrier?"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Why we need memory barrier?</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">即将进入研究生生涯，珍惜最后的大学时光</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Futex"><span class="toc-number">1.</span> <span class="toc-text">Futex</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E7%BB%93%E6%9E%84"><span class="toc-number">1.1.</span> <span class="toc-text">内核结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Futex-Node"><span class="toc-number">1.1.1.</span> <span class="toc-text">Futex Node</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="toc-number">1.1.2.</span> <span class="toc-text">任务调度</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Wait-Task"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">Wait Task</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Wake-Task"><span class="toc-number">1.1.2.2.</span> <span class="toc-text">Wake Task</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TimesharingOS"/></a><div class="content"><a class="title" href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS">TimesharingOS</a><time datetime="2024-04-23T15:09:05.623Z" title="发表于 2024-04-23 23:09:05">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hash Index -- CMU15445"/></a><div class="content"><a class="title" href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445">Hash Index -- CMU15445</a><time datetime="2024-04-23T14:18:32.877Z" title="发表于 2024-04-23 22:18:32">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/CMU15445/BufferPool/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/04/23/CMU15445/BufferPool/" title="无题">无题</a><time datetime="2024-04-23T14:18:23.717Z" title="发表于 2024-04-23 22:18:23">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/22/CS144/CS144/" title="CS144-TCP协议简单实现"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CS144-TCP协议简单实现"/></a><div class="content"><a class="title" href="/2024/04/22/CS144/CS144/" title="CS144-TCP协议简单实现">CS144-TCP协议简单实现</a><time datetime="2024-04-22T05:55:23.079Z" title="发表于 2024-04-22 13:55:23">2024-04-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/20/perfbook/Hardware_and_its_habits/" title="Hardware and its habits"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hardware and its habits"/></a><div class="content"><a class="title" href="/2024/04/20/perfbook/Hardware_and_its_habits/" title="Hardware and its habits">Hardware and its habits</a><time datetime="2024-04-20T15:27:00.000Z" title="发表于 2024-04-20 23:27:00">2024-04-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

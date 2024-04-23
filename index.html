@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>LZY的Code生活 - 桃花坞里桃花庵，桃花庵里桃花仙；桃花仙人中桃树，又摘桃花换酒钱</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="LZY的Code生活">
+<meta property="og:url" content="http://tom-jerr.github.io/index.html">
+<meta property="og:site_name" content="LZY的Code生活">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/avatar.jpg">
+<meta property="article:author" content="LZY">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/avatar.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'LZY的Code生活',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2024-04-24 01:09:38'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347)"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">LZY的Code生活</h1><div id="site_social_icons"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TimesharingOS"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS">TimesharingOS</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-23T15:09:05.623Z" title="发表于 2024-04-23 23:09:05">2024-04-23</time></span></div><div class="content">TimesharingOSMultiprogOS
+
+Qemu把包含多个app的列表和MultiprogOS的image镜像加载到内存中，RustSBI（bootloader）完成基本的硬件初始化后，跳转到MultiprogOS起始位置
+MultiprogOS首先进行正常运行前的初始化工作，即建立栈空间和清零bss段，然后通过改进的 AppManager 内核模块从app列表中把所有app都加载到内存中，并按指定顺序让app在用户态一个接一个地执行。
+app在执行过程中，会通过系统调用的方式得到MultiprogOS提供的OS服务，如输出字符串等。
+
+CoopOS
+
+CoopOS进一步改进了 AppManager 内核模块，把它拆分为负责加载应用的 Loader 内核模块和管理应用运行过程的 TaskManager 内核模块。
+TaskManager 通过 task 任务控制块来管理应用程序的执行过程，支持应用程序主动放弃 CPU 并切换到另一个应用继续执行，从而提高系统整体执行效率。
+应用程序在运行时有自己所在的内存空间和栈，确保被切换时相关信息不会被其他应用破坏。如果当前应用程序正在 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hash Index -- CMU15445"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445">Hash Index -- CMU15445</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-23T14:18:32.877Z" title="发表于 2024-04-23 22:18:32">2024-04-23</time></span></div><div class="content">Extenible Hash Table可扩展哈希，初始哈希表中只有一个directory和一个bucket，每个bucket可以容纳两条数据
+
+Hash Table PageHash Table Header Page
+存放所有的directory pages，但是这个header page容纳的directory pages是固定的
+
+/** * Header page format: *  --------------------------------------------------- * | DirectoryPageIds(2048) | MaxDepth (4) | Free(2044) *  --------------------------------------------------- */static constexpr uint64_t HTABLE_HEADER_PAGE_METADATA_SIZE = sizeof(uint32_t);static constexpr uint64_t HTABLE_HEADER_MAX_DEPTH = 9;stat ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2024/04/23/CMU15445/BufferPool/" title="无题"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/23/CMU15445/BufferPool/" title="无题">无题</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-23T14:18:23.717Z" title="发表于 2024-04-23 22:18:23">2024-04-23</time></span></div><div class="content"></div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/04/22/CS144/CS144/" title="CS144-TCP协议简单实现"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CS144-TCP协议简单实现"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/22/CS144/CS144/" title="CS144-TCP协议简单实现">CS144-TCP协议简单实现</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-22T05:55:23.079Z" title="发表于 2024-04-22 13:55:23">2024-04-22</time></span></div><div class="content">Minnow
+初始的TCPSocket是在Linux TCP&#x2F;IP栈上封装的一个类
+lab4开始自己构建TCPPeer对端进行数据传输，直接使用网卡上的IP数据包进行TCP包的构建
+lab5实现简易ARP协议，可以转换IP地址和MAC地址NetworkInterface
+lab6实现了最长前缀匹配的链路层选路算法IP route
+lab7实现了一个使用IP route、NetworkInterface的端到端的TCP报文传输
+
+数据格式IP包
+IPv4数据包构建：不支持IP选项
+// IPv4 Internet datagram header (note: IP options are not supported)struct IPv4Header&#123;  static constexpr size_t LENGTH = 20;        // IPv4 header length, not including options  static constexpr uint8_t DEFAULT_TTL = 128; // A reasonable default T ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2024/04/20/perfbook/Hardware_and_its_habits/" title="Hardware and its habits"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hardware and its habits"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/20/perfbook/Hardware_and_its_habits/" title="Hardware and its habits">Hardware and its habits</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-20T15:27:00.000Z" title="发表于 2024-04-20 23:27:00">2024-04-20</time></span></div><div class="content">Hardware and its habits硬件发展Pipelined CPUs
+流水线+超标量+乱序执行+分支预测
+分支预测失败将导致预取的指令全部丢弃
+不同线程共享一个CPU核心，指令分解的微操作流水线失效
+
+Memory References
+直接访问内存的成本过高
+现代计算机会增加三级缓存尽可能减小成本
+
+Atomic Operation
+现代计算机改进原子操作
+识别具有原子操作的所有缓存行，所有缓存行由单个CPU所有
+非原子操作进行store可以使用store buffer而非cacheline
+为维护多个数据的同步，CPU提供了memory barrier
+
+Memory Barriers
+内存屏障，实现多个数据的同步
+
+Thermal Throttling
+CPU功耗升高，温度也会升高；受限于冷却设备，可能会自主截断功耗继续升高
+
+Cache Misses
+缓存未命中，会取下一级缓存或者内存中取，这实际上增加了开销
+
+I&#x2F;O Operations</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/04/19/C++20/C++20%E5%8D%8F%E7%A8%8B/" title="C++20协程"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="C++20协程"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/19/C++20/C++20%E5%8D%8F%E7%A8%8B/" title="C++20协程">C++20协程</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-19T13:59:48.866Z" title="发表于 2024-04-19 21:59:48">2024-04-19</time></span></div><div class="content">Coroutine of C++20C++的协程是：
+
+
+对称的。一个协程暂停后，可返回 caller 或恢复任意协程。
+语言级特性。编译器知道你在使用协程。然而不比库强到哪里去。
+无栈(Stackless) 的。没有独立运行时栈，无惧爆栈，调度成本低。
+
+
+
+一个协程在被命令「暂停」时，会保证将数据和当前运行位置保存在堆内存（以便恢复现场），然后转移运行权。
+
+缺点
+除非编译器优化，每个协程都需要通过operator new来分配 frame：
+动态内存分配可能引发性能问题；
+在嵌入式或异构（例如 GPU）环境下，缺乏动态内存分配能力，难以工作。
+
+
+除非编译器优化，协程的可定制点太多，需要大量间接调用&#x2F;跳转（而不是内联），同样引起性能问题。
+目前，编译器通常难以内联协程；
+HALO 优化理论：P0981R0。
+
+
+动态分配和间接调用的存在，导致协程暂时无法成为异步框架的最优方法。
+Debug 的体验风评不佳。
+
+三个关键字
+co_await暂停协程
+co_yield暂停协程同时返回一个值
+co_return结束协程并返回一个值
+
+co_await
+expr转化为await ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2024/04/18/linux/futex/" title="futex"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="futex"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/18/linux/futex/" title="futex">futex</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-18T11:29:00.000Z" title="发表于 2024-04-18 19:29:00">2024-04-18</time></span></div><div class="content">Futex
+Futex(Fast userspace mutex，用户态快速互斥锁) ，是一种用户态与内核态共同作用的锁，其用户态部分负责锁逻辑，内核态部分负责锁调度。
+
+当用户态线程请求锁时，先在用户态进行锁状态的判断维护
+
+若此时不产生锁的竞争，则直接在用户态进行上锁返回；
+反之，则需要进行线程的挂起操作，通过Futex系统调用请求内核介入来挂起线程，并维护阻塞队列。
+
+
+当用户态线程释放锁时，先在用户态进行锁状态的判断维护
+
+若此时没有其他线程被该锁阻塞，则直接在用户态进行解锁返回；
+反之，则需要进行阻塞线程的唤醒操作，通过Futex系统调用请求内核介入来唤醒阻塞队列中的线程。
+
+
+
+/// 快速系统调用static int futex(uint32_t *uaddr, int futex_op, uint32_t val,                 const struct timespec *timeout, uint32_t *uaddr2,                 uint32_t val3) &#123;  return syscall(SYS_futex ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/04/18/C++20/MESI/" title="Why we need memory barrier?"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Why we need memory barrier?"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/18/C++20/MESI/" title="Why we need memory barrier?">Why we need memory barrier?</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-18T10:32:00.000Z" title="发表于 2024-04-18 18:32:00">2024-04-18</time></span></div><div class="content">Why we need memory barrier?MESI protocol state
+
+
+状态
+描述
+监听任务
+
+
+
+M 修改 (Modified)
+该Cache line有效，数据被修改了，和内存中的数据不一致，数据只存在于本Cache中。
+缓存行必须时刻监听所有试图读该缓存行相对就主存的操作，这种操作必须在缓存将该缓存行写回主存并将状态变成S（共享）状态之前被延迟执行。
+
+
+E 独享、互斥 (Exclusive)
+该Cache line有效，数据和内存中的数据一致，数据只存在于本Cache中。
+缓存行也必须监听其它缓存读主存中该缓存行的操作，一旦有这种操作，该缓存行需要变成S（共享）状态。
+
+
+S 共享 (Shared)
+该Cache line有效，数据和内存中的数据一致，数据存在于很多Cache中。
+缓存行也必须监听其它缓存使该缓存行无效或者独享该缓存行的请求，并将该缓存行变成无效（Invalid）。
+
+
+I 无效 (Invalid)
+该Cache line无效。
+无
+
+
+Stores Result in Unnecessary Stalls
+针对某些特定地址的数据（在一 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2024/04/17/Rust/BatchOS/" title="BatchOS"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BatchOS"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/17/Rust/BatchOS/" title="BatchOS">BatchOS</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-17T06:03:00.000Z" title="发表于 2024-04-17 14:03:00">2024-04-17</time></span></div><div class="content">BatchOS
+
+实现批处理程序功能的OS
+APP与OS隔离
+自动加载并运行多个程序
+
+特权级机制
+ecall 具有用户态到内核态的执行环境切换能力的函数调用指令；
+sret ：具有内核态到用户态的执行环境切换能力的函数返回指令。
+首先，操作系统需要提供相应的功能代码，能在执行 sret 前准备和恢复用户态执行应用程序的上下文。其次，在应用程序调用 ecall 指令后，能够检查应用程序的系统调用参数，确保参数不会破坏操作系统。
+
+RISC-V异常
+RISC-V S模式特权指令
+sert：从S模式返回U模式
+wfi：处理器在空闲时进入低功耗状态等待终端
+sfence.vma：刷新TLB缓存
+访问S模式CSR指令：改变系统状态
+
+控制状态寄存器
+sstatus：SPP字段给出Trap发生前CPU的特权级
+sepc：记录异常发生前执行的最后一条指令的地址
+scause：描述Trap的原因
+stval：给出Trap的附加信息
+stvec：控制Trap处理代码的入口地址
+
+硬件切换的硬件控制机制ecall
+
+sstatus中的SPP字段切换到CPU当前特权级
+sepc修改为Trap处理完成后默认 ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2024/04/17/Rust/LibOS/" title="LibOS"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="LibOS"></a></div><div class="recent-post-info"><a class="article-title" href="/2024/04/17/Rust/LibOS/" title="LibOS">LibOS</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2024-04-17T05:41:00.000Z" title="发表于 2024-04-17 13:41:00">2024-04-17</time></span></div><div class="content">LibOS
+
+实现与OS无关的OS类型的程序
+
+结构
+
+OS在APP运行前进行初始化：建立栈空间 + .bss段清零
+Bootloader在0x80000000处加载，所以OS只能在0x80200000处加载
+
+内存布局
+</div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">即将进入研究生生涯，珍惜最后的大学时光</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TimesharingOS"/></a><div class="content"><a class="title" href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS">TimesharingOS</a><time datetime="2024-04-23T15:09:05.623Z" title="发表于 2024-04-23 23:09:05">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hash Index -- CMU15445"/></a><div class="content"><a class="title" href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445">Hash Index -- CMU15445</a><time datetime="2024-04-23T14:18:32.877Z" title="发表于 2024-04-23 22:18:32">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/CMU15445/BufferPool/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/04/23/CMU15445/BufferPool/" title="无题">无题</a><time datetime="2024-04-23T14:18:23.717Z" title="发表于 2024-04-23 22:18:23">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/22/CS144/CS144/" title="CS144-TCP协议简单实现"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CS144-TCP协议简单实现"/></a><div class="content"><a class="title" href="/2024/04/22/CS144/CS144/" title="CS144-TCP协议简单实现">CS144-TCP协议简单实现</a><time datetime="2024-04-22T05:55:23.079Z" title="发表于 2024-04-22 13:55:23">2024-04-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/20/perfbook/Hardware_and_its_habits/" title="Hardware and its habits"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hardware and its habits"/></a><div class="content"><a class="title" href="/2024/04/20/perfbook/Hardware_and_its_habits/" title="Hardware and its habits">Hardware and its habits</a><time datetime="2024-04-20T15:27:00.000Z" title="发表于 2024-04-20 23:27:00">2024-04-20</time></div></div></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/04/"><span class="card-archive-list-date">四月 2024</span><span class="card-archive-list-count">15</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">15</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-04-23T17:09:38.053Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
