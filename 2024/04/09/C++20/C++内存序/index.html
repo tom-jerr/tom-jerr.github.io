@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++内存序 | LZY的Code生活</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="C++11并发操作的内存序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++内存序">
+<meta property="og:url" content="http://tom-jerr.github.io/2024/04/09/C++20/C++%E5%86%85%E5%AD%98%E5%BA%8F/index.html">
+<meta property="og:site_name" content="LZY的Code生活">
+<meta property="og:description" content="C++11并发操作的内存序">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/work.png">
+<meta property="article:published_time" content="2024-04-09T14:17:20.858Z">
+<meta property="article:modified_time" content="2024-04-24T03:34:39.699Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="并发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/work.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2024/04/09/C++20/C++%E5%86%85%E5%AD%98%E5%BA%8F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++内存序',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-24 11:34:39'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/work.png')"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">C++内存序</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-09T14:17:20.858Z" title="发表于 2024-04-09 22:17:20">2024-04-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-24T03:34:39.699Z" title="更新于 2024-04-24 11:34:39">2024-04-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Knowledge/">Knowledge</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="C++内存序"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="C-11并发操作的内存序"><a href="#C-11并发操作的内存序" class="headerlink" title="C++11并发操作的内存序"></a>C++11并发操作的内存序</h1><h2 id="原子操作的关系"><a href="#原子操作的关系" class="headerlink" title="原子操作的关系"></a>原子操作的关系</h2><h3 id="Synchronized-with"><a href="#Synchronized-with" class="headerlink" title="Synchronized-with"></a>Synchronized-with</h3><blockquote>
+<p>If thread A stores a value and thread B reads that value, there’s a synchronizes-with relationship between the store in thread A and the load in thread B.</p>
+</blockquote>
+<h3 id="Happens-before"><a href="#Happens-before" class="headerlink" title="Happens-before"></a>Happens-before</h3><ul>
+<li>单线程：如果一个操作 A 排列在另一个操作 B 之前，那么这个操作 A happens-before B，一般单线程叫A sequenced-before B。</li>
+<li>多线程：对于多线程而言, 如果一个线程中的操作A先于另一个线程中的操作B, 那么 A happens-before B(一般多线程间操作叫A inter-thread happens-before B)。</li>
+</ul>
+<h2 id="六种内存顺序"><a href="#六种内存顺序" class="headerlink" title="六种内存顺序"></a>六种内存顺序</h2><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">enum</span> <span class="title class_">memory_order</span> &#123;</span><br><span class="line">  memory_order_relaxed,  <span class="comment">// 无同步或顺序限制，只保证当前操作原子性</span></span><br><span class="line">  memory_order_consume,  <span class="comment">// 标记读操作，依赖于该值的读写不能重排到此操作前</span></span><br><span class="line">  memory_order_acquire,  <span class="comment">// 标记读操作，之后的读写不能重排到此操作前</span></span><br><span class="line">  memory_order_release,  <span class="comment">// 标记写操作，之前的读写不能重排到此操作后</span></span><br><span class="line">  memory_order_acq_rel,  <span class="comment">// 仅标记读改写操作，读操作相当于 acquire，写操作相当于 release</span></span><br><span class="line">  memory_order_seq_cst   <span class="comment">// sequential consistency：顺序一致性，不允许重排，所有原子操作的默认选项</span></span><br><span class="line">&#125; memory_order;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Relaxed-ordering"><a href="#Relaxed-ordering" class="headerlink" title="Relaxed ordering"></a>Relaxed ordering</h3><ul>
+<li>标记为 <code>memory_order_relaxed</code> 的原子操作不是同步操作，不强制要求并发内存的访问顺序，只保证原子性和修改顺序一致性</li>
+</ul>
+<h3 id="Release-Consume-ordering"><a href="#Release-Consume-ordering" class="headerlink" title="Release-Consume ordering"></a>Release-Consume ordering</h3><ul>
+<li><p>对于标记为<code> memory_order_consume</code> 原子变量 x 的读操作 R，当前线程中依赖于 x 的读写不允许重排到 R 之前，其他线程中对依赖于 x 的变量写操作对当前线程可见</p>
+</li>
+<li><p>consume语义是一种弱的acquire，<strong>它只对关联变量进行约束</strong>，这个实际编程中基本不用，且在某些情况下会自动进化成acquire语义(比如当用consume语义修饰的load操作在if条件表达式中时)。另外，C++17标准明确说明这个语义还未完善，建议直接使用acquire。</p>
+</li>
+</ul>
+<h3 id="Release-Acquire-ordering"><a href="#Release-Acquire-ordering" class="headerlink" title="Release-Acquire ordering"></a>Release-Acquire ordering</h3><ul>
+<li>在release之前的所有store操作绝不会重排到(不管是编译器对代码的重排还是CPU指令重排)此release对应的操作之后，<strong>也就是说如果release对应的store操作完成了，则C++标准能够保证此release之前的所有store操作肯定已经先完成了</strong>，或者说可被感知了；</li>
+<li>在acquire之后的所有load操作或者store操作绝对不会重排到此acquire对应的操作之前，也就是说只有<strong>当执行完此acquire对应的load操作之后，才会执行后续的读操作或者写操作</strong>。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;atomic&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cassert&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"></span><br><span class="line">std::atomic&lt;<span class="type">bool</span>&gt; x = <span class="literal">false</span>;</span><br><span class="line">std::atomic&lt;<span class="type">bool</span>&gt; y = <span class="literal">false</span>;</span><br><span class="line">std::atomic&lt;<span class="type">int</span>&gt; z = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">write_x_then_y</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  x.<span class="built_in">store</span>(<span class="literal">true</span>, std::memory_order_relaxed);  <span class="comment">// 1 happens-before 2，因为2使用了release</span></span><br><span class="line">  y.<span class="built_in">store</span>(<span class="literal">true</span>, std::memory_order_release);  <span class="comment">// 2 happens-before 3（由于 3 的循环）</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">read_y_then_x</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">while</span> (!y.<span class="built_in">load</span>(std::memory_order_acquire)) &#123;  <span class="comment">// 3 happens-before 4，因为3使用了acquire</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (x.<span class="built_in">load</span>(std::memory_order_relaxed)) &#123;  <span class="comment">// 4</span></span><br><span class="line">    ++z;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="function">std::thread <span class="title">t1</span><span class="params">(write_x_then_y)</span></span>;</span><br><span class="line">  <span class="function">std::thread <span class="title">t2</span><span class="params">(read_y_then_x)</span></span>;</span><br><span class="line">  t1.<span class="built_in">join</span>();</span><br><span class="line">  t2.<span class="built_in">join</span>();</span><br><span class="line">  <span class="built_in">assert</span>(z.<span class="built_in">load</span>() != <span class="number">0</span>);  <span class="comment">// 顺序一定为 1234，z一定不为 0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Sequentially-consistent-ordering"><a href="#Sequentially-consistent-ordering" class="headerlink" title="Sequentially-consistent ordering"></a>Sequentially-consistent ordering</h3><ul>
+<li>memory_order_seq_cst 是所有原子操作的默认选项，可以省略不写</li>
+<li>对于标记为 memory_order_seq_cst 的操作，大概行为就是对每一个变量都进行上面所说的Release-Acquire操作，读操作相当于 memory_order_acquire，写操作相当于 memory_order_release，读改写操作相当于 memory_order_acq_rel，此外还附加一个单独的 total ordering，即<strong>所有线程对同一操作看到的顺序也是相同的。</strong></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2024/04/09/C++20/C++%E5%86%85%E5%AD%98%E5%BA%8F/">http://tom-jerr.github.io/2024/04/09/C++20/C++%E5%86%85%E5%AD%98%E5%BA%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">LZY的Code生活</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a><a class="post-meta__tags" href="/tags/%E5%B9%B6%E5%8F%91/">并发</a></div><div class="post_share"><div class="social-share" data-image="/img/work.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/04/09/Rust/rustlings/" title="rustlings"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">rustlings</div></div></a></div><div class="next-post pull-right"><a href="/2024/04/08/C++20/%E5%8D%8F%E7%A8%8B/" title="协程"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">协程</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/04/19/C++20/C++20%E5%8D%8F%E7%A8%8B/" title="C++20协程"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-19</div><div class="title">C++20协程</div></div></a></div><div><a href="/2024/04/08/C++20/%E5%8D%8F%E7%A8%8B/" title="协程"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-08</div><div class="title">协程</div></div></a></div><div><a href="/2024/04/18/C++20/MESI/" title="Why we need memory barrier?"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-18</div><div class="title">Why we need memory barrier?</div></div></a></div><div><a href="/2024/04/20/perfbook/Hardware_and_its_habits/" title="Hardware and its habits"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-20</div><div class="title">Hardware and its habits</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">13</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">即将进入研究生生涯，珍惜最后的大学时光</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-11%E5%B9%B6%E5%8F%91%E6%93%8D%E4%BD%9C%E7%9A%84%E5%86%85%E5%AD%98%E5%BA%8F"><span class="toc-number">1.</span> <span class="toc-text">C++11并发操作的内存序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.1.</span> <span class="toc-text">原子操作的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Synchronized-with"><span class="toc-number">1.1.1.</span> <span class="toc-text">Synchronized-with</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Happens-before"><span class="toc-number">1.1.2.</span> <span class="toc-text">Happens-before</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E7%A7%8D%E5%86%85%E5%AD%98%E9%A1%BA%E5%BA%8F"><span class="toc-number">1.2.</span> <span class="toc-text">六种内存顺序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Relaxed-ordering"><span class="toc-number">1.2.1.</span> <span class="toc-text">Relaxed ordering</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Release-Consume-ordering"><span class="toc-number">1.2.2.</span> <span class="toc-text">Release-Consume ordering</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Release-Acquire-ordering"><span class="toc-number">1.2.3.</span> <span class="toc-text">Release-Acquire ordering</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sequentially-consistent-ordering"><span class="toc-number">1.2.4.</span> <span class="toc-text">Sequentially-consistent ordering</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TimesharingOS"/></a><div class="content"><a class="title" href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS">TimesharingOS</a><time datetime="2024-04-23T15:09:05.623Z" title="发表于 2024-04-23 23:09:05">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hash Index -- CMU15445"/></a><div class="content"><a class="title" href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445">Hash Index -- CMU15445</a><time datetime="2024-04-23T14:18:32.877Z" title="发表于 2024-04-23 22:18:32">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/CMU15445/BufferPool/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/04/23/CMU15445/BufferPool/" title="无题">无题</a><time datetime="2024-04-23T14:18:23.717Z" title="发表于 2024-04-23 22:18:23">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/22/CS144/CS144/" title="CS144-TCP协议简单实现"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CS144-TCP协议简单实现"/></a><div class="content"><a class="title" href="/2024/04/22/CS144/CS144/" title="CS144-TCP协议简单实现">CS144-TCP协议简单实现</a><time datetime="2024-04-22T05:55:23.079Z" title="发表于 2024-04-22 13:55:23">2024-04-22</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/20/perfbook/Hardware_and_its_habits/" title="Hardware and its habits"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hardware and its habits"/></a><div class="content"><a class="title" href="/2024/04/20/perfbook/Hardware_and_its_habits/" title="Hardware and its habits">Hardware and its habits</a><time datetime="2024-04-20T15:27:00.000Z" title="发表于 2024-04-20 23:27:00">2024-04-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
