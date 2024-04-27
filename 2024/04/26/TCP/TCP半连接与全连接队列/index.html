@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>TCP半连接与全连接 | LZY的Code生活</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="TCP半连接与全连接内核中实现，如果这两个队列满了有何影响">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP半连接与全连接">
+<meta property="og:url" content="http://tom-jerr.github.io/2024/04/26/TCP/TCP%E5%8D%8A%E8%BF%9E%E6%8E%A5%E4%B8%8E%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97/index.html">
+<meta property="og:site_name" content="LZY的Code生活">
+<meta property="og:description" content="TCP半连接与全连接内核中实现，如果这两个队列满了有何影响">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/work.png">
+<meta property="article:published_time" content="2024-04-26T14:36:10.356Z">
+<meta property="article:modified_time" content="2024-04-26T15:07:10.038Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="TCP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/work.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2024/04/26/TCP/TCP%E5%8D%8A%E8%BF%9E%E6%8E%A5%E4%B8%8E%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'TCP半连接与全连接',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-04-26 23:07:10'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">17</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/work.png')"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">TCP半连接与全连接</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-26T14:36:10.356Z" title="发表于 2024-04-26 22:36:10">2024-04-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-26T15:07:10.038Z" title="更新于 2024-04-26 23:07:10">2024-04-26</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Knowledge/">Knowledge</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="TCP半连接与全连接"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="TCP半连接与全连接"><a href="#TCP半连接与全连接" class="headerlink" title="TCP半连接与全连接"></a>TCP半连接与全连接</h1><h2 id="TCP三次握手内核动作"><a href="#TCP三次握手内核动作" class="headerlink" title="TCP三次握手内核动作"></a>TCP三次握手内核动作</h2><ul>
+<li><code>listen()</code>会初始化半连接队列</li>
+<li><code>connect()</code>发送SYN请求，server对半连接队列进行溢出判断(<strong>后面会详细讲解</strong>)，没有溢出发送SYN+ACK包；client收到后发送ACK包；Server创建新的sock，从半连接队列中删除，同时将新建的sock加入全连接队列</li>
+<li><code>accept()</code>就是从全连接队列中取出一个文件描述符</li>
+</ul>
+<p><img src="/img/TCP/TCP1.png"></p>
+<h2 id="半连接队列和全连接队列"><a href="#半连接队列和全连接队列" class="headerlink" title="半连接队列和全连接队列"></a>半连接队列和全连接队列</h2><ul>
+<li>半连接队列，SYN队列</li>
+<li>全连接队列，accept队列</li>
+</ul>
+<p>不管是半连接队列还是全连接队列，都有最大长度限制，超过限制时，内核会直接丢弃，或返回 RST 包。</p>
+<h2 id="TCP全连接队列情况"><a href="#TCP全连接队列情况" class="headerlink" title="TCP全连接队列情况"></a>TCP全连接队列情况</h2><ul>
+<li>使用<code>ss -lnt</code>查看TCP全连接队列情况</li>
+<li>LISTEN状态下<ul>
+<li>Recv-Q：当前全连接队列的大小，也就是当前已完成三次握手并等待服务端 <code>accept()</code> 的 TCP 连接；</li>
+<li>Send-Q：当前全连接最大队列长度</li>
+</ul>
+</li>
+<li>非LISTEN状态下<ul>
+<li>Recv-Q：已收到但未被应用进程读取的字节数；</li>
+<li>Send-Q：已发送但未收到确认的字节数；</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/TCP/TCP2.png"></p>
+<h3 id="溢出"><a href="#溢出" class="headerlink" title="溢出"></a>溢出</h3><ul>
+<li><p>溢出后的策略由<code>tcp_abort_on_overflow </code>设置</p>
+<ul>
+<li>0 ：如果全连接队列满了，那么 server 扔掉 client 发过来的 ACK ；</li>
+<li>1 ：如果全连接队列满了，server 发送一个 <code>RST</code> 包给 client，表示废掉这个握手过程和这个连接；</li>
+</ul>
+</li>
+<li><p><strong>当超过了 TCP 最大全连接队列，服务端默认则会丢掉后续进来的 TCP 连接</strong>，可以使用<code>netstate -s</code>查看<code>overflowed</code>的条目</p>
+</li>
+</ul>
+<h3 id="设置全连接队列最大值"><a href="#设置全连接队列最大值" class="headerlink" title="设置全连接队列最大值"></a>设置全连接队列最大值</h3><ul>
+<li><strong>TCP 全连接队列的最大值取决于 somaxconn 和 backlog 之间的最小值，也就是 min(somaxconn, backlog)</strong></li>
+</ul>
+<h2 id="TCP半连接队列"><a href="#TCP半连接队列" class="headerlink" title="TCP半连接队列"></a>TCP半连接队列</h2><h3 id="查看半连接队列"><a href="#查看半连接队列" class="headerlink" title="查看半连接队列"></a>查看半连接队列</h3><ul>
+<li><code>netstat -natp | grep SYN_RECV</code></li>
+</ul>
+<h3 id="溢出-1"><a href="#溢出-1" class="headerlink" title="溢出"></a>溢出</h3><ul>
+<li>服务端有大量的处于 <code>SYN_RECV</code> 状态的 TCP 连接。</li>
+<li>查看溢出<code>netstat -s | grep &quot;SYNs to LISTEN&quot;</code></li>
+<li>溢出条件<ul>
+<li><strong>如果半连接队列满了，并且没有开启 tcp_syncookies，则会丢弃；</strong></li>
+<li><strong>若全连接队列满了，且没有重传 SYN+ACK 包的连接请求多于 1 个，则会丢弃；</strong></li>
+<li><strong>如果没有开启 tcp_syncookies，并且 max_syn_backlog 减去 当前半连接队列长度小于 (max_syn_backlog &gt;&gt; 2)，则会丢弃；</strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="设置半连接队列最大值"><a href="#设置半连接队列最大值" class="headerlink" title="设置半连接队列最大值"></a>设置半连接队列最大值</h3><ul>
+<li><p>半连接队列的最大值<code>1 &lt;&lt; max_qlen_log</code>，在申请队列时确定</p>
+</li>
+<li><p>Linux5.0.0:<strong>「理论」</strong>半连接最大值就是全连接队列最大值</p>
+<ul>
+<li>由于没有开启 tcp_syncookies， max_syn_backlog 减去当前半连接队列长度小于 (max_syn_backlog &gt;&gt; 2)，客户端发送的ACK包会丢弃；实际的半连接最大值要小于理论值</li>
+</ul>
+</li>
+</ul>
+<h3 id="syncookies"><a href="#syncookies" class="headerlink" title="syncookies"></a><strong>syncookies</strong></h3><ul>
+<li>不使用SYN半连接队列，与服务器建立连接<ul>
+<li>服务器根据当前状态计算出一个值，放在己方发出的 SYN+ACK 报文中发出</li>
+<li>当客户端返回 ACK 报文时，取出该值验证，如果合法，就认为连接建立成功</li>
+</ul>
+</li>
+</ul>
+<h3 id="防御SYN攻击方法"><a href="#防御SYN攻击方法" class="headerlink" title="防御SYN攻击方法"></a>防御SYN攻击方法</h3><ul>
+<li>增大半连接队列；<ul>
+<li><strong>增大 tcp_max_syn_backlog 的值，还需一同增大 somaxconn 和 backlog，也就是增大全连接队列</strong>。</li>
+</ul>
+</li>
+<li>开启 tcp_syncookies 功能</li>
+<li>减少 SYN+ACK 重传次数</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2024/04/26/TCP/TCP%E5%8D%8A%E8%BF%9E%E6%8E%A5%E4%B8%8E%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97/">http://tom-jerr.github.io/2024/04/26/TCP/TCP%E5%8D%8A%E8%BF%9E%E6%8E%A5%E4%B8%8E%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">LZY的Code生活</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/TCP/">TCP</a></div><div class="post_share"><div class="social-share" data-image="/img/work.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/04/27/TCP/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" title="TCP三次握手与四次挥手"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">TCP三次握手与四次挥手</div></div></a></div><div class="next-post pull-right"><a href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">TimesharingOS</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/04/22/CS144/CS144/" title="CS144-TCP协议简单实现"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-22</div><div class="title">CS144-TCP协议简单实现</div></div></a></div><div><a href="/2024/04/27/TCP/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" title="TCP三次握手与四次挥手"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-27</div><div class="title">TCP三次握手与四次挥手</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">17</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">14</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">即将进入研究生生涯，珍惜最后的大学时光</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP%E5%8D%8A%E8%BF%9E%E6%8E%A5%E4%B8%8E%E5%85%A8%E8%BF%9E%E6%8E%A5"><span class="toc-number">1.</span> <span class="toc-text">TCP半连接与全连接</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E5%86%85%E6%A0%B8%E5%8A%A8%E4%BD%9C"><span class="toc-number">1.1.</span> <span class="toc-text">TCP三次握手内核动作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%8A%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97%E5%92%8C%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97"><span class="toc-number">1.2.</span> <span class="toc-text">半连接队列和全连接队列</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97%E6%83%85%E5%86%B5"><span class="toc-number">1.3.</span> <span class="toc-text">TCP全连接队列情况</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%A2%E5%87%BA"><span class="toc-number">1.3.1.</span> <span class="toc-text">溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97%E6%9C%80%E5%A4%A7%E5%80%BC"><span class="toc-number">1.3.2.</span> <span class="toc-text">设置全连接队列最大值</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP%E5%8D%8A%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97"><span class="toc-number">1.4.</span> <span class="toc-text">TCP半连接队列</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%8D%8A%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97"><span class="toc-number">1.4.1.</span> <span class="toc-text">查看半连接队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%A2%E5%87%BA-1"><span class="toc-number">1.4.2.</span> <span class="toc-text">溢出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E5%8D%8A%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97%E6%9C%80%E5%A4%A7%E5%80%BC"><span class="toc-number">1.4.3.</span> <span class="toc-text">设置半连接队列最大值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#syncookies"><span class="toc-number">1.4.4.</span> <span class="toc-text">syncookies</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E5%BE%A1SYN%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95"><span class="toc-number">1.4.5.</span> <span class="toc-text">防御SYN攻击方法</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/04/27/linux/%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF/" title="Zero Copy"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Zero Copy"/></a><div class="content"><a class="title" href="/2024/04/27/linux/%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF/" title="Zero Copy">Zero Copy</a><time datetime="2024-04-27T10:30:00.000Z" title="发表于 2024-04-27 18:30:00">2024-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/27/TCP/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" title="TCP三次握手与四次挥手"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TCP三次握手与四次挥手"/></a><div class="content"><a class="title" href="/2024/04/27/TCP/TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%E4%B8%8E%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B/" title="TCP三次握手与四次挥手">TCP三次握手与四次挥手</a><time datetime="2024-04-27T09:55:49.434Z" title="发表于 2024-04-27 17:55:49">2024-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/26/TCP/TCP%E5%8D%8A%E8%BF%9E%E6%8E%A5%E4%B8%8E%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97/" title="TCP半连接与全连接"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TCP半连接与全连接"/></a><div class="content"><a class="title" href="/2024/04/26/TCP/TCP%E5%8D%8A%E8%BF%9E%E6%8E%A5%E4%B8%8E%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%98%9F%E5%88%97/" title="TCP半连接与全连接">TCP半连接与全连接</a><time datetime="2024-04-26T14:36:10.356Z" title="发表于 2024-04-26 22:36:10">2024-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="TimesharingOS"/></a><div class="content"><a class="title" href="/2024/04/23/Rust/TimeSharingOS/" title="TimesharingOS">TimesharingOS</a><time datetime="2024-04-23T15:09:05.623Z" title="发表于 2024-04-23 23:09:05">2024-04-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hash Index -- CMU15445"/></a><div class="content"><a class="title" href="/2024/04/23/CMU15445/Hash%20Index/" title="Hash Index -- CMU15445">Hash Index -- CMU15445</a><time datetime="2024-04-23T14:18:32.877Z" title="发表于 2024-04-23 22:18:32">2024-04-23</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
