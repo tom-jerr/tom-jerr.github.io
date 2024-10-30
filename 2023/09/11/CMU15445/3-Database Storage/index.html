@@ -1,0 +1,361 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>3_Database_Storage I | LZY的Code生活</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="3-Database Storage I 1 DISK-BASED ARCHITECTURE  易失性存储和非易失性存储相结合 Volatile：Random Access Byte-Addressable （DRAM 之上） Non-Volatile：Sequential Access Block-Addressable（SSD 之下 ） SSD 以下只能按块来存取   顺序访问和随机访问  非">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3_Database_Storage I">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/09/11/CMU15445/3-Database%20Storage/index.html">
+<meta property="og:site_name" content="LZY的Code生活">
+<meta property="og:description" content="3-Database Storage I 1 DISK-BASED ARCHITECTURE  易失性存储和非易失性存储相结合 Volatile：Random Access Byte-Addressable （DRAM 之上） Non-Volatile：Sequential Access Block-Addressable（SSD 之下 ） SSD 以下只能按块来存取   顺序访问和随机访问  非">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/work.png">
+<meta property="article:published_time" content="2023-09-11T14:17:49.000Z">
+<meta property="article:modified_time" content="2024-10-30T16:51:22.689Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="CMU15445">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/work.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2023/09/11/CMU15445/3-Database%20Storage/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '3_Database_Storage I',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-31 00:51:22'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/work.png')"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">3_Database_Storage I</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-30T16:51:22.689Z" title="更新于 2024-10-31 00:51:22">2024-10-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/DB/">DB</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="3_Database_Storage I"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>3-Database Storage I</h1>
+<h2 id="1-DISK-BASED-ARCHITECTURE">1 DISK-BASED ARCHITECTURE</h2>
+<ul>
+<li>易失性存储和非易失性存储相结合</li>
+<li>Volatile：Random Access Byte-Addressable （DRAM 之上）</li>
+<li>Non-Volatile：Sequential Access Block-Addressable（SSD 之下 ）</li>
+<li>SSD 以下只能按块来存取</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/storage.png" alt=""></p>
+<h3 id="顺序访问和随机访问">顺序访问和随机访问</h3>
+<ul>
+<li>非易失性存储中顺序访问比随机访问快得多</li>
+<li>一般数据存储在连续的块中，同时分配多个物理页叫区</li>
+</ul>
+<h2 id="2-DBMS-设计目标">2 DBMS 设计目标</h2>
+<ul>
+<li>允许管理比可用内存大的数据库</li>
+<li>读写磁盘代价高昂，尽可能避免大的停顿和性能下降</li>
+<li>DBMS 希望最大化顺序读写</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/DBMS_DISK.png" alt=""></p>
+<h2 id="3-为什么不使用-OS">3 为什么不使用 OS</h2>
+<ul>
+<li>
+<p>The DBMS can use memory mapping (<strong>mmap</strong>) to store the contents of a file into the address space of a program.</p>
+</li>
+<li>
+<p>The OS is responsible for moving the pages of the file in and out of memory, so the DBMS doesn’t need to worry about it.</p>
+</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/mmap.png" alt=""></p>
+<h3 id="使用-OS-可能出现问题">使用 OS 可能出现问题</h3>
+<ul>
+<li>如果此时物理内存已经占满，需要淘汰一个物理页，造成阻塞</li>
+<li>多线程并发读写可能出现问题</li>
+<li>错误处理</li>
+<li>性能问题：OS 的结构成为性能瓶颈</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/MMAP_PRO.png" alt=""></p>
+<h3 id="OS-解决方案">OS 解决方案</h3>
+<ul>
+<li>按正确的顺序将脏页刷新到磁盘中</li>
+<li>特殊的预缓存情况，这样执行器就不用等待特定的页加载到缓冲池中</li>
+<li>缓冲替换策略</li>
+<li>线程、进程调度</li>
+</ul>
+<h2 id="4-File-Storage">4 File Storage</h2>
+<ul>
+<li>
+<p>Table 可以看为是 tuple 的集合，在磁盘中与之对应的单位是文件。一个文件中会保存多个 page，而 page 中会存储多个 tuple。</p>
+</li>
+<li>
+<p>DBMS 在磁盘上，用一个或多个文件，以特定的格式存储数据库</p>
+<ul>
+<li>OS 不关心也不知道这些文件的内容</li>
+</ul>
+</li>
+<li>
+<p>1980 年代的 一些 DBMS 在原始存储（Raw Storage）上使用自定义的文件系统</p>
+<ul>
+<li>现在的一些商业 DBMS 还在这么干</li>
+<li>大多数新出来的 DBMS 不这么做了</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-1-storage-manager">4.1 storage manager</h3>
+<ul>
+<li>调度读写操作提高空间和时间局部性</li>
+<li>将文件组织成页的集合
+<ul>
+<li>跟踪已经读和写的页</li>
+<li>跟踪空闲页</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-2-Database-Pages">4.2 Database Pages</h3>
+<p>因为数据库文件可能很大，需要切分成多个块</p>
+<ul>
+<li>
+<p>一页是很多个 block 组成的集合</p>
+<ul>
+<li>页里可能存着元组、元数据、索引、日志记录…</li>
+<li>大多数系统对于页的使用都是固定的，比如存储索引的页不会用来存数据</li>
+<li>大多数系统需要页是自组织（self-contained）的，也就是说页的 Header 里标识了这个页的类型</li>
+</ul>
+</li>
+<li>
+<p>每个页都有一个独特的标识符</p>
+<ul>
+<li>DBMS 使用非直接的层来把 page id 映射到物理位置硬盘页</li>
+<li>最小能保证原子操作的单位</li>
+</ul>
+</li>
+</ul>
+<h4 id="不同的页概念">不同的页概念</h4>
+<ul>
+<li>
+<p>硬件页（如坏块）：4KB</p>
+</li>
+<li>
+<p>操作系统页（一般为 4kb）操作系统读写硬盘的最小单位</p>
+</li>
+<li>
+<p>数据库页（512b ~ 16kb）</p>
+</li>
+</ul>
+<h3 id="4-3-Page-Storage-Architecture">4.3 Page Storage Architecture</h3>
+<ul>
+<li>heap file organization</li>
+<li>tree file organization</li>
+<li>sequential/sorted file organization (ISAM)</li>
+<li>hashing file organization</li>
+</ul>
+<h4 id="heap-file">heap file</h4>
+<ul>
+<li>无序存放页，容易寻找单个文件</li>
+<li>可以 create, get, write, delete 页</li>
+<li>必须支持迭代所有的页</li>
+</ul>
+<h4 id="实现方式">实现方式</h4>
+<ul>
+<li>
+<p><strong>page directory</strong> (设置一页为 directory)</p>
+<ul>
+<li>pagedirectory 和 data page 要同步更新</li>
+<li>The directory also records meta-data about available space:<br>
+→ The number of free slots per page.<br>
+→ List of free / empty pages</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/page-dic.png" alt=""></p>
+</li>
+<li>
+<p><strong>linked list</strong></p>
+<ul>
+<li>一个 header page，维护两个链表头节点；free page list, data page list</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/linked-list.png" alt=""></p>
+</li>
+</ul>
+<h3 id="4-4-page-layout">4.4 page layout</h3>
+<h4 id="page-header">page header</h4>
+<ul>
+<li>page 内容的元信息
+<ul>
+<li>page size</li>
+<li>checknum（页的校验和）</li>
+<li>DBMS version</li>
+<li>Transaction Visibility（并发是否锁住该页）</li>
+<li>Compression Information（压缩信息）</li>
+</ul>
+</li>
+</ul>
+<h4 id="data-inside-of-the-page">data inside of the page</h4>
+<ul>
+<li>tuple-oriented</li>
+<li>Log-strctured</li>
+</ul>
+<h5 id="1-tuple-storage-in-page">1 tuple storage in page</h5>
+<ul>
+<li>Keep track of the number of tuples in a page and then just append a new tuple to the end.</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/tuple.png" alt=""></p>
+<ul>
+<li>上图所示的是一种朴素的做法，类似数组的方式去存储，header 维护一个数组的信息。</li>
+<li>主要问题：删除时产生内存碎片，文件的不连续等等（如果是<strong>变长的 tuple</strong> 将会有更多问题），tuple 的查找也是一个很大的开销</li>
+</ul>
+<h5 id="2-slotted-pages（页槽）">2 slotted pages（页槽）</h5>
+<ul>
+<li>将特定 slot 映射到 page 某个特定偏移量上的数据结构，这样一个元组就是由一个 page id 和 slot id 来唯一定位，并且 tuple 是倒序存储的。这样当然可能会在中间有部分数据的浪费，但是为了支持变长的元素我们不得不这么做。当然，有办法去应对，<strong>可以去整理或者压缩</strong></li>
+<li>header keeps track of
+<ul>
+<li>used slots</li>
+<li>the offset of the starting location of the last slot used</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/slotted_pages.png" alt=""></p>
+<ul>
+<li>每个 tuple 需要一个独一无二的记录号：page_id + offset/slot</li>
+<li>用户不能使用 record ID 来使用</li>
+</ul>
+<h3 id="4-5-tuple-layout">4.5 tuple layout</h3>
+<ul>
+<li>tuple 是磁盘上的二进制流数据</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/tuple2.png" alt=""></p>
+<ul>
+<li>header contaions meta-data about tuple
+<ul>
+<li>visibility info (concurrency control)</li>
+<li>Bit Map for <strong>NULL</strong> values</li>
+</ul>
+</li>
+<li>存储数据无分隔符，需要记录 NULL 信息</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/tuple3.png" alt=""></p>
+<h4 id="denormalized-tuple-data">denormalized tuple data</h4>
+<ul>
+<li>物理存储上反规范化，将有关联的元组存储在同一页上；相当于提前将表关联 join</li>
+<li>减少 IO 数量</li>
+<li>更新的代价巨大</li>
+</ul>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/denormalize.png" alt=""></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/denormalize1.png" alt=""></p>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/denormalize2.png" alt=""></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2023/09/11/CMU15445/3-Database%20Storage/">http://tom-jerr.github.io/2023/09/11/CMU15445/3-Database%20Storage/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">LZY的Code生活</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CMU15445/">CMU15445</a></div><div class="post_share"><div class="social-share" data-image="/img/work.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2023/09/15/CMU15445/4-Database_Storage_II/" title="4_Database_Storage II"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">4_Database_Storage II</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">11 Query Execution</div></div></a></div><div><a href="/2024/10/31/CMU15445/12-Query_Plan&Optimization/" title="12 Query Planning and Optimization"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">12 Query Planning and Optimization</div></div></a></div><div><a href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">10-Join Algorithm</div></div></a></div><div><a href="/2024/10/31/CMU15445/13-Concurrency_Control_Theory/" title="13 Concurrency Control Theory"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">13 Concurrency Control Theory</div></div></a></div><div><a href="/2024/10/31/CMU15445/15-Timestamp_Ordering_Concurrency/" title="15 Timestamp Ordering Concurrency Control"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">15 Timestamp Ordering Concurrency Control</div></div></a></div><div><a href="/2024/10/31/CMU15445/16-Mult-Version_Concurrency/" title="16 Multi-Version Concurrency"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">16 Multi-Version Concurrency</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">即将进入研究生生涯，珍惜最后的大学时光</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">3-Database Storage I</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-DISK-BASED-ARCHITECTURE"><span class="toc-number">1.1.</span> <span class="toc-text">1 DISK-BASED ARCHITECTURE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%BA%E5%BA%8F%E8%AE%BF%E9%97%AE%E5%92%8C%E9%9A%8F%E6%9C%BA%E8%AE%BF%E9%97%AE"><span class="toc-number">1.1.1.</span> <span class="toc-text">顺序访问和随机访问</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-DBMS-%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.</span> <span class="toc-text">2 DBMS 设计目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E4%BD%BF%E7%94%A8-OS"><span class="toc-number">1.3.</span> <span class="toc-text">3 为什么不使用 OS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-OS-%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E9%97%AE%E9%A2%98"><span class="toc-number">1.3.1.</span> <span class="toc-text">使用 OS 可能出现问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OS-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">1.3.2.</span> <span class="toc-text">OS 解决方案</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-File-Storage"><span class="toc-number">1.4.</span> <span class="toc-text">4 File Storage</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-storage-manager"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 storage manager</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-Database-Pages"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 Database Pages</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E7%9A%84%E9%A1%B5%E6%A6%82%E5%BF%B5"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">不同的页概念</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-Page-Storage-Architecture"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 Page Storage Architecture</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#heap-file"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">heap file</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">实现方式</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-page-layout"><span class="toc-number">1.4.4.</span> <span class="toc-text">4.4 page layout</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#page-header"><span class="toc-number">1.4.4.1.</span> <span class="toc-text">page header</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#data-inside-of-the-page"><span class="toc-number">1.4.4.2.</span> <span class="toc-text">data inside of the page</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-tuple-storage-in-page"><span class="toc-number">1.4.4.2.1.</span> <span class="toc-text">1 tuple storage in page</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-slotted-pages%EF%BC%88%E9%A1%B5%E6%A7%BD%EF%BC%89"><span class="toc-number">1.4.4.2.2.</span> <span class="toc-text">2 slotted pages（页槽）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-tuple-layout"><span class="toc-number">1.4.5.</span> <span class="toc-text">4.5 tuple layout</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#denormalized-tuple-data"><span class="toc-number">1.4.5.1.</span> <span class="toc-text">denormalized tuple data</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题">无题</a><time datetime="2024-10-30T16:37:18.218Z" title="发表于 2024-10-31 00:37:18">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="11 Query Execution"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution">11 Query Execution</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="12 Query Planning and Optimization"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization">12 Query Planning and Optimization</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="10-Join Algorithm"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm">10-Join Algorithm</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/13-Concurrency_Control_Theory/" title="13 Concurrency Control Theory"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="13 Concurrency Control Theory"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/13-Concurrency_Control_Theory/" title="13 Concurrency Control Theory">13 Concurrency Control Theory</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>17 Database Logging | LZY的Code生活</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Database Logging Crash Recovery  Actions during normal txn processing to ensure that the DBMS can recover from a failure Actions after a failure to recovver the database to a state that ensures atomic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="17 Database Logging">
+<meta property="og:url" content="http://tom-jerr.github.io/2024/10/31/CMU15445/17-Database_Logging/index.html">
+<meta property="og:site_name" content="LZY的Code生活">
+<meta property="og:description" content="Database Logging Crash Recovery  Actions during normal txn processing to ensure that the DBMS can recover from a failure Actions after a failure to recovver the database to a state that ensures atomic">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/work.png">
+<meta property="article:published_time" content="2024-10-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-10-30T16:50:20.000Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="CMU15445">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/work.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2024/10/31/CMU15445/17-Database_Logging/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '17 Database Logging',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-10-31 00:50:20'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/work.png')"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">17 Database Logging</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-10-30T16:50:20.000Z" title="更新于 2024-10-31 00:50:20">2024-10-31</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/DB/">DB</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="17 Database Logging"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>Database Logging</h1>
+<h2 id="Crash-Recovery">Crash Recovery</h2>
+<ol>
+<li>Actions during normal txn processing to ensure that the DBMS can recover from a failure</li>
+<li>Actions after a failure to recovver the database to a state that ensures atomicity, consistency, and durability</li>
+</ol>
+<h2 id="Failure-Classification">Failure Classification</h2>
+<h3 id="Transaction-Failures">Transaction Failures</h3>
+<ol>
+<li>Logical Errors: 事务因为一些内部原因没有完成（完整性约束失效）</li>
+<li>Internal State Errors: DBMS 必须终止一个活跃的事务因为一个错误的条件（死锁）</li>
+</ol>
+<h3 id="System-Failures">System Failures</h3>
+<ol>
+<li>Software Failure: OS 或者 DBMS 实现的错误</li>
+<li>Hardware Failure:
+<blockquote>
+<p>the computer hosting the DBMS crahsed(电源线被拉了)<br>
+Fail-stop Assumption: 非易失性存储的内容被假设不会被 system crash 破坏</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="Storage-Media-Failures">Storage Media Failures</h3>
+<p>Non-Repairable（无法修复的） Hardware Failure</p>
+<ol>
+<li>head crash 或者相似的磁盘 failure 破坏了所有或者部分的 non-volatile storage</li>
+<li>重建被假设可以被 detectable(磁盘控制器使用校验和来检测错误)</li>
+</ol>
+<p><strong><em>数据库不能从这种错误中恢复数据</em></strong></p>
+<h2 id="UNDO-VS-REDO">UNDO VS. REDO</h2>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/undo_redo.png" alt=""></p>
+<h3 id="Steal-Policy">Steal Policy</h3>
+<blockquote>
+<p>似乎否允许 DBMS 允许一个未提交的事务覆盖最近提交的数据</p>
+</blockquote>
+<p>Steal: is allowed<br>
+No-steal: is not allowed</p>
+<h3 id="Force-Policy">Force Policy</h3>
+<blockquote>
+<p>是否一个 DBMS 要求事务的所有更新都在事务提交之前反应到 non-valaile 存储中</p>
+</blockquote>
+<p>Force: is required<br>
+NO-force: is not required</p>
+<h3 id="Combination">Combination</h3>
+<h4 id="NO-STEAL-FORCE">NO-STEAL + FORCE</h4>
+<blockquote>
+<p>不必 undo，因为改变还未写入磁盘；<br>
+不必 redo，因为所有的改变在提交时已经确保写入磁盘</p>
+</blockquote>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/nosteal_force.png" alt=""></p>
+<blockquote>
+<p>Shadow Paging 实际上在副本上进行修改，事务 commit 后，将 master 清空并将 shadow 作为新的 master</p>
+</blockquote>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/Shadow_paging1.png" alt=""><br>
+<img src="https://github.com/tom-jerr/MyblogImg/blob/15445/Shadow_paging_example.png" alt=""></p>
+<h4 id="STEAL-NO-FORCE">STEAL + NO-FORCE</h4>
+<blockquote>
+<p>维护一个 log 包含了事务对数据库的改变</p>
+</blockquote>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/WAL.png" alt=""><br>
+<img src="https://github.com/tom-jerr/MyblogImg/blob/15445/WAL2.png" alt=""></p>
+<h2 id="WAL-PROTOCOL">WAL PROTOCOL</h2>
+<blockquote>
+<p>在数据写入磁盘前，对数据进行操作的日志必须先落盘</p>
+</blockquote>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/WAL_PROTOCOL.png" alt=""></p>
+<blockquote>
+<p>每次事务提交需要等待 log 落盘，这可能会成为瓶颈；所以 DBMS 使用 group commit optimization 来 batch multiple log flushed；这会提高吞吐量</p>
+<ol>
+<li>如果 buffer 满了，写磁盘</li>
+<li>如果超时了，写磁盘（5ms）</li>
+</ol>
+</blockquote>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/WAL_PROTOCOL2.png" alt=""><br>
+<img src="https://github.com/tom-jerr/MyblogImg/blob/15445/group_commit.png" alt=""></p>
+<h2 id="Logging-Schemes">Logging Schemes</h2>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/logging_schemes.png" alt=""></p>
+<blockquote>
+<p>逻辑日志需要重新执行语句，成本过于高昂；Physiological 在页级别是物理的，但是页内部只记录修改的数据</p>
+</blockquote>
+<p><img src="https://github.com/tom-jerr/MyblogImg/blob/15445/logging_schemes2.png" alt=""><br>
+<img src="https://github.com/tom-jerr/MyblogImg/blob/15445/physical_logical_logging.png" alt=""></p>
+<h2 id="Checkpoints">Checkpoints</h2>
+<blockquote>
+<p>多频繁地进行检查点的设置是一个 tradeoff</p>
+</blockquote>
+<h3 id="Blocking-Consistent-Checkpoint-Protocol">Blocking/Consistent Checkpoint Protocol</h3>
+<ol>
+<li>暂停所有查询</li>
+<li>将所有的 WAL 记录落盘</li>
+<li>将所有在 Buffer Pool 中的更改的页落盘</li>
+<li>在 WAL 中写入<CHEKCKPOINT>并落盘</li>
+<li>恢复查询</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2024/10/31/CMU15445/17-Database_Logging/">http://tom-jerr.github.io/2024/10/31/CMU15445/17-Database_Logging/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">LZY的Code生活</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CMU15445/">CMU15445</a></div><div class="post_share"><div class="social-share" data-image="/img/work.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/10/31/CMU15445/14-Two_Phase_Lock/" title="14 Two Phase Lock"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">14 Two Phase Lock</div></div></a></div><div class="next-post pull-right"><a href="/2024/10/31/CMU15445/19-Introducd_to_distributed_database/" title="19 Introduction to distributed database"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">19 Introduction to distributed database</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">11 Query Execution</div></div></a></div><div><a href="/2024/10/31/CMU15445/12-Query_Plan&Optimization/" title="12 Query Planning and Optimization"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">12 Query Planning and Optimization</div></div></a></div><div><a href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">10-Join Algorithm</div></div></a></div><div><a href="/2024/10/31/CMU15445/13-Concurrency_Control_Theory/" title="13 Concurrency Control Theory"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">13 Concurrency Control Theory</div></div></a></div><div><a href="/2024/10/31/CMU15445/15-Timestamp_Ordering_Concurrency/" title="15 Timestamp Ordering Concurrency Control"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">15 Timestamp Ordering Concurrency Control</div></div></a></div><div><a href="/2024/10/31/CMU15445/16-Mult-Version_Concurrency/" title="16 Multi-Version Concurrency"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-10-31</div><div class="title">16 Multi-Version Concurrency</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">即将进入研究生生涯，珍惜最后的大学时光</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Database Logging</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Crash-Recovery"><span class="toc-number">1.1.</span> <span class="toc-text">Crash Recovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Failure-Classification"><span class="toc-number">1.2.</span> <span class="toc-text">Failure Classification</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Transaction-Failures"><span class="toc-number">1.2.1.</span> <span class="toc-text">Transaction Failures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#System-Failures"><span class="toc-number">1.2.2.</span> <span class="toc-text">System Failures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Storage-Media-Failures"><span class="toc-number">1.2.3.</span> <span class="toc-text">Storage Media Failures</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UNDO-VS-REDO"><span class="toc-number">1.3.</span> <span class="toc-text">UNDO VS. REDO</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Steal-Policy"><span class="toc-number">1.3.1.</span> <span class="toc-text">Steal Policy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Force-Policy"><span class="toc-number">1.3.2.</span> <span class="toc-text">Force Policy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Combination"><span class="toc-number">1.3.3.</span> <span class="toc-text">Combination</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#NO-STEAL-FORCE"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">NO-STEAL + FORCE</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#STEAL-NO-FORCE"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">STEAL + NO-FORCE</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WAL-PROTOCOL"><span class="toc-number">1.4.</span> <span class="toc-text">WAL PROTOCOL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Logging-Schemes"><span class="toc-number">1.5.</span> <span class="toc-text">Logging Schemes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Checkpoints"><span class="toc-number">1.6.</span> <span class="toc-text">Checkpoints</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Blocking-Consistent-Checkpoint-Protocol"><span class="toc-number">1.6.1.</span> <span class="toc-text">Blocking&#x2F;Consistent Checkpoint Protocol</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题">无题</a><time datetime="2024-10-30T16:37:18.218Z" title="发表于 2024-10-31 00:37:18">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="11 Query Execution"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution">11 Query Execution</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="12 Query Planning and Optimization"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization">12 Query Planning and Optimization</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="10-Join Algorithm"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm">10-Join Algorithm</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/13-Concurrency_Control_Theory/" title="13 Concurrency Control Theory"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="13 Concurrency Control Theory"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/13-Concurrency_Control_Theory/" title="13 Concurrency Control Theory">13 Concurrency Control Theory</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

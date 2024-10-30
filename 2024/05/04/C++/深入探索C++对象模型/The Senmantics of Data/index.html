@@ -1,0 +1,242 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>The Senmantics of Data | LZY的Code生活</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="深度探索C++对象chapter 3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Senmantics of Data">
+<meta property="og:url" content="http://tom-jerr.github.io/2024/05/04/C++/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/The%20Senmantics%20of%20Data/index.html">
+<meta property="og:site_name" content="LZY的Code生活">
+<meta property="og:description" content="深度探索C++对象chapter 3">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/work.png">
+<meta property="article:published_time" content="2024-05-04T11:48:47.999Z">
+<meta property="article:modified_time" content="2024-05-08T05:31:15.033Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/work.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2024/05/04/C++/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/The%20Senmantics%20of%20Data/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'The Senmantics of Data',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-05-08 13:31:15'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/work.png')"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">The Senmantics of Data</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-05-04T11:48:47.999Z" title="发表于 2024-05-04 19:48:47">2024-05-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-05-08T05:31:15.033Z" title="更新于 2024-05-08 13:31:15">2024-05-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Knowledge/">Knowledge</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="The Senmantics of Data"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="The-Senmantics-of-Data"><a href="#The-Senmantics-of-Data" class="headerlink" title="The Senmantics of Data"></a>The Senmantics of Data</h1><h2 id="类大小的计算"><a href="#类大小的计算" class="headerlink" title="类大小的计算"></a>类大小的计算</h2><ul>
+<li>类大小的计算，遵循结构体的对齐原则；</li>
+<li>类的大小，与普通数据成员有关，与成员函数和静态成员无关。即普通成员函数、静态成员函数、静态数据成员、静态常量数据成员，均对类的大小无影响；</li>
+<li>虚函数对类的大小有影响，是因为<strong>虚函数表指针</strong>带来的影响；</li>
+<li>虚继承对类的大小有影响，是因为<strong>虚基表指针</strong>带来的影响；</li>
+<li>静态数据成员之所以不计算在类的对象大小内，是因为类的静态数据成员被该类所有的对象所共享，并不属于具体哪个对象，静态数据成员定义在内存的全局区；</li>
+</ul>
+<h3 id="空类大小"><a href="#空类大小" class="headerlink" title="空类大小"></a>空类大小</h3><ul>
+<li>C++的空类是指这个类不带任何数据，即类中没有非静态(non-static)数据成员变量，没有虚函数(virtual function)，也没有虚基类(virtual base class)。</li>
+<li>C++标准指出，不允许一个对象（当然包括类对象）的大小为0，不同的对象不能具有相同的地址。<ul>
+<li>new需要分配不同的内存地址，不能分配内存大小为0的空间；</li>
+<li>避免除以 sizeof(T)时得到除以0错误；</li>
+</ul>
+</li>
+<li>计算结果1。<ul>
+<li>第一种情况，<strong>空类的继承</strong>：当派生类继承空类后，派生类如果有自己的数据成员，而空基类的一个字节并不会加到派生类中去。sizeof(D)为4。</li>
+<li>第二种情况，<strong>一个类包含一个空类对象数据成员</strong>：sizeof(HoldsAnInt)为8。在这种情况下，空类的1字节是会被计算进去的。而又由于字节对齐的原则，所以结果为4+4&#x3D;8。</li>
+<li><strong>继承空类的派生类</strong>，如果派生类也为空类，大小也都为1。</li>
+</ul>
+</li>
+</ul>
+<h3 id="含有虚函数的类"><a href="#含有虚函数的类" class="headerlink" title="含有虚函数的类"></a>含有虚函数的类</h3><ul>
+<li><strong>所以可以认为VTABLE是该类的所有对象共有的，在定义该类时被初始化；而VPTR则是每个类对象都有独立一份的，且在该类对象被构造时被初始化。</strong></li>
+</ul>
+<h3 id="基类含有虚函数的继承"><a href="#基类含有虚函数的继承" class="headerlink" title="基类含有虚函数的继承"></a>基类含有虚函数的继承</h3><p>1）虚函数按照其声明顺序放于表中。</p>
+<p>2）基类的虚函数在派生类的虚函数前面。</p>
+<p>1）覆盖的f()函数被放到了虚表中原来基类虚函数的位置；</p>
+<p>2）没有被覆盖的函数依旧；</p>
+<p>3）<strong>派生类的大小仍是基类和派生类的非静态数据成员的大小+一个vptr指针的大小；</strong></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span>    </span><br><span class="line">&#123;    </span><br><span class="line">&#125;;   </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span>    </span><br><span class="line">&#123; </span><br><span class="line">    <span class="type">char</span> ch;    </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func0</span><span class="params">()</span>  </span>&#123;  &#125;  </span><br><span class="line">&#125;;  </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span>   </span><br><span class="line">&#123; </span><br><span class="line">    <span class="type">char</span> ch1; </span><br><span class="line">    <span class="type">char</span> ch2; </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func</span><span class="params">()</span>  </span>&#123;  &#125;   </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func1</span><span class="params">()</span>  </span>&#123;  &#125;  </span><br><span class="line">&#125;; </span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">D</span>: <span class="keyword">public</span> A, <span class="keyword">public</span> C </span><br><span class="line">&#123;    </span><br><span class="line">    <span class="type">int</span> d;    </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func</span><span class="params">()</span>  </span>&#123;  &#125;  </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func1</span><span class="params">()</span>  </span>&#123;  &#125; </span><br><span class="line">&#125;;    </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">E</span>: <span class="keyword">public</span> B, <span class="keyword">public</span> C </span><br><span class="line">&#123;    </span><br><span class="line">    <span class="type">int</span> e;    </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func0</span><span class="params">()</span>  </span>&#123;  &#125;  </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func1</span><span class="params">()</span>  </span>&#123;  &#125; </span><br><span class="line">&#125;; </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span> </span></span><br><span class="line"><span class="function"></span>&#123; </span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;A=&quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(A)&lt;&lt;endl;    <span class="comment">//result=1 </span></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;B=&quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(B)&lt;&lt;endl;    <span class="comment">//result=16     </span></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;C=&quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(C)&lt;&lt;endl;    <span class="comment">//result=16 </span></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;D=&quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(D)&lt;&lt;endl;    <span class="comment">//result=16 </span></span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;E=&quot;</span>&lt;&lt;<span class="built_in">sizeof</span>(E)&lt;&lt;endl;    <span class="comment">//result=32 </span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="虚继承"><a href="#虚继承" class="headerlink" title="虚继承"></a>虚继承</h3><ul>
+<li>在这里，只说一下在gcc编译器下，虚继承大小的计算。它在gcc下实现比较简单，不管是否虚继承，GCC都是将虚表指针在整个继承关系中共享的，不共享的是指向虚基类的指针。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line"> </span><br><span class="line">    <span class="type">int</span> a;　<span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">myfuncA</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span>:<span class="keyword">virtual</span> <span class="keyword">public</span> A&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">myfunB</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"> </span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span>:<span class="keyword">virtual</span> <span class="keyword">public</span> A&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">myfunC</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"> </span><br><span class="line">&#125;;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">D</span>:<span class="keyword">public</span> B,<span class="keyword">public</span> C&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">myfunD</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"> </span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// sizeof(A)=16，sizeof(B)=24，sizeof(C)=24，sizeof(D)=32；</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>B，C中由于是虚继承，<strong>因此大小为A中成员大小加指向虚基类的指针的大小</strong>。</p>
+</li>
+<li><p>B,C虽然加入了自己的虚函数，但是虚表指针是和基类共享的，因此不会有自己的虚表指针，<strong>他们两个共用虚基类A的虚表指针</strong>。</p>
+</li>
+<li><p>D的大小使用GCC13.2布局为：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">Class D</span><br><span class="line">   size=<span class="number">32</span> align=<span class="number">8</span></span><br><span class="line">   base size=<span class="number">16</span> base align=<span class="number">8</span></span><br><span class="line"><span class="built_in">D</span> (<span class="number">0x0</span>x7f3b580201c0) <span class="number">0</span></span><br><span class="line">    vptridx=<span class="number">0</span> vptr=((&amp; D::_ZTV1D) + <span class="number">24</span>)</span><br><span class="line"><span class="built_in">B</span> (<span class="number">0x0</span>x7f3b58066d68) <span class="number">0</span> nearly-empty</span><br><span class="line">      primary-<span class="keyword">for</span> <span class="built_in">D</span> (<span class="number">0x0</span>x7f3b580201c0)</span><br><span class="line">      subvttidx=<span class="number">8</span></span><br><span class="line"><span class="built_in">A</span> (<span class="number">0x0</span>x7f3b580406c0) <span class="number">16</span> <span class="keyword">virtual</span></span><br><span class="line">        vptridx=<span class="number">40</span> vbaseoffset=<span class="number">-24</span> vptr=((&amp; D::_ZTV1D) + <span class="number">96</span>)</span><br><span class="line"><span class="built_in">C</span> (<span class="number">0x0</span>x7f3b58066dd0) <span class="number">8</span> nearly-empty</span><br><span class="line">      subvttidx=<span class="number">24</span> vptridx=<span class="number">48</span> vptr=((&amp; D::_ZTV1D) + <span class="number">64</span>)</span><br><span class="line"><span class="built_in">A</span> (<span class="number">0x0</span>x7f3b580406c0) alternative-path</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>clang14布局：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">*** Dumping AST Record Layout</span><br><span class="line">         <span class="number">0</span> | <span class="keyword">class</span> <span class="title class_">D</span></span><br><span class="line">         <span class="number">0</span> |   <span class="function"><span class="keyword">class</span> <span class="title">B</span> <span class="params">(primary base)</span></span></span><br><span class="line"><span class="function">         0 |     <span class="params">(B vtable pointer)</span></span></span><br><span class="line"><span class="function">         8 |   <span class="keyword">class</span> <span class="title">C</span> <span class="params">(base)</span></span></span><br><span class="line"><span class="function">         8 |     <span class="params">(C vtable pointer)</span></span></span><br><span class="line"><span class="function">        16 |   <span class="keyword">class</span> <span class="title">A</span> <span class="params">(<span class="keyword">virtual</span> base)</span></span></span><br><span class="line"><span class="function">        16 |     <span class="params">(A vtable pointer)</span></span></span><br><span class="line"><span class="function">        24 |     <span class="type">int</span> a</span></span><br><span class="line"><span class="function">           | [<span class="keyword">sizeof</span></span>=<span class="number">32</span>, dsize=<span class="number">28</span>, align=<span class="number">8</span>,</span><br><span class="line">           |  nvsize=<span class="number">16</span>, nvalign=<span class="number">8</span>]</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="在VC中数据成员的布局顺序为："><a href="#在VC中数据成员的布局顺序为：" class="headerlink" title="在VC中数据成员的布局顺序为："></a>在VC中数据成员的布局顺序为：</h3><ol>
+<li>vptr部分（如果基类有，则继承基类的）</li>
+<li>vbptr （如果需要）</li>
+<li>基类成员（按声明顺序）</li>
+<li>自身数据成员</li>
+<li>虚基类数据成员（按声明顺序）</li>
+</ol>
+<h3 id="虚拟成员函数"><a href="#虚拟成员函数" class="headerlink" title="虚拟成员函数"></a>虚拟成员函数</h3><p>如果function()是一个虚拟函数，那么用指针或引用进行的调用将发生一点特别的转换——一个中间层被引入进来。例如：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// p-&gt;function()   将转化为</span></span><br><span class="line">(*p-&gt;vptr[<span class="number">1</span>])(p);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>其中vptr为指向虚函数表的指针，它由编译器产生。vptr也要进行名字处理，因为一个继承体系可能有多个vptr。 </p>
+</li>
+<li><p>1是虚函数在虚函数表中的索引，通过它关联到虚函数function().</p>
+</li>
+</ul>
+<p>何时发生这种转换？<strong>答案是在必需的时候</strong>——一个再熟悉不过的答案。当通过指针调用的时候，要调用的函数实体无法在编译期决定，必需待到执行期才能获得，所以上面引入一个间接层的转换必不可少。但是当我们通过对象（不是引用，也不是指针）来调用的时候，进行上面的转换就显得多余了，<strong>因为在编译器要调用的函数实体已经被决定。此时调用发生的转换，与一个非静态成员函数(Nonstatic Member Functions)调用发生的转换一致。</strong></p>
+<h3 id="静态成员函数"><a href="#静态成员函数" class="headerlink" title="静态成员函数"></a>静态成员函数</h3><ul>
+<li>静态成员函数的一些特性：</li>
+</ul>
+<ol>
+<li><strong>不能够直接存取其类中的非静态成员（nostatic members）</strong>，包括不能调用非静态成员函数(Nonstatic Member Functions)。</li>
+<li>不能够声明为 const、voliatile或virtual。</li>
+<li>它不需经由对象调用，当然，通过对象调用也被允许。</li>
+</ol>
+<ul>
+<li><p>除了缺乏一个this指针他与非静态成员函数没有太大的差别。在这里通过对象调用和通过指针或引用调用，将被转化为同样的调用代码。</p>
+</li>
+<li><p>需要注意的是通过一个表达式或函数对静态成员函数进行调用，被C++ Standard要求对表达式进行求值。如：(a+&#x3D;b).static_fuc();</p>
+</li>
+<li><p>虽然省去对a+b求值对于static_fuc()的调用并没有影响，但是程序员肯定会认为表达式a+&#x3D;b已经执行，一旦编译器为了效率省去了这一步，很难说会浪费多少程序员多少时间。这无疑是一个明智的规定。</p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2024/05/04/C++/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/The%20Senmantics%20of%20Data/">http://tom-jerr.github.io/2024/05/04/C++/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/The%20Senmantics%20of%20Data/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">LZY的Code生活</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post_share"><div class="social-share" data-image="/img/work.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/05/04/C++/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="内存管理"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">内存管理</div></div></a></div><div class="next-post pull-right"><a href="/2024/05/04/C++/%E6%B7%B1%E5%85%A5%E6%8E%A2%E7%B4%A2C++%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/The%20Senmantics%20of%20Constructors/" title="The Senmantics of Constructors"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">The Senmantics of Constructors</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/04/19/C++20/C++20%E5%8D%8F%E7%A8%8B/" title="C++20协程"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-19</div><div class="title">C++20协程</div></div></a></div><div><a href="/2024/04/09/C++20/C++%E5%86%85%E5%AD%98%E5%BA%8F/" title="C++内存序"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-09</div><div class="title">C++内存序</div></div></a></div><div><a href="/2024/04/08/C++20/%E5%8D%8F%E7%A8%8B/" title="协程"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-08</div><div class="title">协程</div></div></a></div><div><a href="/2024/05/06/C++/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/malloc/" title="malloc源码解析"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-06</div><div class="title">malloc源码解析</div></div></a></div><div><a href="/2024/05/04/C++/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="内存管理"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-04</div><div class="title">内存管理</div></div></a></div><div><a href="/2024/06/30/C++/new&malloc/" title="new&amp;malloc"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-30</div><div class="title">new&amp;malloc</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">即将进入研究生生涯，珍惜最后的大学时光</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#The-Senmantics-of-Data"><span class="toc-number">1.</span> <span class="toc-text">The Senmantics of Data</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%A4%A7%E5%B0%8F%E7%9A%84%E8%AE%A1%E7%AE%97"><span class="toc-number">1.1.</span> <span class="toc-text">类大小的计算</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E7%B1%BB%E5%A4%A7%E5%B0%8F"><span class="toc-number">1.1.1.</span> <span class="toc-text">空类大小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AB%E6%9C%89%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E7%B1%BB"><span class="toc-number">1.1.2.</span> <span class="toc-text">含有虚函数的类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%B1%BB%E5%90%AB%E6%9C%89%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E7%BB%A7%E6%89%BF"><span class="toc-number">1.1.3.</span> <span class="toc-text">基类含有虚函数的继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E7%BB%A7%E6%89%BF"><span class="toc-number">1.1.4.</span> <span class="toc-text">虚继承</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8VC%E4%B8%AD%E6%95%B0%E6%8D%AE%E6%88%90%E5%91%98%E7%9A%84%E5%B8%83%E5%B1%80%E9%A1%BA%E5%BA%8F%E4%B8%BA%EF%BC%9A"><span class="toc-number">1.1.5.</span> <span class="toc-text">在VC中数据成员的布局顺序为：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.6.</span> <span class="toc-text">虚拟成员函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.7.</span> <span class="toc-text">静态成员函数</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题">无题</a><time datetime="2024-10-30T16:37:18.218Z" title="发表于 2024-10-31 00:37:18">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="11 Query Execution"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution">11 Query Execution</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="12 Query Planning and Optimization"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization">12 Query Planning and Optimization</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="10-Join Algorithm"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm">10-Join Algorithm</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/13-Concurrency_Control_Theory/" title="13 Concurrency Control Theory"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="13 Concurrency Control Theory"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/13-Concurrency_Control_Theory/" title="13 Concurrency Control Theory">13 Concurrency Control Theory</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/copy-tex.min.js"></script><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', { class: 'katex-wrap'})
+  })
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
