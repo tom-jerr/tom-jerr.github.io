@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>csapp-5-优化程序性能 | LZY的Code生活</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Chapter 5 优化程序性能 编译器的能力和局限性  内存别名使用：两个指针可能指向同一个内存位置 可能出现这种问题，编译器必须进行检查和处理，这限制了可能的优化 restrict 关键字，可以告知编译器两个指针不能指向同一块内存，编译器可以进行进一步的优化  内联函数替换（inline substitution）  将函数调用替换成函数体；减轻调用的深度  消除循环中的低效率  比如将复杂的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="csapp-5-优化程序性能">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/09/12/CSAPP/5-%E4%BC%98%E5%8C%96%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD/index.html">
+<meta property="og:site_name" content="LZY的Code生活">
+<meta property="og:description" content="Chapter 5 优化程序性能 编译器的能力和局限性  内存别名使用：两个指针可能指向同一个内存位置 可能出现这种问题，编译器必须进行检查和处理，这限制了可能的优化 restrict 关键字，可以告知编译器两个指针不能指向同一块内存，编译器可以进行进一步的优化  内联函数替换（inline substitution）  将函数调用替换成函数体；减轻调用的深度  消除循环中的低效率  比如将复杂的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/work.png">
+<meta property="article:published_time" content="2023-09-12T11:49:49.000Z">
+<meta property="article:modified_time" content="2023-09-12T11:49:22.616Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="CMU15-213">
+<meta property="article:tag" content="CSAPP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/work.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2023/09/12/CSAPP/5-%E4%BC%98%E5%8C%96%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'csapp-5-优化程序性能',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-12 19:49:22'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/work.png')"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">csapp-5-优化程序性能</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-12T11:49:49.000Z" title="发表于 2023-09-12 19:49:49">2023-09-12</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-12T11:49:22.616Z" title="更新于 2023-09-12 19:49:22">2023-09-12</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CS-COURSE/">CS_COURSE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="csapp-5-优化程序性能"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>Chapter 5 优化程序性能</h1>
+<h2 id="编译器的能力和局限性">编译器的能力和局限性</h2>
+<ul>
+<li>内存别名使用：两个指针可能指向同一个内存位置</li>
+<li>可能出现这种问题，编译器必须进行检查和处理，这限制了可能的优化</li>
+<li>restrict 关键字，可以告知编译器两个指针不能指向同一块内存，编译器可以进行进一步的优化</li>
+</ul>
+<h3 id="内联函数替换（inline-substitution）">内联函数替换（inline substitution）</h3>
+<ul>
+<li>将函数调用替换成函数体；减轻调用的深度</li>
+</ul>
+<h2 id="消除循环中的低效率">消除循环中的低效率</h2>
+<ul>
+<li>比如将复杂的函数加入循环；此时考虑设置局部变量</li>
+<li>消除循环中的过程调用；考虑返回值来优化</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine3</span><span class="params">(vec_ptr v, <span class="type">data_t</span>* dest)</span> &#123;</span><br><span class="line">  <span class="type">long</span> i;</span><br><span class="line">  <span class="type">long</span> length = vec_length(v);</span><br><span class="line">  <span class="comment">// 消除过程调用</span></span><br><span class="line">  <span class="type">data_t</span>* data = get_vec_start(v);</span><br><span class="line"></span><br><span class="line">  *dest = IDENT;</span><br><span class="line">  <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; length; ++i) &#123;</span><br><span class="line">    *dest = *dest OP data[i];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>上述过程汇编是会发现，每次累积变量的数值都要读入内存再写回内存
+<ul>
+<li>解决方案：引入临时变量，该临时变量使用寄存器存储；最后只写入一次内存</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">combine3</span><span class="params">(vec_ptr v, <span class="type">data_t</span>* dest)</span> &#123;</span><br><span class="line">  <span class="type">long</span> i;</span><br><span class="line">  <span class="type">long</span> length = vec_length(v);</span><br><span class="line">  <span class="comment">// 消除过程调用</span></span><br><span class="line">  <span class="type">data_t</span>* data = get_vec_start(v);</span><br><span class="line">  <span class="type">data_t</span> acc = IDENT;</span><br><span class="line">  <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; length; ++i) &#123;</span><br><span class="line">    acc = acc OP data[i];</span><br><span class="line">  &#125;</span><br><span class="line">  *dest = acc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="处理器操作的抽象模型">处理器操作的抽象模型</h2>
+<h3 id="数据流图">数据流图</h3>
+<p><img src="C:/Users/%E6%88%91/Desktop/MyblogImg/csapp/data_stream.png" alt="数据流图"></p>
+<ul>
+<li>可以把循环寄存器单独拿出来；根据不同循环操作的周期可以大概估计出该程序性能瓶颈位置</li>
+</ul>
+<h2 id="循环展开">循环展开</h2>
+<ul>
+<li>通过增加每次迭代计算的数量；减少循环的迭代次数</li>
+<li>但是循环展开可能优化程度有限；取决于关键路径的执行过程</li>
+</ul>
+<p><img src="C:/Users/%E6%88%91/Desktop/MyblogImg/csapp/data_stream2.png" alt="数据流图"></p>
+<h2 id="提高并行性">提高并行性</h2>
+<ul>
+<li>整数运算可以；但是浮点数的加法和乘法不能结合；由于浮点数的舍入和溢出可能造成不同的结果</li>
+</ul>
+<p><img src="C:/Users/%E6%88%91/Desktop/MyblogImg/csapp/data_stream3.png" alt="数据流图"></p>
+<ul>
+<li>重新结合变换，将括号的位置改变；可能可以继续优化程序的性能</li>
+</ul>
+<p><img src="C:/Users/%E6%88%91/Desktop/MyblogImg/csapp/data_stream4.png" alt="数据流图"></p>
+<p><strong>循环展开和并行积累在多个值中，是提高程序性能的更可靠方法</strong></p>
+<ul>
+<li>SIMD：单指令流多数据流方式执行程序；每次运算执行向量的计算</li>
+</ul>
+<h2 id="限制因素">限制因素</h2>
+<ul>
+<li>寄存器溢出：如果溢出，将两个数相乘直接保存在寄存器的优势消失</li>
+<li>分支预测和预测错误惩罚：惩罚是19个时钟周期
+<ul>
+<li>循环分支被预测为选择分支，只在最后一次导致预测错误惩罚</li>
+<li>书写适合用条件传送实现的代码：三元操作符代替if-else</li>
+</ul>
+</li>
+</ul>
+<h2 id="内存性能">内存性能</h2>
+<ul>
+<li>
+<p>加载的性能：除开使用cache，每次进行取取操作数，都需要访存</p>
+</li>
+<li>
+<p>存储的性能：每次存放结果，也需要访存</p>
+</li>
+<li>
+<p>注意程序中可能存在潜在的加载-存储相关的操作（src和dest指向相同的地址或者dest依赖于src计算后存储的新结果）</p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2023/09/12/CSAPP/5-%E4%BC%98%E5%8C%96%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD/">http://tom-jerr.github.io/2023/09/12/CSAPP/5-%E4%BC%98%E5%8C%96%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">LZY的Code生活</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CMU15-213/">CMU15-213</a><a class="post-meta__tags" href="/tags/CSAPP/">CSAPP</a></div><div class="post_share"><div class="social-share" data-image="/img/work.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/09/12/CSAPP/6-%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" title="csapp-6-存储器层次结构"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">csapp-6-存储器层次结构</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/11/CMU15445/3-Database%20Storage/" title="3_Database_Storage I"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">3_Database_Storage I</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/09/12/CSAPP/6-%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/" title="csapp-6-存储器层次结构"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-12</div><div class="title">csapp-6-存储器层次结构</div></div></a></div><div><a href="/2023/09/18/CSAPP/7-%E9%93%BE%E6%8E%A5/" title="csapp-7-链接"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-18</div><div class="title">csapp-7-链接</div></div></a></div><div><a href="/2023/09/18/CSAPP/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/" title="csapp-8-异常控制流"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-18</div><div class="title">csapp-8-异常控制流</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">即将进入研究生生涯，珍惜最后的大学时光</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Chapter 5 优化程序性能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%96%E8%AF%91%E5%99%A8%E7%9A%84%E8%83%BD%E5%8A%9B%E5%92%8C%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">1.1.</span> <span class="toc-text">编译器的能力和局限性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%85%E8%81%94%E5%87%BD%E6%95%B0%E6%9B%BF%E6%8D%A2%EF%BC%88inline-substitution%EF%BC%89"><span class="toc-number">1.1.1.</span> <span class="toc-text">内联函数替换（inline substitution）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E9%99%A4%E5%BE%AA%E7%8E%AF%E4%B8%AD%E7%9A%84%E4%BD%8E%E6%95%88%E7%8E%87"><span class="toc-number">1.2.</span> <span class="toc-text">消除循环中的低效率</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E5%99%A8%E6%93%8D%E4%BD%9C%E7%9A%84%E6%8A%BD%E8%B1%A1%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">处理器操作的抽象模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E5%9B%BE"><span class="toc-number">1.3.1.</span> <span class="toc-text">数据流图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AA%E7%8E%AF%E5%B1%95%E5%BC%80"><span class="toc-number">1.4.</span> <span class="toc-text">循环展开</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E9%AB%98%E5%B9%B6%E8%A1%8C%E6%80%A7"><span class="toc-number">1.5.</span> <span class="toc-text">提高并行性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%90%E5%88%B6%E5%9B%A0%E7%B4%A0"><span class="toc-number">1.6.</span> <span class="toc-text">限制因素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E6%80%A7%E8%83%BD"><span class="toc-number">1.7.</span> <span class="toc-text">内存性能</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/6.s081/xv6/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/10/31/6.s081/xv6/" title="无题">无题</a><time datetime="2024-10-31T02:45:44.569Z" title="发表于 2024-10-31 10:45:44">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题">无题</a><time datetime="2024-10-30T16:37:18.218Z" title="发表于 2024-10-31 00:37:18">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="11 Query Execution"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution">11 Query Execution</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="12 Query Planning and Optimization"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization">12 Query Planning and Optimization</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="10-Join Algorithm"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm">10-Join Algorithm</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>3-系统调用和陷入 | LZY的Code生活</title><meta name="author" content="LZY"><meta name="copyright" content="LZY"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="System calls and Trap  用户态和内核态的切换（trap）  程序执行系统调用（System call） 程序出现了类似 page fault、除 0 等异常（软件中断） 硬件中断（IO 设备）   RISC-V 寄存器  32 个通用寄存器 PC（程序计数器） Mode（表明位于何种状态 user or supervisor） SATP（指向页表的物理地址） SEPC（指向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3-系统调用和陷入">
+<meta property="og:url" content="http://tom-jerr.github.io/2023/09/11/6.s081/3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E9%99%B7%E5%85%A5/index.html">
+<meta property="og:site_name" content="LZY的Code生活">
+<meta property="og:description" content="System calls and Trap  用户态和内核态的切换（trap）  程序执行系统调用（System call） 程序出现了类似 page fault、除 0 等异常（软件中断） 硬件中断（IO 设备）   RISC-V 寄存器  32 个通用寄存器 PC（程序计数器） Mode（表明位于何种状态 user or supervisor） SATP（指向页表的物理地址） SEPC（指向">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://tom-jerr.github.io/img/work.png">
+<meta property="article:published_time" content="2023-09-11T14:17:49.000Z">
+<meta property="article:modified_time" content="2023-09-15T16:02:07.900Z">
+<meta property="article:author" content="LZY">
+<meta property="article:tag" content="6.s081">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://tom-jerr.github.io/img/work.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://tom-jerr.github.io/2023/09/11/6.s081/3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E9%99%B7%E5%85%A5/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '3-系统调用和陷入',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-09-16 00:02:07'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/work.png')"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">3-系统调用和陷入</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-09-15T16:02:07.900Z" title="更新于 2023-09-16 00:02:07">2023-09-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CS-COURSE/">CS_COURSE</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="3-系统调用和陷入"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>System calls and Trap</h1>
+<ul>
+<li>用户态和内核态的切换（trap）
+<ul>
+<li>程序执行系统调用（System call）</li>
+<li>程序出现了类似 page fault、除 0 等异常（软件中断）</li>
+<li>硬件中断（IO 设备）</li>
+</ul>
+</li>
+<li>RISC-V 寄存器
+<ul>
+<li>32 个通用寄存器</li>
+<li>PC（程序计数器）</li>
+<li>Mode（表明位于何种状态 user or supervisor）</li>
+<li>SATP（指向页表的物理地址）</li>
+<li>SEPC（指向 trap 指令的起始地址）</li>
+<li>STVEC （也就是处理 trap 的内核指令地址）</li>
+<li>SSRATCH（交换页表和 a0 地址）</li>
+</ul>
+</li>
+<li>内核态权限
+<ul>
+<li>读写控制寄存器：SATP、STVEC、SEPC</li>
+<li>它可以使用 PTE_U 标志位为 0 的 PTE</li>
+<li>supervisor mode 中的代码并不能读写任意物理地址，通过 page table 访问内存</li>
+</ul>
+</li>
+<li>用户态跳入内核态前
+<ul>
+<li>保存用户态 32 个寄存器</li>
+<li>保存 PC</li>
+<li>改变 Mode 为 Supervisor</li>
+<li>改变 SATP 寄存器指向内核页表</li>
+<li>将堆栈寄存器指向内核的地址</li>
+</ul>
+</li>
+</ul>
+<h2 id="Trap-执行流程">Trap 执行流程</h2>
+<ul>
+<li>
+<p>在从用户空间进入到内核空间之前，内核会设置好 STVEC 寄存器指向 trampoline page</p>
+</li>
+<li>
+<p>ecall（CPU 指令）切换到 Supervisor mode</p>
+<ul>
+<li>此时并未切换 page table，仍然是用户页表，代码正在 trampoline page 的最开始</li>
+<li>保存 PC 到 SEPC 寄存器</li>
+<li>ecall 会跳转到 STVEC 寄存器指向的指令</li>
+</ul>
+<blockquote>
+<p>RISC-V 秉持了这样一个观点：ecall 只完成尽量少必须要完成的工作，其他的工作都交给软件完成。这里的原因是，RISC-V 设计者想要为软件和操作系统的程序员提供最大的灵活性，这样他们就能按照他们想要的方式开发操作系统</p>
+</blockquote>
+</li>
+<li>
+<p>uservec：汇编语言代码，trampoline.s 文件的一部分</p>
+<ul>
+<li>
+<p>内核会将 trapframe page 的地址保存 SSCRATCH 寄存器</p>
+<blockquote>
+<p>用户映射了 trapframe page，每个进程有自己的 trapframe page；用该结构保存 32 个用户寄存器</p>
+</blockquote>
+<blockquote>
+<p>在内核前一次切换回用户空间时，内核会执行 set sscratch 指令，将这个寄存器的内容设置为 0x3fffffe000，也就是 trapframe page 的虚拟地址</p>
+</blockquote>
+<blockquote>
+<p>在返回用户空间前，设置 a0 为 trapframe page 的虚拟地址，同时切换页表为用户页表</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">uint64 fn = TRAMPOLINE + (userret - trampoline);</span><br><span class="line">((<span class="type">void</span>(*)(uint64,uint64))fn)(TRAPFRAME, satp);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>切换到内核页表；因为二者映射的物理地址相同，切换后可以正常运行而不崩溃</p>
+<blockquote>
+<p>trampoline page 在 user page table 中的映射与 kernel page table 中的映射是完全一样的。这两个 page table 中其他所有的映射都是不同的，只有 trampoline page 的映射是一样的，因此我们在切换 page table 时，寻址的结果不会改变，我们实际上就可以继续在同一个代码序列中执行程序而不崩溃</p>
+</blockquote>
+</li>
+<li>
+<p>跳入 usertrap 函数</p>
+</li>
+</ul>
+</li>
+<li>
+<p>usertrap</p>
+<ul>
+<li>
+<p>先将 STVEC 指向了 kernelvec 变量，这是内核空间 trap 处理代码的位置</p>
+<blockquote>
+<p>我们需要知道当前运行的是什么进程，我们通过调用 myproc 函数来做到这一点。myproc 函数实际上会查找一个根据当前 CPU 核的编号索引的数组，CPU 核的编号是 hartid，如果你还记得，我们之前在 uservec 函数中将它存在了 tp 寄存器。这是 myproc 函数找出当前运行进程的方法。</p>
+</blockquote>
+</li>
+<li>
+<p>当程序还在内核中执行时，我们可能切换到另一个进程，并进入到那个程序的用户空间，然后那个进程可能再调用一个系统调用进而导致 SEPC 寄存器的内容被覆盖。所以，我们需要保存当前进程的 SEPC 寄存器到一个与该进程关联的内存中</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">p-&gt;trapframe-epc = r_sepc();</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>
+<p>syscall</p>
+<ul>
+<li>根据系统调用的编号查找相应的系统调用函数。Shell 调用的 write 函数将 a7 设置成了系统调用编号 16</li>
+<li>向 trapframe 中的 a0 赋值，所有的系统调用都有一个返回值</li>
+</ul>
+</li>
+<li>
+<p>usertrapret</p>
+<ul>
+<li>关闭中断</li>
+<li>设置了 STVEC 寄存器指向 trampoline 代码，在那里最终会执行 sret 指令返回到用户空间</li>
+<li>设置 trapframe 参数供下一次 trap 使用
+<ul>
+<li>存储了 kernel page table 的指针</li>
+<li>存储了当前用户进程的 kernel stack</li>
+<li>存储了 usertrap 函数的指针，这样 trampoline 代码才能跳转到这个函数</li>
+<li>从 tp 寄存器中读取当前的 CPU 核编号，并存储在 trapframe 中，这样 trampoline 代码才能恢复这个数字，因为用户代码可能会修改这个数字</li>
+</ul>
+</li>
+<li>设置 SSTATUS 寄存器</li>
+<li>SEPC 寄存器的值设置成之前保存的用户程序计数器的值</li>
+<li>根据 user page table 地址生成相应的 SATP 值</li>
+<li>trapframe 地址作为第一个参数；将 page table 指针准备好，并将这个指针作为第二个参数传递给汇编代码，这个参数会出现在 a1 寄存器；fn 为函数跳转位置</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">uint64 fn = TRAMPOLINE + (userret - trampoline);</span><br><span class="line">((<span class="type">void</span>(*)(uint64,uint64))fn)(TRAPFRAME, satp);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>userret，位于 trampoline.s 文件</p>
+<ul>
+<li>
+<p>切换为用户页表</p>
+</li>
+<li>
+<p>之前保存的寄存器的值加载到对应的各个寄存器中</p>
+</li>
+<li>
+<p>交换 SSCRATCH 寄存器和 a0 寄存器的值，保证 SSCRATCH 持有的是 trapframe 的地址</p>
+</li>
+<li>
+<p>sret</p>
+<ul>
+<li>程序切换为 user mode</li>
+<li>SEPC 的值拷贝到 PC</li>
+<li>开中断</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ul>
+<li>硬件和软件需要协同工作，你可能需要重新设计 XV6，重新设计 RISC-V 来使得这里的处理流程更加简单，更加快速。</li>
+<li>另一个需要时刻记住的问题是，恶意软件是否能滥用这里的机制来打破隔离性。</li>
+</ul>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io">LZY</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://tom-jerr.github.io/2023/09/11/6.s081/3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E9%99%B7%E5%85%A5/">http://tom-jerr.github.io/2023/09/11/6.s081/3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E9%99%B7%E5%85%A5/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://tom-jerr.github.io" target="_blank">LZY的Code生活</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/6-s081/">6.s081</a></div><div class="post_share"><div class="social-share" data-image="/img/work.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/09/11/6.s081/2-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%AE%9E%E7%8E%B0/" title="2-虚拟内存的实现"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">2-虚拟内存的实现</div></div></a></div><div class="next-post pull-right"><a href="/2023/09/11/6.s081/5-%E7%A1%AC%E4%BB%B6%E4%B8%AD%E6%96%AD/" title="5-硬件中断"><img class="cover" src="/img/work.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">5-硬件中断</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/09/11/6.s081/1-OS%E7%9A%84%E9%9A%94%E7%A6%BB%E6%80%A7/" title="1-OS的隔离性"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">1-OS的隔离性</div></div></a></div><div><a href="/2023/09/11/6.s081/2-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%AE%9E%E7%8E%B0/" title="2-虚拟内存的实现"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">2-虚拟内存的实现</div></div></a></div><div><a href="/2023/09/11/6.s081/5-%E7%A1%AC%E4%BB%B6%E4%B8%AD%E6%96%AD/" title="5-硬件中断"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">5-硬件中断</div></div></a></div><div><a href="/2023/09/11/6.s081/4-%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD/" title="4-缺页中断"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">4-缺页中断</div></div></a></div><div><a href="/2023/09/11/6.s081/6-%E5%A4%9A%E6%A0%B8%E5%92%8C%E9%94%81/" title="6-多核和锁"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-11</div><div class="title">6-多核和锁</div></div></a></div><div><a href="/2023/09/15/6.s081/7-%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/" title="7-进程切换"><img class="cover" src="/img/work.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-09-15</div><div class="title">7-进程切换</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">即将进入研究生生涯，珍惜最后的大学时光</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">System calls and Trap</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Trap-%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.1.</span> <span class="toc-text">Trap 执行流程</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/6.s081/xv6/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/10/31/6.s081/xv6/" title="无题">无题</a><time datetime="2024-10-31T02:45:44.569Z" title="发表于 2024-10-31 10:45:44">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题">无题</a><time datetime="2024-10-30T16:37:18.218Z" title="发表于 2024-10-31 00:37:18">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="11 Query Execution"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution">11 Query Execution</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="12 Query Planning and Optimization"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization">12 Query Planning and Optimization</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="10-Join Algorithm"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm">10-Join Algorithm</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
