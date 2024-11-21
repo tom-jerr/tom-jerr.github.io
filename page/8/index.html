@@ -51,7 +51,7 @@
   isHome: true,
   isHighlightShrink: false,
   isToc: false,
-  postUpdate: '2024-10-31 10:54:43'
+  postUpdate: '2024-11-21 21:36:34'
 }</script><script>(win=>{
       win.saveToLocal = {
         set: (key, value, ttl) => {
@@ -148,48 +148,139 @@
         }
       }
       detectApple()
-    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347)"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">LZY的Code生活</h1><div id="site_social_icons"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/11/cs61c/lecture16_Thread-LevelParallelism/" title="lecture16_Thread_Level_Parallelism"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture16_Thread_Level_Parallelism"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture16_Thread-LevelParallelism/" title="lecture16_Thread_Level_Parallelism">lecture16_Thread_Level_Parallelism</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">Thread-Level Parallelism
+    })(window)</script><meta name="generator" content="Hexo 7.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background: linear-gradient(20deg, #0062be, #925696, #cc426e, #fb0347)"><nav id="nav"><span id="blog-info"><a href="/" title="LZY的Code生活"><span class="site-name">LZY的Code生活</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="site-info"><h1 id="site-title">LZY的Code生活</h1><div id="site_social_icons"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts" id="recent-posts"><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/11/cs61c/lecture17_Process_LevelParallelism/" title="lecture17_Process_Level_Parallelism"><img class="post-bg" src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture17_Process_Level_Parallelism"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture17_Process_LevelParallelism/" title="lecture17_Process_Level_Parallelism">lecture17_Process_Level_Parallelism</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">Process-Level ParallelismMultiprocess Framework
+不同的核不分享内存，但是共享一个文件系统
 
+在多线程程序运行时，一个线程 crash，整个程序可能 crash；但是多核程序，每个核之间是独立的，如果一个核 crash，其他的核可以继续运行
+
+不同的核交流占用大量时间
+
+将一个大问题分解成独立的小问题；以此来减少数据的传输时间损耗
+
+
+</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/11/cs61c/lecture18_Caches/" title="lecture18_Caches"><img class="post-bg" src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture18_Caches"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture18_Caches/" title="lecture18_Caches">lecture18_Caches</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">Caches
+Memory Hierarchy (层次化内存)
+寄存器离 CPU 最近，使用也最快；但是很贵；每个 CPU 只有少量寄存器
+DRAM 更适合存储大量数据，但是速度更慢
+需要数据总线进行传输
+
+
+
+加速方式
+Hardware Multithreaing
+
+在等待数据的过程中，切换到另一个进行去执行任务
+每个物理核含有两个 PC 核寄存器组，所以上下文切换很快
+
+
+Prefetching
+
+每个周期预取指令和数据
+
+
+Caching
+
+利用空间局部性和时间局部性，减少和主存之间的数据传输
+
+缓存中存放被主存使用的数据副本
+
+主存中存放磁盘上的数据副本
+
+
+
+
+层次化管理
+Registers &lt;—&gt; Memory
+通过编译器或者汇编级别编程
+
+
+Cache &lt;—&gt; 主存
+通过缓存控制硬件
+
+
+Main Memory &lt;—&gt; Disks
+通过操作系统（虚拟内存）
+通过编程者 (files)
+
+
+
+Cache 三种映射
+全相联映射
+
+每个数据可以被映射到 n 个位置
+
+物理地址被分为 tag and offset
+
+
+
+
+直接映射
+
+每个数据只 ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/11/cs61c/lecture21_Virtual_Memory/" title="lecture21_Virtual_Memory"><img class="post-bg" src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture21_Virtual_Memory"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture21_Virtual_Memory/" title="lecture21_Virtual_Memory">lecture21_Virtual_Memory</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">Virtual Memory直接使用物理内存问题
+
+没有足够空间；RISC-V 只提供 32bit 空间即 4GB
+地址空间有空洞
+不能保证其他程序不访问同一块内存
+
+Benefits
+允许运行自身大小比主存大得多的程序；只有工作的页放在主存，其他页放在磁盘；由OS进行页的请求和置换
+
+OS可以共享内存并实现程序的互相保护
+
+隐藏机器级的不同
+
+
+</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/11/cs61c/lecture2-Intro%20to%20C/" title="lecture2_Intro_to_C"><img class="post-bg" src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture2_Intro_to_C"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture2-Intro%20to%20C/" title="lecture2_Intro_to_C">lecture2_Intro_to_C</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">Intro to CGreat idea in Computer Architecture1. Abstraction
+(Layers of Representation&#x2F;Interpretation)
+
+
+2. Moore’s Law（摩尔定律）3. Principle of Locality&#x2F;Memory Hierarchy（局部性和内存层次性原则）
+4. Parallelism（并行）
+加速频繁事件（Amdahl’s law）
+
+
+5. Performance Measurement &amp; Improvement6. Dependability via redundancy（冗余实现可靠性）
+RAID…
+
+失去一个数据中心，但是整个网络不会宕机
+
+
+Compiled &amp; Interpreted（编译和解释）
+Translation happens in two ways○ Compilation○ Interpretation○ Some languages use both!
+
+C compilers map C programs direct ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/11/cs61c/lecture16_Thread-LevelParallelism/" title="lecture16_Thread_Level_Parallelism"><img class="post-bg" src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture16_Thread_Level_Parallelism"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture16_Thread-LevelParallelism/" title="lecture16_Thread_Level_Parallelism">lecture16_Thread_Level_Parallelism</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">Thread-Level Parallelism
 SISD：线性执行指令，没有并行
-
 RISC-V 单周期 CPU
 
 
 SIMD：单指令流，多数据流
-
 Intel instrinsics
 GPUS
 
 
 MISD：多指令流，单数据流
-
 Deep learning acceleration chips
 
 
 MIMD：多指令流，多数据流
-
 Modern processors
 
 
 
 
 多核执行模型
-
 独立资源
-
 Datapath (PC, registers, ALU)
 Highest level caches (L1, L2 cache)
 
 
 共享资源
-
 Memory (DRAM)
 3rd level cache
 
 
 
 线程
-
 一个进程可以可以分裂或者 fork 出新线程；这些线程可以同时运行
 对于单核来说，CPU 分时运行线程
 
@@ -199,216 +290,50 @@ Memory (DRAM)
 
 
 硬件多线程
-
 在处理器硬件中有两个 PC 核对应的寄存器组
 simultaneous multithreading (SMT) or hyperthreading (HT)
 
-Big/little Pr ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/11/cs61c/lecture18_Caches/" title="lecture18_Caches"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture18_Caches"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture18_Caches/" title="lecture18_Caches">lecture18_Caches</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">Caches
+Big&#x2F;little Process ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/11/cs61c/lecture4_C%20Memory%20Endianness/" title="lecture4_C_Memory"><img class="post-bg" src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture4_C_Memory"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture4_C%20Memory%20Endianness/" title="lecture4_C_Memory">lecture4_C_Memory</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">C Memorymemory alignment（内存对齐）
+Memory alignment: a system-dependent rule that tells us where datacan be stored (usually not at every byte)
 
-Memory Hierarchy (层次化内存)
-
-寄存器离 CPU 最近，使用也最快；但是很贵；每个 CPU 只有少量寄存器
-DRAM 更适合存储大量数据，但是速度更慢
-
-需要数据总线进行传输
-
-
-
-加速方式
-
-
-Hardware Multithreaing
-
-在等待数据的过程中，切换到另一个进行去执行任务
-每个物理核含有两个 PC 核寄存器组，所以上下文切换很快
-
-
-
-Prefetching
-
-每个周期预取指令和数据
-
-
-
-Caching
-
-
-利用空间局部性和时间局部性，减少和主存之间的数据传输
-
-
-缓存中存放被主存使用的数据副本
-
-
-主存中存放磁盘上的数据副本
-
-
-
-
-层次化管理
-
-Registers &lt;—&gt; Memory
-
-通过编译器或者汇编级别编程
-
-
-Cache &lt;—&gt; 主存
-
-通过缓存控制硬件
-
-
-Main Memory &lt;—&gt; Disks
-
-通过操作系统（虚拟内存）
-通过编程者 (files)
-
-
-
-Cache 三种映射
-
-
-全相联映射
-
-
-每个数据可以被映射到 n 个位置
-
-
-物理地址被分为 tag and offs ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/11/cs61c/lecture17_Process_LevelParallelism/" title="lecture17_Process_Level_Parallelism"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture17_Process_Level_Parallelism"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture17_Process_LevelParallelism/" title="lecture17_Process_Level_Parallelism">lecture17_Process_Level_Parallelism</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">Process-Level Parallelism
-Multiprocess Framework
-
-
-不同的核不分享内存，但是共享一个文件系统
-
-
-在多线程程序运行时，一个线程 crash，整个程序可能 crash；但是多核程序，每个核之间是独立的，如果一个核 crash，其他的核可以继续运行
-
-
-不同的核交流占用大量时间
-
-
-将一个大问题分解成独立的小问题；以此来减少数据的传输时间损耗
-
-
-</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/11/cs61c/lecture2-Intro%20to%20C/" title="lecture2_Intro_to_C"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture2_Intro_to_C"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture2-Intro%20to%20C/" title="lecture2_Intro_to_C">lecture2_Intro_to_C</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">Intro to C
-Great idea in Computer Architecture
-1. Abstraction
-
-(Layers of Representation/Interpretation)
-
-
-2. Moore’s Law（摩尔定律）
-3. Principle of Locality/Memory Hierarchy（局部性和内存层次性原则）
-
-4. Parallelism（并行）
-
-加速频繁事件（Amdahl’s law）
-
-
-5. Performance Measurement &amp; Improvement
-6. Dependability via redundancy（冗余实现可靠性）
-
-
-RAID…
-
-
-失去一个数据中心，但是整个网络不会宕机
-
-
-Compiled &amp; Interpreted（编译和解释）
-
-
-Translation happens in two ways
-○ Compilation
-○ Interpretation
-○ Some languages use both!
-
-
-C compilers map C programs  ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/11/cs61c/lecture21_Virtual_Memory/" title="lecture21_Virtual_Memory"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture21_Virtual_Memory"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture21_Virtual_Memory/" title="lecture21_Virtual_Memory">lecture21_Virtual_Memory</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">Virtual Memory
-直接使用物理内存问题
-
-没有足够空间；RISC-V 只提供 32bit 空间即 4GB
-地址空间有空洞
-不能保证其他程序不访问同一块内存
-
-Benefits
-
-
-允许运行自身大小比主存大得多的程序；只有工作的页放在主存，其他页放在磁盘；由OS进行页的请求和置换
-
-
-OS可以共享内存并实现程序的互相保护
-
-
-隐藏机器级的不同
-
-
-</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/11/cs61c/lecture4_C%20Memory%20Endianness/" title="lecture4_C_Memory"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="lecture4_C_Memory"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/cs61c/lecture4_C%20Memory%20Endianness/" title="lecture4_C_Memory">lecture4_C_Memory</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CS-COURSE/">CS_COURSE</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CS61C/">CS61C</a></span></div><div class="content">C Memory
-memory alignment（内存对齐）
-
-
-Memory alignment: a system-dependent rule that tells us where data
-can be stored (usually not at every byte)
-
-
-Can be accomplished with the “aligned” attribute
-__attribute__((aligned(n)));
+Can be accomplished with the “aligned” attribute__attribute__((aligned(n)));
 
 
 Strings
-
-
 Example: The string “Hi” is stored in memory as an array of characters. This array would look like: {‘H’, ‘i’, ‘\0’}
 
-
-If the null terminator is missing, C will continue to read memory as if
-it was part of the string until it comes across a byte that happens to hav ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/11/xv6/BootLoader/" title="xv6-BootLoader"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="xv6-BootLoader"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/xv6/BootLoader/" title="xv6-BootLoader">xv6-BootLoader</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/OS/">OS</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/xv6/">xv6</a></span></div><div class="content">BootLoader
-
+If the null terminator is missing, C will continue to read memory as ifit was part of the string until it comes across a byte that happens to have value 0. ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/11/xv6/BootLoader/" title="xv6-BootLoader"><img class="post-bg" src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="xv6-BootLoader"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/xv6/BootLoader/" title="xv6-BootLoader">xv6-BootLoader</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/OS/">OS</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/xv6/">xv6</a></span></div><div class="content">BootLoader
 查看对应的文件使用runoff.list文件
 
 计算机启动时的硬件动作
-
 PC 机上电时运行的第一条指令总是存储在 ROM 中的 BIOS 指令，BIOS 固件对硬件进行自检然后按照规范总是从磁盘的中的第一个扇区载入程序，并将其放入 0x07c00 地址处，一般情况下这个便是 BootLoader，有些 BootLoader 较大无法用一个扇区存放，所以一般会分为好几部分，由最初的部分将它们载入到内存，然后将控制权交给 BootLoader。
 
-设置 A20 地址线
-  # Physical address line A20 is tied to zero so that the first PCs  # with 2 MB would run software that assumed 1 MB.  Undo that.seta20.1:  inb     $0x64,%al               # Wait for not busy  testb   $0x2,%al  jnz     seta20.1  movb    $0xd1,%al      ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/11/xv6/interrupt&amp;systemcall/" title="xv6-中断和系统调用"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="xv6-中断和系统调用"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/xv6/interrupt&amp;systemcall/" title="xv6-中断和系统调用">xv6-中断和系统调用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/OS/">OS</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/xv6/">xv6</a></span></div><div class="content">Interrupt and System call
-
-
+设置 A20 地址线  # Physical address line A20 is tied to zero so that the first PCs  # with 2 MB would run software that assumed 1 MB.  Undo that.seta20.1:  inb     $0x64,%al               # Wait for not busy  testb   $0x2,%al  jnz     seta20.1  movb    $0xd1,%al         ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/11/xv6/interrupt&amp;systemcall/" title="xv6-中断和系统调用"><img class="post-bg" src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="xv6-中断和系统调用"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/xv6/interrupt&amp;systemcall/" title="xv6-中断和系统调用">xv6-中断和系统调用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/OS/">OS</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/xv6/">xv6</a></span></div><div class="content">Interrupt and System call
 xv6 通过一个存放函数指针的数组来作为中断向量表，在 main 函数初始化过程中，调用tvinit 函数完成中断向量表的初始化。tvinit 将每一个中断处理程序的地址写入 idt 数组中，idtinit 将数组地址载入中断向量表寄存器，硬件能够根据中断向量表寄存器准确找出中断处理程序，xv6 使用 vector.pl 脚本生成 vector 数组，vector 数组存放着每个中断处理程序的入口地址，xv6 简单地将所有的中断处理程序指向 alltraps，由 alltraps 来负责具体的处理。在调用 alltraps 之前，xv6 统一压入 errnum 和 trapnum 来区分是 256 情况中的哪种。
-voidtvinit(void)&#123;  int i;  for(i = 0; i &lt; 256; i++)    SETGATE(idt[i], 0, SEG_KCODE&lt;&lt;3, vectors[i], 0);  SETGATE(idt[T_SYSCALL], 1, SEG_KCODE&lt;&l ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/11/xv6/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="xv6-内存管理"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="xv6-内存管理"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/xv6/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="xv6-内存管理">xv6-内存管理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/OS/">OS</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/xv6/">xv6</a></span></div><div class="content">内存管理
-物理内存初始化
+voidtvinit(void)&#123;  int i;  for(i = 0; i &lt; 256; i++)    SETGATE(idt[i], 0, SEG_KCODE&lt;&lt;3, vectors[i], 0);  SETGATE(idt[T_SYSCALL], 1, SEG_KCODE&lt;&lt; ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2023/09/11/xv6/%E5%86%85%E6%A0%B8%E5%88%9D%E5%A7%8B%E5%8C%96&amp;%E5%A4%9A%E6%A0%B8%E5%90%AF%E5%8A%A8/" title="xv6-多核启动"><img class="post-bg" src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="xv6-多核启动"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/xv6/%E5%86%85%E6%A0%B8%E5%88%9D%E5%A7%8B%E5%8C%96&amp;%E5%A4%9A%E6%A0%B8%E5%90%AF%E5%8A%A8/" title="xv6-多核启动">xv6-多核启动</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/OS/">OS</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/xv6/">xv6</a></span></div><div class="content">内核初始化和多核启动
+查看对应的文件使用runoff.list文件
 
+内核初始化
+bootloader 将内核载入物理地址 0x100000，通过跳转命令正式将控制权交给内核
+# Entering xv6 on boot processor, with paging off..globl entryentry:
 
+这里的 entry 便是内核最开始运行的代码，前面说过，此时虽然已经开始了保护模式但是分页机制并没有开启，这个时候线性地址等于物理地址，但是内核中所有的符号地址都是位于高内存处的虚拟地址，所以最开始先设置页表并开启分页机制
+# Turn on page size extension for 4Mbyte pagesmovl    %cr4, %eaxorl     $(CR4_PSE), %eaxmovl    %eax, %cr4# Set page directorymovl    $(V2P_WO(entrypgdir)), %eaxmovl    %eax, %cr3# Turn on paging.movl    %cr0, %eaxorl     $(CR0_PG ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/11/xv6/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="xv6-内存管理"><img class="post-bg" src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="xv6-内存管理"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/xv6/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="xv6-内存管理">xv6-内存管理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/OS/">OS</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/xv6/">xv6</a></span></div><div class="content">内存管理物理内存初始化
 xv6 在 main 函数中调用 kinit1 和 kinit2 来初始化物理内存，kinit1 初始化内核末尾到物理内存 4M 的物理内存空间为未使用
-
 
 kinit2 初始化剩余内核空间到 PHYSTOP 为未使用
 kinit1(end, P2V(4*1024*1024)); // phys page allocatorkinit2(P2V(4*1024*1024), P2V(PHYSTOP)); // must come after startothers()
 
-
 kinit2 在内核构建了新页表后，能够完全访问内核的虚拟地址空间，所以在这里初始化所有物理内存，并开始了锁机制保护空闲内存链表。
 voidkinit2(void *vstart, void *vend)&#123;  freerange(vstart, vend);  kmem.use_lock = 1;&#125;
 
-
 内核新页表初始化
-
-
 main 函数通过调用 kvmalloc 函数来实现内核新页表的初始化
-pde_t *kpgdir;  // for use in schedul ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2023/09/11/xv6/%E5%86%85%E6%A0%B8%E5%88%9D%E5%A7%8B%E5%8C%96&amp;%E5%A4%9A%E6%A0%B8%E5%90%AF%E5%8A%A8/" title="xv6-多核启动"><img class="post-bg" src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="xv6-多核启动"></a></div><div class="recent-post-info"><a class="article-title" href="/2023/09/11/xv6/%E5%86%85%E6%A0%B8%E5%88%9D%E5%A7%8B%E5%8C%96&amp;%E5%A4%9A%E6%A0%B8%E5%90%AF%E5%8A%A8/" title="xv6-多核启动">xv6-多核启动</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2023-09-11T14:17:49.000Z" title="发表于 2023-09-11 22:17:49">2023-09-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/OS/">OS</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/xv6/">xv6</a></span></div><div class="content">内核初始化和多核启动
-
-查看对应的文件使用runoff.list文件
-
-内核初始化
-
-
-bootloader 将内核载入物理地址 0x100000，通过跳转命令正式将控制权交给内核
-# Entering xv6 on boot processor, with paging off..globl entryentry:
-
-
-这里的 entry 便是内核最开始运行的代码，前面说过，此时虽然已经开始了保护模式但是分页机制并没有开启，这个时候线性地址等于物理地址，但是内核中所有的符号地址都是位于高内存处的虚拟地址，所以最开始先设置页表并开启分页机制
-# Turn on page size extension for 4Mbyte pagesmovl    %cr4, %eaxorl     $(CR4_PSE), %eaxmovl    %eax, %cr4# Set page directorymovl    $(V2P_WO(entrypgdir)), %eaxmovl    %eax, %cr3# Turn on paging.movl    %cr0, %eaxorl     $(CR ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/7/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/#content-inner">7</a><span class="page-number current">8</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">21</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">即将进入研究生生涯，珍惜最后的大学时光</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/6.s081/xv6/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/10/31/6.s081/xv6/" title="无题">无题</a><time datetime="2024-10-31T02:45:44.569Z" title="发表于 2024-10-31 10:45:44">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题">无题</a><time datetime="2024-10-30T16:37:18.218Z" title="发表于 2024-10-31 00:37:18">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="11 Query Execution"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution">11 Query Execution</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="12 Query Planning and Optimization"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/12-Query_Plan&amp;Optimization/" title="12 Query Planning and Optimization">12 Query Planning and Optimization</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm"><img src="/img/work.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="10-Join Algorithm"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm">10-Join Algorithm</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+pde_t *kpgdir;  // for use in scheduler()void ...</div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/7/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/#content-inner">7</a><span class="page-number current">8</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">LZY</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">80</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">20</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/tom-jerr"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/tom-jerr" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="/2584074296@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Stay hungry, Stay foolish</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/6.s081/xv6/" title="无题"><img src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/10/31/6.s081/xv6/" title="无题">无题</a><time datetime="2024-10-31T02:45:44.569Z" title="发表于 2024-10-31 10:45:44">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题"><img src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="无题"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/lab/lab1_buffer_pool/" title="无题">无题</a><time datetime="2024-10-30T16:37:18.218Z" title="发表于 2024-10-31 00:37:18">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm"><img src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="10-Join Algorithm"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/10-Join%20Algorithm/" title="10-Join Algorithm">10-Join Algorithm</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution"><img src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="11 Query Execution"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/11-Query_Execution/" title="11 Query Execution">11 Query Execution</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/10/31/CMU15445/13-Concurrency_Control_Theory/" title="13 Concurrency Control Theory"><img src="/img/Stay_Hungry_Stay_Foolish.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="13 Concurrency Control Theory"/></a><div class="content"><a class="title" href="/2024/10/31/CMU15445/13-Concurrency_Control_Theory/" title="13 Concurrency Control Theory">13 Concurrency Control Theory</a><time datetime="2024-10-30T16:00:00.000Z" title="发表于 2024-10-31 00:00:00">2024-10-31</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
             <i class="fas fa-folder-open"></i>
             <span>分类</span>
             
             </div>
             <ul class="card-category-list" id="aside-cat-list">
             <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CS-COURSE/"><span class="card-category-list-name">CS_COURSE</span><span class="card-category-list-count">22</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CV/"><span class="card-category-list-name">CV</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/DB/"><span class="card-category-list-name">DB</span><span class="card-category-list-count">17</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Knowledge/"><span class="card-category-list-name">Knowledge</span><span class="card-category-list-count">25</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Lab/"><span class="card-category-list-name">Lab</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/OS/"><span class="card-category-list-name">OS</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Project/"><span class="card-category-list-name">Project</span><span class="card-category-list-count">5</span></a></li>
-            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/%E5%B9%B6%E5%8F%91/" style="font-size: 1.23em; color: #999ea6">并发</a> <a href="/tags/C/" style="font-size: 1.5em; color: #99a9bf">C++</a> <a href="/tags/CMU15-213/" style="font-size: 1.37em; color: #99a4b2">CMU15-213</a> <a href="/tags/rust/" style="font-size: 1.37em; color: #99a4b2">rust</a> <a href="/tags/xv6/" style="font-size: 1.37em; color: #99a4b2">xv6</a> <a href="/tags/%E5%8D%8F%E7%A8%8B/" style="font-size: 1.23em; color: #999ea6">协程</a> <a href="/tags/zero-copy/" style="font-size: 1.1em; color: #999">zero copy</a> <a href="/tags/C/" style="font-size: 1.1em; color: #999">C</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">十月 2024</span><span class="card-archive-list-count">15</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">八月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">六月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/05/"><span class="card-archive-list-date">五月 2024</span><span class="card-archive-list-count">17</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/04/"><span class="card-archive-list-date">四月 2024</span><span class="card-archive-list-count">15</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">九月 2023</span><span class="card-archive-list-count">31</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">80</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-10-31T02:54:43.145Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/CS144/" style="font-size: 1.1em; color: #999">CS144</a> <a href="/tags/C/" style="font-size: 1.5em; color: #99a9bf">C++</a> <a href="/tags/CSAPP/" style="font-size: 1.23em; color: #999ea6">CSAPP</a> <a href="/tags/MESI/" style="font-size: 1.1em; color: #999">MESI</a> <a href="/tags/zero-copy/" style="font-size: 1.1em; color: #999">zero copy</a> <a href="/tags/Hardware/" style="font-size: 1.1em; color: #999">Hardware</a> <a href="/tags/CS61C/" style="font-size: 1.37em; color: #99a4b2">CS61C</a> <a href="/tags/CMU15-213/" style="font-size: 1.23em; color: #999ea6">CMU15-213</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/10/"><span class="card-archive-list-date">十月 2024</span><span class="card-archive-list-count">15</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">八月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">六月 2024</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/05/"><span class="card-archive-list-date">五月 2024</span><span class="card-archive-list-count">17</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/04/"><span class="card-archive-list-date">四月 2024</span><span class="card-archive-list-count">15</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/09/"><span class="card-archive-list-date">九月 2023</span><span class="card-archive-list-count">31</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">80</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-11-21T13:36:34.371Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 - 2024 By LZY</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">盲僧，你发现了华点</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
