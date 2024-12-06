@@ -14,7 +14,7 @@ For more academic information about me, see [my academic page🎓](./academy.md)
 
 ---
 
-我是一个热爱结交新朋友的人，一般使用微信和 QQ 在网上交流，你可以在上方对应的图标中找到我的二维码，扫一扫后就可以添加我为好友了。我也使用 X，不过暂时并没有在上面发布过什么内容，也没有添加好友之类的。
+我是一个热爱结交新朋友的人，一般使用微信和 QQ 在网上交流，你可以在下方对应的图标中找到我的二维码，扫一扫后就可以添加我为好友了。我也使用 X，不过暂时并没有在上面发布过什么内容，也没有添加好友之类的。
 
 I am a person who loves to make new friends. I usually use WeChat and QQ for online communication. You can find my QR code in the corresponding icon above, scan it, and then add me as a friend. I also use X, but I haven't posted anything on it yet, nor have I added friends or something like that.
 

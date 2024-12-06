@@ -145,6 +145,15 @@ extra_css:
   - css/flink.css
   - css/tasklist.css
 
+extra:
+  social:
+    - icon: /fontawesome/brands/qq
+      link: img/qq.jpg
+    - icon: /fontawesome/brands/weixin
+      link: img/wechat.jpg
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:2823324228@qq.com
+
 not_in_nav:
   about.md
   changelog.md

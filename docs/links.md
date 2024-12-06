@@ -60,6 +60,16 @@ nostatistics: True
     </a>
 </div>
 
+<div class="flink-list-item">
+    <a href="https://wncfht.github.io/notes/" title="wnc" target="_blank">
+        <div class="flink-item-icon">
+            <img src="https://raw.githubusercontent.com/WncFht/picture/main/picture/logo.jpg" alt="wnc">
+        </div>
+        <div class="flink-item-name heti-skip">Wnc's Cafe</div>
+        <div class="flink-item-desc">Powerful freshman</div>
+    </a>
+</div>
+
 </div>
 
 <hr><p>在下方留言申请加入我的友链，按如下格式提供信息：</p><ul><li>名称：Kinnari's Site</li><li>简介：Kinnariya Mama Tanha</li><li>链接：https://kinnariyamamatanha.github.io/</li><li>图片：Link of your avatar</li></ul>

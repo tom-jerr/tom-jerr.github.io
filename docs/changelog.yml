@@ -1,5 +1,6 @@
 - "2024":
   - "2024-12-06":
+    - function: Add qq and wechat contact
     - newpage:
         text: "First commit"
         href: /index
