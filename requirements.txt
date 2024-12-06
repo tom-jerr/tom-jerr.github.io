@@ -1,0 +1,7 @@
+mkdocs-callouts
+mkdocs-changelog-plugin
+mkdocs-material
+mkdocs-git-revision-date-localized-plugin
+mkdocs-glightbox
+mkdocs-statistics-plugin
+mkdocs-video
