@@ -15,6 +15,8 @@ theme:
     - content.code.annotate
     - content.code.copy
     - content.code.select
+    - content.footnote.tooltips
+    - content.tabs.link
     - header.autohide
     # - navigation.instant.progress
     # - navigation.instant.prefetch
@@ -46,9 +48,7 @@ theme:
         icon: material/brightness-4
         name: 切换至日间模式
 
-  font:
-    text: LXGW WenKai Screen
-    code: JetBrains Mono
+  font: false
  
   favicon: img/avatar1.png
 
@@ -68,10 +68,14 @@ plugins:
   - git-revision-date-localized:
       type: datetime
       timezone: Asia/Shanghai
-      locale: zh
       enable_creation_date: true
       exclude:
         - index.md
+        - academy.md
+        - links.md
+        - changelog.md
+  - minify:
+      minify_html: true
   - mkdocs-video:
       video_muted: True
       video_controls: True
@@ -91,6 +95,8 @@ markdown_extensions:
   - nl2br
   - pymdownx.arithmatex:  # latex支持
       generic: true
+  - pymdownx.blocks.caption
+  - pymdownx.caret
   - pymdownx.critic
   - pymdownx.details
   - pymdownx.emoji:
@@ -99,6 +105,7 @@ markdown_extensions:
       options:
         custom_icons:
           - overrides/.icons
+  - pymdownx.fancylists
   - pymdownx.highlight: # 代码块高亮
       anchor_linenums: true
       auto_title: true # 显示编程语言名称
@@ -110,6 +117,7 @@ markdown_extensions:
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.magiclink
+  - pymdownx.saneheaders
   - pymdownx.snippets
   - pymdownx.smartsymbols
   - pymdownx.superfences:
@@ -136,8 +144,9 @@ extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
   - https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js
-  - https://fastly.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/autoload.js
-
+  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
+  - js/tablesort.js
+  - js/mathjax.js
 
 extra_css:
   - https://cdn.tonycrane.cc/jbmono/jetbrainsmono.css
@@ -148,16 +157,36 @@ extra_css:
 
 extra:
   social:
+    - icon: /fontawesome/brands/github
+      link: https://github.com/kinnariyamamatanha/
+      name: GitHub
     - icon: /fontawesome/brands/qq
       link: img/qq.jpg
+      name: 加加我的QQ
     - icon: /fontawesome/brands/weixin
       link: img/wechat.jpg
+      name: 加加我的微信
     - icon: /fontawesome/brands/x-twitter
       link: https://x.com/MamaTanha76294
+      name: X
     - icon: /fontawesome/brands/zhihu
       link: https://www.zhihu.com/people/Kinnariya
+      name: Zhihu
     - icon: fontawesome/solid/paper-plane
       link: mailto:2823324228@qq.com
+      name: send email to me!
+  analytics:
+    provider: google
+    property: G-20LWGZNLLR
+    feedback:
+      title: Support Me!
+      ratings:
+        - icon: fontawesome/regular/hand-back-fist
+          name: Support Me!
+          data: 1
+          note: >-
+            <center> 难道说……你愿意给我买一瓶快乐水吗！🫣 </center>
+            <img src="https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_2024-12-07_230055_143.png" width=200px>
 
 not_in_nav:
   about.md
