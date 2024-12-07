@@ -5,17 +5,26 @@ hide:
     - toc
 home: true
 nostatistics: true
+comments: false
 ---
 
-# Welcome to Kinnari's Site! 🎉
+<br><br><br><br><br><br>
 
-[:material-clock-time-two-outline: Recent Update](./changelog.md) / [:octicons-link-16: My frineds!](./links.md) / [:octicons-info-16: About](./about.md) / [:material-chart-line: Statistics](javascript:toggle_statistics();)
+<h1 style="text-align: center;">
+<span style="font-size:50px;">
+Welcome to Kinnari's Site! 🎉
+</span>
+</h1>
 
-<div id="statistics" markdown="1" class="card" style="width: 27em; border-color: transparent; opacity: 0; font-size: 75%">
+<span style="display: block; text-align: center; font-size: 18px;">
+[:material-clock-time-two-outline: Recent Update](./changelog.md) / [:octicons-link-16: My frineds!](./links.md) / [:octicons-info-16: About Me](./about.md) / [:academicons-google-scholar: Academic Page](./academy.md) / [:material-chart-line: Statistics](javascript:toggle_statistics();)
+</span>
+
+<div id="statistics" markdown="1" class="card" style="width: 27em; border-color: transparent; opacity: 0; margin-left: auto; margin-right: 0; font-size: 110%">
 <div style="padding-left: 1em;" markdown="1">
-<li>网站运行时间：<span id="web-time"></span></li>
-<li>访客总人数：<span id="busuanzi_value_site_uv"></span>人</li>
-<li>总访问次数：<span id="busuanzi_value_site_pv"></span>次</li>
+<li>Website Operating Time: <span id="web-time"></span></li>
+<li>Total Visitors: <span id="busuanzi_value_site_uv"></span> people</li>
+<li>Total Visits: <span id="busuanzi_value_site_pv"></span> times</li>
 </div>
 </div>
 
@@ -33,9 +42,9 @@ function updateTime() {
     h = Math.floor(diff / (3600 * 1000) % 24);
     m = Math.floor(diff / (60 * 1000) % 60);
     if (y == 0) {
-        document.getElementById("web-time").innerHTML = d + "<span class=\"heti-spacing\"> </span>天<span class=\"heti-spacing\"> </span>" + h + "<span class=\"heti-spacing\"> </span>小时<span class=\"heti-spacing\"> </span>" + m + "<span class=\"heti-spacing\"> </span>分钟";
+        document.getElementById("web-time").innerHTML = d + "<span> </span>d<span> </span>" + h + "<span> </span>h<span> </span>" + m + "<span> </span>m";
     } else {
-        document.getElementById("web-time").innerHTML = y + "<span class=\"heti-spacing\"> </span>年<span class=\"heti-spacing\"> </span>" + d + "<span class=\"heti-spacing\"> </span>天<span class=\"heti-spacing\"> </span>" + h + "<span class=\"heti-spacing\"> </span>小时<span class=\"heti-spacing\"> </span>" + m + "<span class=\"heti-spacing\"> </span>分钟";
+        document.getElementById("web-time").innerHTML = y + "<span> </span>y<span> </span>" + d + "<span> </span>d<span> </span>" + h + "<span> </span>h<span> </span>" + m + "<span> </span>m";
     }
     setTimeout(updateTime, 1000 * 60);
 }
@@ -49,5 +58,3 @@ function toggle_statistics() {
     }
 }
 </script>
-
-<br><br><br><br><br><br><br><br>

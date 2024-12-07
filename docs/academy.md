@@ -15,7 +15,7 @@ nostatistics: true
 
 <!--<span style=font-size:2em;">[:academicons-google-scholar:](https://scholar.google.com/citations?user=9wh9VXIAAAAJ&hl=en) [:academicons-semantic-scholar:](https://www.semanticscholar.org/author/Xichen-Pan/2158877024) [:fontawesome-brands-github:](https://github.com/xichenpan) [:fontawesome-brands-linkedin:](https://www.linkedin.com/in/xichenpan/) [:fontawesome-brands-x-twitter:](https://twitter.com/xichen_pan) [:fontawesome-brands-zhihu:](https://www.zhihu.com/people/xichenpan)</span>-->
 
-<span style=font-size:2em;">[:fontawesome-brands-github:](https://github.com/KinnariyaMamaTanha/) [:fontawesome-brands-x-twitter:](https://twitter.com/xichen_pan) [:fontawesome-brands-zhihu:](https://www.zhihu.com/people/xichenpan)</span>
+<span style=font-size:2em;">[:fontawesome-brands-github:](https://github.com/KinnariyaMamaTanha/) [:fontawesome-brands-x-twitter:](https://x.com/MamaTanha76294) [:fontawesome-brands-zhihu:](https://www.zhihu.com/people/Kinnariya)</span>
 
 ---
 
@@ -39,7 +39,7 @@ I am a second-year undergraduate student of Artificial Intelligence at the [Scho
 
     [11/2024] :party_popper: I won the Zhiyuan Honors Scholarship, SJTU (top 5%)
 
-    [11/2024] :party_popper: I won the 2024 Shanghai Scholarship (top 3%)
+    [11/2024] :party_popper: I won the 2024 Shanghai Scholarship (top 2%)
 
     [09/2024] I became an intern in [RHOS](https://mvig-rhos.com/), advised by Assistant Prof. [Yonglu Li](https://dirtyharrylyl.github.io/) and Prof. [Cewu Lu](https://www.mvig.org/).
 
@@ -111,7 +111,7 @@ An open-source GitHub page built for reference in self-learning of artificial in
 
 ## Honors
 
-- Shanghai Scholarship, 2024 (top 3%)
+- Shanghai Scholarship, 2024 (top 2%)
 - Zhiyuan Honors Scholarship, SJTU, 2024 (top 5%)
 - Merit Scholarship, B level, SJTU, 2024 (top 5%)
 - Zhiyuan Honors Scholarship, SJTU, 2023 (top 5%)

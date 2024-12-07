@@ -3,28 +3,6 @@
   --md-code-font: "JetBrains Mono";
 }
 
-
-@media screen and (min-width: 960px) {
-  /* body {
-    zoom: 1.1;
-  } */
-  html {
-    font-size: 137.5%;
-  }
-}
-
-@media screen and (min-width: 100em) {
-  html {
-    font-size: 137.5%;
-  }
-}
-
-@media screen and (min-width: 125em) {
-  html {
-    font-size: 137.5%;
-  }
-}
-
 .md-typeset h1, .md-typeset h2 {
   font-weight: 600;
 }
@@ -52,7 +30,7 @@
 [data-md-color-scheme="default"] {
   --md-primary-fg-color: #efefef;
   --md-primary-bg-color: #000000;
-  --md-typeset-a-color: #555555;
+  /*--md-typeset-a-color: #555555;*/
   --md-footer-fg-color: #000000;
   --md-footer-bg-color: #efefef;
   --md-footer-bg-color--dark: #efefef;
@@ -142,9 +120,9 @@ input#mkdocs-content-password {
   background-color: #161616;
 }
 
-.katex {
-  -webkit-text-stroke-width: 0.3px;
-}
+/*.katex {*/
+/*  -webkit-text-stroke-width: 0.3px;*/
+/*}*/
 
 .reference ol {
   counter-reset: li;
@@ -244,27 +222,4 @@ input#mkdocs-content-password {
 
 .md-typeset :is(.emojione,.twemoji,.gemoji) {
   vertical-align: sub;
-}
-
-.toc-tag {
-  background-color: #3f6ec6b0;
-  border-radius: 3px;
-  font-size: 80%;
-  padding: 3px;
-}
-
-.toc-tag-classnotes {
-  background-color: #e6ad5bb0;
-}
-
-.toc-tag-classnotes::before {
-  content: "课程笔记"
-}
-
-.toc-tag-reports {
-  background-color: #3f6ec6b0;
-}
-
-.toc-tag-reports::before {
-  content: "实验报告"
 }

@@ -1,6 +1,12 @@
+# See https://github.com/TonyCrane/mkdocs-changelog-plugin
 - "2024":
+  - "2024-12-07":
+    - function: Add mkdocs-toc-plugin, LICENSE, README
+    - pageupdate:
+        text: Update Home page
+        href: /
   - "2024-12-06":
     - function: Add qq and wechat contact
     - newpage:
         text: "First commit"
-        href: /index
+        href: /

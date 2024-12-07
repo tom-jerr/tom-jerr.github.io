@@ -79,6 +79,7 @@ plugins:
   - search
   - statistics:
       words_per_minute: 200
+  - toc
 
 markdown_extensions:
   - abbr
@@ -139,7 +140,7 @@ extra_javascript:
 
 
 extra_css:
-  - https://cdn.tonycrane.cc/jbmono/jetbrainsmono.cs
+  - https://cdn.tonycrane.cc/jbmono/jetbrainsmono.css
   - css/custom.css
   - css/card.css
   - css/flink.css
@@ -151,6 +152,10 @@ extra:
       link: img/qq.jpg
     - icon: /fontawesome/brands/weixin
       link: img/wechat.jpg
+    - icon: /fontawesome/brands/x-twitter
+      link: https://x.com/MamaTanha76294
+    - icon: /fontawesome/brands/zhihu
+      link: https://www.zhihu.com/people/Kinnariya
     - icon: fontawesome/solid/paper-plane
       link: mailto:2823324228@qq.com
 

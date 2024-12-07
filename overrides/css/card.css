@@ -1,5 +1,5 @@
 .card {
-    position: relative;
+    position: right;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-direction: column;

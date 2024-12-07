@@ -5,3 +5,4 @@ mkdocs-git-revision-date-localized-plugin
 mkdocs-glightbox
 mkdocs-statistics-plugin
 mkdocs-video
+rich # for mkdocs-toc-plugin
