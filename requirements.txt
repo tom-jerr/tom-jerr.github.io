@@ -1,9 +1,9 @@
+mkdocs-blogging-plugin
 mkdocs-callouts
 mkdocs-changelog-plugin
 mkdocs-material
 mkdocs-minify-plugin
 mkdocs-git-revision-date-localized-plugin
 mkdocs-glightbox
-mkdocs-statistics-plugin
 mkdocs-video
 rich # for mkdocs-toc-plugin

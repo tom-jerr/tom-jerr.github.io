@@ -1,3 +1,8 @@
+---
+icon: /material/book
+nostatistics: true
+---
+
 # Notes 📚
 
 !!! note "Abstract"

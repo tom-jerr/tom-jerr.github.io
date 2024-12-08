@@ -1,14 +1,8 @@
 ---
-title: 一周总结与回顾-2
-math: false
-mermaid: false
+title: 一周反思与总结-2
 date: 2024-11-06 19:14:41
 tags:
-    - 科研
     - 奖学金
-categories: Life
-index_img: img/avatar5.jpg
-archive: true
 ---
 
 > 外界能干扰到你的，都源自于身体内对自己不诚实的部分。

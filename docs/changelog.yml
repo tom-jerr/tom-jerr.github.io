@@ -1,11 +1,24 @@
 # See https://github.com/TonyCrane/mkdocs-changelog-plugin
 - "2024":
-  - "2024-12-07":
+  - "12-08":
+    - newpage:
+        text: 2024 第六周总结
+        href: /summary/2024/summary-6
+    - newpage:
+        text: OneLLM 论文阅读
+        href: /blogs/posts/OneLLM
+    - function:
+        text: Set up tags
+        href: /tags
+    - function:
+        text: Set up blogs
+        href: /blogs
+  - "12-07":
     - function: Add mkdocs-toc-plugin, LICENSE, README, Google analytics
     - pageupdate:
         text: Update Home page
         href: /
-  - "2024-12-06":
+  - "12-06":
     - function: Add qq and wechat contact
     - newpage:
         text: "First commit"

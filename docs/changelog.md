@@ -1,9 +1,10 @@
 ---
 changelog: true
 nostatistics: true
+comments: false
 ---
 
-# 更新日志
+# Update Logs
 
 <style>
 .md-typeset h2 {

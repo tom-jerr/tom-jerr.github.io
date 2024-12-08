@@ -6,6 +6,7 @@ hide:
 home: true
 nostatistics: true
 comments: false
+icon: material/home
 ---
 
 <br><br><br><br><br><br>
@@ -17,7 +18,7 @@ Welcome to Kinnari's Site! 🎉
 </h1>
 
 <span style="display: block; text-align: center; font-size: 18px;">
-[:material-clock-time-two-outline: Recent Update](./changelog.md) / [:octicons-link-16: My frineds!](./links.md) / [:octicons-info-16: About Me](./about.md) / [:academicons-google-scholar: Academic Page](./academy.md) / [:material-chart-line: Statistics](javascript:toggle_statistics();)
+[:material-clock-time-two-outline: Recent Update](./changelog.md) / [:octicons-link-16: My frineds!](./links/index.md) / [:octicons-info-16: About Me](./about/index.md) / [:academicons-google-scholar: Academic Page](./academy.md) / [:material-chart-line: Statistics](javascript:toggle_statistics();)
 </span>
 
 <div id="statistics" markdown="1" class="card" style="width: 27em; border-color: transparent; opacity: 0; margin-left: auto; margin-right: 0; font-size: 110%">

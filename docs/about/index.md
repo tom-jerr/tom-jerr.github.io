@@ -1,3 +1,7 @@
+---
+icon: /fontawesome/solid/face-smile-wink
+---
+
 # About 🥳
 
 我是来自上海交大的 23 级本科生 Kinnari，现就读于人工智能专业，很高兴能在互联网上和你相遇。
@@ -8,9 +12,9 @@ I am Kinnari from Shanghai Jiao Tong University, majoring in Artificial Intellig
 
 I am interested in Artificial Intelligence, Machine Learning, Deep Learning, Natural Language Processing, Computer Vision, etc., and I am also keen on sharing my learning experience and insights. You can see my sharing of some learning materials on [aiTour](https://aitour.icu/) or [GitHub](https://github.com/KinnariyaMamaTanha/aiTour/), both in Chinese.
 
-关于我的更多学术信息，你可以看[我的学术主页🎓](academy.md)。
+关于我的更多学术信息，你可以看[我的学术主页🎓](../academy.md)。
 
-For more academic information about me, see [my academic page🎓](./academy.md).
+For more academic information about me, see [my academic page🎓](../academy.md).
 
 ---
 

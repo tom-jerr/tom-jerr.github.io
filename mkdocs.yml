@@ -25,7 +25,7 @@ theme:
     - navigation.tabs
     - navigation.top
     - navigation.path
-    - navigation.prune
+    # - navigation.prune
     - navigation.indexes
     - search.highlight
     - search.share
@@ -33,20 +33,24 @@ theme:
     - toc.follow
 
   palette:
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: follow system
     - media: "(prefers-color-scheme: light)"
       scheme: default # 日间模式
       primary: white # 上方的
       accent: indigo # 链接等可交互元件的高亮色
       toggle:
         icon: material/brightness-7 # 图标
-        name: 切换至夜间模式 # 鼠标悬浮提示
+        name: light mode # 鼠标悬浮提示
     - media: "(prefers-color-scheme: dark)"
       scheme: slate # 夜间模式
       primary: black
       accent: indigo
       toggle:
         icon: material/brightness-4
-        name: 切换至日间模式
+        name: darkmode
 
   font: false
  
@@ -61,6 +65,15 @@ theme:
     - 404.html
 
 plugins:
+  - blogging:
+      dirs:
+        - blogs/posts
+      theme:
+        name: card
+      features:
+        tags:
+          index_page: tags/
+          insert: top
   - callouts
   - changelog
   - glightbox:
@@ -95,7 +108,6 @@ markdown_extensions:
   - nl2br
   - pymdownx.arithmatex:  # latex支持
       generic: true
-  - pymdownx.blocks.caption
   - pymdownx.caret
   - pymdownx.critic
   - pymdownx.details
@@ -105,7 +117,6 @@ markdown_extensions:
       options:
         custom_icons:
           - overrides/.icons
-  - pymdownx.fancylists
   - pymdownx.highlight: # 代码块高亮
       anchor_linenums: true
       auto_title: true # 显示编程语言名称
@@ -196,15 +207,12 @@ not_in_nav:
 nav:
   - Home: index.md
   - Notes: notes/index.md
-  - Blogs: blogs/index.md
+  - Blogs:
+    - index: blogs/index.md
+    - Archives: blogs/archives.md
   - Summaries:
     - index: summary/index.md
-    - "2024":
-      - "一周反思与总结-5": summary/2024/summary-5.md
-      - "一周反思与总结-4": summary/2024/summary-4.md
-      - "一周反思与总结-3": summary/2024/summary-3.md
-      - "一周反思与总结-2": summary/2024/summary-2.md
-      - "aiTour第一年总结与反思": summary/2024/aiTour-first-year.md
-  - Links: links.md
-  - About: about.md
+  - Tags: tags/index.md
+  - Links: links/index.md
+  - About: about/index.md
 

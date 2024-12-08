@@ -1,12 +1,6 @@
 ---
 title: 一周总结与回顾-5
-categories: Life
-math: true
-mermaid: false
-index_img: img/avatar13.jpg
-archive: true
 date: 2024-12-01 12:59:12
-tags:
 ---
 
 > 我以与外界交互的方式，认识我自己。

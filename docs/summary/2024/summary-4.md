@@ -1,12 +1,8 @@
 ---
 title: 一周总结与回顾-4
-categories: Life
-math: false
-mermaid: false
-index_img: img/avatar13.jpg
-archive: true
 date: 2024-11-24 18:47:56
 tags:
+    - 发发牢骚
 ---
 
 ## 做了什么

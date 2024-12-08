@@ -59,10 +59,6 @@
   --md-code-bg-color: #1d1d1d;
 }
 
-input.md-search__input {
-  background-color: #fff;
-}
-
 [data-md-color-scheme="slate"] input.md-search__input {
   background-color: #000;
 }
@@ -222,4 +218,14 @@ input#mkdocs-content-password {
 
 .md-typeset :is(.emojione,.twemoji,.gemoji) {
   vertical-align: sub;
+}
+
+[data-md-color-scheme="default"] .md-typeset .admonition,
+.md-typeset details {
+    box-shadow: var(--md-shadow-z2);
+}
+
+[data-md-color-scheme="default"]  .md-typeset .admonition,
+.md-typeset details {
+    border: none;
 }

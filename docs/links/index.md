@@ -1,6 +1,7 @@
 ---
 glightbox: False
 nostatistics: True
+icon: /octicons/link-24
 ---
 
 # Links 🥰
@@ -56,7 +57,7 @@ nostatistics: True
             <img src="https://raw.githubusercontent.com/DeepforThink/DeepforThink.github.io/refs/heads/main/images/touxiang.png" alt="DeepforThink">
         </div>
         <div class="flink-item-name heti-skip">Blogs of donf</div>
-        <div class="flink-item-desc">My friend in NanKai University</div>
+        <div class="flink-item-desc">My friend in Nankai University</div>
     </a>
 </div>
 
@@ -67,6 +68,26 @@ nostatistics: True
         </div>
         <div class="flink-item-name heti-skip">Wnc's Cafe</div>
         <div class="flink-item-desc">Powerful freshman</div>
+    </a>
+</div>
+
+<div class="flink-list-item">
+    <a href="https://haoyuzhen.com/" title="anyeZHY" target="_blank">
+        <div class="flink-item-icon">
+            <img src="https://haoyuzhen.com/images/me.JPG" alt="anyeZHY">
+        </div>
+        <div class="flink-item-name heti-skip">anyeZHY</div>
+        <div class="flink-item-desc">Just awesome</div>
+    </a>
+</div>
+
+<div class="flink-list-item">
+    <a href="https://www.junyi42.com/" title="One Chapter" target="_blank">
+        <div class="flink-item-icon">
+            <img src="https://www.junyi42.com/figs/profile_new.jpg" alt="One Chapter">
+        </div>
+        <div class="flink-item-name heti-skip">One Chapter</div>
+        <div class="flink-item-desc">He is simply God</div>
     </a>
 </div>
 

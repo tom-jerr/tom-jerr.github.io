@@ -1,13 +1,6 @@
 ---
 title: 一周总结与回顾-3
-tags:
-    - 科研
-categories: Life
-math: false
-mermaid: false
-index_img: img/avatar5.jpg
 date: 2024-11-16 20:59:49
-archive: true
 ---
 
 这周是让我破防的一周。
