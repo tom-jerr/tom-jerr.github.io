@@ -198,12 +198,8 @@ extra:
           data: 1
           note: >-
             <center> 难道说……你愿意给我买一瓶快乐水吗！🫣 </center>
+            <center> How about...buy me a coffee？😋 </center>
             <img src="https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_2024-12-07_230055_143.png" width=200px>
-
-not_in_nav:
-  about.md
-  changelog.md
-  links.md
 
 nav:
   - Home: index.md

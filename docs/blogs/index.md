@@ -19,7 +19,9 @@ nostatistics: true
 
 {{ BEGIN_TOC }}
 
-- "2024":
+- "行为方式":
+    - 工程思维与流式规划: posts/project-thinking-and-stream-planing
+- "论文阅读":
     - OneLLM 论文阅读: posts/OneLLM
 
 {{ END_TOC }}

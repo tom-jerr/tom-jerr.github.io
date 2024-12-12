@@ -229,3 +229,24 @@ input#mkdocs-content-password {
 .md-typeset details {
     border: none;
 }
+
+.md-tabs__item:hover {
+  background-color: rgba(68, 138, 255, 0.1);
+  transform: scale(1.1) !important;
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+img {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-radius 0.3s ease-in-out;
+  /* 初始状态下的其他样式 */
+  max-width: 100%;
+  height: auto;
+}
+
+img:hover {
+  transform: scale(1.1);               /* 放大图片 */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  /* 添加阴影 */
+  border-radius: 15px;                /* 圆角 */
+  transition: all 0.3s ease-in-out;    /* 平滑过渡 */
+}

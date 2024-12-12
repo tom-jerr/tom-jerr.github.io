@@ -43,6 +43,8 @@
 }
 .flink-list-item:hover {
   background-color: rgba(68,138,255,.1);
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04);
 }
 .flink-list-item {
   width: calc(50% - 15px) !important;

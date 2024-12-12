@@ -46,6 +46,8 @@ I am a second-year undergraduate student of Artificial Intelligence at the [Scho
 
     [08/2024] I participated in the preparation of the [tutorial report 《基于离散编码的语音合成》](https://www.ncmmsc.org.cn/jcbg/) of [NCMMSC 2024](https://www.ncmmsc.org.cn/).
 
+    [03/2024] :party_popper: I won the first prize of the 15th Chinese Mathematics Competitions (CMC) and the first prize of the 15th Shanghai Mathematics Competitions!
+
     [02/2024] I became an intern in [X-LANCE](https://x-lance.github.io/), advised by Prof. [Kai Yu](https://x-lance.github.io/kaiyu/).
 
 === "2023"

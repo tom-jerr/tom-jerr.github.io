@@ -1,5 +1,13 @@
 # See https://github.com/TonyCrane/mkdocs-changelog-plugin
 - "2024":
+  - "12-12":
+      - newpage:
+          text: Add 工程思维与流式规划
+          href: /blogs/posts/project-thinking-and-stream-planing/
+  - "12-10":
+    - pageupdate:
+        text: Updated academy page
+        href: /academy
   - "12-08":
     - newpage:
         text: 2024 第六周总结
