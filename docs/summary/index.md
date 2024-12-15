@@ -16,6 +16,7 @@ nostatistics: true
 - "aiTour 年总":
     - aiTour 第一年总结: 2024/aiTour-first-year/
 - "2024 周总":
+    - 一周总结与反思-7: 2024/summary-7/
     - 一周总结与反思-6: 2024/summary-6/
     - 一周总结与反思-5: 2024/summary-5/
     - 一周总结与反思-4: 2024/summary-4/

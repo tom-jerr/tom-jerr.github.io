@@ -15,10 +15,6 @@
   letter-spacing: 0;
 }
 
-.md-typeset {
-  font-size: .7rem;
-}
-
 .md-typeset h3 {
   font-weight: 600;
 }
@@ -242,6 +238,8 @@ img {
   /* 初始状态下的其他样式 */
   max-width: 100%;
   height: auto;
+  margin: auto;
+  display: block;
 }
 
 img:hover {

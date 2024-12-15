@@ -50,7 +50,7 @@ theme:
       accent: indigo
       toggle:
         icon: material/brightness-4
-        name: darkmode
+        name: dark mode
 
   font: false
  
