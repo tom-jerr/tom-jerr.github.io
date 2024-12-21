@@ -236,10 +236,9 @@ input#mkdocs-content-password {
 img {
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-radius 0.3s ease-in-out;
   /* 初始状态下的其他样式 */
-  max-width: 100%;
-  height: auto;
-  margin: auto;
-  display: block;
+  /*max-width: 100%;*/
+  /*height: auto;*/
+  /*display: block;*/
 }
 
 img:hover {

@@ -1,4 +1,6 @@
 ---
+hide:
+    - toc
 icon: material/tag
 nostatistics: true
 comments: false
