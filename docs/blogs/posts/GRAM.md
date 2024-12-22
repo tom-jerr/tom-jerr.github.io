@@ -112,6 +112,6 @@ $$
 
 ![](https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/20241221100415018.png)
 
-使用 [t-SNE](t-SNE.md) 可视化的结果：
+使用 t-SNE 可视化的结果：
 
 ![](https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/20241221101841153.png)

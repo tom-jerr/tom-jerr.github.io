@@ -22,7 +22,7 @@ For more academic information about me, see [my academic page🎓](../academy.md
 
 I am a person who loves to make new friends. I usually use WeChat and QQ for online communication. You can find my QR code in the corresponding icon above, scan it, and then add me as a friend. I also use X, but I haven't posted anything on it yet, nor have I added friends or something like that.
 
-如果你有什么问题或者想要和我交流，也欢迎给我[发邮件](mailto:2823324228@qq.com)或者在下方留言。我会尽快回复你的。
+如果你有什么问题或者想要和我交流，也欢迎给我发邮件（mailto: echo 'MjgyMzMyNDIyOEBxcS5jb20=' | base64 -d）或者在下方留言。我会尽快回复你的。
 
 If you have any questions or want to communicate with me, please feel free to [send me an email](mailto:2823324228@qq.com) or leave a message below. I will reply to you as soon as possible.
 
