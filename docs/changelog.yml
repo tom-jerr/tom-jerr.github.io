@@ -1,5 +1,9 @@
 # See https://github.com/TonyCrane/mkdocs-changelog-plugin
 - "2024":
+  - "12-27":
+      - newpage:
+          text: 增加简历
+          href: /assets/cv.pdf
   - "12-12":
       - newpage:
           text: Add 工程思维与流式规划

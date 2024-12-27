@@ -247,3 +247,7 @@ img:hover {
   border-radius: 15px;                /* 圆角 */
   transition: all 0.3s ease-in-out;    /* 平滑过渡 */
 }
+
+.md-typeset div.arithmatex {
+  overflow-y: hidden;
+} /* 解决公式带纵向滚动条 */
