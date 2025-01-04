@@ -64,7 +64,6 @@ I am a second-year undergraduate student of Artificial Intelligence at the [Scho
 
 ## Education
 
-
 ### Zhiyuan Honor Program, Shanghai Jiao Tong University![Image title](img/sjtu.png){ align=right style="height:6em; border-radius: 0.5em;"}
 
 Sept. 2023 -- Present
@@ -116,7 +115,7 @@ An open-source GitHub page built for reference in self-learning of artificial in
 
 ## Honors
 
-- Shanghai Scholarship, 2024 (**top 2%**)
+- [Shanghai Scholarship](img/shjxj2024.jpg), 2024 (**top 2%**)
 - Zhiyuan Honors Scholarship, SJTU, 2024 (**top 5%**)
 - Merit Scholarship, B level, SJTU, 2024 (**top 5%**)
 - **First prize** of [the 15th Chinese Mathematics Competitions](img/15th_national_math_competition.png) and **first prize** of [the 15th Shanghai Mathematics Competitions](img/15th_shanghai_math_competition.png)

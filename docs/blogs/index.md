@@ -4,6 +4,9 @@ nostatistics: true
 ---
 # Blogs ✍
 
+!!! info
+    欢迎访问我的新博客地址：[点这儿](https://kinnariyamamatanha.github.io/blog/)
+
 !!! note "Abstract"
     个人博客，主要记录
 

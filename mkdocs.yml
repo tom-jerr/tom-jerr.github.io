@@ -52,8 +52,9 @@ theme:
         icon: material/brightness-4
         name: dark mode
 
-  font: false
- 
+  font:
+    text: JetBrains Mono
+
   favicon: img/avatar1.png
 
   icon:
@@ -107,7 +108,7 @@ markdown_extensions:
   - meta
   - md_in_html
   - nl2br
-  - pymdownx.arithmatex:  # latex支持
+  - pymdownx.arithmatex: # latex支持
       generic: true
   - pymdownx.caret
   - pymdownx.critic
@@ -156,12 +157,12 @@ extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
   - https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js
+  - https://busuanzi.icodeq.com/busuanzi.pure.mini.js
   - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
   - js/tablesort.js
   - js/mathjax.js
 
 extra_css:
-  - https://cdn.tonycrane.cc/jbmono/jetbrainsmono.css
   - css/custom.css
   - css/card.css
   - css/flink.css
@@ -205,11 +206,10 @@ nav:
   - Home: index.md
   - Notes: notes/index.md
   - Blogs:
-    - index: blogs/index.md
-    - Archives: blogs/archives.md
+      - index: blogs/index.md
+      - Archives: blogs/archives.md
   - Summaries:
-    - index: summary/index.md
+      - index: summary/index.md
   - Tags: tags/index.md
   - Links: links/index.md
   - About: about/index.md
-
