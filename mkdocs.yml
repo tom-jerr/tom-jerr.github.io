@@ -70,8 +70,7 @@ plugins:
       locale: en
       dirs:
         - blogs/posts
-      theme:
-        name: card
+      show_total: true
       features:
         tags:
           index_page: tags/
@@ -95,6 +94,9 @@ plugins:
       video_muted: True
       video_controls: True
       mark: "video"
+  - rss:
+      enabled: !ENV [CI, false]
+      use_material_social_cards: false
   - search
   - statistics:
       words_per_minute: 200
@@ -157,10 +159,9 @@ extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
   - https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js
-  - https://busuanzi.icodeq.com/busuanzi.pure.mini.js
-  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
-  - js/tablesort.js
+  # - https://busuanzi.icodeq.com/busuanzi.pure.mini.js
   - js/mathjax.js
+  - js/chatbot.js
 
 extra_css:
   - css/custom.css
@@ -174,10 +175,10 @@ extra:
       link: https://github.com/kinnariyamamatanha/
       name: GitHub
     - icon: /fontawesome/brands/qq
-      link: img/qq.jpg
+      link: /img/qq.jpg
       name: 加加我的QQ
     - icon: /fontawesome/brands/weixin
-      link: img/wechat.jpg
+      link: /img/wechat.jpg
       name: 加加我的微信
     - icon: /fontawesome/brands/x-twitter
       link: https://x.com/MamaTanha76294
@@ -188,6 +189,13 @@ extra:
     - icon: fontawesome/solid/paper-plane
       link: mailto:2823324228@qq.com
       name: send email to me!
+    - icon: fontawesome/solid/rss
+      link: /feed_rss_created.xml
+      name: RSS created
+    - icon: fontawesome/solid/rss
+      link: /feed_rss_updated.xml
+      name: RSS updatedfeed_rss_created.xml
+
   analytics:
     provider: google
     property: G-20LWGZNLLR

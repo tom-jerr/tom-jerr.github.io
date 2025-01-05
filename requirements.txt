@@ -6,4 +6,5 @@ mkdocs-minify-plugin
 mkdocs-git-revision-date-localized-plugin
 mkdocs-glightbox
 mkdocs-video
+mkdocs-rss-plugin
 rich # for mkdocs-toc-plugin

@@ -4,9 +4,6 @@ nostatistics: true
 ---
 # Blogs ✍
 
-!!! info
-    欢迎访问我的新博客地址：[点这儿](https://kinnariyamamatanha.github.io/blog/)
-
 !!! note "Abstract"
     个人博客，主要记录
 
@@ -22,7 +19,7 @@ nostatistics: true
 
 {{ BEGIN_TOC }}
 
-- "行为方式":
+- "方法论":
     - 工程思维与流式规划: posts/project-thinking-and-stream-planing/
 - "论文阅读":
     - OneLLM: posts/OneLLM/
