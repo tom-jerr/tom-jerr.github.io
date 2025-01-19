@@ -1,6 +1,7 @@
 :root {
   --md-text-font: "JetBrains Mono", "LXGW WenKai Screen"; 
   --md-code-font: "JetBrains Mono";
+  --base-border-radius: 0.5rem;
 }
 
 .md-typeset h1, .md-typeset h2 {
@@ -25,8 +26,7 @@
 
 [data-md-color-scheme="default"] {
   /*--md-primary-fg-color: #efefef;*/
-  --md-primary-bg-color: #000000;
-  /*--md-typeset-a-color: #555555;*/
+  --md-primary-bg-color: #000000; /*--md-typeset-a-color: #555555;*/
   --md-footer-fg-color: #000000;
   --md-footer-bg-color: #efefef;
   --md-footer-bg-color--dark: #efefef;
@@ -56,6 +56,7 @@
 }
 
 [data-md-color-scheme="slate"] input.md-search__input {
+  border-radius: var(--base-border-radius);
   background-color: #000;
 }
 
@@ -104,18 +105,6 @@ body[data-md-prefers-color-scheme=true] .md-icon .unknown-mode {
   background-color: #4c4c4c;
 }
 
-input#mkdocs-content-password {
-  width: 6rem;
-}
-
-[data-md-color-scheme="slate"] input#mkdocs-content-password {
-  background-color: #161616;
-}
-
-/*.katex {*/
-/*  -webkit-text-stroke-width: 0.3px;*/
-/*}*/
-
 .reference ol {
   counter-reset: li;
 }
@@ -127,60 +116,6 @@ input#mkdocs-content-password {
 .reference li::marker {
   content: "[" counter(li) "]";
   font-size: 0.8em;
-}
-
-.riscv-table, .fl-table {
-  width: 100%;
-  display: inline-table;
-  table-layout: fixed;
-  /* border-collapse: collapse; */
-}
-.riscv-table-node {
-  text-align: center;
-  padding: 0.2em;
-  border: 0.04rem solid var(--md-default-fg-color);
-}
-.riscv-table-node-little, .fl-table-node {
-  text-align: center;
-  padding: 0.1em;
-  border: 0.04rem solid var(--md-default-fg-color);
-}
-.riscv-table-numnode {
-  font-size: .4rem;
-}
-.riscv-table-undernode {
-  font-size: .6rem;
-  text-align: center;
-}
-.riscv-table-numnodel {
-  font-size: .4rem;
-  text-align: left;
-}
-.riscv-table-numnoder {
-  font-size: .4rem;
-  text-align: right;
-}
-@media (max-width: 700px) {
-  .riscv-table-node, .riscv-table-node-little, .fl-table-node {
-    font-size: .6rem;
-  }
-}
-@media (max-width: 610px) {
-  .riscv-table-node, .riscv-table-node-little, .fl-table-node {
-    font-size: .5rem;
-  }
-}
-@media (max-width: 602px) {
-  .riscv-table-node, .riscv-table-node-little {
-    overflow-x: scroll;
-    word-wrap: normal;
-  }
-  .riscv-table-numnoder {
-    font-size: 0px;
-  }
-  .riscv-table-numnodel {
-    word-wrap: normal;
-  }
 }
 
 [data-md-color-scheme="slate"] .fl-affected {
@@ -219,18 +154,14 @@ input#mkdocs-content-password {
 [data-md-color-scheme="default"] .md-typeset .admonition,
 .md-typeset details {
     box-shadow: var(--md-shadow-z2);
-}
-
-[data-md-color-scheme="default"]  .md-typeset .admonition,
-.md-typeset details {
     border: none;
 }
 
 .md-tabs__item:hover {
   background-color: rgba(68, 138, 255, 0.1);
-  transform: scale(1.1) !important;
-  border-radius: 10px;
-  transition: all 0.2s ease-in-out;
+  /* transform: scale(1.1) !important; */
+  /* border-radius: 10px; */
+  transition: all 0.1s ease-in-out;
 }
 
 img {
@@ -239,15 +170,59 @@ img {
   /*max-width: 100%;*/
   /*height: auto;*/
   /*display: block;*/
+  border-radius: 10px;                /* 圆角 */
 }
 
 img:hover {
-  transform: scale(1.1);               /* 放大图片 */
+  /* transform: scale(1.1);               /* 放大图片 */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);  /* 添加阴影 */
-  border-radius: 15px;                /* 圆角 */
+  border-radius: 10px;                /* 圆角 */
+  transition: all 0.3s ease-in-out;    /* 平滑过渡 */
+}
+
+[data-md-color-scheme="slate"] img:hover {
+  /* transform: scale(1.1);               /* 放大图片 */
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);  /* 添加阴影 */
+  border-radius: 10px;                /* 圆角 */
   transition: all 0.3s ease-in-out;    /* 平滑过渡 */
 }
 
 .md-typeset div.arithmatex {
   overflow-y: hidden;
 } /* 解决公式带纵向滚动条 */
+
+/* search */
+.md-search__form {
+  border-radius: var(--base-border-radius);
+}
+
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form {
+  border-top-right-radius: var(--base-border-radius);
+  border-top-left-radius: var(--base-border-radius);
+}
+
+[dir="ltr"] .md-search__output {
+  border-bottom-right-radius: var(--base-border-radius);
+  border-bottom-left-radius: var(--base-border-radius);
+}
+
+@media screen and (min-width: 960px) {
+  /* body {
+    zoom: 1.1;
+  } */
+  html {
+    font-size: 137.5%;
+  }
+}
+
+@media screen and (min-width: 100em) {
+  html {
+    font-size: 137.5%;
+  }
+}
+
+@media screen and (min-width: 125em) {
+  html {
+    font-size: 137.5%;
+  }
+}

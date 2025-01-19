@@ -16,33 +16,41 @@ nostatistics: true
 
 :material-file: CV: [Click Here](assets/cv.pdf)
 
-<!--<span style=font-size:2em;">[:academicons-google-scholar:](https://scholar.google.com/citations?user=9wh9VXIAAAAJ&hl=en) [:academicons-semantic-scholar:](https://www.semanticscholar.org/author/Xichen-Pan/2158877024) [:fontawesome-brands-github:](https://github.com/xichenpan) [:fontawesome-brands-linkedin:](https://www.linkedin.com/in/xichenpan/) [:fontawesome-brands-x-twitter:](https://twitter.com/xichen_pan) [:fontawesome-brands-zhihu:](https://www.zhihu.com/people/xichenpan)</span>-->
-
 <span style=font-size:2em;">[:fontawesome-brands-github:](https://github.com/KinnariyaMamaTanha/) [:fontawesome-brands-x-twitter:](https://x.com/MamaTanha76294) [:fontawesome-brands-zhihu:](https://www.zhihu.com/people/Kinnariya)</span>
 
 ---
 
 ## Bio
 
-I am a second-year undergraduate student of Artificial Intelligence at the [School of Electronic Information And Electrical Engineering](https://english.seiee.sjtu.edu.cn/) of [SJTU](https://en.sjtu.edu.cn/). I am now an intern in [RHOS](https://mvig-rhos.com/) advised by Assistant Prof. [Yonglu Li](https://dirtyharrylyl.github.io/) and Prof. [Cewu Lu](https://www.mvig.org/). Before that, I worked as an intern in [X-LANCE](https://x-lance.github.io/), advised by Prof. [Kai Yu](https://x-lance.github.io/kaiyu/). I also participate in the [Zhiyuan Honors Program](https://en.zhiyuan.sjtu.edu.cn/).
+I am a second-year undergraduate student majoring in Artificial Intelligence at the [SEIEE](https://english.seiee.sjtu.edu.cn/) of [Shanghai Jiao Tong University (SJTU)](https://en.sjtu.edu.cn/). Currently, I am an intern at [GAIR](https://plms.ai/index.html), advised by Prof. [Pengfei Liu](http://pfliu.com/), and at [IPADS](https://ipads.se.sjtu.edu.cn/), under the guidance of Prof. [Xingda Wei](https://ipads.se.sjtu.edu.cn/pub/members/xingda_wei). You could find my previous experience [here](#experience). In addition, I am also an active participant in [Zhiyuan Honors Program](https://en.zhiyuan.sjtu.edu.cn/), which fosters academic excellence and innovation.
+
+> [!INFO] I am actively seeking internships in the field of machine learning systems and optimization. Please feel free to reach out to me if you have any opportunities available! 🥰🥰🥰
+
 
 ---
 
-<!--## Research Interest-->
-<!---->
-<!--### Multimodal Learning-->
-<!---->
-<!------->
+## Research Interest
+
+- **Machine Learning Systems for Advancing AI and AGI**: I am committed to the development of robust and efficient *machine learning systems*, recognizing that the advancement of AI and AGI is fundamentally constrained by the capabilities of their underlying system infrastructures.
+- **Optimization in Large Model Training and Reasoning**: I also focus on improving the efficiency and practicality of large-scale model training and inference through advanced *algorithms*.
+
+---
 
 ## News
 
+=== "2025"
+
+    [01/2025] I became an intern in [GAIR](https://plms.ai/index.html), advised by Prof. [Pengfei Liu](http://pfliu.com/).
+
 === "2024"
 
-    [11/2024] :party_popper: I won the Merit Scholarship, B level, SJTU (**top 5%**)
+    [12/2024] I became an intern in [IPADS](https://ipads.se.sjtu.edu.cn/), advised by Prof [Xingda Wei](https://ipads.se.sjtu.edu.cn/pub/members/xingda_wei).
 
-    [11/2024] :party_popper: I won the Zhiyuan Honors Scholarship, SJTU (**top 5%**)
+    [11/2024] :party_popper: I won the Merit Scholarship, B level, SJTU (**top 5%** in SJTU)
 
-    [11/2024] :party_popper: I won the 2024 Shanghai Scholarship (**top 2%**)
+    [11/2024] :party_popper: I won the Zhiyuan Honors Scholarship, SJTU (**top 5%** in Zhiyuan Honors Program)
+
+    [11/2024] :party_popper: I won the 2024 Shanghai Scholarship (**top 0.2%** in Shanghai)
 
     [09/2024] I became an intern in [RHOS](https://mvig-rhos.com/), advised by Assistant Prof. [Yonglu Li](https://dirtyharrylyl.github.io/) and Prof. [Cewu Lu](https://www.mvig.org/).
 
@@ -54,7 +62,7 @@ I am a second-year undergraduate student of Artificial Intelligence at the [Scho
 
 === "2023"
 
-    [12/2023] :party_popper: I won the 2023 Zhiyuan Honors Scholarship, SJTU (**top 5%**)
+    [12/2023] :party_popper: I won the 2023 Zhiyuan Honors Scholarship, SJTU (**top 5%** in ZHiyuan Honors Program).
 
     [09/2023] I participate in the [Zhiyuan Honor Program](https://en.zhiyuan.sjtu.edu.cn/).
 
@@ -84,9 +92,21 @@ Sept. 2023 -- Present
 
 ## Experience
 
+**GAIR, SJTU & Qing Yuan Research Institute**![Image title](img/gair.png){ align=right style="height:5em; border-radius: 0.5em;"}
+
+Jan. 2025 - Present
+
+Research Intern
+
+**IPADS, SJTU**![Image title](img/ipads.png){ align=right style="height:5em; border-radius: 0.5em;"}
+
+Dec. 2024 - Present
+
+Research Intern
+
 **RHOS, SJTU & Qing Yuan Research Institute**![Image title](img/rhos.png){ align=right style="height:5em; border-radius: 0.5em;"}
 
-Sept. 2024 - Present
+Sept. 2024 - Jan. 2025
 
 Research Intern
 
@@ -98,7 +118,7 @@ Research Intern
 
 ---
 
-## Selected Projects
+## Projects
 
 **[:fontawesome-brands-github: aiTour](https://aitour.icu) [![GitHub Repo stars](https://img.shields.io/github/stars/KinnariyaMamaTanha/aiTour)
 ](https://github.com/KinnariyaMamaTanha/aiTour/stargazers)**
@@ -107,19 +127,17 @@ An open-source GitHub page built for reference in self-learning of artificial in
 
 ---
 
-<!--## Media Exposures-->
+## Media Exposures
 
-<!------->
-
-<!--## Academic Service-->
+I write articles and share my thinkings on [Zhihu](https://www.zhihu.com/people/Kinnariya) regularly and have 80+ followers so far!
 
 ## Honors
 
-- [Shanghai Scholarship](img/shjxj2024.jpg), 2024 (**top 2%**)
-- Zhiyuan Honors Scholarship, SJTU, 2024 (**top 5%**)
-- Merit Scholarship, B level, SJTU, 2024 (**top 5%**)
+- [Shanghai Scholarship](img/shjxj2024.jpg), 2024 (**top 0.2%** in Shanghai)
+- Zhiyuan Honors Scholarship, SJTU, 2024 (**top 5%** in Zhiyuan Honors Program)
+- Merit Scholarship, B level, SJTU, 2024 (**top 5%** in SJTU)
 - **First prize** of [the 15th Chinese Mathematics Competitions](img/15th_national_math_competition.png) and **first prize** of [the 15th Shanghai Mathematics Competitions](img/15th_shanghai_math_competition.png)
-- [Zhiyuan Honors Scholarship](img/zhiyuan_honor2023.png), SJTU, 2023 (**top 5%**)
+- [Zhiyuan Honors Scholarship](img/zhiyuan_honor2023.png), SJTU, 2023 (**top 5%** in Zhiyuan Honors Program)
 
 ---
 

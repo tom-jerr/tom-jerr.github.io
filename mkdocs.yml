@@ -33,10 +33,6 @@ theme:
     - toc.follow
 
   palette:
-    - media: "(prefers-color-scheme)"
-      toggle:
-        icon: material/brightness-auto
-        name: follow system
     - media: "(prefers-color-scheme: light)"
       scheme: default # 日间模式
       primary: white # 上方的
@@ -76,7 +72,6 @@ plugins:
           index_page: tags/
           insert: top
   - callouts
-  - changelog
   - glightbox:
       width: 80%
   - git-revision-date-localized:
@@ -94,9 +89,9 @@ plugins:
       video_muted: True
       video_controls: True
       mark: "video"
-  - rss:
-      enabled: !ENV [CI, false]
-      use_material_social_cards: false
+  # - rss:
+  #     enabled: !ENV [CI, false]
+  #     use_material_social_cards: false
   - search
   - statistics:
       words_per_minute: 200
@@ -161,10 +156,13 @@ extra_javascript:
   - https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js
   # - https://busuanzi.icodeq.com/busuanzi.pure.mini.js
   - js/mathjax.js
-  - js/chatbot.js
+  - js/toc.js
 
 extra_css:
   - css/custom.css
+  - https://gcore.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css
+  - https://gcore.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css
+  - css/fold_toc.css
   - css/card.css
   - css/flink.css
   - css/tasklist.css
@@ -189,12 +187,12 @@ extra:
     - icon: fontawesome/solid/paper-plane
       link: mailto:2823324228@qq.com
       name: send email to me!
-    - icon: fontawesome/solid/rss
-      link: /feed_rss_created.xml
-      name: RSS created
-    - icon: fontawesome/solid/rss
-      link: /feed_rss_updated.xml
-      name: RSS updatedfeed_rss_created.xml
+    # - icon: fontawesome/solid/rss
+    #   link: /feed_rss_created.xml
+    #   name: RSS created
+    # - icon: fontawesome/solid/rss
+    #   link: /feed_rss_updated.xml
+    #   name: RSS updatedfeed_rss_created.xml
 
   analytics:
     provider: google
