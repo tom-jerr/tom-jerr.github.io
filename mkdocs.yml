@@ -210,7 +210,12 @@ extra:
 
 nav:
   - Home: index.md
-  - Notes: notes/index.md
+  - Notes:
+      - index: notes/index.md
+      - CS61C:
+          - "1 Intro": notes/cs61c/1-intro.md
+          - "2 C Intro": notes/cs61c/2-c-intro.md
+          - "3 Floating Point": notes/cs61c/3-floating-point.md
   - Blogs:
       - index: blogs/index.md
       - Archives: blogs/archives.md

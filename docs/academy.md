@@ -22,7 +22,7 @@ nostatistics: true
 
 ## Bio
 
-I am a second-year undergraduate student majoring in Artificial Intelligence at the [SEIEE](https://english.seiee.sjtu.edu.cn/) of [Shanghai Jiao Tong University (SJTU)](https://en.sjtu.edu.cn/). Currently, I am an intern at [GAIR](https://plms.ai/index.html), advised by Prof. [Pengfei Liu](http://pfliu.com/), and at [IPADS](https://ipads.se.sjtu.edu.cn/), under the guidance of Prof. [Xingda Wei](https://ipads.se.sjtu.edu.cn/pub/members/xingda_wei). You could find my previous experience [here](#experience). In addition, I am also an active participant in [Zhiyuan Honors Program](https://en.zhiyuan.sjtu.edu.cn/), which fosters academic excellence and innovation.
+I am a second-year undergraduate student majoring in Artificial Intelligence at the [SEIEE](https://english.seiee.sjtu.edu.cn/) of [Shanghai Jiao Tong University (SJTU)](https://en.sjtu.edu.cn/). Currently, I am an intern at [IPADS](https://ipads.se.sjtu.edu.cn/), under the guidance of Prof. [Xingda Wei](https://ipads.se.sjtu.edu.cn/pub/members/xingda_wei). You could find my previous experience [here](#experience). In addition, I am also an active participant in [Zhiyuan Honors Program](https://en.zhiyuan.sjtu.edu.cn/), which fosters academic excellence and innovation.
 
 > [!INFO] I am actively seeking internships in the field of machine learning systems and optimization. Please feel free to reach out to me if you have any opportunities available! 🥰🥰🥰
 
@@ -38,9 +38,9 @@ I am a second-year undergraduate student majoring in Artificial Intelligence at 
 
 ## News
 
-=== "2025"
-
-    [01/2025] I became an intern in [GAIR](https://plms.ai/index.html), advised by Prof. [Pengfei Liu](http://pfliu.com/).
+<!-- === "2025" -->
+<!---->
+<!--     [01/2025] I became an intern in [GAIR](https://plms.ai/index.html), advised by Prof. [Pengfei Liu](http://pfliu.com/). -->
 
 === "2024"
 
@@ -92,11 +92,11 @@ Sept. 2023 -- Present
 
 ## Experience
 
-**GAIR, SJTU & Qing Yuan Research Institute**![Image title](img/gair.png){ align=right style="height:5em; border-radius: 0.5em;"}
-
-Jan. 2025 - Present
-
-Research Intern
+<!-- **GAIR, SJTU & Qing Yuan Research Institute**![Image title](img/gair.png){ align=right style="height:5em; border-radius: 0.5em;"} -->
+<!---->
+<!-- Jan. 2025 - Present -->
+<!---->
+<!-- Research Intern -->
 
 **IPADS, SJTU**![Image title](img/ipads.png){ align=right style="height:5em; border-radius: 0.5em;"}
 
@@ -106,7 +106,7 @@ Research Intern
 
 **RHOS, SJTU & Qing Yuan Research Institute**![Image title](img/rhos.png){ align=right style="height:5em; border-radius: 0.5em;"}
 
-Sept. 2024 - Jan. 2025
+Sept. 2024 - Present
 
 Research Intern
 
@@ -129,7 +129,7 @@ An open-source GitHub page built for reference in self-learning of artificial in
 
 ## Media Exposures
 
-I write articles and share my thinkings on [Zhihu](https://www.zhihu.com/people/Kinnariya) regularly and have 80+ followers so far!
+I write articles and share my thinkings on [Zhihu](https://www.zhihu.com/people/Kinnariya) regularly and have 100+ followers so far!
 
 ## Honors
 

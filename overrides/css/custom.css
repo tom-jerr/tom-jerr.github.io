@@ -226,3 +226,23 @@ img:hover {
     font-size: 137.5%;
   }
 }
+
+/* table */
+/* 为表格添加一个父级容器，设置为 flex 布局并水平居中 */
+.md-typeset__table-wrapper {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    margin: 1rem 0; /* 可选：为表格添加上下外边距 */
+}
+
+/* 确保表格本身不影响容器的居中效果 */
+.md-typeset__table {
+    display: table !important;
+    margin: 0 auto; /* 额外确保表格在容器内居中 */
+}
+
+/* 调整表头样式 */
+.md-typeset table:not([class]) th {
+    min-width: 0rem;
+    text-align: center; /* 可选：表头文字居中 */
+}
