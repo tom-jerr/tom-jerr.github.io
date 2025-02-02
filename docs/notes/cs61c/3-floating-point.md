@@ -1,7 +1,8 @@
 ---
-modified: 星期三, 一月 22日 2025, 2:32:31 下午
 math: false
-tags: [CS61C, C]
+tags:
+  - CS61C
+  - C
 title: Floating Point
 ---
 

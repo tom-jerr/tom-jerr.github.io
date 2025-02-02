@@ -2,8 +2,8 @@
 title: aiTour 第一年反思与总结
 date: 2024-10-15 13:00:54
 tags:
-    - aiTour
-    - 总结与反思
+  - aiTour
+  - 总结与反思
 ---
 
 ## 先聊聊一年前

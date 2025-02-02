@@ -95,7 +95,6 @@ plugins:
   - search
   - statistics:
       words_per_minute: 200
-  - toc
 
 markdown_extensions:
   - abbr
@@ -218,9 +217,18 @@ nav:
           - "3 Floating Point": notes/cs61c/3-floating-point.md
   - Blogs:
       - index: blogs/index.md
-      - Archives: blogs/archives.md
   - Summaries:
       - index: summary/index.md
+      - "2025":
+          - "一周总结与回顾-1": summary/2025/summary-1.md
+      - "2024":
+          - "一周总结与回顾-8": summary/2024/summary-8.md
+          - "一周总结与回顾-7": summary/2024/summary-7.md
+          - "一周总结与回顾-6": summary/2024/summary-6.md
+          - "一周总结与回顾-5": summary/2024/summary-5.md
+          - "一周总结与回顾-4": summary/2024/summary-4.md
+          - "一周总结与回顾-3": summary/2024/summary-3.md
+          - "一周总结与回顾-2": summary/2024/summary-2.md
   - Tags: tags/index.md
   - Links: links/index.md
   - About: about/index.md

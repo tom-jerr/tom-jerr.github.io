@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV 
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
       - uses: actions/cache@v3
         with:
           key: mkdocs-material-${{ env.cache_id }}
@@ -27,11 +27,6 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: pip install -r requirements.txt
-      - name: Install plugins from TonyCrane
-        run: |
-          git clone https://github.com/TonyCrane/mkdocs-toolchain
-          pip install mkdocs-toolchain/mkdocs-toc-plugin
-          rm -rf mkdocs-toolchain
       - name: Install modified mkdocs-statistics-plugin
         run: |
           git clone https://github.com/KinnariyaMamaTanha/mkdocs-statistics-plugin

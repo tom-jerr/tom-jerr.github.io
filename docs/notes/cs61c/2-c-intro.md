@@ -1,8 +1,9 @@
 ---
-modified: 星期二, 一月 21日 2025, 1:40:54 下午
 math: false
-tags: [CS61C, C]
-title: "C Intro"
+tags:
+  - CS61C
+  - C
+title: C Intro
 ---
 
 - C compilation simplified overview: `foo.c -> compiler -> foo.o -> linker -> foo.out` 

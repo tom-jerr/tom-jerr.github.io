@@ -1,13 +1,11 @@
 ---
 title: "GRAM: Multimodal Representation Learning and Alignment"
-date created: 星期六, 十二月 21 日 2024, 8:42:50 早上
-date modified: 星期六, 十二月 21 日 2024, 9:59:47 上午
 tags:
-    - alignment
-    - contrastive-loss
-    - LLM
-    - multimodal
-    - representaion
+  - alignment
+  - contrastive-loss
+  - LLM
+  - multimodal
+  - representaion
 ---
 
 > [!info] 文章信息

@@ -1,6 +1,6 @@
 ---
-glightbox: False
-nostatistics: True
+glightbox: false
+nostatistics: true
 icon: /octicons/link-24
 ---
 

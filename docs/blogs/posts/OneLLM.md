@@ -1,9 +1,9 @@
 ---
 title: "OneLLM: One Framework to Align All Modalities with Language"
 tags:
-    - LLM
-    - MoE
-    - multimodal
+  - LLM
+  - MoE
+  - multimodal
 ---
 
 > [!note] 文章信息

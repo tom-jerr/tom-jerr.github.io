@@ -1,8 +1,8 @@
 ---
 title: Intro
-modified: 星期二, 一月 21日 2025, 11:23:10 上午
 math: false
-tags: [CS61C]
+tags:
+  - CS61C
 ---
 
 ## Great Ideas

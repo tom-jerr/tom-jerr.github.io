@@ -1,6 +1,6 @@
 ---
 tags:
-    - pytorch
+  - pytorch
 title: Tensorboard 浅尝
 ---
 

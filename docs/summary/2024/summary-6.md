@@ -1,7 +1,7 @@
 ---
 title: 一周总结与回顾-6
 tags:
-    - summary
+  - summary
 ---
 
 ## 做了什么

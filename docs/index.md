@@ -1,8 +1,8 @@
 ---
 hide:
-    - date
-    - navigation
-    - toc
+  - date
+  - navigation
+  - toc
 home: true
 nostatistics: true
 comments: false
