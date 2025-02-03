@@ -215,6 +215,7 @@ nav:
           - "1 Intro": notes/cs61c/1-intro.md
           - "2 C Intro": notes/cs61c/2-c-intro.md
           - "3 Floating Point": notes/cs61c/3-floating-point.md
+          - "4 RISC-V Basic": notes/cs61c/4-RISC-V.md
   - Blogs:
       - index: blogs/index.md
   - Summaries:
