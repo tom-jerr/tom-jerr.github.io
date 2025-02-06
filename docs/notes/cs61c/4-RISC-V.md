@@ -1,10 +1,7 @@
 ---
-modified: 星期日, 二月 2日 2025, 8:01:45 晚上
+modified: 星期三, 二月 5日 2025, 10:12:17 上午
 title: RISC-V Basic
-tags:
-  - RISC-V
-  - assembly
-  - CS61C
+tags: [assembly, CS61C, RISC-V]
 math: "true"
 ---
 
@@ -27,7 +24,7 @@ math: "true"
     - 从 0 编号到 31: `x0, x1, …, x31`
         - `x0` 始终存储 0
         - 不能改变名称
-    - **Register file**: 在 processor 中的 general purpose registers 
+    - **Register file**: 处理器内部的一个存储单元集合，通常包括多个寄存器，分为 general-purpose registers 和 special-purpose registers
 
 ![](https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/20250131100849441.png)
 
@@ -268,7 +265,7 @@ Deepseek 的讲解：[deepseek-R-format](deepseek-R-format.md)
 ![](https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/20250202191640015.png)
 
 - 实际偏移量为 `imm[20:1] << 1`，因为最后一位 0 被省略了
-- 这种不自然的划分是为了简化硬件上的实现
+- 这种不自然的划分是为了简化硬件上的实现，见 [6-processor-design](6-processor-design.md)
 - 目标地址的计算：`target_address = PC + sign_extend(imm[20:1] << 1)`
 
 在 `jalr rd, rs, imm` 指令中，使用 I-format，故最后一位 0 不可省略

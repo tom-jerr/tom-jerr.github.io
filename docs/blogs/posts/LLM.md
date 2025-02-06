@@ -1,8 +1,15 @@
 ---
 title: LLM 笔记大杂烩
-tags: [attention, position-embedding, transformer]
-math: "true"
-modified: 星期日, 二月 2日 2025, 2:59:04 下午
+tags:
+  - attention
+  - position-embedding
+  - transformer
+  - RMSNorm
+  - RoPE
+  - linear-attention
+  - grouped-query-attention
+math: true
+modified: 星期四, 二月 6日 2025, 9:38:29 晚上
 ---
 
 > [!warning] 施工中……
@@ -148,7 +155,160 @@ $$
 
 即第 $p+k$ 位的表征可以由第 $p$ 位的表征加上 $k$ 位的偏移得到
 
+### RoPE
+
+为了实现**使用绝对位置编码的方式实现相对位置编码**，经过推导（见 reference 3），得到对二维向量 $\vec{q}$，在 $m$ 处的位置编码为
+
+$$
+f(\vec{q},m) = R_{f}(\vec{q},m)e^{i\Theta_{f}(\vec{q},m)} = \lVert \vec{q} \rVert e^{i(\Theta(\vec{q}) + m\theta )} = \vec{q}e^{im\theta } = \begin{pmatrix}
+\cos m\theta & -\sin m\theta  \\
+\sin m\theta & \cos m\theta 
+\end{pmatrix}\begin{pmatrix}
+q_{0} \\
+q_{1}
+\end{pmatrix}
+$$
+
+即对应向量 $\vec{q}$ 旋转 $m\theta$ 的角度。对于任意偶数维的 RoPE，可表示为二维情形的拼接，即
+
+$$
+\scriptsize{\underbrace{\begin{pmatrix} \cos m\theta_0 & -\sin m\theta_0 & 0 & 0 & \cdots & 0 & 0 \\ \sin m\theta_0 & \cos m\theta_0 & 0 & 0 & \cdots & 0 & 0 \\ 0 & 0 & \cos m\theta_1 & -\sin m\theta_1 & \cdots & 0 & 0 \\ 0 & 0 & \sin m\theta_1 & \cos m\theta_1 & \cdots & 0 & 0 \\ \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\ 0 & 0 & 0 & 0 & \cdots & \cos m\theta_{d/2-1} & -\sin m\theta_{d/2-1} \\ 0 & 0 & 0 & 0 & \cdots & \sin m\theta_{d/2-1} & \cos m\theta_{d/2-1} \\ \end{pmatrix}}_{{\mathcal{R}}_m} \begin{pmatrix}q_0 \\ q_1 \\ q_2 \\ q_3 \\ \vdots \\ q_{d-2} \\ q_{d-1}\end{pmatrix}}
+$$
+
+对于 query $q$ 和 key $k$，分别乘上旋转矩阵 $\mathcal{R}_{m}$ 和 $\mathcal{R}_{n}$ 就相当于：
+
+$$
+(\mathcal{R}_{m}q)^{\top}(\mathcal{R}_{n}k) = q^{\top}(\mathcal{R}_{m}^{\top}\mathcal{R}_{n})k = q^{\top}\mathcal{R}_{n-m}k
+$$
+
+又由于 $\mathcal{R}_{m}$ 的稀疏性，不使用矩阵乘法，而是用
+
+$$
+\begin{pmatrix}q_0 \\ q_1 \\ q_2 \\ q_3 \\ \vdots \\ q_{d-2} \\ q_{d-1} \end{pmatrix}\otimes\begin{pmatrix}\cos m\theta_0 \\ \cos m\theta_0 \\ \cos m\theta_1 \\ \cos m\theta_1 \\ \vdots \\ \cos m\theta_{d/2-1} \\ \cos m\theta_{d/2-1} \end{pmatrix} + \begin{pmatrix}-q_1 \\ q_0 \\ -q_3 \\ q_2 \\ \vdots \\ -q_{d-1} \\ q_{d-2} \end{pmatrix}\otimes\begin{pmatrix}\sin m\theta_0 \\ \sin m\theta_0 \\ \sin m\theta_1 \\ \sin m\theta_1 \\ \vdots \\ \sin m\theta_{d/2-1} \\ \sin m\theta_{d/2-1} \end{pmatrix}
+$$
+
+可以看出 RoPE 是“乘性”的位置编码，而 sinusoidal 是“加性”的。
+
+RoPE 还是目前唯一一种可以用于 Linear Attention 的相对位置编码。
+
+#### 二维情形
+
+上面是在 NLP 中的应用，如果想推广到图像等二维数据中，可以推广为
+
+$$
+\mathcal{R}_{x,y} = \begin{pmatrix}
+\cos x\theta & -\sin x\theta & 0 & 0 \\
+\sin x\theta & \cos x\theta & 0 & 0   \\
+0 & 0 & \cos y\theta & -\sin y\theta \\
+0 & 0 & \sin y\theta & \cos y\theta 
+\end{pmatrix}
+$$
+
+即将输入向量分为两半，一半使用一维的 x-RoPE，一半使用一维的 y-RoPE。并且由于这个矩阵是正交的，在给定 $\mathcal{R}_{x,y}$ 后可以反解出 $x$ 和 $y$。
+
+#### 代码实现
+
+```python
+# 照搬 llama 的源码，写了点注释
+import torch
+
+def apply_rotary_emb(
+    xq: torch.Tensor,
+    xk: torch.Tensor,
+    freqs_cis: torch.Tensor,
+) -> Tuple[torch.Tensor, torch.Tensor]:
+    # *xq.shape[:-1]: 将第 0 维到倒数第 2 维保留，最后一维两两配对，并视作复数
+    xq_ = torch.view_as_complex(xq.float().reshape(*xq.shape[:-1], -1, 2))
+    xk_ = torch.view_as_complex(xk.float().reshape(*xk.shape[:-1], -1, 2))
+    freqs_cis = reshape_for_broadcast(freqs_cis, xq_) # 便于广播的辅助han
+    xq_out = torch.view_as_real(xq_ * freqs_cis).flatten(3) # 元素间相乘，然后从第三维（head_dim 那维）开始拉平，即将之前的两两配对视为复数展开为实数
+    xk_out = torch.view_as_real(xk_ * freqs_cis).flatten(3)
+    return xq_out.type_as(xq), xk_out.type_as(xk)
+```
+
+而 `freqs_cis` 按照论文的实现为：
+
+> [!note]- `freqs_cis` 实现
+> 
+> ```python
+> import torch
+> def precompute_freqs_cis(dim: int, end: int, theta: float = 10000.0):
+>     """
+>     Precompute the frequency tensor for complex exponentials (cis) with given dimensions.
+> 
+>     This function calculates a frequency tensor with complex exponentials using the given dimension 'dim'
+>     and the end index 'end'. The 'theta' parameter scales the frequencies.
+>     The returned tensor contains complex values in complex64 data type.
+> 
+>     Args:
+>         dim (int): Dimension of the frequency tensor.
+>         end (int): End index for precomputing frequencies.
+>         theta (float, optional): Scaling factor for frequency computation. Defaults to 10000.0 （论文中的默认值）.
+> 
+>     Returns:
+>         torch.Tensor: Precomputed frequency tensor with complex exponentials.
+>     """
+>     # Calculate the frequency scaling factors for the dimension.
+>     freqs = 1.0 / (theta ** (torch.arange(0, dim, 2)[: (dim // 2)].float() / dim))
+>     # Create a tensor of integers from 0 to 'end - 1' on the same device as 'freqs'.
+>     t = torch.arange(end, device=freqs.device)  # type: ignore
+>     # Compute the outer product of 't' and 'freqs' to get the frequency matrix.
+>     freqs = torch.outer(t, freqs).float()  # type: ignore
+>     # Convert the frequency matrix to a complex tensor using polar coordinates.
+>     freqs_cis = torch.polar(torch.ones_like(freqs), freqs)  # complex64, 用复数表示
+>     # Return the complex frequency tensor.
+>     return freqs_cis
+> ```
+
+## Normalization
+
+### RMSNorm
+
+相比 LayerNorm，RMSNorm 没有减去均值的步骤，而是直接除以均方根：
+
+$$
+\begin{align}
+\text{RMS}(x)  & = \sqrt{ \frac{1}{d}\sum_{i=1}^{d} x_{i}^{2} + \epsilon } \\
+\hat{x} & =\frac{x}{\text{RMS}(x)} \\
+y & = \gamma \cdot \hat{x}
+\end{align}
+$$
+
+其中 $\gamma$ 为超参数（也可以被训练）；$\epsilon$ 是为了防止 $\text{RMS}(x)=0$
+
+用 RMSNorm 替代 LayerNorm 的可能原因为：
+
+- 计算效率更高
+- 超参数更少
+- 研究表明，减去均值（均匀化）对模型性能影响有限，而缩放操作（**rescaling**）影响更大
+- 硬件友好：无须计算均值，便于并行化
+
+代码实现
+
+```python
+import torch.nn as nn
+import torch
+
+class RMSNorm(nn.Module):
+    def __init__(self, dim, eps=1e-5):
+        super().__init__()
+        self.gamma = nn.Parameter(torch.ones(dim))
+        self.eps = eps
+
+    def forward(self, x: torch.Tensor):
+        rms = torch.rsqrt(x.pow(2).mean(-1, keepdim=True).sqrt() + self.eps)
+        x_hat = x / rms
+        out = self.gamma * x_hat
+        return out
+```
+
 ## Reference
 
 1. [《Attention is All You Need》浅读（简介+代码） - 科学空间\|Scientific Spaces](https://kexue.fm/archives/4765)
 2. [线性Attention的探索：Attention必须有个Softmax吗？ - 科学空间\|Scientific Spaces](https://kexue.fm/archives/7546)
+3. [Transformer升级之路：2、博采众长的旋转式位置编码 - 科学空间\|Scientific Spaces](https://kexue.fm/archives/8265)
+4. [75、Llama源码讲解之RoPE旋转位置编码](https://www.bilibili.com/video/BV1Zr421c76A/?share_source=copy_web&vd_source=c9e11661823ca4062db1ef99f7e0eee1)
+5. [GitHub - meta-llama/llama: Inference code for Llama models](https://github.com/meta-llama/llama)
+6. [Fetching Title#waeq](https://pub.towardsai.net/multi-query-attention-explained-844dfc4935bf)
+7. [What is Grouped Query Attention (GQA)?](https://klu.ai/glossary/grouped-query-attention)
+8. 和 deepseek 的问答
