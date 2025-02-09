@@ -225,6 +225,7 @@ nav:
       - index: summary/index.md
       - "2025":
           - "一周总结与回顾-1": summary/2025/summary-1.md
+          - "大二下规划": summary/2025/semester-plan.md
       - "2024":
           - "一周总结与回顾-8": summary/2024/summary-8.md
           - "一周总结与回顾-7": summary/2024/summary-7.md
