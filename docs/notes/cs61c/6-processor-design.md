@@ -31,7 +31,7 @@ Processor 由 datapath 和 controller 组成，如图
 
 ![](https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/20250205100327849.png)
 
-最后可以得到一个通用的线路图，使得能够在一个 cycle 中能够运行任何一个指令
+其中 **Imm Gen** 用于生成 immediate。最后可以得到一个通用的线路图，使得能够在一个 cycle 中能够运行任何一个指令
 
 ![](https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/20250205102855891.png)
 
