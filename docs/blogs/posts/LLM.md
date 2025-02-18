@@ -1,15 +1,8 @@
 ---
 title: LLM 笔记大杂烩
-tags:
-  - attention
-  - position-embedding
-  - transformer
-  - RMSNorm
-  - RoPE
-  - linear-attention
-  - grouped-query-attention
+tags: [attention, grouped-query-attention, linear-attention, position-embedding, RMSNorm, RoPE, transformer]
 math: true
-modified: 星期四, 二月 6日 2025, 9:38:29 晚上
+modified: 星期一, 二月 17日 2025, 11:02:50 上午
 ---
 
 > [!warning] 施工中……
@@ -129,6 +122,24 @@ $$
 \text{LinearAttention} = \text{softmax}_{2}(Q)\cdot \text{softmax}_{1}(K)^{\top} V
 $$
 
+### Grouped Query Attention
+
+![](https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/20250217100550167.png)
+
+Queries heads 被分为了若干个组，每个组内共享同一个 key head 和 value head。划分组的方法：
+
+1. **Grouping queries based on similarity**: computing a similarity metric between queries and then assigning them to groups accordingly.
+2. **Dividing query heads into groups**: query heads are divided into groups, each of which shares a single key head and value head.
+3. **Using an intermediate number of key-value heads**
+4. **Repeating key-value pairs for computational efficiency**: key-value pairs are repeated to optimize performance while maintaining quality
+
+优点：
+
+- **Interpolation** 减少了 MHA 和 MQA 中 quality degradation、training instability 等问题
+- **Efficiency** 通过选择恰当的 key-value heads 组数，提高效率的同时保持了质量
+- **Trade-off** 在 MHA 和 MQA 中保证了质量
+
+代码可参考：[GitHub - fkodom/grouped-query-attention-pytorch: (Unofficial) PyTorch implementation of grouped-query attention (GQA) from "GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints" (https://arxiv.org/pdf/2305.13245.pdf)](https://github.com/fkodom/grouped-query-attention-pytorch/)
 ## Position Embedding
 
 为了表征 token 的相对位置，可以引入位置编码，否则 transformer 将无法辨认词语间的先后关系。
@@ -309,6 +320,7 @@ class RMSNorm(nn.Module):
 3. [Transformer升级之路：2、博采众长的旋转式位置编码 - 科学空间\|Scientific Spaces](https://kexue.fm/archives/8265)
 4. [75、Llama源码讲解之RoPE旋转位置编码](https://www.bilibili.com/video/BV1Zr421c76A/?share_source=copy_web&vd_source=c9e11661823ca4062db1ef99f7e0eee1)
 5. [GitHub - meta-llama/llama: Inference code for Llama models](https://github.com/meta-llama/llama)
-6. [Fetching Title#waeq](https://pub.towardsai.net/multi-query-attention-explained-844dfc4935bf)
+6. [Multi-Query Attention Explained. Multi-Query Attention (MQA) is a type… \| by Florian June \| Towards AI](https://pub.towardsai.net/multi-query-attention-explained-844dfc4935bf)
 7. [What is Grouped Query Attention (GQA)?](https://klu.ai/glossary/grouped-query-attention)
-8. 和 deepseek 的问答
+8. [GitHub - fkodom/grouped-query-attention-pytorch: (Unofficial) PyTorch implementation of grouped-query attention (GQA) from "GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints" (https://arxiv.org/pdf/2305.13245.pdf)](https://github.com/fkodom/grouped-query-attention-pytorch)
+9. 和 deepseek 的问答
