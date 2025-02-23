@@ -219,11 +219,15 @@ nav:
           - "5 CALL": notes/cs61c/5-CALL.md
           - "6 Processor Design": notes/cs61c/6-processor-design.md
           - "7 Pipeline": notes/cs61c/7-pipeline.md
+          - "8 Cache": notes/cs61c/8-cache.md
+      - 6.s081:
+          - "1 Intro": notes/6.s081/1-intro.md
   - Blogs:
       - index: blogs/index.md
   - Summaries:
       - index: summary/index.md
       - "2025":
+          - "一周总结与回顾-2": summary/2025/summary-2.md
           - "一周总结与回顾-1": summary/2025/summary-1.md
           - "大二下规划": summary/2025/semester-plan.md
       - "2024":
