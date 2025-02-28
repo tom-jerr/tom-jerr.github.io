@@ -101,6 +101,16 @@ icon: /octicons/link-24
     </a>
 </div>
 
+<div class="flink-list-item">
+    <a href="https://hugo0713.com" title="Hugo's Cyber Heritage" target="_blank">
+        <div class="flink-item-icon">
+            <img src="https://avatars.githubusercontent.com/u/37870767?v=4" alt="Hugo's Cyber Heritage">
+        </div>
+        <div class="flink-item-name heti-skip">Hugo's Cyber Heritage</div>
+        <div class="flink-item-desc"></div>
+    </a>
+</div>
+
 </div>
 
 <hr><p>在下方留言申请加入我的友链，按如下格式提供信息：</p><ul><li>名称：Kinnari's Site</li><li>简介：Kinnariya Mama Tanha</li><li>链接：https://kinnariyamamatanha.github.io/</li><li>图片：Link of your avatar</li></ul>

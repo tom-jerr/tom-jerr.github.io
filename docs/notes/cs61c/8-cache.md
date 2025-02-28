@@ -18,7 +18,7 @@ modified: 星期二, 二月 18日 2025, 7:00:36 晚上
 ![](https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/20250216150111327.png)
 
 - the main memory is **DRAM**
-- 关机时，在 disk 中的数据会被保存，但是其他的会被清楚
+- 关机时，在 disk 中的数据会被保存，但是其他的会被清除
 - main memory 由 processor 直接处理；而 disk 在使用 operating system 的时候被处理
 - programmer-invisible
 
@@ -31,7 +31,7 @@ modified: 星期二, 二月 18日 2025, 7:00:36 晚上
 
 ![](https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/20250216151105728.png)
 
-以读取数据为例，首先向 cache 发送地址，确认地址中的值是否在 cache 中已经有存储了。如果有（**cache hit**），则直接从 cache 中读取，反之 (**cache miss**) cache 则到 memory 中去读取 data，然后再发送给 processor
+以读取数据为例，首先向 cache 发送地址，（通过 tag 等方式）确认地址中的值是否在 cache 中已经有存储了。如果有（**cache hit**），则直接从 cache 中读取，反之 (**cache miss**) cache 则到 memory 中去读取 data，然后再发送给 processor
 
 ## **3. 缓存类型与工作机制**
 
@@ -67,7 +67,7 @@ modified: 星期二, 二月 18日 2025, 7:00:36 晚上
 - **Byte offset**: 用 line size 计算，`# byte offset bits = log2(line size)`
 - **tag bits**: `# tag bits = # address bits - # byte offset bits`
 - 由于 locality，读取数据时，即使只需要读一个 byte 的数据，也要将整个 Line 的数据全部读取出来
-- **LRU (Least-Recent used)**: 硬件负责保存 access history，当 cache 满时，覆盖最久未使用过的数据，如下：
+- **LRU (Least-Recent used)**: 硬件负责保存 access history，当 cache 满时，覆盖最久未使用过的数据
 
 ### **(2) 直接映射缓存（Direct Mapped Cache）**
 
@@ -75,7 +75,7 @@ modified: 星期二, 二月 18日 2025, 7:00:36 晚上
 
 - **特点**：每个内存块只能映射到唯一缓存行（通过索引 Index，也等价于对地址取模操作，如上图）。
 - **地址结构**：  
-    - 例：12 位地址，4 行缓存 → Index 占 2 位，Tag 占 8 位，Offset 占 2 位。使用 write-through 策略
+    - 例：12 位地址，4 行缓存 → Index 占 2 ($\log_{2}4$) 位，Tag 占 8 位，Offset 占 2 位。使用 write-through 策略
 
 ```  
 | Tag | Index | Byte Offset |  

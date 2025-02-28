@@ -222,6 +222,9 @@ nav:
           - "8 Cache": notes/cs61c/8-cache.md
       - 6.s081:
           - "1 Intro": notes/6.s081/1-intro.md
+      - SJTU 随机过程:
+          - "Lecture0 Review of Probability": notes/stochastic-progress/Lecture0-Review-of-Probability.md
+          - "Lecture3 Concentration Inequalities": notes/stochastic-progress/Lecture3-Concentration-Inequalities.md
   - Blogs:
       - index: blogs/index.md
   - Summaries:
