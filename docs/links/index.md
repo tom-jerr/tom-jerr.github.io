@@ -9,7 +9,7 @@ icon: /octicons/link-24
 !!! abstract
     My friends!
 
-<div class="flink-list">
+<!-- <div class="flink-list">
 
 <div class="flink-list-item">
     <a href="https://jokerxuxu.github.io/" title="JockerXuxu" target="_blank">
@@ -111,6 +111,6 @@ icon: /octicons/link-24
     </a>
 </div>
 
-</div>
+</div> -->
 
-<hr><p>在下方留言申请加入我的友链，按如下格式提供信息：</p><ul><li>名称：Kinnari's Site</li><li>简介：Kinnariya Mama Tanha</li><li>链接：https://kinnariyamamatanha.github.io/</li><li>图片：Link of your avatar</li></ul>
+<hr><p>在下方留言申请加入我的友链，按如下格式提供信息：</p><ul><li>名称：tom-jerr's Site</li><li>简介：tomjerr </li><li>链接：https://tom-jerr.github.io/</li><li>图片：Link of your avatar</li></ul>

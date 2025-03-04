@@ -212,35 +212,82 @@ nav:
   - Notes:
       - index: notes/index.md
       - CS61C:
-          - "1 Intro": notes/cs61c/1-intro.md
-          - "2 C Intro": notes/cs61c/2-c-intro.md
-          - "3 Floating Point": notes/cs61c/3-floating-point.md
-          - "4 RISC-V Basic": notes/cs61c/4-RISC-V.md
-          - "5 CALL": notes/cs61c/5-CALL.md
-          - "6 Processor Design": notes/cs61c/6-processor-design.md
-          - "7 Pipeline": notes/cs61c/7-pipeline.md
-          - "8 Cache": notes/cs61c/8-cache.md
+          - "1 C Intro": notes/CS61C/lecture2-Intro to C.md
+          - "4 C Memory Endianness": notes/CS61C/lecture4_C Memory Endianness.md
+          - "10 Combinational Logic": notes/CS61C/lecture10_Combinational Logic.md
+          - "11 FSMs": notes/CS61C/lecture11_FSMs.md
+          - "14 Datapath": notes/CS61C/lecture14_Datapath.md
+          - "15 Data-Level Parallelism": notes/CS61C/lecture15_Data-LevelParallelism.md
+          - "16 Thread-Level Parallelism": notes/CS61C/lecture16_Thread-LevelParallelism.md
+          - "17 Process-Level Parallelism": notes/CS61C/lecture17_Process_LevelParallelism.md
+          - "18 Caches": notes/CS61C/lecture18_Caches.md
+          - "21 Virtual Memory": notes/CS61C/lecture21_Virtual_Memory.md
       - 6.s081:
-          - "1 Intro": notes/6.s081/1-intro.md
-      - SJTU 随机过程:
-          - "Lecture0 Review of Probability": notes/stochastic-progress/Lecture0-Review-of-Probability.md
-          - "Lecture3 Concentration Inequalities": notes/stochastic-progress/Lecture3-Concentration-Inequalities.md
+          - "1 OS的隔离性": notes/6.s081/1-OS的隔离性.md
+          - "2 虚拟内存实现": notes/6.s081/2-虚拟内存实现.md
+          - "3 系统调用和陷入": notes/6.s081/3-系统调用和陷入.md
+          - "4 缺页中断": notes/6.s081/4-缺页中断.md
+          - "5 硬件中断": notes/6.s081/5-硬件中断.md
+          - "6 多核和锁": notes/6.s081/6-多核和锁.md
+          - "7 进程切换": notes/6.s081/7-进程切换.md
+          - "8 睡眠和唤醒": notes/6.s081/8-睡眠和唤醒.md
+      - C++ Primer:
+          - "2_变量和基本类型": notes/c++primer/2_变量和基本类型.md
+          - "3_字符串向量数组": notes/c++primer/3_字符串向量数组.md
+          - "4_表达式": notes/c++primer/4_表达式.md
+          - "5_语句": notes/c++primer/5_语句.md
+          - "6_函数": notes/c++primer/6_函数.md
+          - "7_类": notes/c++primer/7_类.md
+          - "8_IO库": notes/c++primer/8_IO库.md
+          - "9_顺序容器": notes/c++primer/9_顺序容器.md
+          - "10_泛型算法": notes/c++primer/10_泛型算法.md
+          - "11_关联容器": notes/c++primer/11_关联容器.md
+          - "12_动态内存": notes/c++primer/12_动态内存.md
+          - "13_拷贝控制": notes/c++primer/13_拷贝控制.md
+          - "14_重载运算和类型转换": notes/c++primer/14_重载运算和类型转换.md
+          - "15_面向对象程序设计": notes/c++primer/15_面向对象程序设计.md
+          - "并发与多线程编程": notes/c++primer/并发与多线程编程.md
+          - "Makefile学习": notes/c++primer/Makefile学习.md
+      - CMU15445:
+          - "3-Database Storage": notes/CMU15445/3-Database Storage.md
+          - "4-Database_Storage_II": notes/CMU15445/4-Database_Storage_II.md
+          - "5-Buffer Pool": notes/CMU15445/5-Buffer Pool.md
+          - "6-Hash Table": notes/CMU15445/6-Hash Table.md
+          - "7-B+Tree": notes/CMU15445/7-B+Tree.md
+          - "8-Index Concurrency": notes/CMU15445/8-Index Concurrency.md
+          - "9-Sort&Aggregation": notes/CMU15445/9-Sort&Aggregation.md
+          - "10-Join Algorithm": notes/CMU15445/10-Join Algorithm.md
+          - "11-Query_Execution": notes/CMU15445/11-Query_Execution.md
+          - "12-Query_Plan&Optimization": notes/CMU15445/12-Query_Plan&Optimization.md
+          - "13-Concurrency_Control_Theory": notes/CMU15445/13-Concurrency_Control_Theory.md
+          - "14-Two_Phase_Lock": notes/CMU15445/14-Two_Phase_Lock.md
+          - "15-Timestamp_Ordering_Concurrency": notes/CMU15445/15-Timestamp_Ordering_Concurrency.md
+          - "16-Mult-Version_Concurrency": notes/CMU15445/16-Mult-Version_Concurrency.md
+          - "17-Database_Logging": notes/CMU15445/17-Database_Logging.md
+          - "18-Database_Recovery": notes/CMU15445/18-Database_Recovery.md
+          - "19-Introducd_to_distributed_database": notes/CMU15445/19-Introducd_to_distributed_database.md
+      - CS144:
+          - "总结": notes/CS144/CS144.md
+
+      - CSAPP:
+          - "5-优化程序性能": notes/CSAPP/5-优化程序性能.md
+          - "6-存储器层次结构": notes/CSAPP/6-存储器层次结构.md
+          - "7-链接": notes/CSAPP/7-链接.md
+          - "8-异常控制流": notes/CSAPP/8-异常控制流.md
+          - "程序的结构和执行": notes/CSAPP/程序的结构和执行.md
+          - "在系统上运行程序": notes/CSAPP/在系统上运行程序.md
+
+      - rcore:
+          - "rustlings": notes/rcore/rustlings.md
+          - "LibOS": notes/rcore/LibOS.md
+          - "BatchOS": notes/rcore/BatchOS.md
+          - "TimeSharingOS": notes/rcore/TimeSharingOS.md
   - Blogs:
       - index: blogs/index.md
   - Summaries:
       - index: summary/index.md
       - "2025":
-          - "一周总结与回顾-2": summary/2025/summary-2.md
-          - "一周总结与回顾-1": summary/2025/summary-1.md
-          - "大二下规划": summary/2025/semester-plan.md
-      - "2024":
-          - "一周总结与回顾-8": summary/2024/summary-8.md
-          - "一周总结与回顾-7": summary/2024/summary-7.md
-          - "一周总结与回顾-6": summary/2024/summary-6.md
-          - "一周总结与回顾-5": summary/2024/summary-5.md
-          - "一周总结与回顾-4": summary/2024/summary-4.md
-          - "一周总结与回顾-3": summary/2024/summary-3.md
-          - "一周总结与回顾-2": summary/2024/summary-2.md
+          - "研一下规划": summary/2025/semester-plan.md
   - Tags: tags/index.md
   - Links: links/index.md
   - About: about/index.md
