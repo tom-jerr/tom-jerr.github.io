@@ -1,10 +1,10 @@
-site_name: Kinnari's Site
-site_author: Kinnari
-site_url: https://kinnariyamamatanha.github.io
-site_description: Kinnari 的个人网站
-repo_url: https://github.com/KinnariyaMamaTanha/kinnariyamamatanha.github.io/
-repo_name: Kinnari's Site
-copyright: Copyright &copy; 2024 - Present <a href="https://github.com/KinnariyaMamaTanha/" target="_blank" rel="noopener">Kinnari</a>
+site_name: tom-jerr's Site
+site_author: tom-jerr
+site_url: https://tom-jerr.github.io
+site_description: tom-jerr 的个人网站
+repo_url: https://github.com/tom-jerr/tom-jerr.github.io/
+repo_name: tom-jerr's Site
+copyright: Copyright &copy; 2024 - Present <a href="https://github.com/tom-jerr/" target="_blank" rel="noopener">tom-jerr</a>
 
 theme:
   name: material
@@ -169,22 +169,22 @@ extra_css:
 extra:
   social:
     - icon: /fontawesome/brands/github
-      link: https://github.com/kinnariyamamatanha/
+      link: https://github.com/tom-jerr/
       name: GitHub
     - icon: /fontawesome/brands/qq
       link: /img/qq.jpg
-      name: 加加我的QQ
+      name: QQ
     - icon: /fontawesome/brands/weixin
       link: /img/wechat.jpg
-      name: 加加我的微信
+      name: 微信
     - icon: /fontawesome/brands/x-twitter
-      link: https://x.com/MamaTanha76294
+      link: https://x.com/tom_jerry_jack
       name: X
     - icon: /fontawesome/brands/zhihu
-      link: https://www.zhihu.com/people/Kinnariya
+      link: https://www.zhihu.com/people/chen-wen-de-jian-ke
       name: Zhihu
     - icon: fontawesome/solid/paper-plane
-      link: mailto:2823324228@qq.com
+      link: mailto:2584074296@qq.com
       name: send email to me!
     # - icon: fontawesome/solid/rss
     #   link: /feed_rss_created.xml
