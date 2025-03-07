@@ -14,7 +14,7 @@ nostatistics: true
 
 :fontawesome-solid-inbox: Personal Email: [2823324228 [at] qq [dot] com](mailto:2584074296@qq.com)
 
-:material-file: CV: [Click Here](assets/cv.pdf)
+:material-file: CV: [Click Here](assets/CV_ENG.pdf)
 
 <span style=font-size:2em;">[:fontawesome-brands-github:](https://github.com/tom-jerr/) [:fontawesome-brands-x-twitter:](https://x.com/tom_jerry_jack) [:fontawesome-brands-zhihu:](https://www.zhihu.com/people/chen-wen-de-jian-ke)</span>
 

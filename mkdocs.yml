@@ -51,7 +51,7 @@ theme:
   font:
     text: JetBrains Mono
 
-  favicon: img/avatar1.png
+  favicon: img/rocket.png
 
   icon:
     logo: material/coffee
@@ -172,10 +172,10 @@ extra:
       link: https://github.com/tom-jerr/
       name: GitHub
     - icon: /fontawesome/brands/qq
-      link: /img/qq.jpg
+      link: /img/qq.png
       name: QQ
     - icon: /fontawesome/brands/weixin
-      link: /img/wechat.jpg
+      link: /img/wechat.png
       name: 微信
     - icon: /fontawesome/brands/x-twitter
       link: https://x.com/tom_jerry_jack
