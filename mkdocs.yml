@@ -266,8 +266,6 @@ nav:
           - "17-Database_Logging": notes/CMU15445/17-Database_Logging.md
           - "18-Database_Recovery": notes/CMU15445/18-Database_Recovery.md
           - "19-Introducd_to_distributed_database": notes/CMU15445/19-Introducd_to_distributed_database.md
-      - CS144:
-          - "总结": notes/CS144/CS144.md
 
       - CSAPP:
           - "5-优化程序性能": notes/CSAPP/5-优化程序性能.md
@@ -284,6 +282,8 @@ nav:
           - "TimeSharingOS": notes/rcore/TimeSharingOS.md
   - Blogs:
       - index: blogs/index.md
+      - 实现一个TCP:
+          - "CS144总结": notes/CS144/CS144.md
   - Summaries:
       - index: summary/index.md
       - "2025":
