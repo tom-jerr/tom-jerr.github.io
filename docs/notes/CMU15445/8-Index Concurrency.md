@@ -24,11 +24,9 @@ tags:
 
 ### 8.1.2 Latch implementations
 
-Test-and-Set Spin Latch (TAS)
+Test-and-Set Spin Latch (TAS)；比如 std::atomic<T>
 
 > 有效，不能支持大规模并发；对缓存不友好；对 OS 不友好
-
-> std::atomic<T>
 
 > CPU 空转，因为 NUMA 之间的通信，会增加硬件通信流量成本
 
@@ -87,6 +85,8 @@ Compare-and-swap (CAS)
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/better_latching2.png)
 
 ### multithread 并发冲突
+
+> 或者我们可以按照同一种顺序加锁，永远从左向右加锁
 
 > T2 不知道 T1 发生了什么，确定 T1 的完成时间并等待是不现实的；实现线程间通信也是成本很高的；最佳选择是终止自己的事务并重新开始
 
