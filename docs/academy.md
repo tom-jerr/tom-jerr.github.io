@@ -14,7 +14,7 @@ nostatistics: true
 
 :fontawesome-solid-inbox: Personal Email: [2823324228 [at] qq [dot] com](mailto:2584074296@qq.com)
 
-:material-file: CV: [Click Here](assets/CV_ENG.pdf)
+:material-file: CV: [Click Here](assets/CV_zh.pdf)
 
 <span style=font-size:2em;">[:fontawesome-brands-github:](https://github.com/tom-jerr/) [:fontawesome-brands-x-twitter:](https://x.com/tom_jerry_jack) [:fontawesome-brands-zhihu:](https://www.zhihu.com/people/chen-wen-de-jian-ke)</span>
 
@@ -22,17 +22,18 @@ nostatistics: true
 
 ## Bio
 
-I am a first-year master student majoring in Computer Architecture in [University of Electronic Science and Technology of China(UESTC)](https://www.uestc.edu.cn/). Currently, I am a member at [NDSL](https://github.com/uestc-ndssl/). You could find my previous experience [here](#experience). In addition, I am interested in Database, Distributed System and MlSYS. 
+I am a first-year master student majoring in Computer Architecture in [University of Electronic Science and Technology of China(UESTC)](https://www.uestc.edu.cn/). Currently, I am a member at [NDSL](https://github.com/uestc-ndssl/). You could find my previous experience [here](#experience). In addition, I am interested in Database, Distributed System and MlSYS.
 
 > [!INFO] I am actively contributing to the open-source community, particularly in projects related to distributed databases and LLM inference engines. If there are any opportunities to participate in the development of these kinds of open-source projects, please feel free to contact me !!! 🥰🥰🥰
-
 
 ---
 
 ## Work Interest
 
-- **Large Language Model Interferce and Optimization**: I am learning one of the most famous structure in LLM interferce field, which is SGLang. I am confused about how to find a job about this area, what need I to study ?
-- **Distributed Database**: I also focus on Distributed Database. Last year, I and my partners have won the 11th in 2024 OceanBase Database Competition. Now I am learning 6.5840, which is about Distributed System and Rust, which is used most in this field.
+<!-- - **Large Language Model Interferce and Optimization**: I am learning one of the most famous structure in LLM interferce field, which is SGLang. I am confused about how to find a job about this area, what need I to study ? -->
+
+- **Distributed Database**: I also focus on Distributed Database. Last year, I and my partners have won the 11th in 2024 OceanBase Database Competition. Now I am working for a simple distributed vector database or olap with vectorized query engine, if you have any idea, welcome to contact with me.
+
 ---
 
 ## News
@@ -80,39 +81,50 @@ Sept. 2020 -- June 2024
 > Coming soon...
 
 ---
-## Course Labs
-**[:fontawesome-brands-github: CS144]( https://github.com/tom-jerr/CS144/)**
 
-A class about network, build a simple TCP protocol by C++.
+## Course Labs
+
+**[:fontawesome-brands-github: RealyServer](https://github.com/tom-jerr/RelayServer/)**
+
+A relay server based on epoll.
+**[:fontawesome-brands-github: BPlus Tree](https://github.com/tom-jerr/BPlusTree/)**
+
+A simple BPlus Tree implement in C++, using latch crabbing protocol.
 **[:fontawesome-brands-github: 6.S081](https://github.com/tom-jerr/RethinkMIT6.S081/)**
 
 A class about operator system, build a simple os of RISC-V by C.
 
-**[:fontawesome-brands-github: BPlus Tree](https://github.com/tom-jerr/BPlusTree/)**
+**[:fontawesome-brands-github: CS144](https://github.com/tom-jerr/CS144/)**
 
-A simple BPlus Tree implement in C++, using latch crabbing protocol.
-
+A class about network, build a simple TCP protocol by C++.
 
 **[:fontawesome-brands-github: CMU15-213](https://github.com/tom-jerr/CSapp_labs/)**
 
 Some labs from CSAPP.
+**[:fontawesome-brands-github: miniTCMalloc](https://github.com/tom-jerr/CPlusPlus/tree/malloc/)**
 
+A simple implement of Google tcmalloc by C++.
 
 ---
+
 ## Projects
 
-**[:fontawesome-brands-github: DB_Study]( https://tom-jerr.github.io/DB_Study/)**
+**[:fontawesome-brands-github: DB_Study](https://tom-jerr.github.io/DB_Study/)**
 
 An open-source GitHub page built for my notes about Database Study. The page is powered by [mdbook](https://rust-lang.github.io/mdBook/) and supports collaboration through Pull Requests and GitHub Actions.
 
-**[:fontawesome-brands-github: CXX_Study]( https://tom-jerr.github.io/CXX-_Study/)**
+**[:fontawesome-brands-github: CXX_Study](https://tom-jerr.github.io/CXX-_Study/)**
 
 An open-source GitHub page built for my notes about C++ Study. The page is powered by [mdbook](https://rust-lang.github.io/mdBook/) and supports collaboration through Pull Requests and GitHub Actions.
 
+**[:fontawesome-brands-github:TinyKV](https://github.com/tom-jerr/tinykv)**
+A highly available, scalable, and distributed transaction-supported KV database.
 
-**[:fontawesome-brands-github: Relay Server ](https://github.com/tom-jerr/RelayServer)** 
+**[:fontawesome-brands-github:Bustub: ](https://github.com/tom-jerr/bustub)**
+A single-node database that supports basic SQL operations.
 
-This is a Relay server implemented with C++ and epoll, using LT and complex buffer managing.
+**[:fontawesome-brands-github: iouring with muduo ](https://github.com/tom-jerr/Cplusplus/tree/iouringfile)**
+Offered the ability of random reading and writing files by muduo.
 
 ---
 
@@ -123,7 +135,8 @@ I write articles and share my thinkings on [Zhihu](https://www.zhihu.com/people/
 ## Honors
 
 - [First Prize in the Preliminary in 2024 OceanBase Database Competition](img/oceanbase初赛.pdf), 2024
-- [11th in 2024 OceanBase Database Competition](img/oceanbase国赛.pdf), 2024 
+- [11th in 2024 OceanBase Database Competition](img/oceanbase国赛.pdf), 2024
+
 ---
 
 <!-- ??? tip "Some of My Friends"
