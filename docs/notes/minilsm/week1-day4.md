@@ -1,9 +1,9 @@
 ---
-title: Block
-date: 2025/4/6
+title: SST
+date: 2025/5/15
 update:
 comments: true
-description: Block 的基本介绍
+description: Sorted String Table 的基本介绍
 katex: true
 tags:
   - MiniLSM
@@ -13,17 +13,29 @@ tags:
 
 # Block
 
-- 这里我们实现了 SST Block 的 encode 和 decode 以及 block iterator
-  ![](img/week1-03-overview.svg)
+- 这里我们实现了 Sorted String Table 的 encode 和 decode 以及 block iterator
+  ![](img/week1-04-overview.svg)
 
-## Block encoding format
+## Sorted String Table format
 
 ```shell
-----------------------------------------------------------------------------------------------------
-|             Data Section             |              Offset Section             |      Extra      |
-----------------------------------------------------------------------------------------------------
-| Entry #1 | Entry #2 | ... | Entry #N | Offset #1 | Offset #2 | ... | Offset #N | num_of_elements |
-----------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------
+|         Block Section         |          Meta Section         |          Extra          |
+-------------------------------------------------------------------------------------------
+| data block | ... | data block |            metadata           | meta block offset (u32) |
+-------------------------------------------------------------------------------------------
+
+-------------------------------------
+|           Block Meta              |
+-------------------------------------
+| num of metas| Meta1 | Meta2 | ... |
+-------------------------------------
+
+---------------------------------
+|           Meta i              |
+---------------------------------
+| offset | first key | last key |
+---------------------------------
 
 ```
 
