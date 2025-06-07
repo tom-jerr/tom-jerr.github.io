@@ -126,14 +126,6 @@ A highly available, scalable, and distributed transaction-supported KV database.
 
 Offered the ability of random reading and writing files by muduo.
 
-**[:fontawesome-brands-github: DB_Study](https://tom-jerr.github.io/DB_Study/)**
-
-An open-source GitHub page built for my notes about Database Study. The page is powered by [mdbook](https://rust-lang.github.io/mdBook/) and supports collaboration through Pull Requests and GitHub Actions.
-
-**[:fontawesome-brands-github: CXX_Study](https://tom-jerr.github.io/CXX-_Study/)**
-
-An open-source GitHub page built for my notes about C++ Study. The page is powered by [mdbook](https://rust-lang.github.io/mdBook/) and supports collaboration through Pull Requests and GitHub Actions.
-
 ---
 
 <!-- ## Media Exposures

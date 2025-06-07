@@ -8,7 +8,7 @@ icon: /fontawesome/solid/face-smile-wink
 
     你好！我是 刘芷溢，电子科技大学 24 级计算机科学与技术的研究生。很高兴能在互联网上与你相遇🥰。
 
-    我对分布式数据库、向量数据库等领域很有热情，也喜欢分享自己的学习经验和思考🤓。如果感兴趣，可以看看我的 [Database 学习经验](https://tom-jerr.github.io/DB_Study/) 或 [C++ 学习经验](https://tom-jerr.github.io/CXX_Study/)，也许会找到一些对你有帮助的内容。
+    我对分布式数据库、向量数据库等领域很有热情，也喜欢分享自己的学习经验和思考🤓。如果感兴趣，可以看看我的notes，也许会找到一些对你有帮助的内容。
 
     想了解我的经历？可以查看我的[主页🎓](../academy.md)。
 
@@ -30,7 +30,7 @@ icon: /fontawesome/solid/face-smile-wink
 
     Hi! I’m tom-jerr, an graduated student majoring in Computer Science and Technology at UESTC (Class of 2024). It’s a pleasure to meet you here🥰.
 
-    I am passionate about distributed database and vector database, and I enjoy sharing my learning experiences and insights🤓. You can check out my [Database study](https://tom-jerr.github.io/DB_Study/) or [C++ study](https://tom-jerr.github.io/CXX_Study/) (both in Chinese) for useful resources.
+    I am passionate about distributed database and vector database, and I enjoy sharing my learning experiences and insights🤓. You can check out my notes (both in Chinese) for useful resources.
 
     For more details, please visit my [page 🎓](../academy.md).
 
