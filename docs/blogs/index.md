@@ -2,12 +2,14 @@
 icon: fontawesome/solid/blog
 nostatistics: true
 ---
+
 # Blogs ✍
 
 !!! note "Abstract"
-    个人博客，主要记录
+个人博客，主要记录
 
-    - 在MLSYS相关方面的学习，也会掺杂一些其它的领域；
+    - 在 Database 和Distributed System 相关方面的学习；
+    - 一些感兴趣论文的阅读。；
     - 一些杂谈。
 
     一些比较成体系的笔记会记录在 [Notes](../notes/index.md) 中。

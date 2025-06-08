@@ -2,7 +2,7 @@
 title: lecture2_Intro_to_C
 date: 2023-09-11 22:17:49
 tags:
-  - CS61C
+  - System Arch
 ---
 
 # Intro to C

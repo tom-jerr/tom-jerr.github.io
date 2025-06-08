@@ -2,7 +2,7 @@
 title: lecture14_DataPath_Hazards
 date: 2023-09-11 22:17:49
 tags:
-  - CS61C
+  - System Arch
 ---
 
 # Hazards

@@ -222,6 +222,21 @@ nav:
           - "17 Process-Level Parallelism": notes/CS61C/lecture17_Process_LevelParallelism.md
           - "18 Caches": notes/CS61C/lecture18_Caches.md
           - "21 Virtual Memory": notes/CS61C/lecture21_Virtual_Memory.md
+
+      - CSAPP:
+          - "5-优化程序性能": notes/CSAPP/5-优化程序性能.md
+          - "6-存储器层次结构": notes/CSAPP/6-存储器层次结构.md
+          - "7-链接": notes/CSAPP/7-链接.md
+          - "8-异常控制流": notes/CSAPP/8-异常控制流.md
+          - "程序的结构和执行": notes/CSAPP/程序的结构和执行.md
+          - "在系统上运行程序": notes/CSAPP/在系统上运行程序.md
+
+      - rcore:
+          - "rustlings": notes/rcore/rustlings.md
+          - "LibOS": notes/rcore/LibOS.md
+          - "BatchOS": notes/rcore/BatchOS.md
+          - "TimeSharingOS": notes/rcore/TimeSharingOS.md
+
       - 6.s081:
           - "1 OS的隔离性": notes/6.s081/1-OS的隔离性.md
           - "2 虚拟内存实现": notes/6.s081/2-虚拟内存实现.md
@@ -231,6 +246,7 @@ nav:
           - "6 多核和锁": notes/6.s081/6-多核和锁.md
           - "7 进程切换": notes/6.s081/7-进程切换.md
           - "8 睡眠和唤醒": notes/6.s081/8-睡眠和唤醒.md
+
       - C++ Primer:
           - "2_变量和基本类型": notes/c++primer/2_变量和基本类型.md
           - "3_字符串向量数组": notes/c++primer/3_字符串向量数组.md
@@ -248,6 +264,19 @@ nav:
           - "15_面向对象程序设计": notes/c++primer/15_面向对象程序设计.md
           - "并发与多线程编程": notes/c++primer/并发与多线程编程.md
           - "Makefile学习": notes/c++primer/Makefile学习.md
+
+      - C++ 新特性:
+          - "1-Container": notes/C++/1-Container.md
+          - "2-Algorithm": notes/C++/2-Algorithm.md
+          - "3-Iterator": notes/C++/3-Iterator.md
+          - "4-FileSystem": notes/C++/4-FileSystem.md
+          - "5-View": notes/C++/5-View.md
+          - "6-Span": notes/C++/6-Span.md
+
+      - C++ Concurrency in Action:
+          - "1-Thread": notes/C++/C++ Concurrency in Action/1-thread.md
+          - "2-Memory Model in C++ ": notes/C++/C++ Concurrency in Action/2-Memory Model.md
+
       - CMU15445:
           - "3-Database Storage": notes/CMU15445/3-Database Storage.md
           - "4-Database_Storage_II": notes/CMU15445/4-Database_Storage_II.md
@@ -267,23 +296,33 @@ nav:
           - "18-Database_Recovery": notes/CMU15445/18-Database_Recovery.md
           - "19-Introducd_to_distributed_database": notes/CMU15445/19-Introducd_to_distributed_database.md
 
-      - CSAPP:
-          - "5-优化程序性能": notes/CSAPP/5-优化程序性能.md
-          - "6-存储器层次结构": notes/CSAPP/6-存储器层次结构.md
-          - "7-链接": notes/CSAPP/7-链接.md
-          - "8-异常控制流": notes/CSAPP/8-异常控制流.md
-          - "程序的结构和执行": notes/CSAPP/程序的结构和执行.md
-          - "在系统上运行程序": notes/CSAPP/在系统上运行程序.md
+      - 6.824:
+          - "MapReduce 论文阅读": notes/6.824/MapReduce.md
 
-      - rcore:
-          - "rustlings": notes/rcore/rustlings.md
-          - "LibOS": notes/rcore/LibOS.md
-          - "BatchOS": notes/rcore/BatchOS.md
-          - "TimeSharingOS": notes/rcore/TimeSharingOS.md
+      - minilsm:
+          - "week1-day1": notes/minilsm/week1-day1.md
+          - "week1-day2": notes/minilsm/week1-day2.md
+          - "week1-day3": notes/minilsm/week1-day3.md
+          - "week1-day4": notes/minilsm/week1-day4.md
+
+      - nebula:
+          - "1-Vistor Pattern in nebula": notes/nebula/1-vistor pattern.md
+          - "2-Memory Management in nebula": notes/nebula/2-memory management.md
+          - "3-Concurrent LRU Cache in nebula": notes/nebula/3-concurrent lru cache.md
+          - "4-Folly Future Promise framework in nebula": notes/nebula/4-folly future promise.md
+          - "5-nGQL life in nebula": notes/nebula/5-nGQL life.md
+          - "6-raft wal in nebula": notes/nebula/6-raft wal.md
+
   - Blogs:
       - index: blogs/index.md
       - 实现一个TCP:
           - "CS144总结": notes/CS144/CS144.md
+      - linux tolls:
+          - "grep": notes/linux-tools/1-grep.md
+          - "sed": notes/linux-tools/2-sed.md
+          - "awk": notes/linux-tools/3-awk.md
+          - "find": notes/linux-tools/4-find.md
+
   - Summaries:
       - index: summary/index.md
       - "2025":

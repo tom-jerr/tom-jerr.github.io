@@ -2,7 +2,7 @@
 title: lecture16_Thread_Level_Parallelism
 date: 2023-09-11 22:17:49
 tags:
-  - CS61C
+  - System Arch
 ---
 
 # Thread-Level Parallelism
