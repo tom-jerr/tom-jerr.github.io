@@ -318,10 +318,10 @@ nav:
       - 实现一个TCP:
           - "CS144总结": blogs/posts/CS144/CS144.md
       - linux tolls:
-          - "grep": notes/linux tools/1-grep.md
-          - "sed": notes/linux tools/2-sed.md
-          - "awk": notes/linux tools/3-awk.md
-          - "find": notes/linux tools/4-find.md
+          - "grep": blogs/linux tools/1-grep.md
+          - "sed": blogs/linux tools/2-sed.md
+          - "awk": blogs/linux tools/3-awk.md
+          - "find": blogs/linux tools/4-find.md
 
   - Summaries:
       - index: summary/index.md
