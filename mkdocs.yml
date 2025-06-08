@@ -274,8 +274,8 @@ nav:
           - "6-Span": notes/C++/6-Span.md
 
       - C++ Concurrency in Action:
-          - "1-Thread": notes/C++/C++ Concurrency in Action/1-thread.md
-          - "2-Memory Model in C++ ": notes/C++/C++ Concurrency in Action/2-Memory Model.md
+          - "1-Thread": notesC++Concurrency/1-thread.md
+          - "2-Memory Model in C++": notes/C++Concurrency/2-Memory Model.md
 
       - CMU15445:
           - "3-Database Storage": notes/CMU15445/3-Database Storage.md
@@ -306,12 +306,12 @@ nav:
           - "week1-day4": notes/minilsm/week1-day4.md
 
       - nebula:
-          - "1-Vistor Pattern in nebula": notes/nebula/1-vistor pattern.md
-          - "2-Memory Management in nebula": notes/nebula/2-memory management.md
-          - "3-Concurrent LRU Cache in nebula": notes/nebula/3-concurrent lru cache.md
-          - "4-Folly Future Promise framework in nebula": notes/nebula/4-folly future promise.md
-          - "5-nGQL life in nebula": notes/nebula/5-nGQL life.md
-          - "6-raft wal in nebula": notes/nebula/6-raft wal.md
+          - "1-Vistor Pattern in nebula": notes/nebula/1.visitor pattern.md
+          - "2-Memory Management in nebula": notes/nebula/2.memory management.md
+          - "3-Concurrent LRU Cache in nebula": notes/nebula/3.concurrent lru cache.md
+          - "4-Folly Future Promise framework in nebula": notes/nebula/4.folly future promise.md
+          - "5-nGQL life in nebula": notes/nebula/5.nGQL life.md
+          - "6-raft wal in nebula": notes/nebula/6.raft-wal.md
 
   - Blogs:
       - index: blogs/index.md
