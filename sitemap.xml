@@ -29,7 +29,7 @@
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/6.824/1-mapreduce/</loc>
+         <loc>https://tom-jerr.github.io/notes/6.824/MapReduce/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
@@ -65,51 +65,35 @@
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter1/1-Container/</loc>
+         <loc>https://tom-jerr.github.io/notes/C%2B%2B/1-Container/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter1/2-Algorithm/</loc>
+         <loc>https://tom-jerr.github.io/notes/C%2B%2B/2-Algorithm/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter1/3-Iterator/</loc>
+         <loc>https://tom-jerr.github.io/notes/C%2B%2B/3-Iterator/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter1/4-Filesystem/</loc>
+         <loc>https://tom-jerr.github.io/notes/C%2B%2B/4-Filesystem/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter1/5-View/</loc>
+         <loc>https://tom-jerr.github.io/notes/C%2B%2B/5-View/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter1/6-Span/</loc>
+         <loc>https://tom-jerr.github.io/notes/C%2B%2B/6-Span/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter2/1-thread/</loc>
+         <loc>https://tom-jerr.github.io/notes/C%2B%2B%20Concurrency%20in%20Action/1-thread/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter2/2-%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter3/1-grep/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter3/2-sed/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter3/3-awk/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/C%2B%2B/chapter3/4-find/</loc>
+         <loc>https://tom-jerr.github.io/notes/C%2B%2B%20Concurrency%20in%20Action/2-Memory%20Model/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
@@ -309,27 +293,19 @@
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/graphdb/1.visitor%20pattern/</loc>
+         <loc>https://tom-jerr.github.io/notes/linux%20tools/1-grep/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/graphdb/2.memory%20management/</loc>
+         <loc>https://tom-jerr.github.io/notes/linux%20tools/2-sed/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/graphdb/3.ConcurrentLRU/</loc>
+         <loc>https://tom-jerr.github.io/notes/linux%20tools/3-awk/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/graphdb/4.folly%20future%20promise/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/graphdb/5.SQL%20life/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/graphdb/6.raft-wal/</loc>
+         <loc>https://tom-jerr.github.io/notes/linux%20tools/4-find/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
@@ -346,6 +322,30 @@
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/minilsm/week1-day4/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/nebula/1.visitor%20pattern/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/nebula/2.memory%20management/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/nebula/3.concurrent%20lru%20cache/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/nebula/4.folly%20future%20promise/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/nebula/5.nGQL%20life/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/nebula/6.raft-wal/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
