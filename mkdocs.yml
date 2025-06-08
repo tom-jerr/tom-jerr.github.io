@@ -316,12 +316,12 @@ nav:
   - Blogs:
       - index: blogs/index.md
       - 实现一个TCP:
-          - "CS144总结": notes/CS144/CS144.md
+          - "CS144总结": blogs/posts/CS144/CS144.md
       - linux tolls:
-          - "grep": notes/linux-tools/1-grep.md
-          - "sed": notes/linux-tools/2-sed.md
-          - "awk": notes/linux-tools/3-awk.md
-          - "find": notes/linux-tools/4-find.md
+          - "grep": notes/linux tools/1-grep.md
+          - "sed": notes/linux tools/2-sed.md
+          - "awk": notes/linux tools/3-awk.md
+          - "find": notes/linux tools/4-find.md
 
   - Summaries:
       - index: summary/index.md
