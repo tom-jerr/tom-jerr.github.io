@@ -2,7 +2,7 @@
 title: 3_Database_Storage I
 date: 2023-09-11 22:17:49
 tags:
-  - CMU15445
+  - Database
 ---
 
 # 3-Database Storage I

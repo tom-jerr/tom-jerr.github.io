@@ -2,7 +2,7 @@
 title: 11 Query Execution
 date: 2024-10-31
 tags:
-  - CMU15445
+  - Database
 ---
 
 # 11. Query Execution

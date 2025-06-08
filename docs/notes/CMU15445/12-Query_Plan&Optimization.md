@@ -2,7 +2,7 @@
 title: 12 Query Planning and Optimization
 date: 2024-10-31
 tags:
-  - CMU15445
+  - Database
 ---
 
 # Query Planning and Optimization

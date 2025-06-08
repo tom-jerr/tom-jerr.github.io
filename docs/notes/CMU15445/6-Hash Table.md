@@ -2,9 +2,7 @@
 title: 6_Hash_Table
 date: 2023-09-21 22:17:49
 tags:
-  - CMU15445
-
-
+  - Database
 ---
 
 # 6 Hash Table

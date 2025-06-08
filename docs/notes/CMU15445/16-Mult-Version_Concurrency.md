@@ -2,7 +2,7 @@
 title: 16 Multi-Version Concurrency
 date: 2024-10-31
 tags:
-  - CMU15445
+  - Database
 ---
 
 # Mutli-Version Concurrency

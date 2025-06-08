@@ -2,7 +2,7 @@
 title: 14 Two Phase Lock
 date: 2024-10-31
 tags:
-  - CMU15445
+  - Database
 ---
 
 # Two Phase Lock Concurrency Control

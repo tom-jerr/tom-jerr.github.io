@@ -2,7 +2,7 @@
 title: 13 Concurrency Control Theory
 date: 2024-10-31
 tags:
-  - CMU15445
+  - Database
 ---
 
 # Concurrency Control Theory

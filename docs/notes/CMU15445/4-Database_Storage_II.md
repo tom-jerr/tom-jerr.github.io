@@ -2,7 +2,7 @@
 title: 4_Database_Storage II
 date: 2023-09-15 23:49:49
 tags:
-  - CMU15445
+  - Database
 ---
 
 # 4 Database Storage II
