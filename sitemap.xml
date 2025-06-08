@@ -245,30 +245,6 @@
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/notes/OSPP-nebula/1.visitor%20pattern/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/OSPP-nebula/2.memory%20management/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/OSPP-nebula/3.ConcurrentLRU/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/OSPP-nebula/4.folly%20future%20promise/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/OSPP-nebula/5.SQL%20life/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/OSPP-nebula/6.raft-wal/</loc>
-         <lastmod>2025-06-08</lastmod>
-    </url>
-    <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/10_%E6%B3%9B%E5%9E%8B%E7%AE%97%E6%B3%95/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
@@ -330,6 +306,30 @@
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/%E5%B9%B6%E5%8F%91%E4%B8%8E%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/graphdb/1.visitor%20pattern/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/graphdb/2.memory%20management/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/graphdb/3.ConcurrentLRU/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/graphdb/4.folly%20future%20promise/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/graphdb/5.SQL%20life/</loc>
+         <lastmod>2025-06-08</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/graphdb/6.raft-wal/</loc>
          <lastmod>2025-06-08</lastmod>
     </url>
     <url>
