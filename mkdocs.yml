@@ -312,11 +312,14 @@ nav:
           - "4-Folly Future Promise framework in nebula": notes/nebula/4.folly future promise.md
           - "5-nGQL life in nebula": notes/nebula/5.nGQL life.md
           - "6-raft wal in nebula": notes/nebula/6.raft-wal.md
+          - "7-How to Modify nGQL": notes/nebula/7.how to modify sql.md
 
   - Blogs:
       - index: blogs/index.md
-      - 实现一个TCP:
-          - "CS144总结": blogs/posts/CS144/CS144.md
+      - 实现一个TCP: blogs/posts/CS144/CS144.md
+      - bision debug: blogs/posts/bision debug.md
+      - Bustub 通关指北: blogs/bustub通关指北.md
+      - C++ 异步方案演进: blogs/C++异步方案.md
       - linux tolls:
           - "grep": blogs/linux tools/1-grep.md
           - "sed": blogs/linux tools/2-sed.md
