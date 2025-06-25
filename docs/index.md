@@ -33,7 +33,7 @@ Welcome to tom-jerr's Site! 🎉
 function updateTime() {
     var date = new Date();
     var now = date.getTime();
-    var startDate = new Date("2024/12/05 20:00:00");
+    var startDate = new Date("2025/5/04 20:00:00");
     var start = startDate.getTime();
     var diff = now - start;
     var y, d, h, m;
