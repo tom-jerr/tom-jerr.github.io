@@ -13,7 +13,7 @@ icon: material/home
 
 <h1 style="text-align: center;">
 <span style="font-size:50px;">
-Welcome to tom-jerr's Site! 🎉
+Welcome to enjoy DB magic! 🎉
 </span>
 </h1>
 
@@ -24,8 +24,8 @@ Welcome to tom-jerr's Site! 🎉
 <div id="statistics" markdown="1" class="card" style="width: 27em; border-color: transparent; opacity: 0; margin-left: auto; margin-right: 0; font-size: 110%">
 <div style="padding-left: 1em;" markdown="1">
 <li>Website Operating Time: <span id="web-time"></span></li>
-<li>Total Visitors: <span id="busuanzi_value_site_uv"></span> people</li>
-<li>Total Visits: <span id="busuanzi_value_site_pv"></span> times</li>
+<!-- <li>Total Visitors: <span id="busuanzi_value_site_uv"></span> people</li>
+<li>Total Visits: <span id="busuanzi_value_site_pv"></span> times</li> -->
 </div>
 </div>
 

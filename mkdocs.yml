@@ -1,10 +1,10 @@
-site_name: tom-jerr's Site
+site_name: Want to be a DB wizard
 site_author: tom-jerr
 site_url: https://tom-jerr.github.io
-site_description: tom-jerr 的个人网站
+site_description: Experience the journey of a database wizard, from the basics to advanced topics.
 repo_url: https://github.com/tom-jerr/tom-jerr.github.io/
 repo_name: tom-jerr's Site
-copyright: Copyright &copy; 2024 - Present <a href="https://github.com/tom-jerr/" target="_blank" rel="noopener">tom-jerr</a>
+copyright: Copyright &copy; 2025 - Present <a href="https://github.com/tom-jerr/" target="_blank" rel="noopener">tom-jerr</a>
 
 theme:
   name: material
