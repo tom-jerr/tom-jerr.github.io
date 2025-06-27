@@ -321,6 +321,14 @@ nav:
       - Bustub 通关指北: blogs/bustub通关指北.md
       - C++ 异步方案演进: blogs/C++异步方案.md
       - 并发组件实现浅析: blogs/Implement of Concurrent.md
+      - ospp-nebula:
+          - Plan:
+              - week1-week2: blogs/ospp-nebula/plans/week1-week2.md
+              - week3-week4: blogs/ospp-nebula/plans/week3-week4.md
+              - week5-week6: blogs/ospp-nebula/plans/week5-week6.md
+
+          - Implement:
+              - vector type implement: blogs/ospp-nebula/implements/vector type implement.md
       - linux tolls:
           - "grep": blogs/linux tools/1-grep.md
           - "sed": blogs/linux tools/2-sed.md
