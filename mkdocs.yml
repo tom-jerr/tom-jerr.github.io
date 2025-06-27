@@ -323,12 +323,12 @@ nav:
       - 并发组件实现浅析: blogs/Implement of Concurrent.md
       - ospp-nebula:
           - Plan:
-              - week1-week2: blogs/ospp-nebula/plans/week1-week2.md
-              - week3-week4: blogs/ospp-nebula/plans/week3-week4.md
-              - week5-week6: blogs/ospp-nebula/plans/week5-week6.md
+              - week1-week2: blogs/posts/ospp-nebula/plans/week1-week2.md
+              - week3-week4: blogs/posts/ospp-nebula/plans/week3-week4.md
+              - week5-week6: blogs/posts/ospp-nebula/plans/week5-week6.md
 
           - Implement:
-              - vector type implement: blogs/ospp-nebula/implements/vector type implement.md
+              - vector type implement: blogs/posts/ospp-nebula/implements/vector type implement.md
       - linux tolls:
           - "grep": blogs/linux tools/1-grep.md
           - "sed": blogs/linux tools/2-sed.md
