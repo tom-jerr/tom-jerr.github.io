@@ -305,15 +305,6 @@ nav:
           - "week1-day3": notes/minilsm/week1-day3.md
           - "week1-day4": notes/minilsm/week1-day4.md
 
-      - nebula:
-          - "1-Vistor Pattern in nebula": notes/nebula/1.visitor pattern.md
-          - "2-Memory Management in nebula": notes/nebula/2.memory management.md
-          - "3-Concurrent LRU Cache in nebula": notes/nebula/3.concurrent lru cache.md
-          - "4-Folly Future Promise framework in nebula": notes/nebula/4.folly future promise.md
-          - "5-nGQL life in nebula": notes/nebula/5.nGQL life.md
-          - "6-raft wal in nebula": notes/nebula/6.raft-wal.md
-          - "7-How to Modify nGQL": notes/nebula/7.how to modify sql.md
-
   - Blogs:
       - index: blogs/index.md
       - 实现一个TCP: blogs/posts/CS144/CS144.md
@@ -329,6 +320,13 @@ nav:
           - Implement:
               - week1-week2: blogs/posts/ospp-nebula/plans/week1-week2-finished.md
           - UnderStanding:
+              - Vistor Pattern in nebula: notes/nebula/1.visitor pattern.md
+              - Memory Management in nebula: notes/nebula/2.memory management.md
+              - Concurrent LRU Cache in nebula: notes/nebula/3.concurrent lru cache.md
+              - Folly Future Promise framework in nebula: notes/nebula/4.folly future promise.md
+              - nGQL Life in Nebula: notes/nebula/5.nGQL life.md
+              - Raft Wal in Nebula: notes/nebula/6.raft-wal.md
+              - How to Modify nGQL: notes/nebula/7.how to modify sql.md
               - A Life of KV Pairs: blogs/posts/ospp-nebula/understandings/a kv life.md
           - "grep": blogs/linux tools/1-grep.md
           - "sed": blogs/linux tools/2-sed.md
