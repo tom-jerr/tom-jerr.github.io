@@ -1,4 +1,73 @@
-# Stroage Implementation of Vector Type
+# The Implementation of Vector Type in Nebula Graph
+
+1. Implement vector value type and property type and do the unit test for vector type
+   - Add new value type: VECTOR
+   - Modify RocksEngine to support multiple column family of RocksDB
+2. Implement serialization and deserialization for vector type: Graphd to Storaged by thrift
+   - Add thrift operation for vector type
+   - Encoding of vector type key
+   - RowWriter and RowReader for vector type
+3. Modify Schema to simply support original column and vector column
+   - Separate vector column and original column in schema
+   - Modify RowWriter and RowReader to support vector column
+4. Add vector distance expression in expression system
+   - Implement vector distance expression in expression system
+   - TODO: Add vector distance expression in query engine
+5. Implement Create Tag Sentence For Vector Type
+   - Create tag with vector type property
+6. Implement Add Vertex with Vector Type Property
+   - Add vertex with vector type property
+   - TODO: Pass tck tests
+
+# Design Notes
+
+## Vector Value Type
+
+The VECTOR type can be used as a property type. For storage, the actual data content of the vector is placed at the end of the encoded data block. We then use an offset and a length to specify the exact memory region where the vector's content is located.
+
+![](../VectorType.png)
+
+## Storage for Vector Data
+
+Specifically, Vertex data is stored in RocksDB in the form of KV pairs. We use RocksDB's Column Family to separate storage of VECTOR attributes and other graph attributes. We should add read and write method for RowReader and RowWriter.
+
+### Key of Vector Type
+
+The key of vector attributes is PartitionID + VertexID + TagID + PropID, Value is serialized vector data.
+
+![](../vector_key.png)
+
+### Encoded Value
+
+The encoded value of vector is consist of metadata and original data. Metadata is offset and length of original data, and original data is at last of whole value.
+
+![](../encode_value.png)
+
+## Schema Modification
+
+To simply support original column and vector column, we need to modify the schema as follows:
+
+1.  Original columns (for other types except VECTOR type)
+2.  Vector columns (just for VECTOR type)
+3.  Schema Properties Options (TTL, TTL_COL, etc.)
+
+![](../new_schema.png)
+
+Then, we also need to modify RowWriter and RowReader to support vector column. The RowWriter will write the vector data into the RocksDB "vector" column family, and the RowReader will read the vector data from the RocksDB "vector" column family.
+
+![](../schema_read_write.png)
+
+## Create Tag Sentence For Vector Type
+
+To create a tag with a vector type property, we can use the following sentence:
+
+```cypher
+CREATE TAG IF NOT EXISTS test1(name string, embedding vector(3) DEFAULT [1.0,2.0,3.0]) TTL_DURATION = 100, TTL_COL = "create_time";;
+```
+
+## Add Vertex with Vector Type Property
+
+### Process for Adding Vertex with Vector Type Property
 
 When adding a vertex with a VECTOR type property, the `AddVerticesProcessor` executor is responsible for processing the request. It packages the vertex data and metadata into raft-wal logs, which are then submitted to the Raft Part. The actual insertion into RocksDB occurs in the `Part::commitLogs()` method.
 
@@ -67,33 +136,3 @@ public:
                                       const void* snapshot = nullptr) = 0;
 };
 ```
-
-# vector encoding
-
-## Key
-
-- NebulaKeyUtils::vectorTagKey
-  > type(1) + partId(3) + vertexId(\_) + tagId(4) + propId(4)
-- NebulaKeyUtils::vectorVertexKey:
-  > type(1) + partId(3) + vertexId(\_) + tagId(4) + propId(4)
-- NebulaKeyUtils::vectorEdgeKey
-  > type(1) + partId(3) + srcId(_) + edgeType(4) + edgeRank(8) + dstId(_) + propId(4) +placeHolder(1)
-
-## Write
-
-StatusOr<std::string> BaseProcessor<RESP>::encodeRowVal ->
-WriteResult RowWriterV2::setValue(const std::string& name, const Value& val) ->
-WriteResult RowWriterV2::setValue(ssize_t index, const Value& val) ->
-WriteResult RowWriterV2::write(ssize_t index, const Vector& vector)
-
-## Read
-
-RowReaderWrapper() ->
-static StatusOr<nebula::Value> readValue->
-RowReaderWrapper::getValueByName
-
-# KNN Search
-
-## Syntax Design
-
-`vector_distance(vector1: src1, vector2: src2, metric: L2;)`

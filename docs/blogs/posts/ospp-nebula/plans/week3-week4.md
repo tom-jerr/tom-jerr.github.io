@@ -1,20 +1,13 @@
 # Week3 - Week4 Plan
 
-1. Support a process for ann search (stage 1)
+All of my plans and implementation documents are published on the [Blogs](https://tom-jerr.github.io/blogs/posts/ospp-nebula/implements/vector%20type%20implement/)
 
-   - Id-vid mapping encding
-     ![](../id-vid%20mapping.png)
-   - Create tag with vector type properties
-   - Support create vector index statement
-   - Support DML for vector type
+## Support original search for vector type
 
-2. Support a process for ann search (stage 2)
+- Support MATCH, GO, FETCH statement for vector type
 
-   - Syntax design for ANN search
-   - Support IVF/HNSW indexes in ANN index module
-   - Plan generation for ANN search
+## Support a process for ann search (stage 1)
 
-3. Support Write-ahead logging for vector index
-   - Implement wal for vector index
-
-## Support original index search for vector type
+- Support syntax design for ANN search
+- Plan generation for ANN search
+- Support IVF/HNSW indexes in ANN index module
