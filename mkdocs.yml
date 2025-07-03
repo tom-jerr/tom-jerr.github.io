@@ -332,7 +332,9 @@ nav:
           - "sed": blogs/linux tools/2-sed.md
           - "awk": blogs/linux tools/3-awk.md
           - "find": blogs/linux tools/4-find.md
-
+      - vector search papers:
+          - "LSM-VEC": blogs/paper notes/vector search/LSM-VEC.md
+          - "Acceleratin Graph Indexing for ANNs on Modern CPUs": blogs/paper notes/vector search/Acceleratin Graph Indexing for ANNs on Modern CPUs.md
   - Summaries:
       - index: summary/index.md
       - "2025":
