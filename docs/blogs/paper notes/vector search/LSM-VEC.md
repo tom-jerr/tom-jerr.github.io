@@ -1,6 +1,6 @@
 ---
 title: A Large-Scale Disk-Based System for Dynamic Vector Search 论文阅读笔记
-date: 2025/6/10
+date: 2025/7/1
 update:
 comments: true
 description: LSM-VEC：

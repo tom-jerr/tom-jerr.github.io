@@ -14,3 +14,7 @@ tags:
 ---
 
 # Highlights
+
+# Potential Problems
+
+1. **Terrible Experiment Settings**: iQAN use 64 cores and Parlay use 128 cores, but this paper only use 24 cores, so the performance may not be optimal.
