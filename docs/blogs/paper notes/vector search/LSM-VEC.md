@@ -10,7 +10,7 @@ description: LSM-VEC：
 
 katex: true
 tags:
-  - C++
+  - Vector Search
 ---
 
 # Highlights
