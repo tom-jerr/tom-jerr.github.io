@@ -101,10 +101,6 @@
          <lastmod>2025-08-22</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/blogs/posts/ospp-nebula/implements/Vector%20Index/</loc>
-         <lastmod>2025-08-22</lastmod>
-    </url>
-    <url>
          <loc>https://tom-jerr.github.io/blogs/posts/ospp-nebula/implements/wal%20for%20vector%20type/</loc>
          <lastmod>2025-08-22</lastmod>
     </url>
@@ -129,7 +125,35 @@
          <lastmod>2025-08-22</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/blogs/posts/ospp-nebula/understanding/a%20kv%20life/</loc>
+         <loc>https://tom-jerr.github.io/blogs/posts/ospp-nebula/understanding/1.visitor%20pattern/</loc>
+         <lastmod>2025-08-22</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/blogs/posts/ospp-nebula/understanding/2.memory%20management/</loc>
+         <lastmod>2025-08-22</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/blogs/posts/ospp-nebula/understanding/3.concurrent%20lru%20cache/</loc>
+         <lastmod>2025-08-22</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/blogs/posts/ospp-nebula/understanding/4.folly%20future%20promise/</loc>
+         <lastmod>2025-08-22</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/blogs/posts/ospp-nebula/understanding/5.nGQL%20life/</loc>
+         <lastmod>2025-08-22</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/blogs/posts/ospp-nebula/understanding/6.raft-wal/</loc>
+         <lastmod>2025-08-22</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/blogs/posts/ospp-nebula/understanding/7.how%20to%20modify%20sql/</loc>
+         <lastmod>2025-08-22</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/blogs/posts/ospp-nebula/understanding/8.a%20kv%20life/</loc>
          <lastmod>2025-08-22</lastmod>
     </url>
     <url>
@@ -430,34 +454,6 @@
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/minilsm/week1-day4/</loc>
-         <lastmod>2025-08-22</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/nebula/1.visitor%20pattern/</loc>
-         <lastmod>2025-08-22</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/nebula/2.memory%20management/</loc>
-         <lastmod>2025-08-22</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/nebula/3.concurrent%20lru%20cache/</loc>
-         <lastmod>2025-08-22</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/nebula/4.folly%20future%20promise/</loc>
-         <lastmod>2025-08-22</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/nebula/5.nGQL%20life/</loc>
-         <lastmod>2025-08-22</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/nebula/6.raft-wal/</loc>
-         <lastmod>2025-08-22</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/notes/nebula/7.how%20to%20modify%20sql/</loc>
          <lastmod>2025-08-22</lastmod>
     </url>
     <url>
