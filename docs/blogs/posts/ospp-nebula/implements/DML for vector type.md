@@ -45,3 +45,8 @@
 修改 Raft-wal 的 Log 形式，增加每个 KV 对的 column family 信息，实现在 commitLogs()中对不同的 column family 进行写入。保证原子性。
 
 <img src = "../raft_wal_log.png" style="width: 80%">
+
+### Final Solution
+
+- 我们修改 Raft 中处理 Log 的过程，通过处理的 key 的第一字节(**Type**)判断是否需要写入向量 column family
+  <img src = "../vector_key1.png" style="width: 80%">
