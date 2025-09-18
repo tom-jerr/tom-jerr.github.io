@@ -10,6 +10,7 @@ description: LSM-VEC：
 
 katex: true
 tags:
+  - Paper Notes
   - Vector Search
 ---
 

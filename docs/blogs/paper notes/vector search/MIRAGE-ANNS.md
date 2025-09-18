@@ -8,6 +8,7 @@ description: MIRAGE-ANNS: Mixed Approach Graph-based Indexing for Approximate Ne
 
 katex: true
 tags:
+  - Paper Notes
   - Vector Search
 ---
 

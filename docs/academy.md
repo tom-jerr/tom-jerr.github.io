@@ -22,19 +22,19 @@ nostatistics: true
 
 ## Bio
 
-I am a first-year master student majoring in Computer Architecture in [University of Electronic Science and Technology of China(UESTC)](https://www.uestc.edu.cn/). Currently, I am a member at [NDSL](https://github.com/uestc-ndssl/). You could find my previous experience [here](#experience). In addition, I am interested in Database, Distributed System and Vector Database.
+I am a second-year master student majoring in Computer Architecture in [University of Electronic Science and Technology of China(UESTC)](https://www.uestc.edu.cn/). Currently, I am a member at [NDSL](https://github.com/uestc-ndssl/). You could find my previous experience [here](#experience). In addition, I am interested in LLM Inference, Database, Distributed System.
 
-> [!INFO] I am actively contributing to the open-source community, particularly in projects related to distributed databases and Vector Database. If there are any opportunities to participate in the development of these kinds of open-source projects, please feel free to contact me !!! 🥰🥰🥰
+> [!INFO] I am actively contributing to the open-source community, particularly in projects related to LLM Inference. If there are any opportunities to participate in the development of these kinds of open-source projects, please feel free to contact me !!! 🥰🥰🥰
 
 ---
 
 ## Work Interest
 
-<!-- - **Large Language Model Interferce and Optimization**: I am learning one of the most famous structure in LLM interferce field, which is SGLang. I am confused about how to find a job about this area, what need I to study ? -->
+- **Large Language Model Interference and Optimization**: I am learning one of the most famous structure in LLM interference field, which is VLLM. I want to publish a paper about LLM interference optimization. If you have any idea, welcome to contact with me.
 
-- **Distributed Database**: I focus on Distributed Database. Last year, I and my partners have won the 11th in 2024 OceanBase Database Competition. Now I am working for a simple distributed vector database or olap with vectorized query engine, if you have any idea, welcome to contact with me.
+- **Distributed Database**: I focus on Distributed Database. Last year, I and my partners have won the 11th in 2024 OceanBase Database Competition. Now I am working on designing vector search for nebula.
 
-- **Vector Database**: I also foceus on vector database and Graph RAG on this field. Now I am working for adding the ability of vector search on a graph database. I want to do some optimization on vector search with hnsw, if you have any idea about hnsw, welcome to contact with me.
+<!-- - **Vector Database**: I also foceus on vector database and Graph RAG on this field. Now I am working for adding the ability of vector search on a graph database. I want to do some optimization on vector search with hnsw, if you have any idea about hnsw, welcome to contact with me. -->
 
 ---
 

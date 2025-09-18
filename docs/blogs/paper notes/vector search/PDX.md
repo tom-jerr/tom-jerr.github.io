@@ -10,6 +10,7 @@ description: PDX: A Data Layout for Vector Similarity Search
 
 katex: true
 tags:
+  - Paper Notes
   - Vector Search
 ---
 

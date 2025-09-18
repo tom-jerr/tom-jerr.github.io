@@ -10,6 +10,7 @@ description: Acceleratin Graph Indexing for ANNs on Modern CPUs：
 
 katex: true
 tags:
+  - Paper Notes
   - Vector Search
 ---
 

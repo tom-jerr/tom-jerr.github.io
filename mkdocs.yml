@@ -299,14 +299,22 @@ nav:
       - 6.824:
           - "MapReduce 论文阅读": notes/6.824/MapReduce.md
 
-      - minilsm:
-          - "week1-day1": notes/minilsm/week1-day1.md
-          - "week1-day2": notes/minilsm/week1-day2.md
-          - "week1-day3": notes/minilsm/week1-day3.md
-          - "week1-day4": notes/minilsm/week1-day4.md
-
+      # - minilsm:
+      #     - "week1-day1": notes/minilsm/week1-day1.md
+      #     - "week1-day2": notes/minilsm/week1-day2.md
+      #     - "week1-day3": notes/minilsm/week1-day3.md
+      #     - "week1-day4": notes/minilsm/week1-day4.md
+      - paper notes:
+          - Do not use MMAP in DBMS: blogs/paper notes/db/storage/NoMMAP.md
+          - IQAN: blogs/paper notes/vector search/IQAN.md
+          - MIRAGE-ANNS: blogs/paper notes/vector search/MIRAGE-ANNS.md
+          - LSM-VEC: blogs/paper notes/vector search/LSM-VEC.md
+          - PANNS: blogs/paper notes/vector search/PANNS.md
   - Blogs:
       - index: blogs/index.md
+      - LLM Inference:
+          - Introduction for LLM Inference: notes/llm_inference/Introduction.md
+          - Parallelizatoin in ML System: notes/llm_inference/parallelization.md
       - 实现一个TCP: blogs/posts/CS144/CS144.md
       - bision debug: blogs/posts/bision debug.md
       - Bustub 通关指北: blogs/bustub通关指北.md

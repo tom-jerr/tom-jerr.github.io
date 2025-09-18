@@ -35,16 +35,6 @@ class VectorIndexManager final {
                                                IndexID indexId);
   // Remove a vector index
   Status removeIndex(GraphSpaceID spaceId, PartitionID partitionId, IndexID indexId);
-  // Add vectors to an index
-  Status addVectors(GraphSpaceID spaceId,
-                    PartitionID partitionId,
-                    IndexID indexId,
-                    const VecData& vecData);
-  // Search vectors in an index
-  StatusOr<SearchResult> searchVectors(GraphSpaceID spaceId,
-                                       PartitionID partitionId,
-                                       IndexID indexId,
-                                       const SearchParams& searchParams);
   // Get all managed indexes for a partition
   std::vector<std::shared_ptr<AnnIndex>> getIndexesByPartition(GraphSpaceID spaceId,
                                                                PartitionID partitionId);
@@ -56,6 +46,44 @@ class VectorIndexManager final {
                       IndexID indexId,
                       const std::shared_ptr<meta::cpp2::AnnIndexItem>& indexItem);
 };
+```
+
+### Storage 中 VectorIndexManager 的传递
+
+1. 在 `StorageServer::start()` 方法创建了 StorageEnv 实例并将 env 传递给 AdminTaskManager
+2. 初始化 Ann Index Manager 实例
+3. 然后将 Ann Index Manager 实例与 StorageEnv 关联
+4. StorageEnv 结构定义
+   - 我们增加了一个新的成员变量 `annIndexMan_`，用于管理 ANN 索引。
+   - 需要在 Storaged 启动时初始化
+
+```cpp
+// StorageServer 启动
+void StorageServer::start(){
+  // 初始化各个组件
+  schemaMan_ = meta::ServerBasedSchemaManager::create(metaClient_.get());
+  indexMan_ = meta::ServerBasedIndexManager::create(metaClient_.get());
+  kvstore_ = getStoreInstance();
+
+  // 创建 StorageEnv 并设置各个组件
+  env_ = std::make_unique<storage::StorageEnv>();
+  env_->kvstore_ = kvstore_.get();
+  env_->indexMan_ = indexMan_.get();
+  env_->schemaMan_ = schemaMan_.get();
+  env_->rebuildIndexGuard_ = std::make_unique<IndexGuard>();
+  env_->metaClient_ = metaClient_.get();
+  env_->verticesML_ = std::make_unique<VerticesMemLock>();
+  env_->edgesML_ = std::make_unique<EdgesMemLock>();
+  env_->adminStore_ = getAdminStoreInstance();
+  env_->adminSeqId_ = getAdminStoreSeqId();
+}
+
+// VectorIndexManager 启动
+vectorIndexMgr = std::make_unique<VectorIndexManager>();
+vectorIndexMgr->init(storageServer->getIndexMgr());
+
+// StorageServer 设置 ANN 索引管理器
+storageServer->setEnvAnnIndexMgr(vectorIndexMgr.get());
 ```
 
 ## Ann Index Interface

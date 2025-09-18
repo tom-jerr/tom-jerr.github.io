@@ -10,6 +10,7 @@ description: PANNS: Enhancing Graph-based Approximate Nearest  Neighbor Search t
 
 katex: true
 tags:
+  - Paper Notes
   - Vector Search
 ---
 

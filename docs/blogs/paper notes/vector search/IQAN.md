@@ -9,6 +9,7 @@ description: iQAN: Fast and Accurate Vector Search with Efficient  Intra-Query P
 
 katex: true
 tags:
+  - Paper Notes
   - Vector Search
 ---
 
