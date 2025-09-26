@@ -1,0 +1,100 @@
+# A Vertex Life in Nebula Graph Storaged
+
+在 Nebula Graph 中，一个 Vertex 的生命周期从创建到删除，涉及到多个组件和流程。本文将详细介绍一个 Vertex 的生命周期，由此来借鉴实现 VECTOR 类型属性的存储和处理流程。
+
+## Vertex Creation
+
+在 Nebula Graph 中，Vertex 的创建通常通过 `AddVerticesProcessor` executor 来完成。它会将 Vertex 要插入的数据已经元数据打包成 raft-wal log，提交到 Raft Part 中，最后在 Part::commitLogs()中将数据写入到 RocksDB。
+
+![](../vector_storage.png)
+
+## Vertex Search
+
+Vertex 的查询可以通过 Match，GO 以及 Fetch 进行查询，这里我们先讨论最简单的 Fetch 查询。
+
+### Fetch 查询
+
+`FETCH PROP ON test1 "t1" YIELD properties(vertex);`语句执行计划如下：
+
+```c++
+-----+-------------+--------------+----------------+------------------------------
+| id | name        | dependencies | profiling data | operator info               |
+-----+-------------+--------------+----------------+------------------------------
+|  2 | Project     | 1            |                | outputVar: {                |
+|    |             |              |                |   "colNames": [             |
+|    |             |              |                |     "properties(VERTEX)"    |
+|    |             |              |                |   ],                        |
+|    |             |              |                |   "name": "__Project_2",    |
+|    |             |              |                |   "type": "DATASET"         |
+|    |             |              |                | }                           |
+|    |             |              |                | inputVar: __GetVertices_1   |
+|    |             |              |                | columns: [                  |
+|    |             |              |                |   "properties(VERTEX)"      |
+|    |             |              |                | ]                           |
+-----+-------------+--------------+----------------+------------------------------
+|  1 | GetVertices | 0            |                | outputVar: {                |
+|    |             |              |                |   "colNames": [],           |
+|    |             |              |                |   "type": "DATASET",        |
+|    |             |              |                |   "name": "__GetVertices_1" |
+|    |             |              |                | }                           |
+|    |             |              |                | inputVar: __VAR_0           |
+|    |             |              |                | space: 2                    |
+|    |             |              |                | dedup: 0                    |
+|    |             |              |                | limit: -1                   |
+|    |             |              |                | filter:                     |
+|    |             |              |                | orderBy: []                 |
+|    |             |              |                | src: COLUMN[0]              |
+|    |             |              |                | props: [                    |
+|    |             |              |                |   {                         |
+|    |             |              |                |     "props": [              |
+|    |             |              |                |       "_tag",               |
+|    |             |              |                |       "embedding",          |
+|    |             |              |                |       "name"                |
+|    |             |              |                |     ],                      |
+|    |             |              |                |     "tagId": 3              |
+|    |             |              |                |   }                         |
+|    |             |              |                | ]                           |
+|    |             |              |                | exprs:                      |
+-----+-------------+--------------+----------------+------------------------------
+|  0 | Start       |              |                | outputVar: {                |
+|    |             |              |                |   "colNames": [],           |
+|    |             |              |                |   "type": "DATASET",        |
+|    |             |              |                |   "name": "__Start_0"       |
+|    |             |              |                | }                           |
+-----+-------------+--------------+----------------+------------------------------
+```
+
+Fetch 查询会最终调用`GetVerticesProcessor` executor。这个 executor 会生成 Node 的执行计划，执行 GetTagPropNode 的计划，我们需要在`GetTagPropNode::doExecute`方法中解析在`TagNode::doExecute`中从 kvstore 中获取的 value。
+
+```c++
+List row;
+for (auto* tagNode : tagNodes_) {
+  ret = tagNode->collectTagPropsIfValid(
+      [&row, tagNode, this](const std::vector<PropContext>* props) -> nebula::cpp2::ErrorCode {
+        for (const auto& prop : *props) {
+          if (prop.returned_) {
+            row.emplace_back(Value());
+          }
+          if (prop.filtered_ && expCtx_ != nullptr) {
+            expCtx_->setTagProp(tagNode->getTagName(), prop.name_, Value());
+          }
+        }
+        return nebula::cpp2::ErrorCode::SUCCEEDED;
+      },
+      [&row, vIdLen, isIntId, tagNode, this](
+          folly::StringPiece key,
+          RowReaderWrapper* reader,
+          RowReaderWrapper* vectorReader,
+          const std::vector<PropContext>* props) -> nebula::cpp2::ErrorCode {
+          // 向row中添加解析后vertex的属性对应的value
+        auto status = QueryUtils::collectVertexProps(
+            key, vIdLen, isIntId, reader, vecReader, props, row, expCtx_.get(), tagNode->getTagName());
+        if (!status.ok()) {
+          return nebula::cpp2::ErrorCode::E_TAG_PROP_NOT_FOUND;
+        }
+        return nebula::cpp2::ErrorCode::SUCCEEDED;
+      });
+}
+```
+
+## Vertex Deletion

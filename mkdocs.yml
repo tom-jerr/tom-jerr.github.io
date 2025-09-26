@@ -344,7 +344,7 @@ nav:
           - Raft Wal in Nebula: projects/nebula-vsearch/understanding/6.raft-wal.md
           - How to Modify nGQL: projects/nebula-vsearch/understanding/7.how to modify sql.md
           - A Life of KV Pairs: projects/nebula-vsearch/understandings/8.a kv life.md
-      - 实现一个TCP: blogs/posts/CS144/CS144.md
+      - 实现一个TCP: blogs/posts/CS144.md
       - bision debug: blogs/posts/bision debug.md
       - Bustub 通关指北: blogs/posts/bustub通关指北.md
       - C++ 异步方案演进: blogs/posts/C++异步方案.md
@@ -354,6 +354,15 @@ nav:
   - Projects:
       - index: projects/index.md
       - nebula-vsearch:
+          - UnderStanding Fundermentals:
+              - Visitor Pattern in nebula: projects/nebula-vsearch/understanding/1.visitor pattern.md
+              - Memory Management in nebula: projects/nebula-vsearch/understanding/2.memory management.md
+              - Concurrent LRU Cache in nebula: projects/nebula-vsearch/understanding/3.concurrent lru cache.md
+              - Folly Future Promise framework in nebula: projects/nebula-vsearch/understanding/4.folly future promise.md
+              - nGQL Life in Nebula: projects/nebula-vsearch/understanding/5.nGQL life.md
+              - Raft Wal in Nebula: projects/nebula-vsearch/understanding/6.raft-wal.md
+              - How to Modify nGQL: projects/nebula-vsearch/understanding/7.how to modify sql.md
+              - A Life of KV Pairs: projects/nebula-vsearch/understandings/8.a kv life.md
           - Implement:
               - DDL for VECTOR Type: projects/nebula-vsearch/implements/DDL for vector type.md
               - DML for VECTOR Type: projects/nebula-vsearch/implements/DML for vector type.md
