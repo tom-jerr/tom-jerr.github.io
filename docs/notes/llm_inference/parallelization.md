@@ -1,11 +1,11 @@
 ---
 title: Parallelization in ML Systems
-date: 2025/9/12
+date: 2025/9/18
 update:
 comments: true
 katex: true
 tags:
-  - Parallelization in ML Systems
+  - LLM Inference
 ---
 
 # Parallelization in ML Systems
