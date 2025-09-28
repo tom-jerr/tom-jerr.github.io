@@ -69,7 +69,7 @@
 
 - 向量数据类型与 List 类型不同，除了比较运算符外，它**不应该支持其他的运算符**，如加减乘除等。
 - 实际向量类型是一个`std::vector<float>`，在存储时会将其序列化为二进制字符串存储在 RocksDB 中。
-  <img src="img/vector.png" alt="vector" style="width:200px;">
+  ![](img/vector.png){ width="200px" }
 
 ### 向量存储支持(RocksDB Multi Column Family)
 
@@ -77,7 +77,7 @@
 - 为了实现与其他数据的隔离，我们需要将向量数据存储在向量列族中，其他数据存储在默认列族中。
   > :warning:这里的 ID-VID 列族是为了后续实现 ANN 索引创建使用的
 
-<img src="img/rocksdb.png" alt="column_family" style="width:200px;">
+![](img/rocksdb.png){ width="200px" }
 
 ### 向量类型的 Key 结构
 
@@ -100,14 +100,14 @@
 - 向量列：专门用于 VECTOR 类型
 - Schema 属性选项：如 TTL、TTL_COL 等
 
-<img src="img/schema.png" alt="schema" style="width:300px;">
+![](img/schema.png){ width="400px" }
 
 此外，还需修改 RowWriter 和 RowReader 以支持向量列操作：
 
 - RowWriter 将向量数据写入 RocksDB 的 vector 列族
 - RowReader 从 RocksDB 的 vector 列族读取向量数据
 
-<img src="img/rowreader&writer.png" alt="rowwriter" style="width:600px;">
+![](img/rowreader&writer.png){ width="600px" }
 
 ### :skull: 向量属性的 DML 语句(Insert/Update/Delete/Upsert)
 
@@ -118,17 +118,17 @@
 - Storage 节点接收到 Request 后，会生成 Storage 节点的计划，最后调用存储引擎接口将数据写入 RocksDB
 - 返回结果给 Client 端
 
-<img src="img/insert_dml.png" alt="dml" style="width:400px;">
+![](img/insert_dml.png){ width="400px" }
 
 :warning:这里面有一些细节需要注意:
 
 - Storage Cache: storaged 会定期使用心跳拉取 metad 最新的 Schema 信息，更新本地的 Schema 缓存，从而获取最新的 Schema 信息。我们需要确保**向量列的信息也能正确地被缓存和更新(后续还有向量索引的更新)**。
-  <img src="img/storage_cache.png" alt="storage_cache" style="width:200px;">
+  ![](img/storage_cache.png){ width="200px" }
 - 为了确保 DML 操作的一致性，我们在 DML 流程中进行了修改，要求每个请求仅使用一次异步操作将数据写入。具体实现是在数据真正写入的 `Raft::commitLog()` 函数中，通过检查键（Key）的第一个字节（Type），来判断需要写入到哪个列族中。
-  <img src="img/doput.png" alt="doput" style="width:400px;">
+  ![](img/doput.png){ width="400px" }
 - 除了 Graghd 会生成物理计划，实际上 Storaged 也会生成自己的执行计划，这个计划会调用存储引擎的接口将数据写入 RocksDB 中。我们需要为获取向量属性修改相关计划节点(TagNode/EdgeNode)。
   - 为了支持 TagNode/EdgeNode 多向量属性的支持，在 TagNode/EdgeNode 中增加了`std::vector<RowReader> vecReaders_`成员变量，用于读取多个向量属性的值。
-    <img src="img/storage_plan.png" alt="storage_plan" style="width:400px;">
+    ![](img/storage_plan.png){ width="400px" }
 
 ### 向量索引功能(Ann Index in Common)
 
@@ -245,7 +245,7 @@ CREATE EDGE ANNINDEX <index_name> ON <tag_name_list>::(<field_name>) [IF NOT EXI
     - `VertexID → VectorID`
   - 最后构建向量索引，并将其加载到内存中。
 
-<img src="img/create_ann_index.png" alt="create_index" style="width:600px;">
+![](img/create_ann_index.png){ width="600px" }
 
 :warning: Storaged 中实际上也会有一个计划，进行真正的索引创建工作：
 
@@ -253,7 +253,7 @@ CREATE EDGE ANNINDEX <index_name> ON <tag_name_list>::(<field_name>) [IF NOT EXI
 2. 将 Vertex ID 与 Vector ID 的映射关系存储到 id-vid 列族中(:star2:**这就是为什么我们需要三个列族**)
 3. 构建向量索引并加载到内存中
 
-<img src="img/ann_index_storage_plan.png" alt="ann_index_storage_plan" style="width:600px;">
+![](img/ann_index_storage_plan.png){ width="600px" }
 
 ### :skull::skull:ANN Search
 
@@ -282,17 +282,17 @@ match (v:tag5:tag6) return v order by euclidean(vector(1.0,2.0,3.0), v.vec)  app
 1. 经过优化规则处理后的物理执行计划会执行 `TagAnnIndexScan`，在 storaged 收到请求后，会生成一个内部执行计划，在 IVF 索引上进行搜索，并将结果返回给 graphd
 2. Graphd 调用 storaged 的 `getProp` 算子生成执行计划，以获取节点的非向量属性，最后执行 Limit 和 Project，得到最终结果
 
-<img src="img/ann_search.png" alt="ann_search_overview" style="width:500px;">
+![](img/ann_search.png){ width="600px" }
 
 #### 优化规则
 
 - 对不返回向量距离的语句，优化器工作流程如下图所示:
 
-<img src="img/opt-rule1.png" alt="ann_search_graphd" style="width:400px;">
+![](img/opt-rule1.png){ width="400px" }
 
 - 对返回向量距离的语句，优化器工作流程如下图所示:
 
-<img src="img/opt-rule2.png" alt="ann_search_graphd" style="width:400px;">
+![](img/opt-rule2.png){ width="400px" }
 
 #### 执行流程
 
@@ -302,7 +302,7 @@ match (v:tag5:tag6) return v order by euclidean(vector(1.0,2.0,3.0), v.vec)  app
 
 > 实际上，storaged 接收到 graphd 的请求后会启动它自己的执行器，并在其中生成 storaged 的执行计划，计划执行会从 Ann Index 中获取数据，最后返回结果给 graphd。
 
-<img src="img/ann_search2.png" alt="ann_search_detailed" style="width:600px;">
+![](img/ann_search2.png){ width="600px" }
 
 实际上，在 storaged 中，`AnnIndexScan` 的处理过程与 `IndexScan` 非常相似。
 
@@ -310,7 +310,7 @@ match (v:tag5:tag6) return v order by euclidean(vector(1.0,2.0,3.0), v.vec)  app
   > 此时是通过 ANN 索引获取结果（这里得到的只是向量 ID，而不是实际的顶点 ID）
 - 随后 `doNext` 只是简单地遍历这些结果，再调用 `AnnIndexVertexScan::getVidByVectorid() `从 RocksDB 中获取实际的 VID 数据，并将 VID 与向量距离数据一并返回给 graphd。
 
-<img src="img/ann_search_storaged.png" alt="ann_index_scan" style="width:200px;">
+![](img/ann_search_storaged.png){ width="300px" }
 
 ## 功能测试
 
@@ -336,7 +336,7 @@ match (v:tag5:tag6) return v order by euclidean(vector(1.0,2.0,3.0), v.vec)  app
     | ANN Search                                       | [Ann Search](https://github.com/vesoft-inc/nebula/pull/6104)                                          |
 
   - tck 测试用例结果：
-    <img src="img/create_ann_index_test.png" alt="create_ann_index_test" style="width:600px;">
+    ![](img/create_ann_index_test.png)
 
 ### 单元测试
 
