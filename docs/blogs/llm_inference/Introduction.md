@@ -49,7 +49,7 @@ $$
 h^{(l)} = f(W^{(l)}h^{(l-1)} + b^{(l)})
 $$
 
-![](../img/MLP.png)
+![](img/MLP.png)
 
 ### Computational Mapping
 
@@ -101,7 +101,7 @@ MLP 中的全连接模式产生了巨大的数据移动需求。每次乘加操�
 ### Pattern Processing Needs
 
 空间模式处理涉及数据点之间的关系取决于它们的相对位置或邻近性的场景。
-![](../img/conv.png)
+![](img/conv.png)
 
 > 空间特征提取：卷积神经网络通过在输入上应用可学习的滤波器来识别图像中独立于其位置的图案，从而实现鲁棒的对象识别。这些滤波器检测局部特征，**并在图像上重复应用这些滤波器创建**——即无论图案的位置如何都能识别该图案的能力
 
@@ -150,7 +150,7 @@ $$
 h_t = f(W_{hh}h_{t-1} + W_{xh}x_t + b_h)
 $$
 
-![](../img/rnn.png)
+![](img/rnn.png)
 
 > Rnn 通过维护一个包含先前时间步信息的状态来处理序列数据。展开的结构明确表示了循环权重建模的时间依赖性，使网络能够学习可变长度序列中的模式。
 
@@ -188,7 +188,7 @@ $$
 Attention(Q, K, V) = softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V
 $$
 
-![](../img/attention.png)
+![](img/attention.png)
 
 ### System Implications
 

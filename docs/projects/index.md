@@ -1,5 +1,5 @@
 ---
-icon: /material/projects
+icon: /material/folder
 nostatistics: true
 ---
 

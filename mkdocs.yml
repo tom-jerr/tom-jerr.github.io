@@ -231,11 +231,11 @@ nav:
           - "程序的结构和执行": notes/CSAPP/程序的结构和执行.md
           - "在系统上运行程序": notes/CSAPP/在系统上运行程序.md
 
-      - rcore:
-          - "rustlings": notes/rcore/rustlings.md
-          - "LibOS": notes/rcore/LibOS.md
-          - "BatchOS": notes/rcore/BatchOS.md
-          - "TimeSharingOS": notes/rcore/TimeSharingOS.md
+      # - rcore:
+      #     - "rustlings": notes/rcore/rustlings.md
+      #     - "LibOS": notes/rcore/LibOS.md
+      #     - "BatchOS": notes/rcore/BatchOS.md
+      #     - "TimeSharingOS": notes/rcore/TimeSharingOS.md
 
       - 6.s081:
           - "1 OS的隔离性": notes/6.s081/1-OS的隔离性.md
@@ -274,7 +274,7 @@ nav:
           - "6-Span": notes/C++/6-Span.md
 
       - C++ Concurrency in Action:
-          - "1-Thread": notesC++Concurrency/1-thread.md
+          - "1-Thread": notes/C++Concurrency/1-thread.md
           - "2-Memory Model in C++": notes/C++Concurrency/2-Memory Model.md
 
       - CMU15445:
@@ -334,9 +334,10 @@ nav:
           - A Life of KV Pairs: projects/nebula-vsearch/understandings/8.a kv life.md
       - 实现一个TCP: blogs/posts/CS144/CS144.md
       - bision debug: blogs/posts/bision debug.md
-      - Bustub 通关指北: blogs/bustub通关指北.md
-      - C++ 异步方案演进: blogs/C++异步方案.md
-      - 并发组件实现浅析: blogs/Implement of Concurrent.md
+      - Bustub 通关指北: blogs/posts/bustub通关指北.md
+      - C++ 异步方案演进: blogs/posts/C++异步方案.md
+      - 并发组件实现浅析: blogs/posts/Implement of Concurrent.md
+      - RocksDB: blogs/posts/rocksdb.md
 
   - Projects:
       - index: projects/index.md
