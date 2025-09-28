@@ -84,7 +84,57 @@ ICRA 2022
 
 使用这种 Re-integration 方法来确保地图的全局一致性，同时通过**帧剪枝**和**增量式 TSDF 更新**来提升实时性能。
 
+#### Truncated Signed Distance Field(TSDF)
+
+- **Signed Distance Field (SDF)** 是一种隐式的空间表示方式。  
+  它为空间中的每一个点 \( \mathbf{x} = (x, y, z) \) 定义一个符号距离值：
+
+\[
+\text{SDF}(\mathbf{x}) =
+\begin{cases}
++d(\mathbf{x}, \text{surface}), & \text{if outside the surface} \\
+-d(\mathbf{x}, \text{surface}), & \text{if inside the surface}
+\end{cases}
+\]
+
+- **TSDF**: 在实际计算中，我们不需要（也存不下）全空间的距离，因此引入**截断半径** \( \mu \)：
+
+\[
+\text{TSDF}(\mathbf{x}) = \text{clip}\left(\frac{d(\mathbf{x})}{\mu}, -1, +1\right)
+\]
+
+- 若距离太远（>|μ|），直接截断为 ±1；
+- 只精确保存表面附近的一层体素（±μ 范围内）。
+
+##### TSDF 地图更新
+
+TSDF 通常存储在一个 **3D 体素网格** 中：
+
+\[
+V(x, y, z)
+\]
+
+每个体素存储两项数据：
+
+- **距离值** \( f \)：表面到该体素中心的截断符号距离；
+- **权重** \( w \)：融合置信度（用于融合多个深度帧）。
+
+**当新的深度图到来时，会通过相机模型投影更新 TSDF**：
+
+\[
+f' = \frac{w \cdot f + w*{new} \cdot f*{new}}{w + w*{new}}
+\]
+\[
+w' = w + w*{new}
+\]
+
+也就是说，每帧深度都会对 TSDF 网格做一次**加权平均更新**，最终形成平滑稳定的三维表面。
+
+---
+
 ## Method
+
+**整体流程**
 
 1. 感知与定位: 机器人启动，通过深度相机观察环境，并通过状态估计模块得出自己的初始位置。
 
@@ -99,6 +149,8 @@ ICRA 2022
 5. 循环: 机器人沿着规划好的路径移动，然后回到第 1 步，不断循环这个“感知-建图-决策”的过程，直到整个环境被探索完毕。
 
 ![](img/explore_re_intergration.png)
+
+### TSDF-based Mapping
 
 ## Experiments/Evaluation/Results
 

@@ -5,7 +5,7 @@ update:
 comments: true
 katex: true
 tags:
-  - LLM Inference
+  - LLMInference
 ---
 
 # Parallelization in ML Systems

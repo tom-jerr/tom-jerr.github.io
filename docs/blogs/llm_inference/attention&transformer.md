@@ -5,7 +5,7 @@ update:
 comments: true
 katex: true
 tags:
-  - LLM Inference
+  - LLMInference
 ---
 
 # Chapter 1 Attention & Transformers
