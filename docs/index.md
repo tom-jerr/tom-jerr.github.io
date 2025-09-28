@@ -13,7 +13,7 @@ icon: material/home
 
 <h1 style="text-align: center;">
 <span style="font-size:50px;">
-Welcome to enjoy DB magic! 🎉
+Welcome to enjoy MlSys magic! 🎉
 </span>
 </h1>
 
@@ -29,7 +29,7 @@ Welcome to enjoy DB magic! 🎉
 </div>
 </div>
 
-<script>
+<!-- <script>
 function updateTime() {
     var date = new Date();
     var now = date.getTime();
@@ -58,4 +58,4 @@ function toggle_statistics() {
         statistics.style.opacity = 0;
     }
 }
-</script>
+</script> -->

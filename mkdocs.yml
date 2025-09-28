@@ -93,8 +93,8 @@ plugins:
   #     enabled: !ENV [CI, false]
   #     use_material_social_cards: false
   - search
-  - statistics:
-      words_per_minute: 200
+  # - statistics:
+  #     words_per_minute: 200
 
 markdown_extensions:
   - abbr
@@ -305,48 +305,48 @@ nav:
       #     - "week1-day3": notes/minilsm/week1-day3.md
       #     - "week1-day4": notes/minilsm/week1-day4.md
       - paper notes:
-          - Do not use MMAP in DBMS: blogs/paper notes/db/storage/NoMMAP.md
-          - IQAN: blogs/paper notes/vector search/IQAN.md
-          - MIRAGE-ANNS: blogs/paper notes/vector search/MIRAGE-ANNS.md
-          - LSM-VEC: blogs/paper notes/vector search/LSM-VEC.md
-          - PANNS: blogs/paper notes/vector search/PANNS.md
+          - Database Systems:
+              - Do not use MMAP in DBMS: blogs/paper notes/db/storage/NoMMAP.md
+              - IQAN: blogs/paper notes/vector search/IQAN.md
+              - MIRAGE-ANNS: blogs/paper notes/vector search/MIRAGE-ANNS.md
+              - LSM-VEC: blogs/paper notes/vector search/LSM-VEC.md
+              - PANNS: blogs/paper notes/vector search/PANNS.md
+      - Linux Tools:
+          - "grep": notes/linux tools/1-grep.md
+          - "sed": notes/linux tools/2-sed.md
+          - "awk": notes/linux tools/3-awk.md
+          - "find": notes/linux tools/4-find.md
   - Blogs:
       - index: blogs/index.md
       - LLM Inference:
-          - Introduction for LLM Inference: notes/llm_inference/Introduction.md
-          - Parallelizatoin in ML System: notes/llm_inference/parallelization.md
-          - PageAttention: notes/llm_inference/pageattention.md
-          - CUDA Optimization: notes/llm_inference/cudaopt.md
+          - Introduction for LLM Inference: blogs/llm_inference/Introduction.md
+          - Parallelizatoin in ML System: blogs/llm_inference/parallelization.md
+          - PageAttention: blogs/llm_inference/pageattention.md
+          - CUDA Optimization: blogs/llm_inference/cudaopt.md
+      - nebula:
+          - Vistor Pattern in nebula: projects/nebula-vsearch/understanding/1.visitor pattern.md
+          - Memory Management in nebula: projects/nebula-vsearch/understanding/2.memory management.md
+          - Concurrent LRU Cache in nebula: projects/nebula-vsearch/understanding/3.concurrent lru cache.md
+          - Folly Future Promise framework in nebula: projects/nebula-vsearch/understanding/4.folly future promise.md
+          - nGQL Life in Nebula: projects/nebula-vsearch/understanding/5.nGQL life.md
+          - Raft Wal in Nebula: projects/nebula-vsearch/understanding/6.raft-wal.md
+          - How to Modify nGQL: projects/nebula-vsearch/understanding/7.how to modify sql.md
+          - A Life of KV Pairs: projects/nebula-vsearch/understandings/8.a kv life.md
       - 实现一个TCP: blogs/posts/CS144/CS144.md
       - bision debug: blogs/posts/bision debug.md
       - Bustub 通关指北: blogs/bustub通关指北.md
       - C++ 异步方案演进: blogs/C++异步方案.md
       - 并发组件实现浅析: blogs/Implement of Concurrent.md
-      - ospp-nebula:
-          - UnderStanding:
-              - Vistor Pattern in nebula: blogs/ospp-nebula/understanding/1.visitor pattern.md
-              - Memory Management in nebula: blogs/ospp-nebula/understanding/2.memory management.md
-              - Concurrent LRU Cache in nebula: blogs/ospp-nebula/understanding/3.concurrent lru cache.md
-              - Folly Future Promise framework in nebula: blogs/ospp-nebula/understanding/4.folly future promise.md
-              - nGQL Life in Nebula: blogs/ospp-nebula/understanding/5.nGQL life.md
-              - Raft Wal in Nebula: blogs/ospp-nebula/understanding/6.raft-wal.md
-              - How to Modify nGQL: blogs/ospp-nebula/understanding/7.how to modify sql.md
-              - A Life of KV Pairs: blogs/ospp-nebula/understandings/8.a kv life.md
-          - Implement:
-              - DDL for VECTOR Type: blogs/ospp-nebula/implements/DDL for vector type.md
-              - DML for VECTOR Type: blogs/ospp-nebula/implements/DML for vector type.md
-              - Match for VECTOR Type: blogs/ospp-nebula/implements/Match for vector property.md
-              - Create Ann Index: blogs/ospp-nebula/implements/Create Ann Index.md
-          - Summary: blogs/ospp-nebula/summary.md
-      - Linux Tools:
-          - "grep": blogs/linux tools/1-grep.md
-          - "sed": blogs/linux tools/2-sed.md
-          - "awk": blogs/linux tools/3-awk.md
-          - "find": blogs/linux tools/4-find.md
-      - vector search papers:
-          - "LSM-VEC": blogs/paper notes/vector search/LSM-VEC.md
-          - "iQAN": blogs/paper notes/vector search/IQAN.md
 
+  - Projects:
+      - index: projects/index.md
+      - nebula-vsearch:
+          - Implement:
+              - DDL for VECTOR Type: projects/nebula-vsearch/implements/DDL for vector type.md
+              - DML for VECTOR Type: projects/nebula-vsearch/implements/DML for vector type.md
+              - Match for VECTOR Type: projects/nebula-vsearch/implements/Match for vector property.md
+              - Create Ann Index: projects/nebula-vsearch/implements/Create Ann Index.md
+          - Summary: projects/nebula-vsearch/summary.md
   - Summaries:
       - index: summary/index.md
       - "2025":

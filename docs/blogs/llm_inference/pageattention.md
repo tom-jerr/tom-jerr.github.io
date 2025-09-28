@@ -123,7 +123,7 @@ vLLM 中的逻辑概念：小型、自定义大小的线程集合，通常是一
 ### Process
 
 1. Query 数据向量化从 global memory 加载到 shared memory
-   <img src="img/qptr2qvecs.png" alt="q_ptr2q_vecs" style="width:600px" />
+   <img src="img/qptr2qvecs.png" alt="q_ptr2q_vecs" style="width:600px;" />
 2. 按照 context 的 block 数量迭代
    - Key 数据向量化从 global memory 加载到 register
      ![](img/kptr2kvecs.png)
@@ -245,7 +245,7 @@ for (int i = 0; i < NUM_ROWS_PER_THREAD; i++) {
 - 定位 Key 数据：在每次循环开始时，计算指向当前 Key Token 的指针 k_ptr。这个指针在每次迭代时都会更新，指向下一个新的 Key Token。
 
 - 加载 Key 数据到寄存器：使用内存合并模式，从 k_ptr 指向的全局内存中读取当前 Key Token 的向量数据。**关键区别：这次，Key 数据被加载到每个线程私有的寄存器 k_vecs 中。**
-  <img src="img/key.png" alt="key" style="width:600px" />
+  <img src="img/key.png" alt="key" style="width:600px;" />
 
 ```cpp
 const scalar_t* k_ptr = k_cache + physical_block_number * kv_block_stride
@@ -398,8 +398,8 @@ constexpr int NUM_ROWS_PER_THREAD =
       DIVIDE_ROUND_UP(HEAD_SIZE, NUM_ROWS_PER_ITER);
 ```
 
-<img src="img/v_vec.png" alt="v_vecs" style="width:500px" />
-<img src="img/value.png" alt="accs" style="width:500px" />
+<img src="img/v_vec.png" alt="v_vecs" style="width:500px;" />
+<img src="img/value.png" alt="accs" style="width:500px;" />
 
 计算核心
 
