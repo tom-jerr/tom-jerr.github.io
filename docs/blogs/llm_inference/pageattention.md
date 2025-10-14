@@ -95,13 +95,15 @@ Grid (The entire attention calculation for all queries & heads)
 
 #### Thread Block
 
-单个线程块有一个非常具体且独立的任务：计算单个查询标记和单个注意力头的完整注意力输出。
+单个线程块有一个非常具体且独立的任务：计算单个 token 和单个 head 的完整注意力输出。
 
 因为块是独立的，GPU 可以在不同的硬件单元上同时计算（Query 0，Head 0）、（Query 1，Head 0）和（Query 0，Head 1）的注意力，这是并行化的主要来源。
 
 #### Warp
 
-在一个单独的块中，你仍然有很多工作要做：一个查询需要与整个上下文（所有 KV cache）进行比较。这个上下文被分成更小的块（ block_idx ）。
+在一个单独的块中，你仍然有很多工作要做：单个 token 需要与整个上下文（所有 KV cache）进行比较。这个上下文被分成更小的块（ block_idx ）。
+
+- Wrap 中的每个线程处理每个 token 和一个 kv cache block 的计算
 
 ```cpp
 for (int block_idx = start_block_idx + warp_idx; ...; block_idx += NUM_WARPS) {

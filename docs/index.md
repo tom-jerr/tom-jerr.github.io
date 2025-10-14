@@ -17,7 +17,7 @@ Welcome to enjoy MlSys magic! 🎉
 </span>
 </h1>
 
-<span style="display: block; text-align: center; font-size: 18px;">
+<!-- <span style="display: block; text-align: center; font-size: 18px;">
 [:octicons-link-16: My frineds!](./links/index.md) / [:octicons-info-16: About Me](./about/index.md) / [:academicons-google-scholar: Academic Page](./academy.md) / [:material-chart-line: Statistics](javascript:toggle_statistics();)
 </span>
 
@@ -26,8 +26,8 @@ Welcome to enjoy MlSys magic! 🎉
 <li>Website Operating Time: <span id="web-time"></span></li>
 <!-- <li>Total Visitors: <span id="busuanzi_value_site_uv"></span> people</li>
 <li>Total Visits: <span id="busuanzi_value_site_pv"></span> times</li> -->
-</div>
-</div>
+<!-- </div>
+</div> --> -->
 
 <!-- <script>
 function updateTime() {

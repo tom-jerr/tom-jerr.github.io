@@ -304,26 +304,37 @@ nav:
       #     - "week1-day2": notes/minilsm/week1-day2.md
       #     - "week1-day3": notes/minilsm/week1-day3.md
       #     - "week1-day4": notes/minilsm/week1-day4.md
-      - paper notes:
-          - Database Systems:
-              - Do not use MMAP in DBMS: blogs/paper notes/db/storage/NoMMAP.md
-              - IQAN: blogs/paper notes/vector search/IQAN.md
-              - MIRAGE-ANNS: blogs/paper notes/vector search/MIRAGE-ANNS.md
-              - LSM-VEC: blogs/paper notes/vector search/LSM-VEC.md
-              - PANNS: blogs/paper notes/vector search/PANNS.md
       - Linux Tools:
           - "grep": notes/linux tools/1-grep.md
           - "sed": notes/linux tools/2-sed.md
           - "awk": notes/linux tools/3-awk.md
           - "find": notes/linux tools/4-find.md
+  - PaperReading:
+      - index: notes/paperreading/index.md
+      - Database Systems:
+          - Do not use MMAP in DBMS: paperreadings/db/storage/NoMMAP.md
+      - Vector Search:
+          - IQAN: paperreadings/vector search/IQAN.md
+          - MIRAGE-ANNS: paperreadings/vector search/MIRAGE-ANNS.md
+          - LSM-VEC: paperreadings/vector search/LSM-VEC.md
+          - PANNS: paperreadings/vector search/PANNS.md
+      - Active SLAM:
+          - PL-VINS: paperreadings/activeslam/PL-VINS.md
+          - 3D Active Metric-Semantic SLAM: paperreadings/activeslam/3D Active Metric-Semantic SLAM.md
+          - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
+
   - Blogs:
       - index: blogs/index.md
       - LLM Inference:
+          - 不再更新: blogs/llm_inference/index.md
           - Introduction for LLM Inference: blogs/llm_inference/Introduction.md
           - CUDA Optimization: blogs/llm_inference/cudaopt.md
           - Parallelizatoin in ML System: blogs/llm_inference/parallelization.md
           - Parallelization in LLM Inference: blogs/llm_inference/LLMparallelization.md
           - PageAttention: blogs/llm_inference/pageattention.md
+      - Active SLAM:
+          - VINS 基础: paperreadings/activeslam/vins基础.md
+          - Active SLAM 概述: paperreadings/activeslam/active slam.md
       - nebula:
           - Vistor Pattern in nebula: projects/nebula-vsearch/understanding/1.visitor pattern.md
           - Memory Management in nebula: projects/nebula-vsearch/understanding/2.memory management.md

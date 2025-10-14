@@ -30,7 +30,7 @@ I am a second-year master student majoring in Computer Architecture in [Universi
 
 ## Work Interest
 
-- **Large Language Model Interference and Optimization**: I am learning one of the most famous structure in LLM interference field, which is VLLM. I want to publish a paper about LLM interference optimization. If you have any idea, welcome to contact with me.
+- **Large Language Model Interference and Optimization**: I am learning one of the most famous structure in LLM interference field, which is SGLang. I want to publish a paper about LLM interference optimization. If you have any idea, welcome to contact with me.
 
 - **Distributed Database**: I focus on Distributed Database. Last year, I and my partners have won the 11th in 2024 OceanBase Database Competition. Now I am working on designing vector search for nebula.
 
