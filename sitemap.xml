@@ -349,6 +349,14 @@
          <lastmod>2025-10-28</lastmod>
     </url>
     <url>
+         <loc>https://tom-jerr.github.io/notes/cuda/Roofline%20%26%20Basic%20Analysis/</loc>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/cuda/Vector%20Add%20Optimization%20Example/</loc>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
          <loc>https://tom-jerr.github.io/notes/linux%20tools/1-grep/</loc>
          <lastmod>2025-10-28</lastmod>
     </url>
@@ -397,6 +405,26 @@
          <lastmod>2025-10-28</lastmod>
     </url>
     <url>
+         <loc>https://tom-jerr.github.io/notes/sglang/DP%20Attention/</loc>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/sglang/SGLang%20Schedular%20%E6%8A%80%E6%9C%AF%E5%8F%98%E8%BF%81/</loc>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/tiny-llm/Batching%20Inference%20%26%20KV%20Cache/</loc>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/tiny-llm/Group%20Query%20Attention/</loc>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/notes/tiny-llm/RMSNorm%20%26%20MLP/</loc>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
          <loc>https://tom-jerr.github.io/paperreadings/</loc>
          <lastmod>2025-10-28</lastmod>
     </url>
@@ -426,6 +454,14 @@
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/db/storage/NoMMAP/</loc>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/A%20Survey%20on%20Efficient%20Inference%20for%20Large%20%20Language%20Models/</loc>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/Prepacking/</loc>
          <lastmod>2025-10-28</lastmod>
     </url>
     <url>
@@ -522,6 +558,10 @@
     </url>
     <url>
          <loc>https://tom-jerr.github.io/summary/</loc>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/summary/2025/LLM%20%E6%8E%A8%E7%90%86%E7%B3%BB%E7%BB%9F%E6%8A%80%E8%83%BD%E5%9B%BE%E8%B0%B1/</loc>
          <lastmod>2025-10-28</lastmod>
     </url>
     <url>
