@@ -2,530 +2,534 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://tom-jerr.github.io/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/academy/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/about/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/llm_inference/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/llm_inference/Introduction/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/llm_inference/LLMparallelization/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/llm_inference/attention%26transformer/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/llm_inference/cudaopt/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/llm_inference/pageattention/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/llm_inference/parallelization/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/posts/C%2B%2B%E5%BC%82%E6%AD%A5%E6%96%B9%E6%A1%88/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/posts/CS144/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/posts/Implement%20of%20Concurrent/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/posts/bision%20debug/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/blogs/posts/bustub%E9%80%9A%E5%85%B3%E6%8C%87%E5%8C%97/</loc>
-         <lastmod>2025-10-21</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/blogs/posts/rocksdb/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/links/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/6.824/MapReduce/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/6.s081/1-OS%E7%9A%84%E9%9A%94%E7%A6%BB%E6%80%A7/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/6.s081/2-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E5%AE%9E%E7%8E%B0/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/6.s081/3-%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E5%92%8C%E9%99%B7%E5%85%A5/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/6.s081/4-%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/6.s081/5-%E7%A1%AC%E4%BB%B6%E4%B8%AD%E6%96%AD/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/6.s081/6-%E5%A4%9A%E6%A0%B8%E5%92%8C%E9%94%81/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/6.s081/7-%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/6.s081/8-%E7%9D%A1%E7%9C%A0%E5%92%8C%E5%94%A4%E9%86%92/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/C%2B%2B/1-Container/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/C%2B%2B/2-Algorithm/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/C%2B%2B/3-Iterator/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/C%2B%2B/4-Filesystem/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/C%2B%2B/5-View/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/C%2B%2B/6-Span/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/C%2B%2BConcurrency/1-thread/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/C%2B%2BConcurrency/2-Memory%20Model/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/C%2B%2BConcurrency/3-shared%20data%20protection/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/C%2B%2BConcurrency/4-sync%20concurrency/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/C%2B%2BConcurrency/5.Non-blocking%20DataStructure/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/10-Join%20Algorithm/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/11-Query_Execution/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/12-Query_Plan%26Optimization/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/13-Concurrency_Control_Theory/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/14-Two_Phase_Lock/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/15-Timestamp_Ordering_Concurrency/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/16-Mult-Version_Concurrency/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/17-Database_Logging/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/18-Database_Recovery/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/19-Introducd_to_distributed_database/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/3-Database%20Storage/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/4-Database_Storage_II/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/5-Buffer%20Pool/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/6-Hash%20Table/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/7-B%2BTree/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/8-Index%20Concurrency/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CMU15445/9-Sort%26Aggregation/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CS61C/lecture10_Combinational%20Logic/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CS61C/lecture11_FSMs/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CS61C/lecture14_Datapath/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CS61C/lecture15_Data-LevelParallelism/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CS61C/lecture16_Thread-LevelParallelism/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CS61C/lecture17_Process_LevelParallelism/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CS61C/lecture18_Caches/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CS61C/lecture2-Intro%20to%20C/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CS61C/lecture21_Virtual_Memory/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CS61C/lecture4_C%20Memory%20Endianness/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CSAPP/5-%E4%BC%98%E5%8C%96%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CSAPP/6-%E5%AD%98%E5%82%A8%E5%99%A8%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CSAPP/7-%E9%93%BE%E6%8E%A5/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CSAPP/8-%E5%BC%82%E5%B8%B8%E6%8E%A7%E5%88%B6%E6%B5%81/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CSAPP/%E5%9C%A8%E7%B3%BB%E7%BB%9F%E4%B8%8A%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/CSAPP/%E7%A8%8B%E5%BA%8F%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E6%89%A7%E8%A1%8C/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/10_%E6%B3%9B%E5%9E%8B%E7%AE%97%E6%B3%95/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/11_%E5%85%B3%E8%81%94%E5%AE%B9%E5%99%A8/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/12_%E5%8A%A8%E6%80%81%E5%86%85%E5%AD%98/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/13_%E6%8B%B7%E8%B4%9D%E6%8E%A7%E5%88%B6/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/14_%E9%87%8D%E8%BD%BD%E8%BF%90%E7%AE%97%E5%92%8C%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/15_%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/2_%E5%8F%98%E9%87%8F%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/3_%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%90%91%E9%87%8F%E6%95%B0%E7%BB%84/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/4_%E8%A1%A8%E8%BE%BE%E5%BC%8F/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/5_%E8%AF%AD%E5%8F%A5/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/6_%E5%87%BD%E6%95%B0/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/7_%E7%B1%BB/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/8_IO%E5%BA%93/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/9_%E9%A1%BA%E5%BA%8F%E5%AE%B9%E5%99%A8/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/Makefile%E5%AD%A6%E4%B9%A0/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/c%2B%2Bprimer/%E5%B9%B6%E5%8F%91%E4%B8%8E%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/linux%20tools/1-grep/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/linux%20tools/2-sed/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/linux%20tools/3-awk/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/linux%20tools/4-find/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/minilsm/week1-day1/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/minilsm/week1-day2/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/minilsm/week1-day3/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/minilsm/week1-day4/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/rcore/BatchOS/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/rcore/LibOS/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/rcore/TimeSharingOS/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/notes/rcore/rustlings/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/template/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/activeslam/3D%20Active%20Metric-Semantic%20SLAM/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/activeslam/Exploration%20with%20Global%20Consistency%20%20Using%20Real-Time%20Re-integration%20and%20Active%20Loop%20Closure/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/activeslam/PL-VINS/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/activeslam/active%20slam/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/activeslam/vins%E5%9F%BA%E7%A1%80/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/db/storage/NoMMAP/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/vector%20search/Acceleratin%20Graph%20Indexing%20for%20ANNs%20on%20Modern%20CPUs/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/vector%20search/IQAN/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/vector%20search/LSM-VEC/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/vector%20search/MIRAGE-ANNS/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/vector%20search/PANNS/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/vector%20search/PDX/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/vector%20search/idea/vector_search/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/projects/active%20slam/kr%203d%20active%20slam/</loc>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/summary/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/projects/nebula-vsearch/%E4%B8%8A%E7%AF%87%EF%BC%9A%E5%88%9D%E8%AF%86%20Nebula%20Graph%20%E2%80%94%E2%80%94%20%E5%90%91%E9%87%8F%E7%B1%BB%E5%9E%8B%E6%94%AF%E6%8C%81/</loc>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/implements/Create%20Ann%20Index/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/implements/DDL%20for%20vector%20type/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/implements/DML%20for%20vector%20type/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/implements/Match%20for%20vector%20property/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/implements/wal%20for%20vector%20type/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/understanding/1.visitor%20pattern/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/understanding/2.memory%20management/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/understanding/3.concurrent%20lru%20cache/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/understanding/4.folly%20future%20promise/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/understanding/5.nGQL%20life/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/understanding/6.raft-wal/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/understanding/7.how%20to%20modify%20sql/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/projects/nebula-vsearch/understanding/8.a%20kv%20life/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/summary/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/summary/2025/semester-plan/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
     <url>
          <loc>https://tom-jerr.github.io/tags/</loc>
-         <lastmod>2025-10-21</lastmod>
+         <lastmod>2025-10-28</lastmod>
     </url>
 </urlset>
