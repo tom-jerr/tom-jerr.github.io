@@ -211,120 +211,6 @@ nav:
   - Home: index.md
   - Notes:
       - index: notes/index.md
-      - CS61C:
-          - "1 C Intro": notes/CS61C/lecture2-Intro to C.md
-          - "4 C Memory Endianness": notes/CS61C/lecture4_C Memory Endianness.md
-          - "10 Combinational Logic": notes/CS61C/lecture10_Combinational Logic.md
-          - "11 FSMs": notes/CS61C/lecture11_FSMs.md
-          - "14 Datapath": notes/CS61C/lecture14_Datapath.md
-          - "15 Data-Level Parallelism": notes/CS61C/lecture15_Data-LevelParallelism.md
-          - "16 Thread-Level Parallelism": notes/CS61C/lecture16_Thread-LevelParallelism.md
-          - "17 Process-Level Parallelism": notes/CS61C/lecture17_Process_LevelParallelism.md
-          - "18 Caches": notes/CS61C/lecture18_Caches.md
-          - "21 Virtual Memory": notes/CS61C/lecture21_Virtual_Memory.md
-
-      - CSAPP:
-          - "5-优化程序性能": notes/CSAPP/5-优化程序性能.md
-          - "6-存储器层次结构": notes/CSAPP/6-存储器层次结构.md
-          - "7-链接": notes/CSAPP/7-链接.md
-          - "8-异常控制流": notes/CSAPP/8-异常控制流.md
-          - "程序的结构和执行": notes/CSAPP/程序的结构和执行.md
-          - "在系统上运行程序": notes/CSAPP/在系统上运行程序.md
-
-      # - rcore:
-      #     - "rustlings": notes/rcore/rustlings.md
-      #     - "LibOS": notes/rcore/LibOS.md
-      #     - "BatchOS": notes/rcore/BatchOS.md
-      #     - "TimeSharingOS": notes/rcore/TimeSharingOS.md
-
-      - 6.s081:
-          - "1 OS的隔离性": notes/6.s081/1-OS的隔离性.md
-          - "2 虚拟内存实现": notes/6.s081/2-虚拟内存实现.md
-          - "3 系统调用和陷入": notes/6.s081/3-系统调用和陷入.md
-          - "4 缺页中断": notes/6.s081/4-缺页中断.md
-          - "5 硬件中断": notes/6.s081/5-硬件中断.md
-          - "6 多核和锁": notes/6.s081/6-多核和锁.md
-          - "7 进程切换": notes/6.s081/7-进程切换.md
-          - "8 睡眠和唤醒": notes/6.s081/8-睡眠和唤醒.md
-
-      - C++ Primer:
-          - "2_变量和基本类型": notes/c++primer/2_变量和基本类型.md
-          - "3_字符串向量数组": notes/c++primer/3_字符串向量数组.md
-          - "4_表达式": notes/c++primer/4_表达式.md
-          - "5_语句": notes/c++primer/5_语句.md
-          - "6_函数": notes/c++primer/6_函数.md
-          - "7_类": notes/c++primer/7_类.md
-          - "8_IO库": notes/c++primer/8_IO库.md
-          - "9_顺序容器": notes/c++primer/9_顺序容器.md
-          - "10_泛型算法": notes/c++primer/10_泛型算法.md
-          - "11_关联容器": notes/c++primer/11_关联容器.md
-          - "12_动态内存": notes/c++primer/12_动态内存.md
-          - "13_拷贝控制": notes/c++primer/13_拷贝控制.md
-          - "14_重载运算和类型转换": notes/c++primer/14_重载运算和类型转换.md
-          - "15_面向对象程序设计": notes/c++primer/15_面向对象程序设计.md
-          - "并发与多线程编程": notes/c++primer/并发与多线程编程.md
-          - "Makefile学习": notes/c++primer/Makefile学习.md
-
-      - C++ 新特性:
-          - "1-Container": notes/C++/1-Container.md
-          - "2-Algorithm": notes/C++/2-Algorithm.md
-          - "3-Iterator": notes/C++/3-Iterator.md
-          - "4-FileSystem": notes/C++/4-FileSystem.md
-          - "5-View": notes/C++/5-View.md
-          - "6-Span": notes/C++/6-Span.md
-
-      - C++ Concurrency in Action:
-          - "1-Thread": notes/C++Concurrency/1-thread.md
-          - "2-Memory Model in C++": notes/C++Concurrency/2-Memory Model.md
-
-      - CMU15445:
-          - "3-Database Storage": notes/CMU15445/3-Database Storage.md
-          - "4-Database_Storage_II": notes/CMU15445/4-Database_Storage_II.md
-          - "5-Buffer Pool": notes/CMU15445/5-Buffer Pool.md
-          - "6-Hash Table": notes/CMU15445/6-Hash Table.md
-          - "7-B+Tree": notes/CMU15445/7-B+Tree.md
-          - "8-Index Concurrency": notes/CMU15445/8-Index Concurrency.md
-          - "9-Sort&Aggregation": notes/CMU15445/9-Sort&Aggregation.md
-          - "10-Join Algorithm": notes/CMU15445/10-Join Algorithm.md
-          - "11-Query_Execution": notes/CMU15445/11-Query_Execution.md
-          - "12-Query_Plan&Optimization": notes/CMU15445/12-Query_Plan&Optimization.md
-          - "13-Concurrency_Control_Theory": notes/CMU15445/13-Concurrency_Control_Theory.md
-          - "14-Two_Phase_Lock": notes/CMU15445/14-Two_Phase_Lock.md
-          - "15-Timestamp_Ordering_Concurrency": notes/CMU15445/15-Timestamp_Ordering_Concurrency.md
-          - "16-Mult-Version_Concurrency": notes/CMU15445/16-Mult-Version_Concurrency.md
-          - "17-Database_Logging": notes/CMU15445/17-Database_Logging.md
-          - "18-Database_Recovery": notes/CMU15445/18-Database_Recovery.md
-          - "19-Introducd_to_distributed_database": notes/CMU15445/19-Introducd_to_distributed_database.md
-
-      - 6.824:
-          - "MapReduce 论文阅读": notes/6.824/MapReduce.md
-
-      # - minilsm:
-      #     - "week1-day1": notes/minilsm/week1-day1.md
-      #     - "week1-day2": notes/minilsm/week1-day2.md
-      #     - "week1-day3": notes/minilsm/week1-day3.md
-      #     - "week1-day4": notes/minilsm/week1-day4.md
-      - Linux Tools:
-          - "grep": notes/linux tools/1-grep.md
-          - "sed": notes/linux tools/2-sed.md
-          - "awk": notes/linux tools/3-awk.md
-          - "find": notes/linux tools/4-find.md
-  - PaperReading:
-      - index: notes/paperreading/index.md
-      - Database Systems:
-          - Do not use MMAP in DBMS: paperreadings/db/storage/NoMMAP.md
-      - Vector Search:
-          - IQAN: paperreadings/vector search/IQAN.md
-          - MIRAGE-ANNS: paperreadings/vector search/MIRAGE-ANNS.md
-          - LSM-VEC: paperreadings/vector search/LSM-VEC.md
-          - PANNS: paperreadings/vector search/PANNS.md
-      - Active SLAM:
-          - PL-VINS: paperreadings/activeslam/PL-VINS.md
-          - 3D Active Metric-Semantic SLAM: paperreadings/activeslam/3D Active Metric-Semantic SLAM.md
-          - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
-
-  - Blogs:
-      - index: blogs/index.md
       - LLM Inference:
           - 不再更新: blogs/llm_inference/index.md
           - Introduction for LLM Inference: blogs/llm_inference/Introduction.md
@@ -344,31 +230,111 @@ nav:
           - Raft Wal in Nebula: projects/nebula-vsearch/understanding/6.raft-wal.md
           - How to Modify nGQL: projects/nebula-vsearch/understanding/7.how to modify sql.md
           - A Life of KV Pairs: projects/nebula-vsearch/understandings/8.a kv life.md
-      - 实现一个TCP: blogs/posts/CS144.md
+      - CS61C:
+          - "1 C Intro": notes/CS61C/lecture2-Intro to C.md
+          - "4 C Memory Endianness": notes/CS61C/lecture4_C Memory Endianness.md
+          - "10 Combinational Logic": notes/CS61C/lecture10_Combinational Logic.md
+          - "11 FSMs": notes/CS61C/lecture11_FSMs.md
+          - "14 Datapath": notes/CS61C/lecture14_Datapath.md
+          - "15 Data-Level Parallelism": notes/CS61C/lecture15_Data-LevelParallelism.md
+          - "16 Thread-Level Parallelism": notes/CS61C/lecture16_Thread-LevelParallelism.md
+          - "17 Process-Level Parallelism": notes/CS61C/lecture17_Process_LevelParallelism.md
+          - "18 Caches": notes/CS61C/lecture18_Caches.md
+          - "21 Virtual Memory": notes/CS61C/lecture21_Virtual_Memory.md
+      - CSAPP:
+          - "5-优化程序性能": notes/CSAPP/5-优化程序性能.md
+          - "6-存储器层次结构": notes/CSAPP/6-存储器层次结构.md
+          - "7-链接": notes/CSAPP/7-链接.md
+          - "8-异常控制流": notes/CSAPP/8-异常控制流.md
+          - "程序的结构和执行": notes/CSAPP/程序的结构和执行.md
+          - "在系统上运行程序": notes/CSAPP/在系统上运行程序.md
+      # - rcore:
+      #     - "rustlings": notes/rcore/rustlings.md
+      #     - "LibOS": notes/rcore/LibOS.md
+      #     - "BatchOS": notes/rcore/BatchOS.md
+      #     - "TimeSharingOS": notes/rcore/TimeSharingOS.md
+      - 6.s081:
+          - "1 OS的隔离性": notes/6.s081/1-OS的隔离性.md
+          - "2 虚拟内存实现": notes/6.s081/2-虚拟内存实现.md
+          - "3 系统调用和陷入": notes/6.s081/3-系统调用和陷入.md
+          - "4 缺页中断": notes/6.s081/4-缺页中断.md
+          - "5 硬件中断": notes/6.s081/5-硬件中断.md
+          - "6 多核和锁": notes/6.s081/6-多核和锁.md
+          - "7 进程切换": notes/6.s081/7-进程切换.md
+          - "8 睡眠和唤醒": notes/6.s081/8-睡眠和唤醒.md
+      - C++ Primer:
+          - "2_变量和基本类型": notes/c++primer/2_变量和基本类型.md
+          - "3_字符串向量数组": notes/c++primer/3_字符串向量数组.md
+          - "4_表达式": notes/c++primer/4_表达式.md
+          - "5_语句": notes/c++primer/5_语句.md
+          - "6_函数": notes/c++primer/6_函数.md
+          - "7_类": notes/c++primer/7_类.md
+          - "8_IO库": notes/c++primer/8_IO库.md
+          - "9_顺序容器": notes/c++primer/9_顺序容器.md
+          - "10_泛型算法": notes/c++primer/10_泛型算法.md
+          - "11_关联容器": notes/c++primer/11_关联容器.md
+          - "12_动态内存": notes/c++primer/12_动态内存.md
+          - "13_拷贝控制": notes/c++primer/13_拷贝控制.md
+          - "14_重载运算和类型转换": notes/c++primer/14_重载运算和类型转换.md
+          - "15_面向对象程序设计": notes/c++primer/15_面向对象程序设计.md
+          - "并发与多线程编程": notes/c++primer/并发与多线程编程.md
+          - "Makefile学习": notes/c++primer/Makefile学习.md
+      - C++ 新特性:
+          - "1-Container": notes/C++/1-Container.md
+          - "2-Algorithm": notes/C++/2-Algorithm.md
+          - "3-Iterator": notes/C++/3-Iterator.md
+          - "4-FileSystem": notes/C++/4-FileSystem.md
+          - "5-View": notes/C++/5-View.md
+          - "6-Span": notes/C++/6-Span.md
+      - C++ Concurrency in Action:
+          - "1-Thread": notes/C++Concurrency/1-thread.md
+          - "2-Memory Model in C++": notes/C++Concurrency/2-Memory Model.md
+      - CMU15445:
+          - "3-Database Storage": notes/CMU15445/3-Database Storage.md
+          - "4-Database_Storage_II": notes/CMU15445/4-Database_Storage_II.md
+          - "5-Buffer Pool": notes/CMU15445/5-Buffer Pool.md
+          - "6-Hash Table": notes/CMU15445/6-Hash Table.md
+          - "7-B+Tree": notes/CMU15445/7-B+Tree.md
+          - "8-Index Concurrency": notes/CMU15445/8-Index Concurrency.md
+          - "9-Sort&Aggregation": notes/CMU15445/9-Sort&Aggregation.md
+          - "10-Join Algorithm": notes/CMU15445/10-Join Algorithm.md
+          - "11-Query_Execution": notes/CMU15445/11-Query_Execution.md
+          - "12-Query_Plan&Optimization": notes/CMU15445/12-Query_Plan&Optimization.md
+          - "13-Concurrency_Control_Theory": notes/CMU15445/13-Concurrency_Control_Theory.md
+          - "14-Two_Phase_Lock": notes/CMU15445/14-Two_Phase_Lock.md
+          - "15-Timestamp_Ordering_Concurrency": notes/CMU15445/15-Timestamp_Ordering_Concurrency.md
+          - "16-Mult-Version_Concurrency": notes/CMU15445/16-Mult-Version_Concurrency.md
+          - "17-Database_Logging": notes/CMU15445/17-Database_Logging.md
+          - "18-Database_Recovery": notes/CMU15445/18-Database_Recovery.md
+          - "19-Introducd_to_distributed_database": notes/CMU15445/19-Introducd_to_distributed_database.md
+      - 6.824:
+          - "MapReduce 论文阅读": notes/6.824/MapReduce.md
+      - Linux Tools:
+          - "grep": notes/linux tools/1-grep.md
+          - "sed": notes/linux tools/2-sed.md
+          - "awk": notes/linux tools/3-awk.md
+          - "find": notes/linux tools/4-find.md
+  - PaperReading:
+      - index: notes/paperreading/index.md
+      - Database Systems:
+          - Do not use MMAP in DBMS: paperreadings/db/storage/NoMMAP.md
+      - Vector Search:
+          - IQAN: paperreadings/vector search/IQAN.md
+          - MIRAGE-ANNS: paperreadings/vector search/MIRAGE-ANNS.md
+          - LSM-VEC: paperreadings/vector search/LSM-VEC.md
+          - PANNS: paperreadings/vector search/PANNS.md
+      - Active SLAM:
+          - PL-VINS: paperreadings/activeslam/PL-VINS.md
+          - 3D Active Metric-Semantic SLAM: paperreadings/activeslam/3D Active Metric-Semantic SLAM.md
+          - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
+  - Blogs:
+      - index: blogs/index.md
+      - 上篇：初识 Nebula Graph —— 向量类型支持: projects/nebula-vsearch/上篇：初识 Nebula Graph —— 向量类型支持.md
       - bision debug: blogs/posts/bision debug.md
-      - Bustub 通关指北: blogs/posts/bustub通关指北.md
       - C++ 异步方案演进: blogs/posts/C++异步方案.md
+      - Bustub 通关指北: blogs/posts/bustub通关指北.md
       - 并发组件实现浅析: blogs/posts/Implement of Concurrent.md
-      - RocksDB: blogs/posts/rocksdb.md
-
-  - Projects:
-      - index: projects/index.md
-      - nebula-vsearch:
-          - UnderStanding Fundermentals:
-              - Visitor Pattern in nebula: projects/nebula-vsearch/understanding/1.visitor pattern.md
-              - Memory Management in nebula: projects/nebula-vsearch/understanding/2.memory management.md
-              - Concurrent LRU Cache in nebula: projects/nebula-vsearch/understanding/3.concurrent lru cache.md
-              - Folly Future Promise framework in nebula: projects/nebula-vsearch/understanding/4.folly future promise.md
-              - nGQL Life in Nebula: projects/nebula-vsearch/understanding/5.nGQL life.md
-              - Raft Wal in Nebula: projects/nebula-vsearch/understanding/6.raft-wal.md
-              - How to Modify nGQL: projects/nebula-vsearch/understanding/7.how to modify sql.md
-              - A Life of KV Pairs: projects/nebula-vsearch/understandings/8.a kv life.md
-          - Implement:
-              - DDL for VECTOR Type: projects/nebula-vsearch/implements/DDL for vector type.md
-              - DML for VECTOR Type: projects/nebula-vsearch/implements/DML for vector type.md
-              - Match for VECTOR Type: projects/nebula-vsearch/implements/Match for vector property.md
-              - Create Ann Index: projects/nebula-vsearch/implements/Create Ann Index.md
-          - Summary: projects/nebula-vsearch/summary.md
+      - 实现一个TCP: blogs/posts/CS144.md
   - Summaries:
       - index: summary/index.md
       - "2025":

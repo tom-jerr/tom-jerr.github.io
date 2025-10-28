@@ -4,21 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "34c4549663f2dc3b",
+        "id": "07150ca20b5d2386",
         "type": "tabs",
         "children": [
           {
-            "id": "ed111b594597e81b",
+            "id": "87be62f38607b0ae",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "notes/CSAPP/5-优化程序性能.md",
+                "file": "projects/nebula-vsearch/上篇：初识 Nebula Graph —— 向量类型支持.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "5-优化程序性能"
+              "title": "上篇：初识 Nebula Graph —— 向量类型支持"
+            }
+          },
+          {
+            "id": "cfef105082839db4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "paperreadings/activeslam/3D Active Metric-Semantic SLAM.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "3D Active Metric-Semantic SLAM"
             }
           }
         ]
@@ -53,7 +67,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#plan",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -78,7 +92,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "e3d9a20cb63375eb",
@@ -94,17 +109,17 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "notes/CSAPP/5-优化程序性能.md",
-                "collapseAll": false,
-                "extraContext": false,
+                "file": "projects/nebula-vsearch/上篇：初识 Nebula Graph —— 向量类型支持.md",
+                "collapseAll": true,
+                "extraContext": true,
                 "sortOrder": "alphabetical",
                 "showSearch": false,
                 "searchQuery": "",
                 "backlinkCollapsed": false,
-                "unlinkedCollapsed": true
+                "unlinkedCollapsed": false
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for 5-优化程序性能"
+              "title": "Backlinks for 上篇：初识 Nebula Graph —— 向量类型支持"
             }
           },
           {
@@ -113,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "paperreadings/llm inference/A Survey on Efficient Inference for Large  Language Models 论文精读.md",
+                "file": "projects/nebula-vsearch/上篇：初识 Nebula Graph —— 向量类型支持.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from A Survey on Efficient Inference for Large  Language Models 论文精读"
+              "title": "Outgoing links from 上篇：初识 Nebula Graph —— 向量类型支持"
             }
           },
           {
@@ -142,20 +157,22 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "paperreadings/llm inference/A Survey on Efficient Inference for Large  Language Models 论文精读.md",
+                "file": "projects/nebula-vsearch/上篇：初识 Nebula Graph —— 向量类型支持.md",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of A Survey on Efficient Inference for Large  Language Models 论文精读"
+              "title": "Outline of 上篇：初识 Nebula Graph —— 向量类型支持"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 313.5,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -168,19 +185,38 @@
       "bases:Create new base": false
     }
   },
-  "active": "05495f12264f294f",
+  "active": "87be62f38607b0ae",
   "lastOpenFiles": [
-    "blogs/posts/img/waw_conflict.png",
-    "blogs/posts/img/war_conflict.png",
-    "blogs/posts/img/version_chain.png",
-    "blogs/posts/img/UndoLog.png",
-    "blogs/posts/img/tuple_storage.png",
-    "blogs/posts/img/raw_conflict.png",
-    "blogs/posts/img/GC.png",
-    "blogs/posts/img/future-promise-cpp.png",
-    "blogs/posts/img/future-promise-folly.png",
-    "blogs/posts/img/execution.png",
-    "blogs/posts/img/coroutine.png",
+    "projects/active slam/kr 3d active slam.md",
+    "paperreadings/activeslam/3D Active Metric-Semantic SLAM.md",
+    "projects/nebula-vsearch/上篇：初识 Nebula Graph —— 向量类型支持.md",
+    "projects/active slam/img/data_flow.png",
+    "projects/active slam/img",
+    "projects/active slam/新建文件夹",
+    "paperreadings/activeslam/vins基础.md",
+    "projects/active slam",
+    "img.md",
+    "projects/nebula-vsearch/img/vector_value.png",
+    "projects/nebula-vsearch/understanding/img/vector.png",
+    "projects/nebula-vsearch/understanding/8.a kv life.md",
+    "projects/nebula-vsearch/img/metad.png",
+    "projects/nebula-vsearch/understanding/7.how to modify sql.md",
+    "projects/nebula-vsearch/understanding/6.raft-wal.md",
+    "projects/nebula-vsearch/img/exec.png",
+    "projects/nebula-vsearch/img/processor.png",
+    "projects/nebula-vsearch/understanding/img/exec.png",
+    "projects/nebula-vsearch/understanding/img/LRU.png",
+    "projects/nebula-vsearch/understanding/img/folly_async.png",
+    "projects/nebula-vsearch/understanding/img/doPut.png",
+    "projects/nebula-vsearch/understanding/5.nGQL life.md",
+    "projects/nebula-vsearch/understanding/4.folly future promise.md",
+    "projects/nebula-vsearch/understanding/3.concurrent lru cache.md",
+    "projects/nebula-vsearch/understanding/2.memory management.md",
+    "projects/nebula-vsearch/understanding/1.visitor pattern.md",
+    "index.md",
+    "projects/nebula-vsearch/Untitled",
+    "projects/nebula-vsearch/summary.md",
+    "notes/CSAPP/5-优化程序性能.md",
     "blogs/posts/img",
     "blogs/posts/rocksdb.md",
     "blogs/posts/Implement of Concurrent.md",
@@ -190,32 +226,12 @@
     "blogs/posts/bision debug.md",
     "blogs/posts",
     "projects/nebula-vsearch/understanding/img",
-    "projects/nebula-vsearch/understanding/8.a kv life.md",
-    "projects/nebula-vsearch/understanding/7.how to modify sql.md",
-    "projects/nebula-vsearch/understanding/6.raft-wal.md",
-    "projects/nebula-vsearch/understanding/5.nGQL life.md",
-    "projects/nebula-vsearch/understanding/4.folly future promise.md",
-    "projects/nebula-vsearch/understanding/3.concurrent lru cache.md",
-    "projects/nebula-vsearch/understanding/2.memory management.md",
-    "projects/nebula-vsearch/understanding/1.visitor pattern.md",
     "projects/nebula-vsearch/understanding",
     "blogs/CS144.md",
     "blogs/bision debug.md",
     "blogs/img",
     "blogs/bustub通关指北.md",
-    "blogs/C++异步方案.md",
-    "blogs/Implement of Concurrent.md",
-    "blogs/rocksdb.md",
-    "projects/nebula-vsearch/img/summary.md",
     "projects/nebula-vsearch/img",
-    "blogs/ospp-nebula/img/summary.md",
-    "projects/nebula-vsearch/implements/wal for vector type.md",
-    "projects/nebula-vsearch/implements/Match for vector property.md",
-    "projects/nebula-vsearch/implements/DML for vector type.md",
-    "projects/nebula-vsearch/implements",
-    "blogs/ospp-nebula/plans/pdfs/week3-week4.pdf",
-    "blogs/ospp-nebula/plans/pdfs/week1-week2.pdf",
-    "blogs/ospp-nebula/plans/pdfs/week1-week2-finished.pdf",
     "Untitled.canvas",
     "Untitled 1.canvas"
   ]
