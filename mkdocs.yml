@@ -211,6 +211,16 @@ nav:
   - Home: index.md
   - Notes:
       - index: notes/index.md
+      - SGLang:
+          - DP Attention: notes/sglang/DP Attention.md
+          - SGLang Schedular 技术变迁: notes/sglang/SGLang Schedular 技术变迁.md
+      - tiny-llm:
+          - Group Query Attention: notes/tiny-llm/Group Query Attention.md
+          - RMSNorm & MLP: notes/tiny-llm/RMSNorm & MLP.md
+          - Batch Inference & KV Cache: notes/tiny-llm/Batch Inference & KV Cache.md
+      - cuda:
+          - Roofline & Basic Analysis: notes/cuda/Roofline & Basic Analysis.md
+          - Vector Add Optimization Example: notes/cuda/Vector Add Optimization Example.md
       - LLM Inference:
           - 不再更新: blogs/llm_inference/index.md
           - Introduction for LLM Inference: blogs/llm_inference/Introduction.md
@@ -330,6 +340,9 @@ nav:
   - Blogs:
       - index: blogs/index.md
       - 上篇：初识 Nebula Graph —— 向量类型支持: projects/nebula-vsearch/上篇：初识 Nebula Graph —— 向量类型支持.md
+      - SGLang Schedular 技术变迁: notes/sglang/SGLang Schedular 技术变迁.md
+      - DP Attention: notes/sglang/DP Attention.md
+      - Vector Add Optimization Example: notes/cuda/Vector Add Optimization Example.md
       - bision debug: blogs/posts/bision debug.md
       - C++ 异步方案演进: blogs/posts/C++异步方案.md
       - Bustub 通关指北: blogs/posts/bustub通关指北.md
@@ -338,6 +351,7 @@ nav:
   - Summaries:
       - index: summary/index.md
       - "2025":
+          - "大模型技能掌握": summary/2025/LLM 推理系统技能图谱.md
           - "研一下规划": summary/2025/semester-plan.md
   - Tags: tags/index.md
   - Links: links/index.md
