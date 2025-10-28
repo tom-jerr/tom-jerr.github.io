@@ -5,11 +5,7 @@ update:
 comments: true
 katex: true
 tags:
-<<<<<<< HEAD:docs/blogs/llm_inference/pageattention.md
   - LLMInference
-=======
-  - LLM Inference
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/pageattention.md
 ---
 
 # Page Attention
@@ -103,7 +99,8 @@ Grid (The entire attention calculation for all queries & heads)
 单个线程块有一个非常具体且独立的任务：计算单个 token 和单个 head 的完整注意力输出。
 =======
 单个线程块有一个非常具体且独立的任务：计算单个查询标记和单个注意力头的完整注意力输出。
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/pageattention.md
+
+> > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/pageattention.md
 
 因为块是独立的，GPU 可以在不同的硬件单元上同时计算（Query 0，Head 0）、（Query 1，Head 0）和（Query 0，Head 1）的注意力，这是并行化的主要来源。
 
@@ -112,10 +109,9 @@ Grid (The entire attention calculation for all queries & heads)
 <<<<<<< HEAD:docs/blogs/llm_inference/pageattention.md
 在一个单独的块中，你仍然有很多工作要做：单个 token 需要与整个上下文（所有 KV cache）进行比较。这个上下文被分成更小的块（ block_idx ）。
 
-- Wrap 中的每个线程处理每个 token 和一个 kv cache block 的计算
-=======
-在一个单独的块中，你仍然有很多工作要做：一个查询需要与整个上下文（所有 KV cache）进行比较。这个上下文被分成更小的块（ block_idx ）。
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/pageattention.md
+- # Wrap 中的每个线程处理每个 token 和一个 kv cache block 的计算
+  在一个单独的块中，你仍然有很多工作要做：一个查询需要与整个上下文（所有 KV cache）进行比较。这个上下文被分成更小的块（ block_idx ）。
+  > > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/pageattention.md
 
 ```cpp
 for (int block_idx = start_block_idx + warp_idx; ...; block_idx += NUM_WARPS) {
@@ -137,11 +133,11 @@ vLLM 中的逻辑概念：小型、自定义大小的线程集合，通常是一
 ### Process
 
 1. Query 数据向量化从 global memory 加载到 shared memory
-<<<<<<< HEAD:docs/blogs/llm_inference/pageattention.md
+   <<<<<<< HEAD:docs/blogs/llm_inference/pageattention.md
    <img src="img/qptr2qvecs.png" alt="q_ptr2q_vecs" style="width:600px;" />
-=======
+   =======
    <img src="img/qptr2qvecs.png" alt="q_ptr2q_vecs" width="600px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/pageattention.md
+   > > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/pageattention.md
 2. 按照 context 的 block 数量迭代
    - Key 数据向量化从 global memory 加载到 register
      ![](img/kptr2kvecs.png)
@@ -263,11 +259,11 @@ for (int i = 0; i < NUM_ROWS_PER_THREAD; i++) {
 - 定位 Key 数据：在每次循环开始时，计算指向当前 Key Token 的指针 k_ptr。这个指针在每次迭代时都会更新，指向下一个新的 Key Token。
 
 - 加载 Key 数据到寄存器：使用内存合并模式，从 k_ptr 指向的全局内存中读取当前 Key Token 的向量数据。**关键区别：这次，Key 数据被加载到每个线程私有的寄存器 k_vecs 中。**
-<<<<<<< HEAD:docs/blogs/llm_inference/pageattention.md
+  <<<<<<< HEAD:docs/blogs/llm_inference/pageattention.md
   <img src="img/key.png" alt="key" style="width:600px;" />
-=======
+  =======
   <img src="img/key.png" alt="key" width="600px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/pageattention.md
+  > > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/pageattention.md
 
 ```cpp
 const scalar_t* k_ptr = k_cache + physical_block_number * kv_block_stride
@@ -426,7 +422,8 @@ constexpr int NUM_ROWS_PER_THREAD =
 =======
 <img src="img/v_vec.png" alt="v_vecs" width="500px" />
 <img src="img/value.png" alt="accs" width="500px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/pageattention.md
+
+> > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/pageattention.md
 
 计算核心
 

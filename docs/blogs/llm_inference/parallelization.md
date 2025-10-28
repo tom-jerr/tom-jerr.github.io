@@ -5,11 +5,7 @@ update:
 comments: true
 katex: true
 tags:
-<<<<<<< HEAD:docs/blogs/llm_inference/parallelization.md
   - LLMInference
-=======
-  - LLM Inference
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/parallelization.md
 ---
 
 # Parallelization in ML Systems

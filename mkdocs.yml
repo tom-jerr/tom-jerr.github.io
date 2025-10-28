@@ -217,7 +217,7 @@ nav:
       - tiny-llm:
           - Group Query Attention: notes/tiny-llm/Group Query Attention.md
           - RMSNorm & MLP: notes/tiny-llm/RMSNorm & MLP.md
-          - Batch Inference & KV Cache: notes/tiny-llm/Batch Inference & KV Cache.md
+          - Batch Inference & KV Cache: notes/tiny-llm/Batching Inference & KV Cache.md
       - cuda:
           - Roofline & Basic Analysis: notes/cuda/Roofline & Basic Analysis.md
           - Vector Add Optimization Example: notes/cuda/Vector Add Optimization Example.md

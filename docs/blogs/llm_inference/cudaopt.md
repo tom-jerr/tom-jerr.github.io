@@ -5,11 +5,7 @@ update:
 comments: true
 katex: true
 tags:
-<<<<<<< HEAD:docs/blogs/llm_inference/cudaopt.md
   - LLMInference
-=======
-  - LLM Inference
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
   - CUDA
 ---
 
@@ -44,7 +40,8 @@ GPU 以 Throughput 为设计目标，和 CPU 有很大的不同。
 <img src="img/gpu_hardware.jpg" alt="gpu_arch"  style="width:800px;" />
 =======
 <img src="img/gpu_hardware.jpg" alt="gpu_arch"  width="800px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
+
+> > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
 
 ### Streaming Multiprocessor (SM)
 
@@ -80,7 +77,8 @@ warp contexts 的数量决定了 SM 上能同时并发的 block 数量
 <img src="img/wrap_contexts.png" alt="warp_contexts"  style="width:600px;" />
 =======
 <img src="img/wrap_contexts.png" alt="warp_contexts"  width="600px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
+
+> > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
 
 #### Warp Scheduler
 
@@ -127,12 +125,13 @@ warp contexts 的数量决定了 SM 上能同时并发的 block 数量
 <<<<<<< HEAD:docs/blogs/llm_inference/cudaopt.md
 ![](img/gpu_hardware.jpg)
 
-😆 **Summary**
-=======
+# 😆 **Summary**
+
 <img src="img/gpu_memory.jpg" alt="memory_hierarchy"  width="600px" />
 
 :laughing:**Summary**
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
+
+> > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
 
 - 每个 thread 都有自己的一份 register 和 local memory 的空间
 - 同一个 block 中的每个 thread 则有共享的一份 share memory
@@ -169,7 +168,8 @@ CUDA 将计算任务组织成一个三级层次结构 。这是一个由程序�
 ![](img/grid.jpg)
 =======
 <img src="img/grid.jpg" alt="cuda_hierarchy" width="600px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
+
+> > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
 
 ### Kernel 执行流程
 
@@ -199,20 +199,22 @@ CUDA 将计算任务组织成一个三级层次结构 。这是一个由程序�
   - 合并访问（理想）：Warp 中的线程 i 访问内存地址 base + i。这在处理按行主序存储的矩阵的行时非常常见
 
 <<<<<<< HEAD:docs/blogs/llm_inference/cudaopt.md
-    ![](img/coalesce-smem.png)
+![](img/coalesce-smem.png)
 
-  - 跨步访问（问题）：线程 i 访问 base + i \* stride。如果步长（stride）很大，这将导致许多独立的、低效的内存事务。这在访问按行主序存储的矩阵的列时很常见
+- 跨步访问（问题）：线程 i 访问 base + i \* stride。如果步长（stride）很大，这将导致许多独立的、低效的内存事务。这在访问按行主序存储的矩阵的列时很常见
 
-    ![](img/uncoalesce-smem.png)
-=======
-    <img src="img/coalesce-smem.png" alt="coalesce" width="500px" />
+      ![](img/uncoalesce-smem.png)
 
-  - 跨步访问（问题）：线程 i 访问 base + i \* stride。如果步长（stride）很大，这将导致许多独立的、低效的内存事务。这在访问按行主序存储的矩阵的列时很常见
+  =======
+  <img src="img/coalesce-smem.png" alt="coalesce" width="500px" />
 
-    <img src="img/uncoalesce-smem.png" alt="coalesce" width="500px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
+- 跨步访问（问题）：线程 i 访问 base + i \* stride。如果步长（stride）很大，这将导致许多独立的、低效的内存事务。这在访问按行主序存储的矩阵的列时很常见
 
-  - 非对齐访问：Warp 访问的起始地址未与内存事务的大小对齐
+      <img src="img/uncoalesce-smem.png" alt="coalesce" width="500px" />
+
+  > > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
+
+- 非对齐访问：Warp 访问的起始地址未与内存事务的大小对齐
 
 ### Avoid Bank Conflicts in Shared Memory
 
@@ -224,23 +226,23 @@ CUDA 将计算任务组织成一个三级层次结构 。这是一个由程序�
   ![](img/conflict-free.png)
 - 当同一个 Warp 中的两个或更多线程试图访问位于同一个内存银行中的不同地址时，就会发生银行冲突 。此时，这些访问会被串行化处理，从而降低了共享内存的有效带宽
   ![](img/bank-conflict.png){ width="500px" }
-=======
-<img src="img/smem.jpg" alt="shared_memory" width="500px" />
+  =======
+  <img src="img/smem.jpg" alt="shared_memory" width="500px" />
 
 - 当一个 Warp 中的所有 32 个线程访问全局内存中的连续位置时，硬件可以将这 32 个小的请求“合并”成一个单一、大型、高效的内存事务
   <img src="img/conflict-free.png" alt="bank_conflict" width="500px" />
 - 当同一个 Warp 中的两个或更多线程试图访问位于同一个内存银行中的不同地址时，就会发生银行冲突 。此时，这些访问会被串行化处理，从而降低了共享内存的有效带宽
   <img src="img/bank-conflict.png" alt="bank_conflict" width="500px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
+  > > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
 
 #### Solutions
 
 - Padding: 在数据结构中插入填充元素，以改变数据在内存中的布局，避免多个线程访问同一银行
-<<<<<<< HEAD:docs/blogs/llm_inference/cudaopt.md
+  <<<<<<< HEAD:docs/blogs/llm_inference/cudaopt.md
   ![](img/padding.jpg)
-=======
+  =======
   <img src="img/padding.jpg" alt="padding" width="500px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
+  > > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
   - 可能降低 SM 的 occupancy
   - 可能地址访问不对齐，无法使用向量化访问
 - **swizzling:** 重新组织数据的存储方式，使得并行访问时更少冲突(更常用):rocket:
@@ -248,21 +250,23 @@ CUDA 将计算任务组织成一个三级层次结构 。这是一个由程序�
   - 某些 swizzling 方法在从 shared memory 读数据到 register 时不能进行 float4 的合并读取
 
 <<<<<<< HEAD:docs/blogs/llm_inference/cudaopt.md
-    ![](img/swizzling.jpg)
+![](img/swizzling.jpg)
 =======
-    <img src="img/swizzling.jpg" alt="swizzling" width="600px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
+<img src="img/swizzling.jpg" alt="swizzling" width="600px" />
 
-  - 逻辑位置表示元素在矩阵中的逻辑坐标。
-  - 物理位置表示其对应元素在实际存储数据的 shared memory 中的位置坐标。
+> > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
 
-    > 当我们说读取矩阵的第 2 行第 3 列的元素，(2,3)就表示逻辑位置，而真正读取数据的时候，我们需要从实际存储数(2,1)的 shared memory 中对应的位置
+- 逻辑位置表示元素在矩阵中的逻辑坐标。
+- 物理位置表示其对应元素在实际存储数据的 shared memory 中的位置坐标。
+
+  > 当我们说读取矩阵的第 2 行第 3 列的元素，(2,3)就表示逻辑位置，而真正读取数据的时候，我们需要从实际存储数(2,1)的 shared memory 中对应的位置
 
 <<<<<<< HEAD:docs/blogs/llm_inference/cudaopt.md
-    ![](img/smem2.jpg width="600px" }
+![](img/smem2.jpg width="600px" }
 =======
-    <img src="img/smem2.jpg" alt="swizzling2" width="600px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
+<img src="img/smem2.jpg" alt="swizzling2" width="600px" />
+
+> > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
 
 :warning: 广播 (Broadcast): 如果一个 Warp 中的所有线程访问同一个银行中的完全相同的地址，这是一种广播操作，不会产生冲突
 
@@ -292,8 +296,8 @@ const int b_tile_index =  warp_id % 2 * 32 + lane_id % 8 * 4;
 - 一次性从全局内存中加载一小块 A (BM x BK) 和一小块 B (BK x BN) 到共享内存中
 - 一个线程块内的所有线程就可以在共享内存上快速地进行大量的计算，以完成对应的一小块 C (BM x BN) 的计算
 - 每个线程不再是只计算 C 块中的一个元素，而是负**责计算一个更小的结果网格**（图中是 2x2）。这样做可以进一步提升数据复用率和计算效率
-<<<<<<< HEAD:docs/blogs/llm_inference/cudaopt.md
+  <<<<<<< HEAD:docs/blogs/llm_inference/cudaopt.md
   ![](img/tile2.png)
-=======
+  =======
   <img src="img/tile2.png" alt="tiling" width="500px" />
->>>>>>> a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
+  > > > > > > > a2b3758 (add cuda and nebula finished md):docs/notes/llm_inference/cudaopt.md
