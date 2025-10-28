@@ -145,8 +145,6 @@ Storaged 接收到 graphd 发送的 executor 请求，启动对应的 Processor�
   void BaseProcessor<RESP>::handleAsync(GraphSpaceID spaceId,
                                       PartitionID partId,
                                       nebula::cpp2::ErrorCode code) {
-    VLOG(3) << "partId:" << partId << ", code: " << static_cast<int32_t>(code);
-
     bool finished = false;
     {
       std::lock_guard<std::mutex> lg(this->lock_);
@@ -156,7 +154,6 @@ Storaged 接收到 graphd 发送的 executor 请求，启动对应的 Processor�
         finished = true;
       }
     }
-
     if (finished) {
       this->onFinished();
     }
@@ -164,25 +161,9 @@ Storaged 接收到 graphd 发送的 executor 请求，启动对应的 Processor�
 
   virtual void onFinished() {
     memory::MemoryCheckOffGuard guard;
-    if (counters_) {
-      stats::StatsManager::addValue(counters_->numCalls_);
-      if (!this->codes_.empty()) {
-        stats::StatsManager::addValue(counters_->numErrors_);
-      }
-    }
-
-    this->result_.latency_in_us_ref() = this->duration_.elapsedInUSec();
-    if (!profileDetail_.empty()) {
-      this->result_.latency_detail_us_ref() = std::move(profileDetail_);
-    }
     this->result_.failed_parts_ref() = this->codes_;
     this->resp_.result_ref() = std::move(this->result_);
     this->promise_.setValue(std::move(this->resp_));
-
-    if (counters_) {
-      stats::StatsManager::addValue(counters_->latency_, this->duration_.elapsedInUSec());
-    }
-
     delete this;
   }
   ```
@@ -193,29 +174,25 @@ Storaged 接收到 graphd 发送的 executor 请求，启动对应的 Processor�
 
   ![](img/doPut.png)
 
-1. Leader：首先检查自身状态，然后先写入本地 WAL，然后将所有 log 复制到所有 follower
-2. Follower：Followers 也会将新日志写入自己的 WAL，并向 Leader 回复 “成功”。
-3. Leader：包括自己在内的大多数（Majority） 节点都已成功将该日志写入其 WAL，Leader 就会认为这条日志是 **“已提交” (Committed)** 的。Leader 就可以安全地将该日志（即 KV 操作）应用到其状态机（即真正执行 multiPut）
+- Raft 的日志复制过程大致分为三个步骤：
+  1. Leader：首先检查自身状态，然后先写入本地 WAL，然后将所有 log 复制到所有 follower
+  2. Follower：Followers 也会将新日志写入自己的 WAL，并向 Leader 回复 “成功”。
+  3. Leader：包括自己在内的大多数（Majority） 节点都已成功将该日志写入其 WAL，Leader 就会认为这条日志是 **“已提交” (Committed)** 的。Leader 就可以安全地将该日志（即 KV 操作）应用到其状态机（即真正执行 multiPut）
 
 ```c++
 void RaftPart::appendLogsInternal(AppendLogsIterator iter, TermID termId) {
   do {
-	// ...
 	// Process 1
-    // Step 1: Write Local WAL
+  // Step 1: Write Local WAL
     {
       SCOPED_TIMER(
       if (!wal_->appendLogs(iter)) {
-		 // ...
         break;
       }
     }
   } while (false);
 
-  if (!checkAppendLogResult(res)) {
-    iter.commit(res);
-    return;
-  }
+
   // Step 2: Replicate to followers
   auto* eb = ioThreadPool_->getEventBase();
   replicateLogs(eb, std::move(iter), currTerm, lastId, committed, prevLogTerm, prevLogId);
@@ -247,7 +224,7 @@ void RaftPart::replicateLogs(folly::EventBase* eb,
                         gen::as<std::vector>(),
                     quorum_,
                     [hosts](size_t index, cpp2::AppendLogResponse& resp) {
-	                  // Process 2: 收集到了半数节点通过
+      // Process 2: 收集到了半数节点通过
                       return resp.get_error_code() == nebula::cpp2::ErrorCode::SUCCEEDED &&
                              !hosts[index]->isLearner();
                     })
@@ -289,7 +266,7 @@ Nebula Graph 中已经有了支持多 Value 的数据类型 List，但是我们�
 **Why?**
 
 > 向量与标准中已支持的数组在以下方面有所不同：
->
+
 > - 数组类型是一种集合类型。数组是值的集合。这些值在数组之外可能具有意义。例如，在一个电话号码数组中，每个电话号码在数组之外都有其意义。相比之下，向量的单个坐标本身在向量之外没有太多意义。
 > - 一个向量类型中的所有向量都具有相同的维度 $n$。$1$ 和 $n$ 之间的每个坐标都是非空值。这与数组类型形成对比，数组类型通过声明的最大基数 $n$ 来支持可变的基数，并且允许每个元素为空值。
 > - 向量类型除了`==`和`!=`，其他的算数操作均不应该支持
