@@ -205,7 +205,7 @@ extra:
           note: >-
             <center> 难道说……你愿意给我买一瓶快乐水吗！🫣 </center>
             <center> How about...buy me a coffee？😋 </center>
-            <img src="https://cdn.jsdelivr.net/gh/KinnariyaMamaTanha/Images@images/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_2024-12-07_230055_143.png" width=200px>
+            <img src="/img/wechat.png" width=200px>
 
 nav:
   - Home: index.md
@@ -213,7 +213,7 @@ nav:
       - index: notes/index.md
       - SGLang:
           - DP Attention: notes/sglang/DP Attention.md
-          - SGLang Schedular 技术变迁: notes/sglang/SGLang Schedular 技术变迁.md
+          - SGLang Schedular 技术变迁: notes/sglang/SGLang Scheduler 技术变迁.md
       - tiny-llm:
           - Group Query Attention: notes/tiny-llm/Group Query Attention.md
           - RMSNorm & MLP: notes/tiny-llm/RMSNorm & MLP.md
@@ -339,10 +339,10 @@ nav:
           - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
   - Blogs:
       - index: blogs/index.md
-      - 上篇：初识 Nebula Graph —— 向量类型支持: projects/nebula-vsearch/上篇：初识 Nebula Graph —— 向量类型支持.md
-      - SGLang Schedular 技术变迁: notes/sglang/SGLang Schedular 技术变迁.md
-      - DP Attention: notes/sglang/DP Attention.md
-      - Vector Add Optimization Example: notes/cuda/Vector Add Optimization Example.md
+      - 上篇：初识 Nebula Graph —— 向量类型支持: blogs/posts/上篇：初识 Nebula Graph —— 向量类型支持.md
+      - SGLang Schedular 技术变迁: blogs/posts/SGLang Scheduler 技术变迁.md
+      - DP Attention: blogs/posts/DP Attention.md
+      - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md
       - bision debug: blogs/posts/bision debug.md
       - C++ 异步方案演进: blogs/posts/C++异步方案.md
       - Bustub 通关指北: blogs/posts/bustub通关指北.md

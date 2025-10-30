@@ -169,8 +169,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "ba41821ac3b94e09",
+  "active": "d0a7b374f13f2472",
   "lastOpenFiles": [
+    "cuda/Vector Add Optimization Example.md",
+    "cuda/img",
     "sglang/SGLang Scheduler 技术变迁.md",
     "sglang/img/previous_overlap.png",
     "sglang/img/batch_transpose.jpg",
