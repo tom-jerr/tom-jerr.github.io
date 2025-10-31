@@ -224,7 +224,7 @@ nav:
       - LLM Inference:
           - 不再更新: blogs/llm_inference/index.md
           - Introduction for LLM Inference: blogs/llm_inference/Introduction.md
-          - CUDA Optimization: blogs/llm_inference/cudaopt.md
+          # - CUDA Optimization: blogs/llm_inference/cudaopt.md
           - Parallelizatoin in ML System: blogs/llm_inference/parallelization.md
           - Parallelization in LLM Inference: blogs/llm_inference/LLMparallelization.md
           - PageAttention: blogs/llm_inference/pageattention.md
@@ -339,6 +339,7 @@ nav:
           - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
   - Blogs:
       - index: blogs/index.md
+      - PageAttention: blogs/posts/PageAttention.md
       - 上篇：初识 Nebula Graph —— 向量类型支持: blogs/posts/上篇：初识 Nebula Graph —— 向量类型支持.md
       - SGLang Schedular 技术变迁: blogs/posts/SGLang Scheduler 技术变迁.md
       - DP Attention: blogs/posts/DP Attention.md
