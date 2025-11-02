@@ -1,0 +1,10 @@
+{
+  "immediateReplace": true,
+  "suggester": true,
+  "historyPriority": true,
+  "historyLimit": 100,
+  "history": [
+    ":rocket:",
+    ":crying_cat_face:"
+  ]
+}

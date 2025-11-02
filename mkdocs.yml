@@ -339,11 +339,13 @@ nav:
           - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
   - Blogs:
       - index: blogs/index.md
+      - SGLang 专题:
+          - SGLang Schedular 技术变迁: blogs/posts/SGLang Scheduler 技术变迁.md
+          - DP Attention: blogs/posts/DP Attention.md
+          - SGLang 的 Cache 设计: blogs/posts/SGLang 的 KV Cache.md
       - PageAttention: blogs/posts/PageAttention.md
-      - 上篇：初识 Nebula Graph —— 向量类型支持: blogs/posts/上篇：初识 Nebula Graph —— 向量类型支持.md
-      - SGLang Schedular 技术变迁: blogs/posts/SGLang Scheduler 技术变迁.md
-      - DP Attention: blogs/posts/DP Attention.md
       - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md
+      - 上篇：初识 Nebula Graph —— 向量类型支持: blogs/posts/上篇：初识 Nebula Graph —— 向量类型支持.md
       - bision debug: blogs/posts/bision debug.md
       - C++ 异步方案演进: blogs/posts/C++异步方案.md
       - Bustub 通关指北: blogs/posts/bustub通关指北.md
@@ -351,9 +353,14 @@ nav:
       - 实现一个TCP: blogs/posts/CS144.md
   - Summaries:
       - index: summary/index.md
-      - "2025":
-          - "大模型技能掌握": summary/2025/LLM 推理系统技能图谱.md
+      - "plan":
           - "研一下规划": summary/2025/semester-plan.md
+          - "大模型技能掌握": summary/2025/LLM 推理系统技能图谱.md
+      - "研究生总结":
+          - "研一上总结": summary/研究生总结/研一上总结.md
+          - "研一下总结": summary/研究生总结/研一下总结.md
+          - "研二上总结": summary/研究生总结/研二上总结.md
+
   - Tags: tags/index.md
   - Links: links/index.md
   - About: about/index.md

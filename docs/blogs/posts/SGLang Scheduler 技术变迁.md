@@ -199,8 +199,9 @@ class ReqToTokenPool:
 
 - tree_cache 在调度策略中是个关键角色，根据 prefix match 的情况，会决定当前请求何时被 prefill
 - `page_size` 决定前缀匹配的粒度，键匹配策略以及分页匹配算法
+
   - page_size = 1 是逐 token 精确匹配，可以匹配任意长度的前缀
-  - page_size > 1 是按页进行前缀匹配(使用 tuple(tokens) 为 key
+  - page_size > 1 是按页进行前缀匹配，使用 tuple(tokens) 为 key
     ```python
     # page_size = 1
     root
@@ -209,20 +210,26 @@ class ReqToTokenPool:
             └── 3 (child_key=3)
                 └── 4 (child_key=4)
                     └── 5 (child_key=5)
-	# page_size = 4
-	root
-    └── (1,2,3,4) (child_key=(1,2,3,4))
-        └── (5,6,7,8) (child_key=(5,6,7,8))
-
     ```
+
+  # page_size = 4
+
+  root
+  └── (1,2,3,4) (child_key=(1,2,3,4))
+  └── (5,6,7,8) (child_key=(5,6,7,8))
+
+  ```
+
+  ```
 
 #### RelationShip
 
 一个新请求进入
+
 - 首先进行最长前缀匹配找到对应的 KV 索引
--  `req_to_token_pool` 分配 `extend_token` 的空闲槽位，得到 `req_pool_idx` 索引
+- `req_to_token_pool` 分配 `extend_token` 的空闲槽位，得到 `req_pool_idx` 索引
 - `token_to_kv_pool_allocator` 分配新的 KV Cache
-- 更新 `req_pool_idx` 与  KV Cache 间的映射关系
+- 更新 `req_pool_idx` 与 KV Cache 间的映射关系
 
 ```python
 # 直接分配这一个 batch 所有 req 的 extend tokens 需要的 kv cache
@@ -273,50 +280,51 @@ class PrefillAdder:
 ```
 
 ### GenerationBatchResult
+
 #### **1. logits_output: Optional[LogitsProcessorOutput]**
 
-- **作用**: 包含模型前向传播的完整logits输出和相关信息
+- **作用**: 包含模型前向传播的完整 logits 输出和相关信息
 - **内容**:
-    - [next_token_logits](vscode-file://vscode-app/c:/Users/lzy/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-browser/workbench/workbench.html): 下一个token的logits分布 `[batch_size, vocab_size]`
-    - [input_token_logprobs](vscode-file://vscode-app/c:/Users/lzy/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-browser/workbench/workbench.html): 输入token的log概率
-    - [hidden_states](vscode-file://vscode-app/c:/Users/lzy/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-browser/workbench/workbench.html): 隐藏状态（用于推测解码）
-    - 各种top-k logprobs和token概率信息
-- **用途**: 用于采样、计算概率、返回logprob信息给用户
+  - [next_token_logits](vscode-file://vscode-app/c:/Users/lzy/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-browser/workbench/workbench.html): 下一个 token 的 logits 分布  `[batch_size, vocab_size]`
+  - [input_token_logprobs](vscode-file://vscode-app/c:/Users/lzy/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-browser/workbench/workbench.html): 输入 token 的 log 概率
+  - [hidden_states](vscode-file://vscode-app/c:/Users/lzy/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-browser/workbench/workbench.html): 隐藏状态（用于推测解码）
+  - 各种 top-k logprobs 和 token 概率信息
+- **用途**: 用于采样、计算概率、返回 logprob 信息给用户
 
 #### **2. next_token_ids: Optional[torch.Tensor]**
 
-- **作用**: 经过采样后的下一个token ID
+- **作用**: 经过采样后的下一个 token ID
 - **形状**: `[batch_size]`
 - **内容**:
-    - Prefill模式：基于最后位置采样的第一个生成token
-    - Decode模式：当前步骤生成的下一个token
-    - Prefill-only：全零占位符tensor
+  - Prefill 模式：基于最后位置采样的第一个生成 token
+  - Decode 模式：当前步骤生成的下一个 token
+  - Prefill-only：全零占位符 tensor
 - **用途**: 直接用于更新请求的 `output_ids`，推进生成过程
 
 #### **3. num_accepted_tokens: Optional[int]**
 
-- **作用**: 推测解码中被接受的token数量
+- **作用**: 推测解码中被接受的 token 数量
 - **用途**: 统计推测解码的接受率，用于性能优化和指标收集
 
 #### **4. next_draft_input: Optional[EagleDraftInput]**
 
-- **作用**: EAGLE推测解码的下一轮输入信息
-- **内容**: 包含top-k概率、索引、隐藏状态等
+- **作用**: EAGLE 推测解码的下一轮输入信息
+- **内容**: 包含 top-k 概率、索引、隐藏状态等
 - **用途**: 为下一轮推测解码准备输入数据
 
 #### **5. extend_input_len_per_req: Optional[List[int]]**
 
 - **作用**: 每个请求的扩展输入长度
-- **用途**: 在处理batch结果时，知道每个请求**实际处理了多少个新token**
+- **用途**: 在处理 batch 结果时，知道每个请求**实际处理了多少个新 token**
 
 #### **6. extend_logprob_start_len_per_req: Optional[List[int]]**
 
-- **作用**: 每个请求开始计算logprob的位置
-- **用途**: 确定从哪个位置开始返回logprob信息给用户
+- **作用**: 每个请求开始计算 logprob 的位置
+- **用途**: 确定从哪个位置开始返回 logprob 信息给用户
 
 #### **7. copy_done: Optional[torch.cuda.Event]**
 
-- **作用**: GPU到CPU数据传输完成的同步事件
+- **作用**: GPU 到 CPU 数据传输完成的同步事件
 - **用途**: 在重叠调度中确保数据传输完成再处理结果
 
 #### **8. delay_sample_func: Optional[callable]**
@@ -326,23 +334,25 @@ class PrefillAdder:
 
 #### **9. future_indices: Optional[FutureIndices]**
 
-- **作用**: Future机制中的索引信息
+- **作用**: Future 机制中的索引信息
 - **用途**: 在重叠调度中**管理异步结果的存储和检索**
+
 ## Normal (No overlap)
 
 LLM 是自回归结构，所以无论是 Prefill 还是 Decode，驱动它们进行下一步推理的都是预测序列的下一个 token，包含 `next_token_ids` 的数据就非常关键
 
-在prefill模式下，`next_token_ids` 包含的是：
+在 prefill 模式下，`next_token_ids` 包含的是：
 
-- **形状**: `[batch_size]` - 每个请求一个token ID
-- **内容**: 每个序列的**下一个token**，即基于输入序列最后一个位置的logits采样得到的token
-- **位置**: 对于prefill，只使用序列的最后一个位置进行采样
+- **形状**: `[batch_size]` - 每个请求一个 token ID
+- **内容**: 每个序列的**下一个 token**，即基于输入序列最后一个位置的 logits 采样得到的 token
+- **位置**: 对于 prefill，只使用序列的最后一个位置进行采样
 
-在decode模式下，`next_token_ids` 包含的是：
+在 decode 模式下，`next_token_ids` 包含的是：
 
-- **形状**: `[batch_size]` - 每个请求一个token ID
-- **内容**: 每个请求当前解码步骤生成的**下一个token**
+- **形状**: `[batch_size]` - 每个请求一个 token ID
+- **内容**: 每个请求当前解码步骤生成的**下一个 token**
 - **位置**: 使用当前解码位置进行采样
+
 ### Overview
 
 一个请求 Request 进入 SGLang Scheduler，会经过如下阶段
@@ -352,19 +362,23 @@ Req -> Pre Schedule(CPU) -> Compute Batch -> Sample(GPU) -> Post Schedule(CPU) -
 ```
 
 ![](img/Scheduler.png)
+
 #### Pre Schedule
 
 - 收集前端传入的请求，并将其放入等待队列。(`Schedule::recv_request()` & `Schedule::process_input_requests()`)
 - 从等待队列和 running_batch 中进行调度 (`Schedule::get_batch_to_run()`)
   - Prefill 中涉及 Radix Tree 和最长前缀匹配（Longest Prefix Matching）算法。(`Req::init_next_round_input()`)
 - 为每个请求分配 Token 所需的内存资源。。(`ScheduleBatch::prepare_for_extend()` & `ScheduleBatch::prepare_for_decode()`)
+
 #### Compute batch
 
 新的请求会进入 Prefill 阶段，Prefill 阶段结束后进入 Decode 阶
+
 ##### Prefill Schedule
 
 1. `get_next_batch_to_run`：这里是 Prefill 优先，所以会调用 `get_new_batch_prefill`，并直接把函数返回的`new_batch`**作为这一轮执行的 batch(即 `cur_batch`)**
 2. `get_new_batch_prefill`:
+
    - 创建 PrefillAdder 来管理批次构建，从 waiting_queue 中选择请求
    - **`init_next_round_input` 更新 radix tree cache 的前缀**
    - 创建新的 ScheduleBatch，调用 `prepare_for_extend`:
@@ -373,6 +387,7 @@ Req -> Pre Schedule(CPU) -> Compute Batch -> Sample(GPU) -> Post Schedule(CPU) -
        - 将 req 与 kv cache 的映射写入到 `req_to_token_pool`
 
 3. `run_batch()`：执行 Prefill 推理，调用 `TpModelWorker::forward_batch_generation()` -> `ModelRunner::forward()` -> `ModelRunner::_foward_raw()` -> `ModelRunner::forward_extend()`，后面执行 backend 的算子等待返回结果
+
 ##### Decode Schedule
 
 1. `get_next_batch_to_run()`：处理上一批次的完成请求，然后与 running_batch 进行 merge
@@ -382,15 +397,16 @@ Req -> Pre Schedule(CPU) -> Compute Batch -> Sample(GPU) -> Post Schedule(CPU) -
      - 为  `out_cache_loc`  分配（batch size \* 1）个 slot，因为在 decode 模式下我们对每个 batch 一次只生成一个 token
      ```python
        out_cache_loc = alloc_token_slots(batch.tree_cache, bs * 1)
-       ```
+     ```
 3. `run_batch()`：执行 Decode 推理，调用 `TpModelWorker::forward_batch_generation()` -> `ModelRunner::forward()` -> `ModelRunner::_foward_raw()` -> `ModelRunner::forward_decode()`后面执行 backend 的算子等待返回结果
+
 #### Sample
 
 `TpModelWorker::forward_batch_generation()`：
 
 - 如果不是 overlap 模式，立即进行 Sample，否则重叠 CPU 和 GPU 进行延迟采样
 - **Sample 得到 batch 的 `next_token_ids`，供下一次 batch forward 使用**
-	```python
+  `python
 	sampling_info.update_regex_vocab_mask()
     sampling_info.apply_logits_bias(logits_output.next_token_logits)
     next_token_ids = self.sampler(
@@ -406,7 +422,8 @@ Req -> Pre Schedule(CPU) -> Compute Batch -> Sample(GPU) -> Post Schedule(CPU) -
                 else forward_batch.seq_lens - 1
             ),
         )
-	```
+	`
+
 #### Post Schedule
 
 - Prefill： `process_batch_result_prefill()`
@@ -414,6 +431,7 @@ Req -> Pre Schedule(CPU) -> Compute Batch -> Sample(GPU) -> Post Schedule(CPU) -
 - Decode： `process_batch_result_decode()`：
   - 对每个 Req 进行判断，如果已经完成就释放 tree_cache 中对应的 KV cache(**循环解释后批量释放**)
   - 将 batch 的结果通过 `stream_out()` 返回给 detokenizer 进行下一步处理
+
 ### 事件循环
 
 - 请求都会先执行 prefill 阶段然后执行 decode 阶段，直到获得 EOS 或其他原因退出
@@ -440,6 +458,7 @@ def event_loop_normal(self):
 #### Req -> Waiting_queue
 
 - 首先执行 `recv_requests`：
+
   - 只有 Pipeline rank = 0 的可以从 zmq 中获取 tokenizer 传来的 requests
   - 其他 pipeline rank 从前一个 pipeline 获取 requests
   - work_reqs 在 attn_tp 中进行广播；系统的 control_reqs 在整个 tp_size 中广播
@@ -451,9 +470,11 @@ def event_loop_normal(self):
       - 将 recv_req 构建为新的 `Req` 对象
       - 调用 `_add_request_to_queue()` 将 `Req` 插入 waiting_queue 中
   4.  **发送回应**: 将输出发送回对应的 tokenizer 工作进程
+
 #### Waiting_queue/running_batch -> cur_batch
 
 ![](img/batch.png)
+
 ##### 获取 prefill batch `get_new_batch_prefill`
 
 - 创建 PrefillAdder，对新来的请求进行分块，然后每次处理多个分块
@@ -486,16 +507,20 @@ KV Cache Pool:
 │ k1,v1│ k2,v2│ ... │k1984,v1984│k1985,v1985│ ... │k3984,v3984│ ... │
 └──────┴──────┴──────┴──────┴──────┴──────┴──────┴──────┘
 ```
+
 ##### 获取 decode batch
 
 - 先从 batch 中删除已经完成或者已经出错的 batch，然后将上一轮的 decode batch 与 running_batch 合并
   - 实际上就是将 `seq_lens`, `orig_seq_lens`, `output_ids` 等进行 `torch.cat` 拼接
 - 调用 `update_running_batch()` 获取 decode batch
+
   - 先检查是否需要回退请求
   - 如果需要，把要回退的请求重新插入 `waiting_queue`，重新排队进行调度
   - 调用 `ScheduleBatch::prepare_for_decode()`
+
     - 上一轮输出作为这一轮的输入
     - 内存分配 + 序列长度更新
+
     ```python
     # 假设batch有3个请求，每个请求当前长度分别为[10, 15, 8]
     # decode需要为每个请求的下一个位置分配空间
@@ -519,9 +544,11 @@ KV Cache Pool:
     # update all length
     self.seq_lens_sum += bs  # bs = batch_size
     ```
+
 ### Compute batch & Sample
 
 这里我们暂时只考虑 **generation** 的情况（还有 Embedding 的情况）
+
 - 将 `ScheduleBatch` 转化为 `ModelWorkerBatch`
 - 调用 `TpModelWorker::forward_batch_generation()`
   - 将 `ModelWorkerBatch` 转化为 `ForwardBatch`
@@ -530,6 +557,7 @@ KV Cache Pool:
     - Decode 执行 `ModelRunner::forward_decode()`
   - **立即进行 Sample，根据 logits 获得下一个 token**
   - 返回结果 `GenerationBatchResult`
+
 ### Post Schedule
 
 #### Prefill
@@ -541,6 +569,7 @@ KV Cache Pool:
   - 更新 logprob
   - Chunked 请求的特殊处理：`is_chunked > 0` 表示 prefill 尚未全部完成，需要递减计数并跳过流式输出。
 - 输出流式结果：调用 `stream_output()` 将结果（token、logprob 等）发送给客户端（例如 WebSocket / API response）
+
 #### Decode
 
 ```python
@@ -574,6 +603,7 @@ KV Cache Pool:
 在介绍原理之前我们需要回忆一下上面推理过程的 4 个大步骤，考虑哪些步骤可以进行 Overlap，减少 GPU Bubble，先放一张现在 Overlap 的流水线图
 
 ![](img/lazy_sampling.png)
+
 #### Inference Overview
 
 SGLang 的推理过程主要分为以下四个阶段：
@@ -585,7 +615,7 @@ SGLang 的推理过程主要分为以下四个阶段：
    - 为每个请求分配 Token 所需的内存资源。(`ScheduleBatch::prepare_for_extend()` & `ScheduleBatch::prepare_for_decode()`)
 2. **Compute batch：**
    - 将 batch 发送到 GPU 上进行一步（即 Continue Batch 的一个 iter）推理(`Scheduler::run_batch()`)
-1. **Sample：**
+3. **Sample：**
    - 根据模型输出的 Logit 进行采样，生成下一步的 Token。(`ModelRunner::sample()`)
 4. **Post schedule：**
    - 在一步推理完成后，动态检查请求是否满足结束条件（Check Finish Condition）。(`Scheduler::process_batch_result()`)
@@ -598,11 +628,11 @@ Compute batch 和 Sample 这两个挨在一起的阶段是 GPU heavy 的，而 s
 > 实际上我们的 Prefill 请求进入并不依赖未完成的 batch，**第一个请求进来可以直接正常执行**
 
 我们通过使用 Forward CUDA Stream 的方式来实现 overlap，具体来说：
+
 - Run Batch 中将两个操作提交到 forward_stream 队列：一个是从 FutureMap **获取上一次 batch 的 next token**；一个用这个 token 作为 `intput_id` 进行下一次计算
-- Sample  中也把两个操作提交到 forward_stream 队列：一个是进行采样；一个是将得**到的 next token 写回 FutureMap**
-- 我们需要在 Post Schedule 处理数据前对 CPU 和 GPU 做一个同步，保证可以处理到 CPU 的 `next_token_ids`
-	- 我们**在 Post Schedule 中进行同步操作**，确保后续的处理可以正常运行且不影响 GPU 的流水线工作
-	```python
+- Sample 中也把两个操作提交到 forward_stream 队列：一个是进行采样；一个是将得**到的 next token 写回 FutureMap**
+- 我们需要在 Post Schedule 处理数据前对 CPU 和 GPU 做一个同步，保证可以处理到 CPU 的 `next_token_ids` - 我们**在 Post Schedule 中进行同步操作**，确保后续的处理可以正常运行且不影响 GPU 的流水线工作
+  `python
 	def process_batch_result_decode(
         self: Scheduler,
         batch: ScheduleBatch,
@@ -617,15 +647,16 @@ Compute batch 和 Sample 这两个挨在一起的阶段是 GPU heavy 的，而 s
         )
 		next_token_ids = next_token_ids.tolist()
 		next_token_logprobs = logits_output.next_token_logprobs.tolist()
-	```
+	`
 
 ![](img/lazy_sampling.png)
+
 ### 初始化 Overlap
 
 - **forward_stream**：专门用于 GPU 前向计算，与默认流并行
 - **copy_stream**：处理 GPU->CPU 数据传输
 - **future_map**：管理异步计算结果，使用**负索引作为 future 标识符**
-	- 上一个 batch 计算的 `output_id` 作为下一个 batch 的 `input_id`，通过存取 `future_map` 实现
+  - 上一个 batch 计算的 `output_id` 作为下一个 batch 的 `input_id`，通过存取 `future_map` 实现
 
 ```python
 def init_overlap(self):
@@ -702,29 +733,29 @@ def event_loop_overlap(self):
 - `TpModelWorker::forward_batch_generation()`，该函数仅仅将 model_runner.sample 函数 delay 执行，先返回 batch_result
 - 增加了 `Scheduler::launch_batch_sample_if_needed()`：
   - 执行真正的 Sample 操作
-	  - 屏蔽非法 token，分配 vocab_mask 张量大小 [batch, vocab_size]
-	  - 移动 mask 到 CPU
+    - 屏蔽非法 token，分配 vocab_mask 张量大小 [batch, vocab_size]
+    - 移动 mask 到 CPU
   - 将得到的 `next_token_id` 存储到 FutureMap 的 `future_indices` 的对应位置
-	  - 为了下一次 batch 在 `run_batch` 中的 `resolve_future` 获取到真正的 token
+    - 为了下一次 batch 在 `run_batch` 中的 `resolve_future` 获取到真正的 token
 
 ### 流同步
 
 - decode 模式下前一次 batch 的 `batch.output_ids` 是后一次 batch 的 `batch.input_ids`
 - **前一次 batch 的 `output_id` 存入 FutureMap 后，才会执行后从 FutureMap 中获取这个 `output_id` 并作为下一次 batch 的 `input_id` 进行计算**
-	- CUDA Stream 的本身的限制
-	- CPU 侧使用负数占位符实现，等待 GPU 进行真正 token 的填充
+  - CUDA Stream 的本身的限制
+  - CPU 侧使用负数占位符实现，等待 GPU 进行真正 token 的填充
 
 ```python
 # previos batch output is negative indices
 batch.output_ids = -self.future_map.alloc_future_indices(bs).indices
 with self.forward_stream_ctx:
-	self.forward_stream.wait_stream(self.default_stream) 
+	self.forward_stream.wait_stream(self.default_stream)
 	_batch_result = batch_result.delay_sample_func()
 	assert _batch_result is batch_result
 	# store token to negative indices
 	self.future_map.store_to_map(batch_result.future_indices, batch_result)
 	batch_result.copy_to_cpu()
-	
+
 # next batch input is output of previous batch
  with self.forward_stream_ctx:
 	self.forward_stream.wait_stream(self.default_stream)
@@ -738,8 +769,8 @@ with self.forward_stream_ctx:
 ### 与上一版 overlap 差异
 
 - 将 update_vocab_mask 移动到 GPU 进行计算，`vocab_mask` 也在 GPU 直接进行分配，不再进行传输
-- 现在的 GPU 额外负责向 FutureMap 存储(after sample)以及获取(before compute) `next_token_ids` 
-	- FutureMap 也是完全存储在 GPU 上
+- 现在的 GPU 额外负责向 FutureMap 存储(after sample)以及获取(before compute) `next_token_ids`
+  - FutureMap 也是完全存储在 GPU 上
 - 对 GPU 调度由原来 CPU 进行 launch，变成直接将操作提交到 cuda stream，由 stream 自己来调度
 - 对 sample 的同步，上一版使用 cuda event 进行同步，这里直接使用 **cuda stream 顺序限制来进行同步**
 
@@ -747,21 +778,49 @@ with self.forward_stream_ctx:
 ![](img/lazy_sampling.png)
 
 #### 两个版本的优缺点
+
 ##### CUDA stream 版本
 
 - 执行效率更高：`vocab_mask` 和 `token_ids_buf` 无 CPU-GPU 传输；充分利用 GPU 内存带宽
 - 延迟更低：`token_ids_buf` 直接在 GPU 上原地修改，不必反复传输
-	- 与模型推理在同一设备上，便于流水线
+  - 与模型推理在同一设备上，便于流水线
 - 非模型占用显存大：`token_ids_buf` 占用 GPU 显存，开销固定
+
 ##### CPU launch 版本
 
 - 只有在使用时才占用 GPU 内存
-    
 - 同步点增加：`vocab_mask` 会增加一次 CPU-GPU 同步
-	- CPU-GPU 同步会破坏流水线
-    
+  - CPU-GPU 同步会破坏流水线
+
+#### Special TBO(Tow Chunk Overlap)[^tco]
+
+Two Batch Overlap（TBO）里，调度器尝试重叠两批次（micro-batch）来**遮掩计算和通信等开销**，但当输入长度高度不均（比如一个很长，一个很短或空）时，会出现 “idle batch”——即某个 micro-batch 没有有效 token 要处理，导致 GPU 存在空闲时间
+
+##### 原理
+
+把一个长序列智能拆成两个 chunk 并把它们当作两个并行的 micro-batch 去执行，从而消除空闲 micro-batch、提高 GPU 利用率与吞吐。比如把 3072 拆成 1536 + 1536：
+
+> 第一个 chunk 是 (seq_len=1536, prefix=0)
+> 第二个 chunk 是 (seq_len=1536, prefix=1536)
+> 第二个 chunk 在逻辑上是接续第一个 chunk 的后半段，但作为另一个并行 micro-batch 被安排，从而避免空闲
+
+##### Example
+
+```python
+two batch overlap
+dp0:
+batch_size = 1, extend_seq_len = [4000], extend_prefix_len = [0, 0].
+dp1-dp31 :
+batch_size = 2, extend_seq_len = [2000, 2000], extend_prefix_len = [0, 0]
+
+two chunk overlap
+extend_seq_len0=[2000], extend_prefix_len0=[0]
+extend_seq_len1=[2000], extend_prefix_len1=[2000]
+```
+
 ## Reference
 
 [^overlap]: [Zero-Overhead Batch Scheduler](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/zero-overhead-scheduler/zero-overhead-batch-scheduler.md)
 [^overhead]: [Can Scheduling Overhead Dominate LLM Inference Performance? A Study of CPU Scheduling Overhead on Two Popular LLM Inference Systems](https://mlsys.wuklab.io/posts/scheduling_overhead/)
 [^code-walk]: [ SGLang 后端代码解析](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/code-walk-through/readme-CN.md)
+[^tco]: [two-chunk overlap for DeepSeekV3/R1](https://github.com/sgl-project/sglang/issues/6328)
