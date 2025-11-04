@@ -11,10 +11,14 @@
             "id": "ba41821ac3b94e09",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "tiny-llm/RMSNorm & MLP.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "RMSNorm & MLP"
             }
           }
         ]
@@ -74,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "c267b0c1098f3a27",
@@ -139,12 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "tiny-llm/RMSNorm & MLP.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
+              "title": "Outline of RMSNorm & MLP"
             }
           }
         ],
@@ -167,13 +171,29 @@
   },
   "active": "ba41821ac3b94e09",
   "lastOpenFiles": [
+    "cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md",
+    "cuda/img/result.jpg",
+    "cuda/img/未确认 361433.crdownload",
+    "cuda/img/pdl.jpg",
+    "cuda/img/未确认 36663.crdownload",
+    "cuda/img/latency.jpg",
+    "cuda/img/未确认 651537.crdownload",
+    "cuda/img/opt.jpg",
+    "cuda/img/未确认 253754.crdownload",
+    "cuda/img/tma.jpg",
+    "cuda/img/未确认 697597.crdownload",
+    "cuda/img/async_load.jpg",
+    "cuda/img/未确认 615694.crdownload",
+    "cuda/img/dlp.png",
+    "cuda/img/littleslaw.png",
+    "cuda/img",
+    "cuda/新建文件夹",
+    "().md",
+    "cuda",
     "sglang/SGLang Scheduler 技术变迁.md",
     "sglang/img/warp_work.png",
     "cuda/Vector Add Optimization Example.md",
-    "cuda/img",
     "sglang/img/previous_overlap.png",
-    "sglang/img/batch_transpose.jpg",
-    "sglang/img/Scheduler.png",
     "tiny-llm/Batching Inference & KV Cache.md",
     "tiny-llm/Group Query Attention.md",
     "tiny-llm/RMSNorm & MLP.md",

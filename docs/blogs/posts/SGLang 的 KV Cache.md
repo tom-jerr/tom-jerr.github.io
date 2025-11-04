@@ -24,7 +24,7 @@ tags:
 
 ### req_to_token_pool
 
-这是从请求到其令牌的键值缓存索引的映射。这就是我们在注意力后端图中提到的 `req_to_token` 。
+这是从请求到其令牌的键值缓存索引的映射。这就是我们在注意力后端图中提到的 `req_to_token` 
 
 - 形状：最大允许请求数（由参数 `max-running-requests` 设置，用于指定可同时运行的最大请求数）\* 每个请求的最大上下文长度（由配置 model_config.context_len 设置）
 - 访问：

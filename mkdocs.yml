@@ -155,6 +155,9 @@ extra_javascript:
   - https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js
   # - https://busuanzi.icodeq.com/busuanzi.pure.mini.js
   - js/mathjax.js
+  - https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js
+  - https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js
+
   # - js/toc.js
 
 extra_css:
@@ -344,6 +347,7 @@ nav:
           - DP Attention: blogs/posts/DP Attention.md
           - SGLang 的 Cache 设计: blogs/posts/SGLang 的 KV Cache.md
       - PageAttention: blogs/posts/PageAttention.md
+      - FlashAttention: blogs/posts/FlashAttention 原理 v1-v2.md
       - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md
       - 上篇：初识 Nebula Graph —— 向量类型支持: blogs/posts/上篇：初识 Nebula Graph —— 向量类型支持.md
       - bision debug: blogs/posts/bision debug.md
