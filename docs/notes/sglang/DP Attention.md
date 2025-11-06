@@ -15,8 +15,7 @@ tags:
 1. 对于模型中除 MLP 层以外的部分（如 Embedding, Self-Attention），每个数据并行单元（DP_Rank）内部的张量并行规模（TP_Size）设置为 1，即每个 DP_Rank 独立计算这些部分。
 2. 对于 MLP 层，所有 DP_Rank 则共同组成一个大的张量并行组（TP_Group），该组的大小等于数据并行的规模（DP_Size）。
 
-![](img/dp_attention.png)
-
+![img_dp_attention](img/dp_attention.png)
 ## 启动流程
 
 1.  engine 会启动一个子进程执行 `run_data_parallel_control_process`
@@ -25,42 +24,49 @@ tags:
     - 调用 `launch_tensor_parallel_group`
 3.  `launch_tensor_parallel_group` 对每个 (pp_rank, tp_rank) 启动一个 Schedular 子进程 - 父进程在这里阻塞等待每个子进程通过 pipe 发送初始化信息（通常包含：模型已加载完成、模型的 buffer/kv 配置、最大 token 长度等
 
-        ```python
+    ```python
+	scheduler = Scheduler(
+			server_args,
+			port_args,
+			gpu_id,
+			tp_rank,
+			moe_ep_rank,
+			pp_rank,
+			dp_rank,
+		)
+	pipe_writer.send(
+				{
+					"status": "ready",
+					"max_total_num_tokens": scheduler.max_total_num_tokens,
+					"max_req_input_len": scheduler.max_req_input_len,
+				}
+			)
+			
+	# PP + TP
+	┌─────────────── Pipeline Stage 0 ───────────────┐
+	TP=0→ │ TP Rank 0 │ TP Rank 1 │ TP Rank 2        │
+	├─────────────── Pipeline Stage 1 ───────────────┤
+	TP=1→ │ TP Rank 3 │ TP Rank 4 │ TP Rank 5        │
+	├─────────────── Pipeline Stage 2 ───────────────┤
+	TP=2→ │ TP Rank 6 │ TP Rank 7 │ TP Rank 8        │
+	└────────────────────────────────────────────────┘
+	```
 
-    scheduler = Scheduler(
-                server_args,
-                port_args,
-                gpu_id,
-                tp_rank,
-                moe_ep_rank,
-                pp_rank,
-                dp_rank,
-            )
-
-pipe_writer.send(
-            {
-                "status": "ready",
-                "max_total_num_tokens": scheduler.max_total_num_tokens,
-                "max_req_input_len": scheduler.max_req_input_len,
-            }
-        )
-┌─────────────── Pipeline Stage 0 ───────────────┐
-TP=0→ │ TP Rank 0 │ TP Rank 1 │ TP Rank 2 │
-├─────────────── Pipeline Stage 1 ───────────────┤
-TP=1→ │ TP Rank 3 │ TP Rank 4 │ TP Rank 5 │
-├─────────────── Pipeline Stage 2 ───────────────┤
-TP=2→ │ TP Rank 6 │ TP Rank 7 │ TP Rank 8 │
-└────────────────────────────────────────────────┘
-
-````
 
 4. ModelRunner 初始化时执行 `initialize_dp_attention`，
-   - attn_tp_size = tp_size // dp_size
-   - attn_dp_rank = tp_rank // attn_tp_size
-   - attn_tp_rank = tp_rank % attn_tp_size
+   - 计算 `attn_tp` 的大小以及对应的 `attn_tp_rank` 以及 `attn_dp_rank`
    - 并据此创建 attention-specific group coordinator（attn_tp_group）
    - 设置 Gather 时候的 Buffer
+	    > 为 Gather buffer 预留 `attn_tp_size` 倍的空间
 
+以[上面的图](#what-is-data-parallelism-in-attention)为例
+
+| tp_rank | attn_tp_size | attn_dp_rank | attn_tp_rank |
+| ------- | -----------: | -----------: | -----------: |
+| 0       |            1 |            0 |            0 |
+| 1       |            1 |            1 |            0 |
+| 2       |            1 |            2 |            0 |
+| 3       |            1 |            3 |            0 |
 ## 执行流程
 
 与正常执行类似，都先执行 `recv_requests` 和 `process_input_requests`
@@ -86,21 +92,6 @@ TP=2→ │ TP Rank 6 │ TP Rank 7 │ TP Rank 8 │
              return idle_batch
      ```
 
-def prepare_for_idle(self):
-        self.forward_mode = ForwardMode.IDLE
-        self.input_ids = torch.empty(0, dtype=torch.int64, device=self.device)
-        self.seq_lens = torch.empty(0, dtype=torch.int64, device=self.device)
-        self.seq_lens_cpu = torch.empty(0, dtype=torch.int64)
-        self.orig_seq_lens = torch.empty(0, dtype=torch.int32, device=self.device)
-        self.out_cache_loc = torch.empty(0, dtype=torch.int64, device=self.device)
-        self.req_pool_indices = torch.empty(0, dtype=torch.int32, device=self.device)
-        self.seq_lens_sum = 0
-        self.extend_num_tokens = 0
-        self.sampling_info = SamplingBatchInfo.from_schedule_batch(
-            self,
-            self.model_config.vocab_size,
-        )
-````
 
 3. 变为 `ModelWorkerBatch` 后调用 `TpModelWorker::forward_batch_generation`转化为 `ForwardBatch`，调用 `ModelRunner::forward` -> `ModelRunner::_forward_raw` 在这里进行 padding
 4. 实际上是调用 `FowardBatch::prepare_mlp_sync_batch`
@@ -110,8 +101,8 @@ def prepare_for_idle(self):
    - 每个 dp rank 本地的 batch 会根据填充模式被 padding 到指定的大小(bs = self.batchsize = num_tokens).
      - 当 `dp_padding_mode` 设置为 max 时，padding 到的 batchsize 大小为所有 dp rank 上最大的 local batch，同时对齐到 attention_tp_size;
      - 当 `dp_padding_mode` 设置为 sum 时，padding 到的 batchsize 大小为所有 dp rank 上 local batch 之和，即 global batch size
-     - is_extend_in_batch 设置 SUM，cuda_graph 设置 MAX
-5. 在完成 dp attention batch padding 后，根据 batch 类型调用`self.forward_decode` 进行模型推理。在完成推理后，调用`forward_batch.post_forward_mlp_sync_batch(ret)`
+     - **is_extend_in_batch 设置 SUM，cuda_graph 设置 MAX**
+3. 在完成 dp attention batch padding 后，根据 batch 类型调用`self.forward_decode` 进行模型推理。在完成推理后，调用`forward_batch.post_forward_mlp_sync_batch(ret)`
    - 复原被临时修改的属性
    - 将 padding 后的 ForwardBatch 还原，具体做法是在 prepare 时会记录原 batchsize，此时对结果进行切片
 
@@ -139,10 +130,9 @@ logits_output.hidden_states = logits_output.hidden_states[:bs]
 在 Attention 层与 MoE 层之间需要进行同步通信，对各 dp rank atttention 部分计算得到的 hidden_state 集合进行同步，**如果采用 Allgather 或者 Allreduce 通信，其对数据性状有一定的要求**
 
 - allgather：要求每个 sub-batchsize 大小相同。因此需要把 local batchsize padding 到 max batchsize，且最后 gatheredbuffer 大小为：max_batchsize \* sync_group_size
-  ![](../../src/img/allgather.png)
+  ![](img/allgather.png)
 - allreduce：每个 dp rank 上都有完整的数据集合(**对应 padding 到 sum batchsize**). 最后 gatheredbuffer 大小为：sum_batchsize
-  ![](../../src/img/allreduce.png)
-
+  ![](img/allreduce.png)
 ### Padding Problems
 
 这种为了“正确性”而做的 padding，反过来又会严重影响性能，主要体现在以下两方面：

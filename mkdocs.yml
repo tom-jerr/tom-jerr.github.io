@@ -350,6 +350,7 @@ nav:
       - FlashAttention: blogs/posts/FlashAttention 原理 v1-v2.md
       - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md
       - 上篇：初识 Nebula Graph —— 向量类型支持: blogs/posts/上篇：初识 Nebula Graph —— 向量类型支持.md
+      - 中篇：Vector 类型的 DDL & DML 适配: blogs/posts中篇：Vector 类型的 DDL&DML 适配.md
       - bision debug: blogs/posts/bision debug.md
       - C++ 异步方案演进: blogs/posts/C++异步方案.md
       - Bustub 通关指北: blogs/posts/bustub通关指北.md

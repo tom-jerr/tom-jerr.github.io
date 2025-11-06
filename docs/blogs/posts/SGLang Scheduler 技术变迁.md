@@ -202,7 +202,8 @@ class ReqToTokenPool:
 
   - page_size = 1 是逐 token 精确匹配，可以匹配任意长度的前缀
   - page_size > 1 是按页进行前缀匹配，使用 tuple(tokens) 为 key
-    ```python
+  
+ ```python
     # page_size = 1
     root
     └── 1 (child_key=1)
@@ -210,18 +211,13 @@ class ReqToTokenPool:
             └── 3 (child_key=3)
                 └── 4 (child_key=4)
                     └── 5 (child_key=5)
-    ```
 
   # page_size = 4
 
   root
   └── (1,2,3,4) (child_key=(1,2,3,4))
   └── (5,6,7,8) (child_key=(5,6,7,8))
-
   ```
-
-  ```
-
 #### RelationShip
 
 一个新请求进入
@@ -230,6 +226,7 @@ class ReqToTokenPool:
 - `req_to_token_pool` 分配 `extend_token` 的空闲槽位，得到 `req_pool_idx` 索引
 - `token_to_kv_pool_allocator` 分配新的 KV Cache
 - 更新 `req_pool_idx` 与 KV Cache 间的映射关系
+- 计算完成后，新的键值缓存通过 `cache_finished_req()` 或者 `cache_unfinished_req()`被插入回树缓存中
 
 ```python
 # 直接分配这一个 batch 所有 req 的 extend tokens 需要的 kv cache
@@ -245,7 +242,7 @@ req_to_token_pool.write(
 )
 ```
 
-![](img/batch_transpose.jpg)
+![](img/sglang_cache.png)
 
 ### PrefillAdder
 
@@ -406,7 +403,8 @@ Req -> Pre Schedule(CPU) -> Compute Batch -> Sample(GPU) -> Post Schedule(CPU) -
 
 - 如果不是 overlap 模式，立即进行 Sample，否则重叠 CPU 和 GPU 进行延迟采样
 - **Sample 得到 batch 的 `next_token_ids`，供下一次 batch forward 使用**
-  `python
+
+  ```python
 	sampling_info.update_regex_vocab_mask()
     sampling_info.apply_logits_bias(logits_output.next_token_logits)
     next_token_ids = self.sampler(
@@ -422,7 +420,7 @@ Req -> Pre Schedule(CPU) -> Compute Batch -> Sample(GPU) -> Post Schedule(CPU) -
                 else forward_batch.seq_lens - 1
             ),
         )
-	`
+	```
 
 #### Post Schedule
 
@@ -632,7 +630,8 @@ Compute batch 和 Sample 这两个挨在一起的阶段是 GPU heavy 的，而 s
 - Run Batch 中将两个操作提交到 forward_stream 队列：一个是从 FutureMap **获取上一次 batch 的 next token**；一个用这个 token 作为 `intput_id` 进行下一次计算
 - Sample 中也把两个操作提交到 forward_stream 队列：一个是进行采样；一个是将得**到的 next token 写回 FutureMap**
 - 我们需要在 Post Schedule 处理数据前对 CPU 和 GPU 做一个同步，保证可以处理到 CPU 的 `next_token_ids` - 我们**在 Post Schedule 中进行同步操作**，确保后续的处理可以正常运行且不影响 GPU 的流水线工作
-  `python
+
+  ```python
 	def process_batch_result_decode(
         self: Scheduler,
         batch: ScheduleBatch,
@@ -647,7 +646,7 @@ Compute batch 和 Sample 这两个挨在一起的阶段是 GPU heavy 的，而 s
         )
 		next_token_ids = next_token_ids.tolist()
 		next_token_logprobs = logits_output.next_token_logprobs.tolist()
-	`
+	```
 
 ![](img/lazy_sampling.png)
 
