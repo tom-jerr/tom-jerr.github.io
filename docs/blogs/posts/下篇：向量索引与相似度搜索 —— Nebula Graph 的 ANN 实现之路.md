@@ -1,11 +1,11 @@
 ---
-title: 中篇：Vector 类型的 DDL & DML 适配
-date: 2025/11/5
+title: 下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路
+date: 2025/11/13
 tags:
   - Database
 ---
 
-# 中篇：Vector 类型的 DDL & DML 适配
+# 下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路
 
 📚 本系列文章分为上中下三篇，记录了我在开源之夏项目中，开发 Nebula Graph 向量搜索功能的一些复盘和思考，希望可以给大家学习和开发类似系统时有一定的样本参考。希望大家多多关注和交流，大家一起进步 😊 欢迎订阅我的个人网站:rocket: [tom-jerr.github.io](https://tom-jerr.github.io/)
 
