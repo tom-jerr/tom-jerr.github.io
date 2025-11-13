@@ -168,6 +168,7 @@ extra_css:
   - css/card.css
   - css/flink.css
   - css/tasklist.css
+  - css/footer-stats.css
 
 extra:
   social:
@@ -198,7 +199,7 @@ extra:
 
   analytics:
     provider: google
-    property: G-20LWGZNLLR
+    property: G-NKJWZM1JHX
     feedback:
       title: Support Me!
       ratings:
@@ -351,6 +352,7 @@ nav:
       - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md
       - 上篇：初识 Nebula Graph —— 向量类型支持: blogs/posts/上篇：初识 Nebula Graph —— 向量类型支持.md
       - 中篇：Vector 类型的 DDL & DML 适配: blogs/posts/中篇：Vector 类型的 DDL&DML 适配.md
+      - 下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路: blogs/posts/下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路.md
       - bision debug: blogs/posts/bision debug.md
       - C++ 异步方案演进: blogs/posts/C++异步方案.md
       - Bustub 通关指北: blogs/posts/bustub通关指北.md

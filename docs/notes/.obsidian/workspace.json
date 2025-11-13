@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "sglang/从代码看 SGLang 的 KV Cache.md",
+                "file": "sglang/大模型推理服务中的 Batching.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "从代码看 SGLang 的 KV Cache"
+              "title": "大模型推理服务中的 Batching"
             }
           }
         ]
@@ -142,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "sglang/从代码看 SGLang 的 KV Cache.md",
+                "file": "sglang/大模型推理服务中的 Batching.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 从代码看 SGLang 的 KV Cache"
+              "title": "Outline of 大模型推理服务中的 Batching"
             }
           }
         ],
@@ -171,26 +171,28 @@
   },
   "active": "9b42e07828b65cb4",
   "lastOpenFiles": [
-    "sglang/SGLang Scheduler 技术变迁.md",
+    "sglang/一条 Request 在 SGLang 的前世今生.md",
+    "sglang/大模型推理服务中的 Batching.md",
+    "sglang/img/prepacking.png",
+    "sglang/img/arithmetic_intensity.png",
+    "sglang/img/prefill_decode.png",
+    "sglang/img/stall_free_scheduling.png",
+    "sglang/img/orca_bubble.png",
+    "sglang/img/chunked_prefill.png",
+    "sglang/img/memory_waste.png",
+    "sglang/img/orca2.png",
+    "sglang/img/orca1.png",
+    "sglang/img/static_batching.png",
     "sglang/从代码看 SGLang 的 KV Cache.md",
     "sglang/SGlang 中的 Sepeculative Decoding.md",
-    "sglang/img/allgather.png",
-    "sglang/img/allreduce.png",
+    "sglang/SGLang Scheduler 技术变迁.md",
     "sglang/DP Attention.md",
-    "sglang/img/dp_attention.png",
-    "sglang/img/spec_decoding_model.png",
-    "sglang/img/spec_decoding.png",
     "tiny-llm/RMSNorm & MLP.md",
     "cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md",
-    "cuda/img/result.jpg",
     "cuda/img/未确认 361433.crdownload",
-    "cuda/img/pdl.jpg",
     "cuda/img/未确认 36663.crdownload",
-    "cuda/img/latency.jpg",
     "cuda/img/未确认 651537.crdownload",
-    "cuda/img/opt.jpg",
     "cuda/img/未确认 253754.crdownload",
-    "cuda/img/tma.jpg",
     "cuda/img/未确认 697597.crdownload",
     "cuda/img/未确认 615694.crdownload",
     "cuda/img",
