@@ -37,6 +37,12 @@ tags:
 
 > 这个 `VectorIndexManager` 在存储守护进程**启动时初始化(加载持久化的向量索引)**，在进程退**出前持久化**所有的向量索引到磁盘。
 
+### Ann Index Persistence
+
+我们这里暂时没有考虑到分布式一致性和宕机重启情况，所以只是简单的调用 faiss 和 hnswlib 的序列化 ann index 接口，以二进制形式写入本地文件。
+
+> 实际上这些 ann search 库持久化底层使用的也是 C++ IOStream **序列化机制**
+
 ### Memory Tracked
 
 暂时我的实现是使用 Nebula 内置的 MemoryTracker 定期查询内存索引的大小。如果超过限制，则无法插入新的 Vector
@@ -179,6 +185,7 @@ CREATE TAG ANNINDEX <index_name> ON <tag_name_list>::(<field_name>) [IF NOT EXIS
 ```
 
 - Ann Index Parameters
+
   - `ANNINDEX_TYPE`: Index type， support `IVF` and `HNSW`
   - `DIM`: Vector dimension
   - `METRIC_TYPE`: Metric type， support `L2` and `INNER_PRODUCT`
@@ -211,7 +218,7 @@ struct IndexItem {
 }
 ```
 
-Ann 索引项定义了在多个模式中同名属性之间创建索引的过程，包括所有需要建立索引的模式的信息。同时，它还使用一个列表来存储创建 Ann 索引所需的参数。
+- Ann 索引项定义了在多个模式中同名属性之间创建索引的过程，包括所有需要建立索引的模式的信息。同时，它还使用一个列表来存储创建 Ann 索引所需的参数。
 
 > ```cpp
 > ann index params:
@@ -323,7 +330,7 @@ class VectorIndexManager final {
 
 创建过程是一个多步骤操作，涉及 Graphd 、 Metad 和 Storaged 。
 
-#### Graphd -> Metad -> Storaged
+#### 1. Graphd -> Metad -> Storaged
 
 1. Graphd: 解析 `CREATE ANNINDEX DDL` 并生成生成计划 `Start->CreateTagAnnIndex->​​SubmitJob`。
 
@@ -339,7 +346,7 @@ class VectorIndexManager final {
 
 ![](img/create_ann_index.png)
 
-#### Storaged Ann Index Creation
+#### 2. Storaged Ann Index Creation
 
 存储节点在接收到创建 Ann Index 的 AdminTask 后，会生成真正的向量索引实例并将其存储在 `VectorIndexManager` 中。
 
@@ -516,7 +523,32 @@ GetProp 返回的属性示例：
 
 3. **Multi-Tag Ann Index 支持**: 突破了传统索引只能作用于单个 Schema 的限制，实现了跨多个 Tag 对同名向量属性建立索引的能力，这是本次实现的一大亮点。
 
-4. **Ann Search 执行计划优化**: 设计了从 Graphd 到 Storaged 的完整执行链路，包括新的优化规则、`TagAnnIndexScan` 执行节点，以及 VectorID 到 VertexID 的映射机制。
+4. **高效的 Ann Search 执行流程**: 设计了从 Graphd 到 Storaged 的完整执行链路,包括新的优化规则、`TagAnnIndexScan` 执行节点,以及 VectorID 到 VertexID 的映射机制。
+
+### 回顾关键问题
+
+在文章开头，我们提出了三个关键问题。现在让我们来回顾一下这些问题的答案：
+
+**问题 1：Ann Index 的生命周期管理谁来负责？**
+
+答案：**由 Storaged 通过 `VectorIndexManager` 单例来管理**。这个单例维护了一个内存中的向量索引映射表（Key 为 `GraphSpaceID + PartID + IndexID`，Value 为具体的向量索引实例）。`VectorIndexManager` 在存储守护进程启动时初始化并加载持久化的索引，在进程退出前将所有索引持久化到磁盘。这种设计将索引实例维护在存储层，既保证了数据局部性，又简化了分布式环境下的一致性问题。
+
+**问题 2：Ann Index 的数据存储在哪里？**
+
+答案：**Ann Index 以两种形式存储**：
+
+- **内存存储**：向量索引实例（IVF、HNSW）常驻内存，通过 `VectorIndexManager` 管理，以支持高性能的向量搜索。
+- **磁盘持久化**：调用 Faiss 和 HNSWlib 的序列化接口，将索引以二进制形式写入本地文件系统。这些库底层使用 C++ IOStream 序列化机制。
+- **映射关系存储**：VectorID 与 VertexID/EdgeType 之间的映射关系存储在 RocksDB 的 id-vid 列族中，确保能够将向量搜索结果转换回实际的顶点或边。
+
+**问题 3：Ann Search 生成的计划如何使用 Ann Index 进行搜索？**
+
+答案：**通过专门的优化规则和执行节点实现**：
+
+1. **Graphd 优化阶段**：新的优化规则识别 `APPROXIMATE LIMIT` 语法，将 `ApproximateLimit->Sort->Project->ScanVertices` 转换为 `Limit->TagAnnIndexScan` 执行计划。
+2. **Storaged 执行阶段**：`AnnIndexScan` 节点通过 `VectorIndexManager` 获取对应的向量索引实例，调用其 `search` 接口返回 VectorID 列表。
+3. **ID 映射转换**：通过查询 RocksDB 的 id-vid 列族，将 VectorID 转换为实际的 VertexID。
+4. **属性补全**：Graphd 使用返回的 VertexID 列表调用 `GetProp` 获取完整的顶点属性，通过 `collectAllVertexProps` 函数处理 Multi-Tag 场景。
 
 ### 关键技术决策
 
