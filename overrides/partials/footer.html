@@ -100,42 +100,11 @@
   </div>
 </footer>
 
-<!-- Busuanzi counter reset script -->
-<!-- 通过添加自定义参数来重置不蒜子计数器 -->
-<script>
-  (function() {
-    // 为不蒜子设置自定义站点 ID，从而重置计数
-    // 修改这个值可以重新开始计数
-    var customSiteId = 'tom-jerr-blog-2024-11-13'; // 使用唯一标识符
-    
-    // 覆盖不蒜子的默认行为，使用自定义 ID
-    if (typeof window.busuanzi !== 'undefined') {
-      window.busuanzi.site_id = customSiteId;
-    }
-    
-    // 监听不蒜子脚本加载
-    var checkBusuanzi = setInterval(function() {
-      if (typeof window.busuanzi !== 'undefined') {
-        clearInterval(checkBusuanzi);
-        window.busuanzi.site_id = customSiteId;
-        // 强制刷新计数
-        if (typeof window.busuanzi.fetch === 'function') {
-          window.busuanzi.fetch();
-        }
-      }
-    }, 100);
-    
-    // 10秒后停止检查
-    setTimeout(function() {
-      clearInterval(checkBusuanzi);
-    }, 10000);
-  })();
-</script>
 
 <!-- Website running time counter script -->
 <script>
   function updateWebTime() {
-    var startDate = new Date("2024/05/04 20:00:00");
+    var startDate = new Date("2025/05/04 20:00:00");
     var now = new Date();
     var diff = now.getTime() - startDate.getTime();
     
