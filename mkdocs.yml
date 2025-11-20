@@ -66,6 +66,7 @@ plugins:
       locale: en
       dirs:
         - blogs/posts
+        - notes/sglang
       show_total: true
       features:
         tags:
@@ -345,11 +346,11 @@ nav:
   - Blogs:
       - index: blogs/index.md
       - SGLang 专题:
-          - 一条 Request 在 SGLang 的前世今生: blogs/posts/一条 Request 在 SGLang 的前世今生.md
-          - SGLang Schedular 技术变迁: blogs/posts/SGLang Scheduler 技术变迁.md
-          - DP Attention: blogs/posts/DP Attention.md
-          - SGLang 的 Cache 设计: blogs/posts/SGLang 的 KV Cache.md
-          - 🚧 SGLang 中的 Speculative Decoding: blogs/posts/SGLang 中的 Speculative Decoding.md
+          - 一条 Request 在 SGLang 的前世今生: notes/sglang/一条 Request 在 SGLang 的前世今生.md
+          - SGLang Schedular 技术变迁: notes/sglang/SGLang Scheduler 技术变迁.md
+          - DP Attention: notes/sglang/DP Attention.md
+          - 从代码看 SGLang 的 KV Cache: notes/sglang/从代码看 SGLang 的 KV Cache.md
+          - 🚧 SGLang 中的 Speculative Decoding: notes/sglang/SGLang 中的 Speculative Decoding.md
       - PageAttention: blogs/posts/PageAttention.md
       - FlashAttention: blogs/posts/FlashAttention 原理 v1-v2.md
       - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md
