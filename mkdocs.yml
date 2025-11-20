@@ -215,9 +215,10 @@ nav:
   - Home: index.md
   - Notes:
       - index: notes/index.md
-      - SGLang:
-          - DP Attention: notes/sglang/DP Attention.md
-          - SGLang Schedular 技术变迁: notes/sglang/SGLang Scheduler 技术变迁.md
+      - Python:
+          - Python 中的装饰器: notes/python/Python 中的装饰器.md
+          - Python 中的并行: notes/python/Python 中的并行.md
+          - Asyncio 基础: notes/python/Asyncio.md
       - tiny-llm:
           - Group Query Attention: notes/tiny-llm/Group Query Attention.md
           - RMSNorm & MLP: notes/tiny-llm/RMSNorm & MLP.md
@@ -344,9 +345,11 @@ nav:
   - Blogs:
       - index: blogs/index.md
       - SGLang 专题:
+          - 一条 Request 在 SGLang 的前世今生: blogs/posts/一条 Request 在 SGLang 的前世今生.md
           - SGLang Schedular 技术变迁: blogs/posts/SGLang Scheduler 技术变迁.md
           - DP Attention: blogs/posts/DP Attention.md
           - SGLang 的 Cache 设计: blogs/posts/SGLang 的 KV Cache.md
+          - 🚧 SGLang 中的 Speculative Decoding: blogs/posts/SGLang 中的 Speculative Decoding.md
       - PageAttention: blogs/posts/PageAttention.md
       - FlashAttention: blogs/posts/FlashAttention 原理 v1-v2.md
       - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md

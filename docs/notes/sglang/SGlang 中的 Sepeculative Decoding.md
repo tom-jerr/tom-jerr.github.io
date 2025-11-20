@@ -24,6 +24,7 @@ LLM 是自回归（autoregressive）的：生成一个 token 要依赖前面的�
 
 1. **如何降低投机采样的 overhead？**
 2. **如何提升 Verify 阶段的接受率？**
+
 ## What is Speculative Decoding
 
 首先我们会介绍什么是推测解码，然后我们会概述下推测解码技术的发展历程
@@ -133,9 +134,9 @@ $$
 
 ---
 
-
-
 ## Eagle in SGLang
+
+
 
 ## Reference 
 [^spec1]: [Clover: Regressive Lightweight Speculative Decoding with Sequential Knowledge](https://arxiv.org/pdf/2405.00263)
