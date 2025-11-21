@@ -350,7 +350,7 @@ nav:
           - SGLang Schedular 技术变迁: notes/sglang/SGLang Scheduler 技术变迁.md
           - DP Attention: notes/sglang/DP Attention.md
           - 从代码看 SGLang 的 KV Cache: notes/sglang/从代码看 SGLang 的 KV Cache.md
-          - 🚧 SGLang 中的 Speculative Decoding: notes/sglang/SGLang 中的 Speculative Decoding.md
+          - 🚧 SGLang 中的 Speculative Decoding: notes/sglang/SGlang 中的 Speculative Decoding.md
       - PageAttention: blogs/posts/PageAttention.md
       - FlashAttention: blogs/posts/FlashAttention 原理 v1-v2.md
       - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md
