@@ -158,8 +158,8 @@ token_to_kv_pool = {
      
 4. Step 4：经过 Scheduler 调度后，modelrunner 进行模型真正执行，这里以 flash attention 作为后端为例
 
-	- 获取 metadata，比如多个序列 `cur_q_len`，`cur_q_len` 以及每个序列的 token 需要的 KV cache 索引
-	- 调用 `flash-attn.flash_attn_with_kvcache()`，将 page table 和 meta data 作为参数传入，就结束了 prefill 的过程
+    - 获取 metadata，比如多个序列 `cur_q_len`，`cur_q_len` 以及每个序列的 token 需要的 KV cache 索引
+    - 调用 `flash-attn.flash_attn_with_kvcache()`，将 page table 和 meta data 作为参数传入，就结束了 prefill 的过程
 ### Decode
 
 Decode 的流程实际上与 Prefill 相似，只是分配内存时，每个 token 只需要分配 1 个即可，其余操作基本相同
