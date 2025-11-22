@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "sglang/SGLang 中的并行.md",
+                "file": "sglang/SGLang 中的 TP + PP.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,7 +28,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "SGLang 中的并行"
+              "title": "SGLang 中的 TP + PP"
             }
           }
         ]
@@ -153,13 +153,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "sglang/SGLang 中的并行.md",
+                "file": "sglang/SGLang 中的 TP + PP.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of SGLang 中的并行"
+              "title": "Outline of SGLang 中的 TP + PP"
             }
           }
         ],
@@ -187,7 +187,7 @@
     "sglang/从代码看 SGLang 的 KV Cache.md",
     "sglang/大模型推理服务中的 Batching.md",
     "sglang/一条 Request 在 SGLang 的前世今生.md",
-    "sglang/SGLang 中的并行.md",
+    "sglang/SGLang 中的 TP + PP.md",
     "sglang/SGLang Scheduler Evolution.md",
     "sglang/SGLang Scheduler 技术变迁.md",
     "sglang/img/scenario1.png",
