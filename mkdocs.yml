@@ -67,6 +67,8 @@ plugins:
       dirs:
         - blogs/posts
         - notes/sglang
+        - notes/llm_inference
+        - notes/cuda
       show_total: true
       features:
         tags:
@@ -224,16 +226,6 @@ nav:
           - Group Query Attention: notes/tiny-llm/Group Query Attention.md
           - RMSNorm & MLP: notes/tiny-llm/RMSNorm & MLP.md
           - Batch Inference & KV Cache: notes/tiny-llm/Batching Inference & KV Cache.md
-      - cuda:
-          - Roofline & Basic Analysis: notes/cuda/Roofline & Basic Analysis.md
-          - Vector Add Optimization Example: notes/cuda/Vector Add Optimization Example.md
-      - LLM Inference:
-          - 不再更新: blogs/llm_inference/index.md
-          - Introduction for LLM Inference: blogs/llm_inference/Introduction.md
-          # - CUDA Optimization: blogs/llm_inference/cudaopt.md
-          - Parallelizatoin in ML System: blogs/llm_inference/parallelization.md
-          - Parallelization in LLM Inference: blogs/llm_inference/LLMparallelization.md
-          - PageAttention: blogs/llm_inference/pageattention.md
       - Active SLAM:
           - VINS 基础: paperreadings/activeslam/vins基础.md
           - Active SLAM 概述: paperreadings/activeslam/active slam.md
@@ -353,9 +345,18 @@ nav:
           - 从代码看 SGLang 的 KV Cache: blogs/posts/从代码看 SGLang 的 KV Cache.md
           - 🚧 SGLang 中的 Speculative Decoding: notes/sglang/SGlang 中的 Speculative Decoding.md
           - 🚧 SGLang 中的并行: notes/sgalng/SGLang 中的并行.md
-      - PageAttention: blogs/posts/PageAttention.md
-      - FlashAttention: blogs/posts/FlashAttention 原理 v1-v2.md
-      - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md
+      - LLM Inference:
+          - Attention & Transformers: notes/llm_inference/attention&transformer.md
+          - Transformer-Based LLM Architecture: notes/llm_inference/transformerbasedllm.md
+          - Introduction for LLM Inference: blogs/llm_inference/Introduction.md
+          - Parallelizatoin Concepts: notes/llm_inference/parallelization.md
+          - Parallelization in LLM Inference: notes/llm_inference/LLMparallelization.md
+          - PageAttention: blogs/posts/PageAttention.md
+          - FlashAttention: blogs/posts/FlashAttention 原理 v1-v2.md
+      - CUDA:
+          - GPU 内存系统演进: notes/cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md
+          - CUDA Optimization for LLM Inference: notes/cuda/cudaopt.md
+          - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md
       - 上篇：初识 Nebula Graph —— 向量类型支持: blogs/posts/上篇：初识 Nebula Graph —— 向量类型支持.md
       - 中篇：Vector 类型的 DDL & DML 适配: blogs/posts/中篇：Vector 类型的 DDL&DML 适配.md
       - 下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路: blogs/posts/下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路.md

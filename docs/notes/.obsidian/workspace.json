@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "sglang/SGLang 中的 TP + PP.md",
+                "file": "cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md",
                 "mode": "source",
                 "source": false,
                 "backlinks": true,
@@ -28,7 +28,7 @@
                 }
               },
               "icon": "lucide-file",
-              "title": "SGLang 中的 TP + PP"
+              "title": "GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径"
             }
           }
         ]
@@ -88,8 +88,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 239.5069465637207,
-    "collapsed": true
+    "width": 239.5069465637207
   },
   "right": {
     "id": "c267b0c1098f3a27",
@@ -153,13 +152,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "sglang/SGLang 中的 TP + PP.md",
+                "file": "cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of SGLang 中的 TP + PP"
+              "title": "Outline of GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径"
             }
           }
         ],
@@ -167,7 +166,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -183,15 +183,39 @@
   },
   "active": "a398b2116907b31d",
   "lastOpenFiles": [
+    "cuda/img/llm_dp.jpg",
+    "llm_inference/llmparallelexample.md",
+    "llm_inference/transformerbasedllm.md",
+    "llm_inference/img/zero3 copy.png",
+    "llm_inference/img/zero2 copy.png",
+    "llm_inference/img/zero copy.png",
+    "llm_inference/img/ZB-V.png",
+    "llm_inference/img/ZB-H2.png",
+    "llm_inference/img/ZB-H1.png",
+    "llm_inference/img/wrap_tile.png",
+    "llm_inference/img/wrap_contexts copy.png",
+    "llm_inference/img/warp_tile.png",
+    "llm_inference/img/value copy.png",
+    "llm_inference/vllm.drawio",
+    "llm_inference/parallelization.md",
+    "llm_inference/LLMparallelization.md",
+    "llm_inference/attention&transformer.md",
+    "llm_inference/Introduction.md",
+    "llm_inference/img",
+    "llm_inference/index.md",
+    "llm_inference",
+    "cuda/cudaopt.md",
+    "cuda/img/img",
+    "cuda/Vector Add Optimization Example.md",
+    "cuda/新 Vector Add 一步步优化.md",
+    "cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md",
+    "sglang/SGLang 中的 TP + PP.md",
     "sglang/SGlang 中的 Speculative Decoding.md",
     "sglang/从代码看 SGLang 的 KV Cache.md",
     "sglang/大模型推理服务中的 Batching.md",
     "sglang/一条 Request 在 SGLang 的前世今生.md",
-    "sglang/SGLang 中的 TP + PP.md",
     "sglang/SGLang Scheduler Evolution.md",
     "sglang/SGLang Scheduler 技术变迁.md",
-    "sglang/img/scenario1.png",
-    "sglang/img/continuous_batching.png",
     "sglang/SGlang 中的 Sepeculative Decoding.md",
     "python/Asyncio.md",
     "python/Python 中的并行.md",
@@ -202,27 +226,8 @@
     "TaskNotes/Views/tasks-default.base",
     "TaskNotes/Views/relationships.base",
     "TaskNotes/Views/mini-calendar-default.base",
-    "TaskNotes/Views",
-    "TaskNotes",
     "slam/毕设：面向复杂室内环境的无人机自主探索框架.md",
-    "python",
     "slam/Slam基础知识.md",
-    "slam",
-    "sglang/img/prepacking.png",
-    "sglang/img/arithmetic_intensity.png",
-    "sglang/img/prefill_decode.png",
-    "sglang/img/stall_free_scheduling.png",
-    "sglang/img/orca_bubble.png",
-    "sglang/img/chunked_prefill.png",
-    "sglang/img/memory_waste.png",
-    "sglang/img/orca2.png",
-    "sglang/DP Attention.md",
-    "tiny-llm/RMSNorm & MLP.md",
-    "cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md",
-    "().md",
-    "cuda/Vector Add Optimization Example.md",
-    "tiny-llm/Batching Inference & KV Cache.md",
-    "tiny-llm/Group Query Attention.md",
-    "6.s081/1-OS的隔离性.md"
+    "sglang/DP Attention.md"
   ]
 }

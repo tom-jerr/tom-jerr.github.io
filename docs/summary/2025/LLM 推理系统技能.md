@@ -1,106 +1,158 @@
 ## CUDA
-### 第 1 周：建立心智模型与内存优化（PMPP 基础篇）
+### 第 1 周：建立“Roofline”思维与内存这一生之敌
 
-**目标：** 能够写出正确的 CUDA 代码，并深刻理解“为什么慢”。
+**目标变化：** 不仅要会写，要学会用 **Nsight Compute (NCU)** 算账。一切优化始于“带宽利用率”。
 
-- **PMPP 重点章节：**
+- **理论升级 (PMPP + 官方文档)：**
     
-    - **Ch 1-3 (Introduction & Data Parallelism):** 快速过。搞懂 Grid, Block, Thread 的映射关系，以及 `idx = blockIdx.x * blockDim.x + threadIdx.x` 这种坐标变换。
+    - **Memory Hierarchy:** 重点看 Global Memory -> **L2 Cache** -> Shared Memory 的路径。理解 L2 Cache 在 LLM 推理（特别是 KV Cache）中的巨大作用。
         
-    - **Ch 4 (Memory Architecture):** **精读。** 这是面试的重灾区。必须搞懂 Global Memory 的 Coalesced Access（合并访问）。
+    - **Coalesced Access (合并访问):** 依然是核心，必须死磕。
         
-    - **Ch 5 (Performance Considerations):** **精读。** 理解 Bandwidth 瓶颈和 Compute 瓶颈的区别。
+    - **Roofline Model:** 必须学会算：`理论带宽 * 实测算力 / 理论算力`。
         
-- **实战任务（必须手写）：**
+- **实战任务 (现代化改造)：**
     
-    1. **Vector Add:** 写一个最简单的向量加法，分别尝试调整 Block Size (32, 128, 256, 512, 1024)，观察耗时变化。
+    1. **Vector Add (带宽测试版):**
         
-    2. **Naive SGEMM (矩阵乘法):** 写一个最朴素的 `C = A * B` (Global Memory 直接读写)。
+        - 写完后，用 NCU 跑一下，查看 **"Memory Throughput"**。
+            
+        - **KPI:** 你的 Kernel 能跑到 GPU 理论带宽（比如 3090 是 936GB/s）的 80% 以上吗？如果不到，为什么？
+            
+    2. **Naive SGEMM:**
         
-    3. **关键练习：** 故意写一个**非合并访问**（Memory Uncoalesced）的 Kernel，然后写一个**合并访问**的 Kernel，用 `nvprof` 或 Nsight Compute (NCU) 截图对比两者的吞吐量。**（面试时这是绝佳的谈资）**
-        
+        - 写个最烂的版本。
+            
+        - **关键练习升级:** 不仅对比吞吐量，还要打开 NCU 的 **Source View**，看看到底是哪一行代码导致了 Memory Stall（内存停顿）。
+            
 - **面试必杀技储备：**
     
-    - 能画出 SM (Streaming Multiprocessor) 的简图。
+    - 能画出 SM 简图（包含 Tensor Core 和 L1/Shared Mem）。
         
-    - 能解释为什么 Warp Divergence（线程束分歧）会降低性能。
-        
-
----
-
-### 第 2 周：攻克计算密集型算子 —— SGEMM 优化（PMPP 进阶篇）
-
-**目标：** 通过优化矩阵乘法（GEMM），掌握 Shared Memory 和寄存器分块。这是推理加速的基石。
-
-- **PMPP 重点章节：**
-    
-    - **Ch 6 (Matrix Multiplication):** **圣经级章节，反复读。** 理解 Tiling（分块）技术如何减少 Global Memory 访问。
-        
-- **实战任务（SGEMM 进化之路）：**
-    
-    - **V1: Shared Memory Tiling:** 将矩阵块加载到 Shared Memory 中再计算。解决 Bank Conflicts（PMPP 中有讲 Padding）。
-        
-    - **V2: Register Tiling (2D Register Blocking):** 每个线程不再只算 1 个点，而是算 4x4 或 8x8 的小块，利用寄存器极高的带宽。
-        
-    - **V3: Vectorized Load:** 使用 `float4` 指令从 Global Memory 读取数据（一条指令读128位），极大提升带宽利用率。
-        
-- **关键工具学习：**
-    
-    - 学习使用 **Nsight Compute (NCU)**。不要只看运行时间，要学会看 **"Memory Throughput"** 和 **"Compute Throughput"**。
-        
-    - **面试题预演：** “你的 Kernel 现在的瓶颈在哪里？是访存还是计算？Occupancy 是多少？”
+    - **新增：** 能口述“为什么 Uncoalesced Memory Access 会导致带宽浪费？”（答案要涉及 Transaction 的 32 字节/128 字节粒度）。
         
 
 ---
 
-### 第 3 周：攻克访存密集型算子 —— Softmax/LayerNorm（LLM 核心）
+### 第 2 周：从 CUDA Core 跨越到 Tensor Core (最痛苦但也最重要的一周)
 
-**目标：** 掌握 Reduction（规约）算法和 Warp Shuffle 原语。LLM 推理中，除了矩阵乘，剩下的瓶颈全在这里。
+**目标变化：** 放弃纯 CUDA Core 优化的执念，拥抱 **WMMA** 和 **Async Copy**。这是实习面试的**分水岭**。
 
-- **PMPP 重点章节：**
+- **理论升级 (跳出 PMPP)：**
     
-    - **Ch 10 (Reduction):** 学习并行求和、求最大值的各种优化策略（避免 Warp Divergence，利用 Shared Memory）。
+    - **Tensor Core API:** 学习 C++ 接口 `nvcuda::wmma`。理解 Fragment（片段）的概念：数据必须先加载到 Fragment 才能进 Tensor Core。
         
-- **补充知识点（PMPP 可能讲得不够深）：**
+    - **Async Copy (`cp.async`):** 学习如何绕过寄存器，直接从 Global Memory 搬运到 Shared Memory。这是现代 GPU 掩盖延迟的神器。
+        
+- **实战任务 (SGEMM 现代化进化之路)：**
     
-    - **Warp Shuffle Instructions (`__shfl_down_sync`):** 现在的 GPU 优化 Reduction 不再完全依赖 Shared Memory，而是用寄存器在 Warp 内直接通信。去搜 Nvidia 官方博客或文档学习这个 API。
+    - **V1: Shared Memory Tiling (FP32):** 这一步保留，为了理解分块原理。解决 Bank Conflicts。
+        
+    - **V2: Tensor Core GEMM (FP16):** **(核心新增)**
+        
+        - 将数据类型改为 `half` (FP16)。
+            
+        - 使用 `wmma::load_matrix_sync`, `wmma::mma_sync`, `wmma::store_matrix_sync` 实现矩阵乘。
+            
+        - **KPI:** 此时你的性能应该轻松碾压 V1 版本。
+            
+    - **V3: Double Buffering + Async Copy:** **(高阶选做)**
+        
+        - 在 V2 的基础上，尝试用 `cp.async` 预取下一块数据。即使写不出来，也要看懂相关代码逻辑。
+            
+- **面试题预演：**
+    
+    - “Tensor Core 计算的时候，SM 在干什么？”（答案：SM 的 INT32 单元可以并行做地址计算/指针移动，这就是并行的魅力）。
+        
+
+---
+
+### 第 3 周：Memory-Bound 算子与 Warp 魔法
+
+**目标变化：** 针对 LLM 的 **Softmax** 和 **RMSNorm** 进行针对性训练。
+
+- **理论升级：**
+    
+    - **Warp Primitives:** 彻底搞懂 `__shfl_down_sync` (归约用) 和 `__shfl_xor_sync` (蝴蝶交换用)。
+        
+    - **Online Softmax:** 理解如何在**不知道全局最大值**的情况下计算 Softmax（FlashAttention 的数学基础）。
         
 - **实战任务：**
     
-    1. **Parallel Reduction:** 实现一个求数组 Sum 或 Max 的 Kernel。
+    1. **Warp Reduction:** 写一个 Kernel，一个 Warp 内 32 个线程求和，**不使用 Shared Memory**，只用 Shuffle 指令。
         
-    2. **Softmax Kernel:** 结合 Reduction (求Max) -> Exp -> Reduction (求Sum) -> Div。
+    2. **RMSNorm (Llama 同款):**
         
-        - **进阶要求：** 实现 **Online Softmax**（FlashAttention 的基础），防止数值溢出，且只遍历一次数据。
+        - 实现公式：$x / \sqrt{\text{mean}(x^2) + \epsilon} * \gamma$
             
-    3. **RMSNorm / LayerNorm:** 尝试写一个简单的 LayerNorm Kernel。
+        - 技巧：输入数据通常是 `float4` 加载，先算出平方和，做一次 Warp Reduce，然后广播结果，最后计算输出。
+            
+    3. **Online Softmax:**
         
+        - 尝试在一个 Kernel Pass 内完成 Softmax 计算。
+            
+        - **关键点:** 数值稳定性处理（减去 Max 值）。
+            
 
 ---
 
-### 第 4 周：LLM 特性与模拟面试（综合提升）
+### 第 4 周：LLM 综合实战与简历包装
 
-**目标：** 将知识串联，了解前沿技术，准备简历项目。
+**目标变化：** 将前三周的积木拼成一个“微型推理引擎”。
 
-- **PMPP 选读：** 此时书已经是参考书了，不需要通读。
+- **理论知识 (LLM 特供)：**
     
-- **必须补充的 LLM 知识（PMPP 里没有）：**
+    - **FlashAttention:** 不要只看博客，要看 **FlashAttention V1 的伪代码**。理解 Tiling Q/K/V 的循环顺序：`Outer Loop: K, V blocks; Inner Loop: Q blocks` (或者反过来，取决于具体实现)。
+        
+    - **Quantization (量化):** 了解 **W8A16** (权重 INT8，激活 FP16)。知道 Kernel 里需要把 INT8 权重转换回 FP16 再计算（De-quantization）。
+        
+- **最终项目 (GitHub: Tiny-LLM-CUDA):**
     
-    - **FlashAttention 原理：** 找一篇好的博客（如知乎上的解析），理解它如何通过 Tiling Q, K, V 来利用 SRAM 计算，从而减少 HBM 访问。你需要能口述其逻辑。
+    - **结构建议：**
         
-    - **量化（Quantization）：** 理解 Int8/FP16 的区别。了解 Weight-Only Quantization (W8A16) 是什么。
+        Plaintext
         
-    - **Tensor Core:** 只需要知道它存在，以及如何用 `wmma` API 调用。不需要精通，但要知道它比 CUDA Core 快在哪（一次指令算一个 16x16 矩阵块）。
+        ```
+        Tiny-LLM-CUDA/
+        ├── 01_basics/
+        │   └── vec_add_profiled.cu  (附带 NCU 截图)
+        ├── 02_gemm_tensorcore/
+        │   └── wmma_gemm_fp16.cu    (展示你懂 Tensor Core)
+        ├── 03_ops/
+        │   ├── rms_norm_shfl.cu     (展示你懂 Warp Shuffle)
+        │   └── online_softmax.cu    (展示你懂 LLM 算子特性)
+        └── README.md
+        ```
         
-- **最终项目（简历亮点）：**
+    - **README 写法：**
+        
+        - 不要只贴代码。要贴**图表**。
+            
+        - _Case Study:_ "在 RMSNorm 中，通过将 Shared Memory Reduction 替换为 Warp Shuffle，Kernel Latency 从 10us 降低到了 2us，带宽利用率提升至 90%。"
+            
+
+---
+
+### 每日时间分配建议 (高强度版)
+
+- **前 3 天 (周一至周三):** 痛苦地死磕代码。比如这就写一个 `wmma_gemm`，写不出来就去抄 NVIDIA 官方 Sample，然后一行行注释读懂。
     
-    - 整理你前三周的代码，建一个 GitHub 仓库，起名如 `Tiny-CUDA-LLM-Ops`。
-        
-    - 包含：优化过的 SGEMM、Softmax、LayerNorm。
-        
-    - **关键：** 写一个 `README.md`，放上你的**性能对比图**（Baseline vs Optimized vs PyTorch/CuBLAS）。
-        
-    - _例如：“通过使用 Shared Memory 和 float4 向量化，我的 SGEMM 性能达到了 CuBLAS 的 80%。”_ —— 这句话在面试中非常有分量。
+- **周四:** **Profile Day。** 打开 NCU，对着你的 Kernel 找红线（瓶颈）。
+    
+- **周五:** **Refactor Day。** 根据 NCU 的建议优化代码（比如加 `#pragma unroll`，或者改一下 Block Size）。
+    
+- **周末:** 整理 GitHub 和 博客/笔记。面试官很喜欢看“优化日志”。
+    
+
+### 总结：为什么这个 V2 计划更强？
+
+原计划让你成为一个“扎实的 CUDA 工程师”。
+
+V2 计划让你成为一个**“可以直接上手 vLLM/TensorRT-LLM 开发的实习生”**。
+
+在面试中，当你随口说出：“我之前在写 GEMM 时，发现从 Global Memory 读数据如果不由 cp.async 预取，Tensor Core 就会因为数据饥饿而 Stall...”
+
+面试官就知道，你是自己人。
 
 ## SGLang
 
