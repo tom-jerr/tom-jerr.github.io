@@ -111,7 +111,8 @@ Chunked Prefill [^chunk]的核心思想是：**把长 Prompt 把它切成小块�
      - `req_pool_indices`  指向包含了完整 KV 历史的映射表。
 5. **Attention 执行 (`FlashAttentionBackend`)**
    调用  `flash_with_kv_cache()`： - Attention Kernel 会读取  `req_pool_indices`  获取 KV Cache 的物理地址。 - 对于本次 chunk 的 Query，它会计算与  **Self (本次 chunk 的 KV)**  的 Attention。
-   `python
+
+   ```python
 	flash_attn_with_kvcache(
                 q=q.contiguous().view(-1, layer.tp_q_head_num, layer.head_dim),
                 k_cache=key_cache,
@@ -131,7 +132,7 @@ Chunked Prefill [^chunk]的核心思想是：**把长 Prompt 把它切成小块�
                 num_splits=self.num_splits,
                 **kwargs,
             )
-	`
+	```
 
 ---
 
@@ -204,9 +205,7 @@ Chunked Prefill [^chunk]的核心思想是：**把长 Prompt 把它切成小块�
   - 总长度 = $I+N - 1$。
   - `prefix_len` = 总长度 - 1 = $I+N−1$。
   - delta 必须为  **0**。
-- **代码对应**：[delta = 0](vscode-file://vscode-app/c:/Users/lzy/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-browser/workbench/workbench.html)。
--
-
+- **代码对应**：`delta = 0`。
 #### Summary
 
 在 Overlap 模式下，当 Scheduler 安排下一个 Batch 时，上一个 Batch 刚刚生成的 Token 还没有更新到  `req.output_ids`  中，即 **`req.output_ids` 的更新有一个 step 的延迟**
@@ -226,7 +225,7 @@ SGLang 使用了 PrefillAdder 进行 stall-free 调度，一个 Prefill 请求�
    - 一旦决定 Chunk，它会贪婪地消耗掉**所有**剩余的  `rem_chunk_tokens`。
    - `budget_state()`  检测到 Token 耗尽，返回  `OTHER`，导致调度循环立即终止。
    - 因此，Chunked Request 后面不可能再有任何请求加入。最终结果是  `[Chunked_Req]`。
-3. 不可能出现  `[Full_Req, Chunked_Req]` 或者 `[Chunked_Req, Chunked_Req]`  这样的组合，因为如果第一个是 Full Req，第二个放不下时会被直接拒绝（而不是被 Chunk 进来）。
+1. **不可能出现  `[Full_Req, Chunked_Req]` 或者 `[Chunked_Req, Chunked_Req]`  这样的组合**，因为如果第一个是 Full Req，第二个放不下时会被直接拒绝（而不是被 Chunk 进来）。
 
 ```python
 def add_one_req(
@@ -304,7 +303,7 @@ def budget_state(self):
    - 调用 `flash_with_kv_cache()`
    - 两者在同一个 Kernel Launch 中完成计算，实现了计算资源的流水线并行，填补了 Decode 阶段 GPU 计算能力的空闲。
 
-## Questions on Problems
+## Q & A
 
 ### 1. SGLang 调度策略是 Prefill 优先吗？
 

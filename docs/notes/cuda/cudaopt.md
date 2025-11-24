@@ -174,9 +174,142 @@ CUDA 将计算任务组织成一个三级层次结构 。这是一个由程序�
 
 这个映射关系是层级化的：`Grid -> GPU`，`Block -> SM`，`Thread -> Warp -> CUDA核心`
 
+## Roofline 模型
+
+Roofline 模型（屋顶线模型）是一种用来**分析程序性能瓶颈**（计算受限还是带宽受限）的方法。  
+它把**计算性能**（FLOPs/s）和**访存性能**（Bytes/s）联系在一起，。以可视化的方式展示性能上限
+
+$$
+Achievable \space FLOPs=min(AI×Memory\space BW,Peak FLOPs)
+$$
+
+![](img/roofline.png)
+
 ## CUDA Kernel 性能调优
 
-- [一步步实现 CUDA Vector Add 优化](https://tom-jerr.github.io/blogs/posts/Vector%20Add%20Optimization%20Example/)
+
+根据 Roofline 模型，算子分为 Compute-Bound 和 Memory-Bound 型，所以我们需要分开讨论，但实际上在优化过程中，这两种瓶颈会交替出现😭
+
+### Memory-Bound
+
+#### 1. 指令层级：指令发射效率 (Instruction Issue Efficiency)
+
+这是 `float4` 优化的直接作用域。
+
+- **LSU (Load Store Unit) 压力：**
+    
+    - **Scalar (`float`):** 搬运同样多的数据，需要发射 **4 倍** 的指令数。这会大量占用前端（Fetch/Decode）带宽，并增加 LSU 维护 In-flight 状态的开销。
+        
+    - **Vectorized (`float4`):** **单指令高吞吐**。一条指令即可搬运 128-bit 数据。LSU 队列占用少，更容易维持流水线饱和。
+        
+    - _修正点：_ 即使是标量访问，如果是 Coalesced 的，Warp 也只会生成 1 个 Transaction，但需要 **4 条指令** 才能完成 4 个元素的加载。
+        
+- **指令发射延迟掩盖 (Issue Latency Hiding)：**
+    
+    - **气泡问题：** 指令发射有固有延迟。如果每条指令搬运的数据量太小（如 4 Bytes），指令发射的速度可能跟不上内存总线的消耗速度，导致总线出现“空闲气泡”。
+        
+    - **优势：** `float4` (16 Bytes/thread) 让每次发射的“含金量”更高，更容易填满内存管道。
+        
+
+#### 2. 数据层级：内存级并行度 (MLP, Memory Level Parallelism)
+
+这是决定带宽上限的关键软件策略。
+
+- **原理：** HBM 延迟极高 (~600 cycles)。为了掩盖延迟，必须让总线上同时飞着足够多的请求 (In-flight Requests)。
+    
+- **优化手段：** **循环展开 (Loop Unrolling)**。
+    
+    - _Bad:_ `Load -> Use -> Load -> Use` (串行依赖，延迟无法掩盖)。
+        
+    - _Good:_ `Load1 -> Load2 -> Load3 -> Load4 ... -> Use1` (并行发射，一次等待，全部返回)。
+        
+
+#### 3. 硬件层级：传输粒度与利用率 (Transaction & Utilization)
+
+即使软件写得好，硬件机制也可能导致浪费。
+
+- **扇区利用率 (Sector Utilization):**
+    
+    - **机制：** DRAM 到 L2 的最小传输粒度是 **32 Bytes (Sector)**。
+        
+    - **浪费：** 如果你只读 1 个 Byte (`char`) 且未打包，硬件也被迫搬运 32 Bytes。**有效带宽 (Effective Bandwidth)** 只有 1/32。
+        
+    - **对策：** 对于小数据类型（INT8/FP16），必须使用打包对齐（Pack Alignment）访问。
+        
+- **地址对齐 (Address Alignment):**
+    
+    - **机制：** 硬件要求访问地址按 32B 或 128B 对齐。
+        
+    - **后果：** 如果指针地址偏移（Misaligned），一次 128 Bytes 的读取可能会跨越两个 128B 块，导致硬件必须发起 **2 个 Transactions**。这会直接导致带宽性能减半。
+        
+
+#### 4. 架构层级：物理冲突 (Physical Conflict)
+
+通常由硬件解决，但在极端优化时需注意。
+
+- **分区冲突 (Partition Camping / Channel Conflict):**
+    
+    - **原理：** 显存被划分为多个物理分区（Memory Controllers）。
+        
+    - **现象：** 特定的访问步长（Stride，通常是 2 的幂次）可能导致所有请求集中打向同一个 Controller，造成局部拥堵（Serialization），而其他 Controller 空闲。
+        
+    - **现状：** 现代 GPU (Pascal+) 已通过物理地址哈希（Address Swizzling）极大缓解了此问题，但在写极限 Kernel 时仍需避免完美的 2 的幂次跨度。
+### Compute-Bound
+
+#### 1. 使用 Tensor Cores 
+这是现代 LLM 推理加速的**绝对核心**。
+- **原理：**
+    - **CUDA Core (FP32):** 每个时钟周期执行 1 次 `FMA (a*b+c)`。
+    - **Tensor Core (FP16):** 每个时钟周期执行 1 次完整的 `4x4` 或 `16x8` 矩阵乘加。
+    - **差距：** A100 上，Tensor Core 的吞吐量是 CUDA Core 的 **16 倍**以上。
+- **优化手段：**
+    - 抛弃 `c = a * b + c` 的标量写法。
+    - 使用 `nvcuda::wmma` (Warp-level Matrix Multiply Accumulate) 或 PTX `mma` 指令。
+    - **数据布局 (Layout):** Tensor Core 要求数据在 Shared Memory 或寄存器中满足特定的布局（如 fragment），否则为了对齐数据花费的指令会抵消加速效果。
+#### 2. 降低精度 (Precision Reduction)
+计算吞吐量与数据类型的位宽成反比
+- **原理：** 硬件处理位数越少，并行度越高。
+- **层级：**
+    - **FP32:** 基准 (1x)
+    - **TF32 (Ampere+):** Tensor Core 专用，19 bits，吞吐量通常是 FP32 的 high-speed 模式。
+    - **FP16 / BF16:** 吞吐量是 FP32 的 **2x** (CUDA Core) 或更高 (Tensor Core)。
+    - **INT8:** 吞吐量是 FP16 的 **2x**。
+- **优化手段：** 在 LLM 推理中，权重（Weight）和激活（Activation）通常量化为 **FP16** 或 **INT8/W8A16**。
+#### 3. 指令级并行 (ILP, Instruction Level Parallelism)
+
+即使没有 Tensor Core，SM 内部也有流水线优化空间。
+- **原理：** 算术指令（如 FMA）有延迟（Latency，比如 4-6 个周期）
+- **优化手段：** **循环展开 (Loop Unrolling)**。这能让每个线程同时维持多个“In-flight”的计算指令
+    ```cpp
+    // 展开后，编译器会交错发射指令
+    a1 = b1 * c1; // 发射
+    a2 = b2 * c2; // 发射，不需要等 a1
+    a3 = b3 * c3; // 发射
+    // ... 此时 ALU 流水线被填满
+    ```
+    
+#### 4. 双发射 (Dual Issue) / 并发执行
+
+
+- **原理：** 现代 SM（Ampere/Ada/Hopper）通常包含：
+    - FP32 计算单元
+    - INT32 计算单元
+    - 这两者在某些架构上是**独立**的，可以**同时执行**。
+- **场景：**
+    - `val = val * x + y` (FP32 计算)
+    - `ptr += stride` (INT32 指针计算/循环计数)
+        
+- **优化手段：** 编写 Kernel 时，如果能让浮点计算（业务逻辑）和整数计算（地址索引）交织在一起，SM 可以**在一个周期内同时发射这两条指令**，从而掩盖掉索引计算的开销。
+#### 5. 使用 FMA (Fused Multiply-Add)
+
+- **原理：** `a * b + c`。
+    - 如果不优化：`MUL` (乘法) + `ADD` (加法) = 2 条指令。
+    - 优化后：`FFMA` (Fused FMA) = 1 条指令。
+- **优化手段：** 编译器通常会自动优化。但在手写 intrinsic 时，确保调用 `__fmaf_rn(a, b, c)` 而不是分开写。
+
+### Examples
+
+- **Memory-Bound Vector Add**：[一步步实现 CUDA Vector Add 优化](https://tom-jerr.github.io/blogs/posts/Vector%20Add%20Optimization%20Example/)
 
 ## CUDA 常用优化技巧
 

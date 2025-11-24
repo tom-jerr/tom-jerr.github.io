@@ -1,0 +1,22 @@
+filters:
+  and:
+    - file.hasTag("task")
+views:
+  - type: tasknotesCalendar
+    name: Agenda
+    order:
+      - status
+      - priority
+      - due
+      - scheduled
+      - projects
+      - contexts
+      - file.tags
+      - blockedBy
+      - file.name
+      - recurrence
+      - complete_instances
+    calendarView: listWeek
+    startDateProperty: file.ctime
+    listDayCount: 7
+    titleProperty: file.basename

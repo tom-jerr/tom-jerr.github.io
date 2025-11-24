@@ -308,7 +308,7 @@ $$
 
 #### Parallelize One Operator
 
-- **Manual**: 枚举所有可能的划分方式，选择在你环境限制下最优的划分方式
+- **Manual**: 枚举所有可能的划分方式，选择在环境限制下最优的划分方式
   ![](img/parallelize_op.png)
 
 #### Re-partition in Tensor Parallelism
