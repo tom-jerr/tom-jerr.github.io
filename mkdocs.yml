@@ -97,24 +97,16 @@ plugins:
         - academy.md
         - links.md
         - changelog.md
-      date_format: '%Y-%m-%d'  # Date format strings (e.g., %Y-%m-%d, %b %d, %Y)
-      time_format: '%H:%M:%S'  # Time format strings (valid only if type=datetime)
-      show_created: true       # Show creation date: true false, default: true
-      show_updated: true       # Show last updated date: true false, default: true
-      show_author: true        # Show author: true(avatar) text(text) false(hidden), default: true
 
-  - ai-summary:
-      ai_service: "deepseek"          
-      # local_enabled: true
-      enabled_folders:
-        - docs                       # 处理 docs 文件夹
-      exclude_patterns:
-        - index.md                    # 排除 index.md 文件
-        - academy.md
-        - links.md
-        - changelog.md
   - statistics:
       words_per_minute: 200
+  - ai-summary:
+      api: "tongyi"
+      model: "qwen-turbo"
+      ignore_code: true
+      cache: true
+      cache_dir: "./"
+      prompt: "Please help me summarize the following content into an abstract within 800 words: "
 
 markdown_extensions:
   - abbr
@@ -189,6 +181,7 @@ extra_css:
   - css/flink.css
   - css/tasklist.css
   - css/footer-stats.css
+  - css/ai-summary.css
 
 extra:
   social:
@@ -371,6 +364,7 @@ nav:
           - Parallelization in LLM Inference: notes/llm_inference/LLMparallelization.md
           - PageAttention: blogs/posts/PageAttention.md
           - FlashAttention: blogs/posts/FlashAttention 原理 v1-v2.md
+          - 大模型推理服务中的 Batching: notes/sglang/大模型推理服务中的 Batching.md
       - CUDA:
           - GPU 内存系统演进: notes/cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md
           - CUDA Optimization for LLM Inference: notes/cuda/cudaopt.md

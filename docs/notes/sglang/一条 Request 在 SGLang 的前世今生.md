@@ -2,12 +2,20 @@
 title: 一条 Request 在 SGLang 的前世今生
 tags:
   - LLMInference
-date: 2025/11/20
+created: 2025-11-25
+ai_summary_lang: zh
+include:
+   - ai-summary
+ai-summary-config:
+    api: "tongyi"
+    model: "qwen-turbo"
+    prompt: "帮我把这篇文章总结为500字以内的摘要："
 ---
 
 # 一条 Request 在 SGLang 的前世今生
 
-> 这里我们设置一些参数更接近真实的推理场景，启用 `mixed chunked` 参数，prefill 开启 `chunked_prefill`，cache 使用 `page_size > 1`，scheduler 使用 `overlap scheduler`
+ > [!NOTE] 
+ > 这里我们设置一些参数更接近真实的推理场景，启用 `mixed chunked` 参数，prefill 开启 `chunked_prefill`，cache 使用 `page_size > 1`，scheduler 使用 `overlap scheduler`
 
 **Continuous Batching** 的重点在 Scheduler[^sglang]，**Page Attention** 重点在算子层以及对应的封装，所以我们主要关注这两部分。在开始前，我们提出几个问题，在我们梳理完整个代码流程后再来回答：
 

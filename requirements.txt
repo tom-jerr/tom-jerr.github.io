@@ -5,8 +5,8 @@ mkdocs-minify-plugin
 mkdocs-glightbox
 mkdocs-video
 mkdocs-rss-plugin
-mkdocs-document-dates
-mkdocs-ai-summary-wcowin
+mkdocs-document-dates>=3.4.9
 mkdocs-statistics-plugin
-mkdocs-document-dates
+dashscope
+mkdocs-ai-summary
 #rich # for mkdocs-toc-plugin

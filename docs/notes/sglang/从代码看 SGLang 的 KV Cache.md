@@ -7,6 +7,7 @@ tags:
 
 # 从代码看 SGLang 的 KV Cache
 
+> [!INFO]
 > 建议阅读 [SGLang Scheduler 技术变迁](https://tom-jerr.github.io/blogs/posts/SGLang%20Scheduler%20%E6%8A%80%E6%9C%AF%E5%8F%98%E8%BF%81/)后进行阅读，效果更好
 
 实际上 SGLang 的 Cache 管理由三个组件构成 `tree_cache` 、 `req_to_token_pool` 和 `token_to_kv_pool_allocator` 。

@@ -38,13 +38,17 @@ jobs:
       #     pip install ./mkdocs-document-dates --no-build-isolation
       #     rm -rf mkdocs-document-dates
       - run: pip cache purge
+      # 先进行一次严格构建，提前暴露错误
+      - name: Build (strict)
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+        run: mkdocs build --verbose
       # 使用 AI 摘要部署
       - name: 使用 AI 摘要部署
         env:
-          AI_SUMMARY_CI_ENABLED: 'true'
-          AI_SUMMARY_CACHE_ENABLED: 'true'
-          AI_SUMMARY_CACHE_EXPIRE_DAYS: '300'
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
         run: mkdocs gh-deploy --force
       # 自动提交 AI 缓存文件
       # - name: 自动提交 AI 缓存

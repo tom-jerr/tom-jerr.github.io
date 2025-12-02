@@ -4,3 +4,5 @@ site
 TaskNotes/
 .env
 .ai_cache
+docs/assets
+_ai_summary*.json

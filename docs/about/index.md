@@ -50,3 +50,7 @@ icon: /fontawesome/solid/face-smile-wink
     ---
 
     In my spare time, I enjoy listening to music, watching anime, and reading. Occasionally, I write about these hobbies on my blog to share my thoughts✍.
+
+=== "Acadamy Page 🎓"
+
+    欢迎访问我的[主页🎓](../academy.md)，了解我的教育背景、项目经验和技能专长。如果你对我的经历感兴趣，或者想进一步交流，欢迎随时联系我！
