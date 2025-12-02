@@ -1,0 +1,398 @@
+site_name: Want to be a MlSys wizard
+site_author: tom-jerr
+site_url: https://tom-jerr.github.io
+site_description: Experience the journey of a database wizard, from the basics to advanced topics.
+repo_url: https://github.com/tom-jerr/tom-jerr.github.io/
+repo_name: tom-jerr's Site
+copyright: Copyright &copy; 2025 - Present <a href="https://github.com/tom-jerr/" target="_blank" rel="noopener">tom-jerr</a>
+
+theme:
+  name: material
+  language: en
+  custom_dir: overrides
+
+  features:
+    - content.code.annotate
+    - content.code.copy
+    - content.code.select
+    - content.footnote.tooltips
+    - content.tabs.link
+    - header.autohide
+    # - navigation.instant.progress
+    # - navigation.instant.prefetch
+    # - navigation.instant.preview
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.top
+    - navigation.path
+    # - navigation.prune
+    - navigation.indexes
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default # 日间模式
+      primary: white # 上方的
+      accent: indigo # 链接等可交互元件的高亮色
+      toggle:
+        icon: material/brightness-7 # 图标
+        name: light mode # 鼠标悬浮提示
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate # 夜间模式
+      primary: black
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: dark mode
+
+  font:
+    text: JetBrains Mono
+
+  favicon: img/rocket.png
+
+  icon:
+    logo: material/coffee
+    repo: fontawesome/brands/git-alt
+    edit: material/pencil
+
+  static_templates:
+    - 404.html
+
+plugins:
+  - blogging:
+      locale: en
+      dirs:
+        - blogs/posts
+        - notes/sglang
+        - notes/llm_inference
+        - notes/cuda
+      show_total: true
+      features:
+        tags:
+          index_page: tags/
+          insert: top
+  - callouts
+  - glightbox:
+      width: 80%
+  - minify:
+      minify_html: true
+  - mkdocs-video:
+      video_muted: True
+      video_controls: True
+      mark: "video"
+  - rss:
+      enabled: !ENV [CI, false]
+      use_material_social_cards: false
+  - search
+  - document-dates:
+      position: top            # Display position: top(after title) bottom(end of document), default: top
+      type: date               # Date type: date datetime timeago, default: date
+      exclude:                 # List of excluded files
+        - temp.md                  # Example: exclude the specified file
+        - blog/*                   # Example: exclude all files in blog folder, including subfolders
+        - index.md                    # 排除 index.md 文件
+        - academy.md
+        - links.md
+        - changelog.md
+      date_format: '%Y-%m-%d'  # Date format strings (e.g., %Y-%m-%d, %b %d, %Y)
+      time_format: '%H:%M:%S'  # Time format strings (valid only if type=datetime)
+      show_created: true       # Show creation date: true false, default: true
+      show_updated: true       # Show last updated date: true false, default: true
+      show_author: true        # Show author: true(avatar) text(text) false(hidden), default: true
+
+  - ai-summary:
+      ai_service: "deepseek"          
+      # local_enabled: true
+      enabled_folders:
+        - docs                       # 处理 docs 文件夹
+      exclude_patterns:
+        - index.md                    # 排除 index.md 文件
+        - academy.md
+        - links.md
+        - changelog.md
+  - statistics:
+      words_per_minute: 200
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - footnotes
+  - meta
+  - md_in_html
+  - nl2br
+  - pymdownx.arithmatex: # latex支持
+      generic: true
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      options:
+        custom_icons:
+          - overrides/.icons
+  - pymdownx.highlight: # 代码块高亮
+      anchor_linenums: true
+      auto_title: true # 显示编程语言名称
+      linenums: true # 显示行号
+      linenums_style: pymdownx-inline
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.magiclink
+  - pymdownx.saneheaders
+  - pymdownx.snippets
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tabbed:
+      alternate_style: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tilde
+  - sane_lists
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 4
+
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+  # - https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js
+  # - https://busuanzi.icodeq.com/busuanzi.pure.mini.js
+  - js/mathjax.js
+  - https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js
+  - https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js
+
+  # - js/toc.js
+
+extra_css:
+  - css/custom.css
+  - https://gcore.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css
+  - https://gcore.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css
+  # - css/fold_toc.css
+  - css/card.css
+  - css/flink.css
+  - css/tasklist.css
+  - css/footer-stats.css
+
+extra:
+  social:
+    - icon: /fontawesome/brands/github
+      link: https://github.com/tom-jerr/
+      name: GitHub
+    - icon: /fontawesome/brands/qq
+      link: /img/qq.png
+      name: QQ
+    - icon: /fontawesome/brands/weixin
+      link: /img/wechat.png
+      name: 微信
+    - icon: /fontawesome/brands/x-twitter
+      link: https://x.com/tom_jerry_jack
+      name: X
+    - icon: /fontawesome/brands/zhihu
+      link: https://www.zhihu.com/people/chen-wen-de-jian-ke
+      name: Zhihu
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:2584074296@qq.com
+      name: send email to me!
+    # - icon: fontawesome/solid/rss
+    #   link: /feed_rss_created.xml
+    #   name: RSS created
+    # - icon: fontawesome/solid/rss
+    #   link: /feed_rss_updated.xml
+    #   name: RSS updatedfeed_rss_created.xml
+
+  analytics:
+    provider: google
+    property: G-NKJWZM1JHX
+    feedback:
+      title: Support Me!
+      ratings:
+        - icon: fontawesome/regular/hand-back-fist
+          name: Support Me!
+          data: 1
+          note: >-
+            <center> 难道说……你愿意给我买一瓶快乐水吗！🫣 </center>
+            <center> How about...buy me a coffee？😋 </center>
+            <img src="/img/wechat.png" width=200px>
+
+nav:
+  - Home: index.md
+  - Notes:
+      - index: notes/index.md
+      - Python:
+          - Python 中的装饰器: notes/python/Python 中的装饰器.md
+          - Python 中的并行: notes/python/Python 中的并行.md
+          - Asyncio 基础: notes/python/Asyncio.md
+      - tiny-llm:
+          - Group Query Attention: notes/tiny-llm/Group Query Attention.md
+          - RMSNorm & MLP: notes/tiny-llm/RMSNorm & MLP.md
+          - Batch Inference & KV Cache: notes/tiny-llm/Batching Inference & KV Cache.md
+      - Active SLAM:
+          - VINS 基础: paperreadings/activeslam/vins基础.md
+          - Active SLAM 概述: paperreadings/activeslam/active slam.md
+      - nebula:
+          - Vistor Pattern in nebula: projects/nebula-vsearch/understanding/1.visitor pattern.md
+          - Memory Management in nebula: projects/nebula-vsearch/understanding/2.memory management.md
+          - Concurrent LRU Cache in nebula: projects/nebula-vsearch/understanding/3.concurrent lru cache.md
+          - Folly Future Promise framework in nebula: projects/nebula-vsearch/understanding/4.folly future promise.md
+          - nGQL Life in Nebula: projects/nebula-vsearch/understanding/5.nGQL life.md
+          - Raft Wal in Nebula: projects/nebula-vsearch/understanding/6.raft-wal.md
+          - How to Modify nGQL: projects/nebula-vsearch/understanding/7.how to modify sql.md
+          - A Life of KV Pairs: projects/nebula-vsearch/understandings/8.a kv life.md
+      - CS61C:
+          - "1 C Intro": notes/CS61C/lecture2-Intro to C.md
+          - "4 C Memory Endianness": notes/CS61C/lecture4_C Memory Endianness.md
+          - "10 Combinational Logic": notes/CS61C/lecture10_Combinational Logic.md
+          - "11 FSMs": notes/CS61C/lecture11_FSMs.md
+          - "14 Datapath": notes/CS61C/lecture14_Datapath.md
+          - "15 Data-Level Parallelism": notes/CS61C/lecture15_Data-LevelParallelism.md
+          - "16 Thread-Level Parallelism": notes/CS61C/lecture16_Thread-LevelParallelism.md
+          - "17 Process-Level Parallelism": notes/CS61C/lecture17_Process_LevelParallelism.md
+          - "18 Caches": notes/CS61C/lecture18_Caches.md
+          - "21 Virtual Memory": notes/CS61C/lecture21_Virtual_Memory.md
+      - CSAPP:
+          - "5-优化程序性能": notes/CSAPP/5-优化程序性能.md
+          - "6-存储器层次结构": notes/CSAPP/6-存储器层次结构.md
+          - "7-链接": notes/CSAPP/7-链接.md
+          - "8-异常控制流": notes/CSAPP/8-异常控制流.md
+          - "程序的结构和执行": notes/CSAPP/程序的结构和执行.md
+          - "在系统上运行程序": notes/CSAPP/在系统上运行程序.md
+      # - rcore:
+      #     - "rustlings": notes/rcore/rustlings.md
+      #     - "LibOS": notes/rcore/LibOS.md
+      #     - "BatchOS": notes/rcore/BatchOS.md
+      #     - "TimeSharingOS": notes/rcore/TimeSharingOS.md
+      - 6.s081:
+          - "1 OS的隔离性": notes/6.s081/1-OS的隔离性.md
+          - "2 虚拟内存实现": notes/6.s081/2-虚拟内存实现.md
+          - "3 系统调用和陷入": notes/6.s081/3-系统调用和陷入.md
+          - "4 缺页中断": notes/6.s081/4-缺页中断.md
+          - "5 硬件中断": notes/6.s081/5-硬件中断.md
+          - "6 多核和锁": notes/6.s081/6-多核和锁.md
+          - "7 进程切换": notes/6.s081/7-进程切换.md
+          - "8 睡眠和唤醒": notes/6.s081/8-睡眠和唤醒.md
+      - C++ Primer:
+          - "2_变量和基本类型": notes/c++primer/2_变量和基本类型.md
+          - "3_字符串向量数组": notes/c++primer/3_字符串向量数组.md
+          - "4_表达式": notes/c++primer/4_表达式.md
+          - "5_语句": notes/c++primer/5_语句.md
+          - "6_函数": notes/c++primer/6_函数.md
+          - "7_类": notes/c++primer/7_类.md
+          - "8_IO库": notes/c++primer/8_IO库.md
+          - "9_顺序容器": notes/c++primer/9_顺序容器.md
+          - "10_泛型算法": notes/c++primer/10_泛型算法.md
+          - "11_关联容器": notes/c++primer/11_关联容器.md
+          - "12_动态内存": notes/c++primer/12_动态内存.md
+          - "13_拷贝控制": notes/c++primer/13_拷贝控制.md
+          - "14_重载运算和类型转换": notes/c++primer/14_重载运算和类型转换.md
+          - "15_面向对象程序设计": notes/c++primer/15_面向对象程序设计.md
+          - "并发与多线程编程": notes/c++primer/并发与多线程编程.md
+          - "Makefile学习": notes/c++primer/Makefile学习.md
+      - C++ 新特性:
+          - "1-Container": notes/C++/1-Container.md
+          - "2-Algorithm": notes/C++/2-Algorithm.md
+          - "3-Iterator": notes/C++/3-Iterator.md
+          - "4-FileSystem": notes/C++/4-FileSystem.md
+          - "5-View": notes/C++/5-View.md
+          - "6-Span": notes/C++/6-Span.md
+      - C++ Concurrency in Action:
+          - "1-Thread": notes/C++Concurrency/1-thread.md
+          - "2-Memory Model in C++": notes/C++Concurrency/2-Memory Model.md
+      - CMU15445:
+          - "3-Database Storage": notes/CMU15445/3-Database Storage.md
+          - "4-Database_Storage_II": notes/CMU15445/4-Database_Storage_II.md
+          - "5-Buffer Pool": notes/CMU15445/5-Buffer Pool.md
+          - "6-Hash Table": notes/CMU15445/6-Hash Table.md
+          - "7-B+Tree": notes/CMU15445/7-B+Tree.md
+          - "8-Index Concurrency": notes/CMU15445/8-Index Concurrency.md
+          - "9-Sort&Aggregation": notes/CMU15445/9-Sort&Aggregation.md
+          - "10-Join Algorithm": notes/CMU15445/10-Join Algorithm.md
+          - "11-Query_Execution": notes/CMU15445/11-Query_Execution.md
+          - "12-Query_Plan&Optimization": notes/CMU15445/12-Query_Plan&Optimization.md
+          - "13-Concurrency_Control_Theory": notes/CMU15445/13-Concurrency_Control_Theory.md
+          - "14-Two_Phase_Lock": notes/CMU15445/14-Two_Phase_Lock.md
+          - "15-Timestamp_Ordering_Concurrency": notes/CMU15445/15-Timestamp_Ordering_Concurrency.md
+          - "16-Mult-Version_Concurrency": notes/CMU15445/16-Mult-Version_Concurrency.md
+          - "17-Database_Logging": notes/CMU15445/17-Database_Logging.md
+          - "18-Database_Recovery": notes/CMU15445/18-Database_Recovery.md
+          - "19-Introducd_to_distributed_database": notes/CMU15445/19-Introducd_to_distributed_database.md
+      - 6.824:
+          - "MapReduce 论文阅读": notes/6.824/MapReduce.md
+      - Linux Tools:
+          - "grep": notes/linux tools/1-grep.md
+          - "sed": notes/linux tools/2-sed.md
+          - "awk": notes/linux tools/3-awk.md
+          - "find": notes/linux tools/4-find.md
+  - PaperReading:
+      - index: paperreadings/index.md
+      - Database Systems:
+          - Do not use MMAP in DBMS: paperreadings/db/storage/NoMMAP.md
+      - Vector Search:
+          - IQAN: paperreadings/vector search/IQAN.md
+          - MIRAGE-ANNS: paperreadings/vector search/MIRAGE-ANNS.md
+          - LSM-VEC: paperreadings/vector search/LSM-VEC.md
+          - PANNS: paperreadings/vector search/PANNS.md
+      - Active SLAM:
+          - PL-VINS: paperreadings/activeslam/PL-VINS.md
+          - 3D Active Metric-Semantic SLAM: paperreadings/activeslam/3D Active Metric-Semantic SLAM.md
+          - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
+  - Blogs:
+      - index: blogs/index.md
+      - SGLang 专题:
+          - 一条 Request 在 SGLang 的前世今生: notes/sglang/一条 Request 在 SGLang 的前世今生.md
+          - SGLang Schedular 技术变迁: notes/sglang/SGLang Scheduler 技术变迁.md
+          - SGLang Scheduler Evolution: notes/sglang/SGLang Scheduler Evolution.md
+          - RadixAttention 你需要知道的细节: notes/sglang/RadixAttention 你需要知道的全部细节.md
+          - DP Attention: notes/sglang/DP Attention.md
+          - 从代码看 SGLang 的 KV Cache: blogs/posts/从代码看 SGLang 的 KV Cache.md
+          - 🚧 SGLang 中的 Speculative Decoding: notes/sglang/SGlang 中的 Speculative Decoding.md
+          - 🚧 SGLang 中的并行: notes/sgalng/SGLang 中的并行.md
+      - LLM Inference:
+          - Attention & Transformers: notes/llm_inference/attention&transformer.md
+          - Transformer-Based LLM Architecture: notes/llm_inference/transformerbasedllm.md
+          - Introduction for LLM Inference: blogs/llm_inference/Introduction.md
+          - Parallelizatoin Concepts: notes/llm_inference/parallelization.md
+          - Parallelization in LLM Inference: notes/llm_inference/LLMparallelization.md
+          - PageAttention: blogs/posts/PageAttention.md
+          - FlashAttention: blogs/posts/FlashAttention 原理 v1-v2.md
+      - CUDA:
+          - GPU 内存系统演进: notes/cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md
+          - CUDA Optimization for LLM Inference: notes/cuda/cudaopt.md
+          - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md
+      - 上篇：初识 Nebula Graph —— 向量类型支持: blogs/posts/上篇：初识 Nebula Graph —— 向量类型支持.md
+      - 中篇：Vector 类型的 DDL & DML 适配: blogs/posts/中篇：Vector 类型的 DDL&DML 适配.md
+      - 下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路: blogs/posts/下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路.md
+      - bision debug: blogs/posts/bision debug.md
+      - C++ 异步方案演进: blogs/posts/C++异步方案.md
+      - Bustub 通关指北: blogs/posts/bustub通关指北.md
+      - 并发组件实现浅析: blogs/posts/Implement of Concurrent.md
+      - 实现一个TCP: blogs/posts/CS144.md
+  - Summaries:
+      - index: summary/index.md
+      - "plan":
+          - "研一下规划": summary/2025/semester-plan.md
+          - "大模型技能掌握": summary/2025/LLM 推理系统技能图谱.md
+      - "研究生总结":
+          - "研一上总结": summary/研究生总结/研一上总结.md
+          - "研一下总结": summary/研究生总结/研一下总结.md
+          - "研二上总结": summary/研究生总结/研二上总结.md
+
+  - Tags: tags/index.md
+  - Links: links/index.md
+  - About: about/index.md

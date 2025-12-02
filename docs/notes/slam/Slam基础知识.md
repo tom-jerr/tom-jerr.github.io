@@ -1,0 +1,100 @@
+
+# Slam 
+  
+## 因子图后端优化
+
+### 因子图的基本思想
+
+在 SLAM / VIO / V-SLAM 中，**因子图（Factor Graph）**是描述优化问题结构的图模型：
+
+- **节点（Variables）**：表示待估计的状态变量，例如：
+    - 位姿（camera pose）$\mathbf{T}_i = [\mathbf{R}_i, \mathbf{t}_i]$
+    - 地标（landmark）$\mathbf{p}_j$
+    - IMU 偏置（bias）$\mathbf{b}_i$
+    - 对象语义特征（object feature）$\mathbf{o}_m$
+        
+- **因子（Factors）**：表示测量约束 $f_k(X_k) - z_k$，例如：
+    - 相机观测因子（视觉重投影误差）
+    - IMU 因子（惯性积分误差）
+    - 语义约束因子（语义一致性误差）
+
+最终的目标是：
+$$X^* = \underset{X}{\operatorname{argmin}} \sum_{k} \left\| f_k(X_k) - z_k \right\|_{\Sigma_k}^2$$
+---
+### 联合优化的总体流程
+
+#### 步骤 1：状态定义（Variables）
+
+定义状态量集合 $X$：
+$$X = \{\mathbf{T}_1, \mathbf{T}_2, \ldots, \mathbf{T}_N, \mathbf{p}_1, \mathbf{p}_2, \ldots, \mathbf{p}_M, \mathbf{b}_1, \mathbf{o}_1, \ldots\}$$
+其中：
+- $\mathbf{T}_i$：第 i 帧相机的位姿（SE(3)）
+- $\mathbf{p}_j$：第 j 个路标点（地图点）
+- $\mathbf{b}_i$​：IMU 零偏（bias）
+- $\mathbf{o}_m$​：语义对象特征（如检测框、语义中心）
+---
+#### 步骤 2：构建因子（Measurement Factors）
+
+我们根据不同传感器建立不同类型的因子，每个因子对应一个测量模型 $f_k(X_k)$)。
+##### (1) 视觉因子（Reprojection Factor）
+
+- 测量：图像中像素坐标 $z_{ij}$
+- 模型：
+  $$f_{\text{vision}}(X_k) = \pi(\mathbf{T}_i^{-1}\mathbf{p}_j)$$
+
+    - 其中 $\pi(\cdot)$ 是相机投影模型。
+- 误差：
+    $$e_{ij}^{\text{vision}} = f_{\text{vision}}(X_k) - z_{ij}$$​
+- 物理含义：当前估计的位姿和路标能否在像素平面上重投影到真实观测点。
+---
+##### (2) IMU 因子（Preintegration Factor）
+
+- 测量：IMU 在两帧之间的加速度、角速度读数。
+- 模型（经过预积分）：
+$$f_{\text{imu}}(X_k) = \text{Preintegrate}(\mathbf{b}_i, \Delta t)$$
+    
+    - 预测相邻两帧之间的运动。
+- 误差项：
+    $$e_{ij}^{\text{imu}} = \text{Log}\left( (\mathbf{T}_i^{-1}\mathbf{T}_j) \ominus f_{\text{imu}}(X_k) \right)$$
+- 物理含义：当前位姿估计与IMU测得的运动变化是否一致。
+---
+##### (3) 语义因子（Semantic Factor）
+
+语义信息来自语义分割或目标检测模型，约束地图中某些结构（如墙面、行人、车辆）的几何一致性。
+
+例如：
+- 语义分割提供每个像素的类别概率；
+- 检测框提供语义对象的空间约束。
+    
+
+可定义：
+$$f_{\text{sem}}(X_k) = g(\mathbf{T}_i, \mathbf{o}_m)$$
+表示当前相机姿态与对象位置之间的**几何语义一致性预测**。
+- 误差项：
+	$$e_{im}^{\text{sem}} = f_{\text{sem}}(X_k) - z_{im}$$
+    - 其中$z_{im}$ 是语义观测（例如物体类别、像素位置或mask）。
+
+- 物理含义：当前位姿估计下，预测的物体投影应与语义分割结果匹配。
+---
+#### 步骤 3：组合代价函数
+
+将所有误差项加权求和：
+$$J(X) = \sum_{(i,j)\in \mathcal{C}} \| e_{ij}^{\text{vision}} \|_{\Sigma_v}^2 + \sum_{(i,j)\in \mathcal{I}} \| e_{ij}^{\text{imu}} \|_{\Sigma_i}^2 + \sum_{(i,m)\in \mathcal{S}} \| e_{im}^{\text{sem}} \|_{\Sigma_s}^2$$
+---
+#### 步骤 4：线性化与迭代优化
+
+由于$f_k(X_k$ 非线性，需线性化后使用 **高斯牛顿 (Gauss-Newton)** 或 **LM (Levenberg–Marquardt)** 优化。
+
+1. 线性化：
+    $$f_k(X_k + \delta X_k) \approx f_k(X_k) + J_k \delta X_k$$​
+2. 构建线性方程：
+    $$(J^T \Sigma^{-1} J)\delta X = -J^T \Sigma^{-1} e$$
+3. 求解增量$\delta X$，更新状态：
+    $$X \leftarrow X \oplus \delta X$$
+4. 重复迭代直至收敛。
+---
+#### 步骤 5：结果与意义
+
+优化后得到：
+$$X^* = \{\mathbf{T}_i^*, \mathbf{p}_j^*, \mathbf{b}_i^*, \mathbf{o}_m^*\}$$
+即最优估计的相机轨迹、地图点位置、IMU偏置以及语义对象位置。

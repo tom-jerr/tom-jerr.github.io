@@ -1,0 +1,60 @@
+name: ci
+on:
+  push:
+    branches:
+      - mkdocs
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.x
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - uses: actions/cache@v3
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
+      - run: pip install -r requirements.txt 
+      # - name: Install modified mkdocs-statistics-plugin
+      #   run: |
+      #     git clone https://github.com/tom-jerr/mkdocs-statistics-plugin
+      #     pip install ./mkdocs-statistics-plugin
+      #     rm -rf mkdocs-statistics-plugin
+      # - name: Install modified mkdocs-document-dates
+      #   run: |
+      #     git clone https://github.com/jaywhj/mkdocs-document-dates.git
+      #     pip install ./mkdocs-document-dates --no-build-isolation
+      #     rm -rf mkdocs-document-dates
+      - run: pip cache purge
+      # 使用 AI 摘要部署
+      - name: 使用 AI 摘要部署
+        env:
+          AI_SUMMARY_CI_ENABLED: 'true'
+          AI_SUMMARY_CACHE_ENABLED: 'true'
+          AI_SUMMARY_CACHE_EXPIRE_DAYS: '300'
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: mkdocs gh-deploy --force
+      # 自动提交 AI 缓存文件
+      - name: 自动提交 AI 缓存
+        run: |
+          if [ -d ".ai_cache" ] && [ "$(ls -A .ai_cache 2>/dev/null)" ]; then
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add .ai_cache/
+            if ! git diff --cached --quiet; then
+              git commit -m "  自动更新 AI 摘要缓存 [skip ci]"
+              git push
+            fi
+          fi

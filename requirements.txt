@@ -1,0 +1,12 @@
+mkdocs-blogging-plugin
+mkdocs-callouts
+mkdocs-material
+mkdocs-minify-plugin
+mkdocs-glightbox
+mkdocs-video
+mkdocs-rss-plugin
+mkdocs-document-dates
+mkdocs-ai-summary-wcowin
+mkdocs-statistics-plugin
+mkdocs-document-dates
+#rich # for mkdocs-toc-plugin
