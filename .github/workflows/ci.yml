@@ -2,7 +2,7 @@ name: ci
 on:
   push:
     branches:
-      - mkdocs
+      - master
 permissions:
   contents: write
 jobs:
@@ -47,14 +47,14 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: mkdocs gh-deploy --force
       # 自动提交 AI 缓存文件
-      - name: 自动提交 AI 缓存
-        run: |
-          if [ -d ".ai_cache" ] && [ "$(ls -A .ai_cache 2>/dev/null)" ]; then
-            git config --local user.email "action@github.com"
-            git config --local user.name "GitHub Action"
-            git add .ai_cache/
-            if ! git diff --cached --quiet; then
-              git commit -m "  自动更新 AI 摘要缓存 [skip ci]"
-              git push
-            fi
-          fi
+      # - name: 自动提交 AI 缓存
+      #   run: |
+      #     if [ -d ".ai_cache" ] && [ "$(ls -A .ai_cache 2>/dev/null)" ]; then
+      #       git config --local user.email "action@github.com"
+      #       git config --local user.name "GitHub Action"
+      #       git add .ai_cache/
+      #       if ! git diff --cached --quiet; then
+      #         git commit -m "  自动更新 AI 摘要缓存 [skip ci]"
+      #         git push
+      #       fi
+      #     fi
