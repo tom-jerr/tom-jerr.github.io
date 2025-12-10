@@ -1,8 +1,11 @@
 ---
+
 title: 3_Database_Storage I
-date: 2023-09-11 22:17:49
+created: 2023-09-11
 tags:
-  - Database
+
+- Database
+
 ---
 
 # 3-Database Storage I
@@ -62,6 +65,7 @@ tags:
   - OS 不关心也不知道这些文件的内容
 
 - 1980 年代的 一些 DBMS 在原始存储（Raw Storage）上使用自定义的文件系统
+
   - 现在的一些商业 DBMS 还在这么干
   - 大多数新出来的 DBMS 不这么做了
 

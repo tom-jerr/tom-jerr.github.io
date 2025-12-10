@@ -1,8 +1,11 @@
 ---
+
 title: 一步步实现 CUDA Vector Add 优化
-date: 2025/10/21 23:15
+created: 2025-10-21
 tags:
-  - LLMInference
+
+- LLMInference
+
 ---
 
 # 一步步实现 CUDA Vector Add 优化
@@ -22,12 +25,12 @@ tags:
 
 **2. 为什么它如此重要？** AI 决定了一个程序**理论上的性能瓶颈**。我们可以用它来对比一个程序和一个硬件（GPU）的特性：
 
-- **硬件的“AI”**：GPU 也有一个平衡点，即它的 `峰值计算能力 (GFLOPs/s)` / `峰值内存带宽 (GB/s)
+- **硬件的“AI”**：GPU 也有一个平衡点，即它的 `峰值计算能力 (GFLOPs/s)` / \`峰值内存带宽 (GB/s)
 - **程序的 AI**：内核的 `FLOPs / Bytes`。
 
 ### Roofline
 
-Roofline 模型（屋顶线模型）是一种用来**分析程序性能瓶颈**（计算受限还是带宽受限）的方法。  
+Roofline 模型（屋顶线模型）是一种用来**分析程序性能瓶颈**（计算受限还是带宽受限）的方法。\
 它把**计算性能**（FLOPs/s）和**访存性能**（Bytes/s）联系在一起，。以可视化的方式展示性能上限
 
 $$
@@ -66,7 +69,7 @@ __global__ void vector_add_kernel(const float *a, const float *b, float *c,
 该版本的 vector add，执行一次计算需要三次访存，每次读 4 bytes (read A, read B, write C)
 
 $$
-	AI = 1 / (3 \times 4) =1/12\approx 0.083
+AI = 1 / (3 \\times 4) =1/12\\approx 0.083
 $$
 
 说明这是一个 **memory-bound** 的程序
@@ -143,7 +146,7 @@ __global__ void elementwise_add_f16_kernel(half *a, half *b, half *c, int N) {
 ### 分析
 
 $$
-AI = \frac{1 FLOPs}{2 * 3 Bytes} = 1/6 \approx 0.17 FLOPs /Byte
+AI = \\frac{1 FLOPs}{2 * 3 Bytes} = 1/6 \\approx 0.17 FLOPs /Byte
 $$
 
 ⚠ **fp16 计算的精度会比 fp32 低很多**，需要考虑应用的场景是否可以接受，测试发现基本精度在 0.2 以下
@@ -176,7 +179,7 @@ __global__ void elementwise_add_f16x2_kernel(half *a, half *b, half *c, int N) {
 ### 分析
 
 $$
-AI = \frac{2*(\_hadd) FLOPs}{4 * 3 Bytes} = 1/6 \approx 0.17 FLOPs /Byte
+AI = \\frac{2\*(\_hadd) FLOPs}{4 * 3 Bytes} = 1/6 \\approx 0.17 FLOPs /Byte
 $$
 
 - **执行时间继续下降**：13.41 μs → 11.17 μs
@@ -223,7 +226,7 @@ __global__ void elementwise_add_f16x8_pack_kernel(half *a, half *b, half *c, int
 ### 分析
 
 $$
-AI = \frac{4*(\_hadd2) FLOPs}{16 * 3 Bytes} = 1/6 \approx 0.17 FLOPs /Byte
+AI = \\frac{4\*(\_hadd2) FLOPs}{16 * 3 Bytes} = 1/6 \\approx 0.17 FLOPs /Byte
 $$
 
 - 一次加载 128 bit 数据，减少内存事务数量，节省时间
@@ -244,32 +247,35 @@ vector add 算子是一个典型的 memory-bound 的算子，我们需要尽可�
 
   - CPU Time: **0.0030 ms**
 
-  - GPU (最快): **0.0078 ms**  
+  - GPU (最快): **0.0078 ms**
 
   - **原因：** 调用一个 CUDA 内核（`__global__ void`）本身就有**固定的开销**（`Kernel Launch Overhead`），这个开销通常需要几个微秒 (microseconds)。对于 1K 这样的小问题，GPU 实际执行计算的时间（可能只有 1-2 微秒）远小于启动它所花费的时间（5-6 微秒）。CPU 直接在本地执行循环，没有任何启动开销，所以更快。
 
 - **在 1M (N=1048576) 时：GPU 完胜**
+
   - CPU Time: **3.0058 ms**
   - GPU (最快): **0.0132 ms** (即 `GPU FP16 x2` 版本)
   - **原因：** 当问题规模变得足够大时，**大规模并行（Massive Parallelism）**的优势开始显现。启动内核的 5-6 微秒开销在总共 13.2 微秒的执行时间中变得微不足道。此时，GPU 的**巨大内存带宽**（`GPU FP16 x2` 达到了 **475.7 GB/s**）彻底击败了 CPU 的内存带宽（被限制在 **4.2 GB/s**）。
 
----
+______________________________________________________________________
 
 ### 洞察 2：内存带宽是瓶颈 (Memory-Bound)
 
-逐元素加法（Vector Addition）是一个经典的**内存带宽受限（Memory-Bound）**问题，它的计算密集度 (AI) 极低。这意味着性能的瓶颈是\*\*你能多快地从显存中读取 a 和 b，并写回 c。
+逐元素加法（Vector Addition）是一个经典的\*\*内存带宽受限（Memory-Bound）\*\*问题，它的计算密集度 (AI) 极低。这意味着性能的瓶颈是\*\*你能多快地从显存中读取 a 和 b，并写回 c。
 
 这个测试结果清楚地证明了这一点：
 
 - \*\*FP32 vs. FP16 (在 1M 数据集)
-  - `GPU Standard` (FP32): 0.0250 ms  
 
-  - `GPU FP16 Std`: 0.0163 ms  
+  - `GPU Standard` (FP32): 0.0250 ms
 
-- **原因：** FP32 内核需要移动的数据量是 $1M \times (4+4+4) = 12 \text{ MB}$。而 FP16 内核只需要移动 $1M \times (2+2+2) = 6 \text{ MB}$。
+  - `GPU FP16 Std`: 0.0163 ms
+
+- **原因：** FP32 内核需要移动的数据量是 $1M \\times (4+4+4) = 12 \\text{ MB}$。而 FP16 内核只需要移动 $1M \\times (2+2+2) = 6 \\text{ MB}$。
+
 - **数据量减半，性能几乎翻倍**（`0.0250 / 0.0163 = 1.53x` 加速）。这证实了瓶颈在内存，而不是计算。
 
----
+______________________________________________________________________
 
 ### 洞察 3：baseline 实现在较小的问题规模下已足够好
 
@@ -315,9 +321,9 @@ Standard vs FP16x8_pack:  0.88x
 在最大的 1M 测试中，我们看 FP16 的各种实现：
 
 1. **`GPU FP16 x2`**: **0.0132 ms** (🏆)
-2. `GPU FP16 x8_pack`: 0.0158 ms
-3. `GPU FP16 x8`: 0.0161 ms
-4. `GPU FP16 Std`: 0.0163 ms
+1. `GPU FP16 x8_pack`: 0.0158 ms
+1. `GPU FP16 x8`: 0.0161 ms
+1. `GPU FP16 Std`: 0.0163 ms
 
 - **`FP16 Std` (1 线程/1 元素)** 是最慢的，因为它最朴素，每个线程只做了最少的工作，调度的开销相对最大。
 - **`FP16 x8` 和 `x8_pack` (1 线程/8 元素)** 表现更好，因为它们让每个线程做了更多工作，减少了总的调度开销并使用了向量化指令（如 Nsight 分析所示）。

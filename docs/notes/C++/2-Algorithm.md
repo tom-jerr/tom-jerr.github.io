@@ -1,8 +1,12 @@
 # 2 Algorithm
+
 ## 2.1 std::transform
+
 - std::transform applies the given function to the elements of the given input range(s), and stores the result in an output range starting from d_first.
+
 ## parameters
-``` admonish info
+
+```admonish info
 first1, last1: the pair of iterators defining the source range of elements to transform ;  
 first2: the beginning of the second range of elements to transform, (3,4) only;  
 d_first: the beginning of the destination range, may be equal to first1 or first2;  
@@ -13,7 +17,7 @@ binary_op: Ret fun(const Type1 &a, const Type2 &b);
 
 ## possible implementation
 
-``` c++
+```c++
 template<class InputIt, class OutputIt, class UnaryOp>
 constexpr //< since C++20
 OutputIt transform(InputIt first1, InputIt last1,
@@ -37,6 +41,7 @@ OutputIt transform(InputIt1 first1, InputIt1 last1, InputIt2 first2,
     return d_first;
 }
 ```
+
 ## example
 
 ```c++
@@ -105,19 +110,21 @@ int main()
 // ordinals:  72  69  76  76  79 
 // ordinals: 144 138 152 152 158
 ```
+
 ## 2.2 std::accumulate
+
 ```admonish info
 Computes the sum of the given value init and the elements in the range [first, last).
 ```
+
 ## parameters
 
-- first, last	-	the pair of iterators defining the range of elements to accumulate
-- init	-	initial value of the accumulate
-- op	-	Ret fun(const Type1 &a, const Type2 &b);
-  ``` admonish example
+- first, last - the pair of iterators defining the range of elements to accumulate
+- init - initial value of the accumulate
+- op - Ret fun(const Type1 &a, const Type2 &b);
+  ```admonish example
   如标准库中的std::plus<>
   ```
-
 
 ## possible implementation
 
@@ -144,53 +151,63 @@ T accumulate(InputIt first, InputIt last, T init, BinaryOperation op)
     return init;
 }
 ```
+
 ## 2.3 std::optinal
+
 - std::optional最高效的写法是触发RVO的写法，即：
 
-    ```c++
-    optional<A> optional_best(int n) {
-        optional<A> temp(someFn(n));
-        return temp;
-    }
-    
-    ```
+  ```c++
+  optional<A> optional_best(int n) {
+      optional<A> temp(someFn(n));
+      return temp;
+  }
+
+  ```
+
 ## 2.4 std::move
+
 - 将 `[first, last)` 范围内的元素移动到以 d_first 开始的目标范围
+
 ```c++
 template <typename InputIt, typename OutputIt>
 OutputIt std::move(InputIt first, InputIt last, OutputIt d_first);
 ```
+
 - 返回一个迭代器，指向目标范围移动后的结束位置（即 d_first + (last - first)）。
-  
-|参数|	类型|	描述|
-|---|---|---|
-|first|	InputIt|	源范围的起始迭代器（指向要移动的第一个元素）|
-|last|	InputIt|	源范围的结束迭代器（指向最后一个元素的下一个位置）|
-|d_first|	OutputIt|	目标范围的起始迭代器（指向移动后第一个元素位置）|
+
+| 参数    | 类型     | 描述                                               |
+| ------- | -------- | -------------------------------------------------- |
+| first   | InputIt  | 源范围的起始迭代器（指向要移动的第一个元素）       |
+| last    | InputIt  | 源范围的结束迭代器（指向最后一个元素的下一个位置） |
+| d_first | OutputIt | 目标范围的起始迭代器（指向移动后第一个元素位置）   |
 
 ## 2.5 std::move_backward
+
 - 目标位置：元素会被移动到以 d_last 为结束的目标范围，即目标范围是 `[d_last - N, d_last)`，其中 N = last - first。
+
 ```c++
 template <class BidirIt1, class BidirIt2>
 BidirIt2 std::move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last);
 ```
+
 - 返回一个迭代器，指向目标范围移动后的起始位置（即 d_last - (last - first)）
 
-|参数|	类型|	描述|
-|---|---|---|
-|first|	BidirIt1|	源范围的起始迭代器（指向要移动的第一个元素）|
-|last|	BidirIt1|	源范围的结束迭代器（指向最后一个元素的下一个位置）|
-|d_last|	BidirIt2|	目标范围的结束迭代器（指向移动后最后一个元素的下一个位置）|
+| 参数   | 类型     | 描述                                                       |
+| ------ | -------- | ---------------------------------------------------------- |
+| first  | BidirIt1 | 源范围的起始迭代器（指向要移动的第一个元素）               |
+| last   | BidirIt1 | 源范围的结束迭代器（指向最后一个元素的下一个位置）         |
+| d_last | BidirIt2 | 目标范围的结束迭代器（指向移动后最后一个元素的下一个位置） |
 
 ## 2.6 std::lower_bound 和 std::upper_bound
+
 - 实际上是二分查找的实现
-  
-``` admonish info
+
+```admonish info
 std::lower_bound: 返回第一个不小于给定值的元素位置。
 返回值: 指向第一个满足 *it >= value 的元素的迭代器。若没有这样的元素，则返回 end()
 ```
 
-``` admonish info
+```admonish info
 std::upper_bound: 返回第一个大于给定值的元素位置。
 返回值: 指向第一个满足 *it > value 的元素的迭代器。若没有这样的元素，则返回 end()。
 ```
@@ -214,15 +231,18 @@ std::all_of: 检查所有元素是否都满足条件（Predicate 返回 true）�
 std::any_of: 检查是否至少有一个元素满足条件。  
 std::non_of: 检查是否全部不满足条件
 ```
+
 - 参数说明
-|参数|	说明|
-|---|---|
-|first|	起始迭代器，指向待检查范围的第一个元素。|
-|last|	终止迭代器，指向待检查范围的末尾（最后一个元素的下一个位置）。|
-|p|	谓词（Predicate），接受一个元素类型的参数，返回 bool 类型的条件结果。|
+  |参数| 说明|
+  |\---|---|
+  |first| 起始迭代器，指向待检查范围的第一个元素。|
+  |last| 终止迭代器，指向待检查范围的末尾（最后一个元素的下一个位置）。|
+  |p| 谓词（Predicate），接受一个元素类型的参数，返回 bool 类型的条件结果。|
 
 ## 2.9 std::count, std::count_if
+
 - std::count
+
   ```admonish
   统计值为 value 的元素个数
   ```
@@ -232,8 +252,10 @@ std::non_of: 检查是否全部不满足条件
   typename iterator_traits<InputIt>::difference_type
         count(InputIt first, InputIt last, const T& value);
   ```
+
 - std::count_if
-  ```admonish 
+
+  ```admonish
   统计符合条件的元素个数
   ```
 
@@ -242,36 +264,45 @@ std::non_of: 检查是否全部不满足条件
   typename iterator_traits<InputIt>::difference_type
     count_if(InputIt first, InputIt last, Predicate p);
   ```
-## 2.10 std::find, std::find_if
-- std::find: 返回第一个等于 value 的迭代器
-    ```admonish
-    自定义对象使用std::find，需重载 operator==
-    ```
-    
-    ```c++
-    template<class InputIt, class T>
-    InputIt find(InputIt first, InputIt last, const T& value);
-    ```
 
+## 2.10 std::find, std::find_if
+
+- std::find: 返回第一个等于 value 的迭代器
+
+  ```admonish
+  自定义对象使用std::find，需重载 operator==
+  ```
+
+  ```c++
+  template<class InputIt, class T>
+  InputIt find(InputIt first, InputIt last, const T& value);
+  ```
 
 - std::find_if: 在范围内查找第一个满足谓词条件的元素。
+
   ```c++
   template<class InputIt, class Predicate>
   InputIt find_if(InputIt first, InputIt last, Predicate p);
   ```
+
 ## 2.11 std::copy, std::copy_if
+
 - std::copy: 完全复制所有元素
-    ```c++
-    template<class InputIt, class OutputIt, class Predicate>
-    OutputIt copy(InputIt first, InputIt last, OutputIt d_first);
-    ```
+
+  ```c++
+  template<class InputIt, class OutputIt, class Predicate>
+  OutputIt copy(InputIt first, InputIt last, OutputIt d_first);
+  ```
 
 - std::copy_if: 选择性复制元素
-    ```c++
-    template<class InputIt, class OutputIt, class Predicate>
-    OutputIt copy_if(InputIt first, InputIt last, OutputIt d_first, Predicate pred);
-    ```
+
+  ```c++
+  template<class InputIt, class OutputIt, class Predicate>
+  OutputIt copy_if(InputIt first, InputIt last, OutputIt d_first, Predicate pred);
+  ```
+
 ## 2.12 std::fill, std::generate
+
 - std::fill: 用固定值填充范围
   ```c++
   template<class ForwardIt, class T>
@@ -304,8 +335,11 @@ std::mt19937 rng(rd());
 std::uniform_int_distribution<int> dist(1, 10);
 std::generate(v.begin(), v.end(), [&]() { return dist(rng); });
 ```
+
 ## 2.13 std::search, std::mismatch
+
 - std::search: 在序列中搜索子序列。
+
   ```c++
     template<class ForwardIt1, class ForwardIt2>
     ForwardIt1 search(ForwardIt1 first1, ForwardIt1 last1, ForwardIt2 first2, ForwardIt2 last2);
@@ -317,6 +351,7 @@ std::generate(v.begin(), v.end(), [&]() { return dist(rng); });
   ```
 
 - std::mismatch: 在比较两个序列，返回第一个不匹配的位置。
+
   ```c++
     template<class InputIt1, class InputIt2>
     std::pair<InputIt1, InputIt2> mismatch(InputIt1 first1, InputIt1 last1, InputIt2 first2);
@@ -326,8 +361,11 @@ std::generate(v.begin(), v.end(), [&]() { return dist(rng); });
     auto [it1, it2] = std::mismatch(s1.begin(), s1.end(), s2.begin()); 
     // it1指向s1的'e', it2指向s2的'x'
   ```
+
 ## 2.14 std::replace, std::replace_if
+
 - std::replace: 替换所有等于 old_value 的元素。
+
 ```c++
 template<class ForwardIt, class T>
 void replace(ForwardIt first, ForwardIt last, const T& old_value, const T& new_value);
@@ -336,7 +374,9 @@ void replace(ForwardIt first, ForwardIt last, const T& old_value, const T& new_v
 std::vector<int> v = {1, 2, 3, 3, 4};
 std::replace(v.begin(), v.end(), 3, 5); // v变为{1, 2, 5, 5, 4}
 ```
+
 - std::replace_if: 替换满足谓词的元素
+
 ```c++
 template<class ForwardIt, class Predicate, class T>
 void replace_if(ForwardIt first, ForwardIt last, Predicate pred, const T& new_value);
@@ -346,6 +386,7 @@ std::replace_if(v.begin(), v.end(), [](int x) { return x % 2 == 0; }, 0);
 ```
 
 ## 2.15 std::remove / std::remove_if
+
 ```admonish
 移动满足条件的元素到末尾，返回新逻辑结尾。
 ```
@@ -362,7 +403,9 @@ std::vector<int> v = {1, 2, 3, 4, 3};
 auto new_end = std::remove(v.begin(), v.end(), 3);
 v.erase(new_end, v.end()); // v变为{1, 2, 4}
 ```
+
 ## 2.16 std::reverse
+
 - 反转整个序列
 
 ```c++
@@ -374,6 +417,7 @@ std::reverse(v.begin(), v.end()); // {1, 2, 3} → {3, 2, 1}
 ```
 
 ## 2.17 std::rotate
+
 - 把middle旋转到开头
 
 ```c++
@@ -384,7 +428,9 @@ ForwardIt rotate(ForwardIt first, ForwardIt middle, ForwardIt last);
 std::vector<int> v = {1, 2, 3, 4, 5};
 std::rotate(v.begin(), v.begin() + 2, v.end()); // v变为{3, 4, 5, 1, 2}
 ```
+
 ## 2.18 std::shuffle
+
 - 使用一个随机生成器，打乱序列
 
 ```c++
@@ -400,9 +446,11 @@ std::shuffle(v.begin(), v.end(), rng); // 随机排列
 ```
 
 ## 2.19 std::unique
+
 ```admonish
 删除相邻重复元素（需先排序）。
 ```
+
 ```c++
 template<class ForwardIt>
 ForwardIt unique(ForwardIt first, ForwardIt last);
@@ -414,7 +462,9 @@ v.erase(last, v.end()); // v变为{1, 2, 3}
 ```
 
 ## 2.20 std::sort, std::stable_sort, std::partial_sort
+
 - std::partial_sort是部分排序
+
 ```c++
 template<class RandomIt>
 void sort(RandomIt first, RandomIt last);
@@ -432,7 +482,9 @@ void partial_sort(RandomIt first, RandomIt middle, RandomIt last);
 std::vector<int> v = {5, 3, 1, 4, 2};
 std::partial_sort(v.begin(), v.begin() + 3, v.end()); // 前3个元素为{1, 2, 3}
 ```
+
 ## 2.21 std::nth_element
+
 - 将第n个元素排序到正确的位置上
 
 ```c++
@@ -445,7 +497,9 @@ std::nth_element(v.begin(), v.begin() + 2, v.end());
 ```
 
 ## 2.22 std::merge
+
 - 合并两个**有序序列**
+
 ```c++
 template<class InputIt1, class InputIt2, class OutputIt>
 OutputIt merge(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, OutputIt d_first);
@@ -457,6 +511,7 @@ std::merge(v1.begin(), v1.end(), v2.begin(), v2.end(), std::back_inserter(result
 ```
 
 ## 2.23 std::partition, std::stable_partition, std::partition_point
+
 - std::partition: 将满足条件的元素移动到前端
 
 ```c++
@@ -468,7 +523,9 @@ std::vector<int> v = {1, 2, 3, 4, 5};
 auto it = std::partition(v.begin(), v.end(), [](int x) { return x % 2 != 0; });
 // 奇数在前，偶数在后（可能改变相对顺序）
 ```
+
 - std::partition_point: 返回分区点
+
 ```c++
 template<class ForwardIt, class Predicate>
 ForwardIt partition_point(ForwardIt first, ForwardIt last, Predicate pred);
@@ -478,6 +535,7 @@ auto it = std::partition_point(v.begin(), v.end(), [](int x) { return x % 2 != 0
 ```
 
 ## 2.24 std::minelement, std::maxelement, std::clamp
+
 ```c++
 template<class ForwardIt>
 ForwardIt min_element(ForwardIt first, ForwardIt last);
@@ -485,7 +543,9 @@ ForwardIt min_element(ForwardIt first, ForwardIt last);
 // 示例：找到最大值
 auto it = std::max_element(v.begin(), v.end());
 ```
+
 - std::clamp: 将元素限制在范围内
+
 ```c++
 template<class T>
 const T& clamp(const T& value, const T& lo, const T& hi);
@@ -496,7 +556,9 @@ x = std::clamp(x, 0, 100); // x变为100
 ```
 
 ## 2.25 std::sample
+
 - 随机采样，需要插入迭代器
+
 ```c++
 template<class PopulationIt, class SampleIt, class Distance, class UniformRandomBitGenerator>
 SampleIt sample(PopulationIt first, PopulationIt last, SampleIt out, Distance n, UniformRandomBitGenerator&& g);

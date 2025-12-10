@@ -29,21 +29,21 @@
    - 实现新的数据类型 VECTOR
    - 实现向量类型的存储，为 RocksDB 增加多 column family 支持
    - 实现向量的 Key 结构和存储格式(加工后的字符串)
-2. 实现向量相关的 DDL 语句，包括 create tag、create index 等语句。
+1. 实现向量相关的 DDL 语句，包括 create tag、create index 等语句。
    - 语法兼容 NebulaGraph 现有的查询语言
    - 在原有 Schema Provider 基础上增加对向量列的支持
    - 实现的 create ann index 计划执行类似 rebuild index
-3. 实现向量相关的 DML 语句，包括 insert、update、delete 等语句。
+1. 实现向量相关的 DML 语句，包括 insert、update、delete 等语句。
    - 语法兼容 NebulaGraph 现有的查询语言
    - 实现向量属性的插入、更新、删除等功能，不影响分布式一致性和可用性
-4. 设计并实现 ANN Search 语句。
+1. 设计并实现 ANN Search 语句。
    - 语法兼容 NebulaGraph 现有的 match 语句
    - 集成 Faiss 和 HNSWLib 实现 ANN Search 功能
    - 实现 ANN Search 语句的单机功能，类似 Index Scan
-5. 满足分布式一致性和可用性要求，保证向量数据副本一致性及内存磁盘数据一致性。
+1. 满足分布式一致性和可用性要求，保证向量数据副本一致性及内存磁盘数据一致性。
    - 设计向量索引的 WAL 机制，保证内存和磁盘数据一致性
    - 设计向量数据的 Raft 日志机制，保证向量数据副本一致性
-6. 对 ANN Search 性能进行优化以满足业务需求。
+1. 对 ANN Search 性能进行优化以满足业务需求。
    - 使用 profiler 工具对 ANN Search 进行性能分析
    - 结合分析结果对 ANN Search 进行性能优化
 
@@ -82,6 +82,7 @@
 ### 向量类型的 Key 结构
 
 - 经过我们对 RocksDB 的多 column family 的改造，现在需要将向量属性存入向量列族中。这需要我们重新设计向量属性的 Key 结构。
+
 - 经过设计，向量属性的 Key 结构如下：
 
   ```shell
@@ -135,10 +136,15 @@
 我们会将向量索引对象交由存储服务（Storage Server）管理，采用 `<TagID, IndexID>` 作为 key，`shared_ptr<AnnIndex>`作为 value。
 
 - **向量索引生命周期**: 向量索引的生命周期由存储服务管理。执行 Create Index 命令后，会插入对应的向量索引；执行 Drop Index 命令后，该索引会被移除。在其他情况下，存储服务会持续维护该索引。
+
   - 持久化：当存储服务关闭或崩溃前，将索引持久化到磁盘，每次重启时加载。
+
 - **内存追踪**: 暂时利用 Nebula 内置的 MemoryTracker 定期查询内存索引的大小。如果超过限制，就禁止插入新的向量
+
   - 使用`MemoryTracker::getCurrentUsage()`获取当前内存使用量
+
 - **Faiss & HNSW 并发**: 通过实现 ANNIndex 接口，我们实现了两种向量索引，一种基于 Faiss IVF 索引，另一种基于 HNSWlib HNSW 索引。为了实现并发控制，我们在向量索引中引入了**读写锁**：允许多个查询同时执行 ANN 搜索（ANN Search），但只允许一个 DML 操作（Add 或 Remove）进行。
+
 - **ANN 索引接口**: 目前我们仅完成了 ANN 索引模块的单机测试，WAL 和 Raft 相关方法尚未实现。
 
   ```cpp
@@ -250,8 +256,8 @@ CREATE EDGE ANNINDEX <index_name> ON <tag_name_list>::(<field_name>) [IF NOT EXI
 :warning: Storaged 中实际上也会有一个计划，进行真正的索引创建工作：
 
 1. 从 RocksDB 中扫描所有的向量数据
-2. 将 Vertex ID 与 Vector ID 的映射关系存储到 id-vid 列族中(:star2:**这就是为什么我们需要三个列族**)
-3. 构建向量索引并加载到内存中
+1. 将 Vertex ID 与 Vector ID 的映射关系存储到 id-vid 列族中(:star2:**这就是为什么我们需要三个列族**)
+1. 构建向量索引并加载到内存中
 
 ![](img/ann_index_storage_plan.png){ width="600px" }
 
@@ -280,7 +286,7 @@ match (v:tag5:tag6) return v order by euclidean(vector(1.0,2.0,3.0), v.vec)  app
 整体的执行流程如下：
 
 1. 经过优化规则处理后的物理执行计划会执行 `TagAnnIndexScan`，在 storaged 收到请求后，会生成一个内部执行计划，在 IVF 索引上进行搜索，并将结果返回给 graphd
-2. Graphd 调用 storaged 的 `getProp` 算子生成执行计划，以获取节点的非向量属性，最后执行 Limit 和 Project，得到最终结果
+1. Graphd 调用 storaged 的 `getProp` 算子生成执行计划，以获取节点的非向量属性，最后执行 Limit 和 Project，得到最终结果
 
 ![](img/ann_search.png){ width="600px" }
 
@@ -319,9 +325,11 @@ match (v:tag5:tag6) return v order by euclidean(vector(1.0,2.0,3.0), v.vec)  app
 - 使用 tck 回归测试工具，通过对新增功能编写新的测试用例测试，确保新增功能没有影响到原有功能。
 
   - 新增的测试用例见`tests/tck/features/vector`目录下
+
     - `Create Tag/Edge with VECTOR property`
     - `Insert/Update/Delete/Upsert VECTOR property`
     - `Create Ann Index`
+
   - 详细的测试结果见下表的 github PR 链接。
 
     | 功能                                             | PR 链接                                                                                               |
@@ -359,21 +367,31 @@ match (v:tag5:tag6) return v order by euclidean(vector(1.0,2.0,3.0), v.vec)  app
   - MultiCFCompressionConfigTest
 
 - 对新增语法的测试，详情见`src/parser/test/ParserTest.cpp`
+
 - 对 VECTOR 类型的 Key 结构测试，详情见`src/common/test/NebulaKeyUtilsTest.cpp`
+
   - VectorSimpleTest
   - VectorNegativeEdgeTypeTest
+
 - 向量属性的 DDL 语句测试，详情见`src/meta/test/ProcessorTest.cpp`
+
   - CreateVectorTagTest
   - CreateVectorEdgeTest
+
 - RowWriter 和 RowReader 测试，详情见`src/codec/test/RowWriterV2Test.cpp`
+
   - VectorTest
   - VectorWithDefaultValue
   - DoubleSetVector
   - UpdateVector
+
 - 向量索引功能测试，详情见`src/common/vectorIndex/test/AnnIndexTest.cpp`
+
   - IVFIndexTest
   - HNSWIndexTest
+
 - Ann Benchmark 测试，详情见`src/common/vectorIndex/test/ANNBenchmark.cpp`
+
   - IVFBenchmarkTest
   - HNSWBenchmarkTest
 

@@ -1,8 +1,11 @@
 ---
+
 title: 上篇：初识 Nebula Graph —— 向量类型支持
-date: 2025/10/28 23:15
+created: 2025-10-28
 tags:
-  - Database
+
+- Database
+
 ---
 
 # 上篇：初识 Nebula Graph —— 向量类型支持
@@ -26,11 +29,11 @@ tags:
 ### Overview
 
 1. 用户在 `console` 或者通过 `sdk` 输入 Cypher 语句到 Graph Service，立即返回给用户 Future，线程池的工作线程开始执行下面的真实工作流程。
-2. Graph Service 将 Query、Session、Storage 等打包成 Request Context，随后将 Request Context 打包成 Query Context，创建 Query Instance 随后开始执行 parse、validate、optimize、execute 整个流程，这里生成了 Graphd 的物理计划。
+1. Graph Service 将 Query、Session、Storage 等打包成 Request Context，随后将 Request Context 打包成 Query Context，创建 Query Instance 随后开始执行 parse、validate、optimize、execute 整个流程，这里生成了 Graphd 的物理计划。
    - Query Context 的生命周期从语句传入 Graphd 开始，到向 client 返回结果
-3. 然后将 Request Context 传入 Scheduler，按照算子树依次执行每个物理节点计划。
-4. 每个物理节点计划在 Graphd 中存在一个 executor，实际上里面调用了 storaged 的 processor。
-5. Storaged 的每个 processor 内部也会生成自己的执行计划。
+1. 然后将 Request Context 传入 Scheduler，按照算子树依次执行每个物理节点计划。
+1. 每个物理节点计划在 Graphd 中存在一个 executor，实际上里面调用了 storaged 的 processor。
+1. Storaged 的每个 processor 内部也会生成自己的执行计划。
    - 真正对数据的操作计划的每个节点上(node)：从 RocksDB 中获取或者存储 KV 对，实际上是通过 raft-wal 进行集群间的数据同步（确保原子性和一致性），然后用结果去设置 Promise，触发 Future 回调返回给 client 结果。
 
 ![](img/exec.png)
@@ -44,7 +47,9 @@ tags:
 Graphd 大体上分为 parse，validate，planner，optimize，execute 这几个阶段。所有的 statement、execplan 以及最后的 resultset 包括原始的 Query 语句，都存储在 RequestContext 中。
 
 - 构建 RequestContext 并把 Query 语句传入，根据 RequestContext 构建 Query Instance。开启所有的异步流程后，返回用户一个 Future。
+
 - 在 Query Instance 中执行 parse，将语句解析成 sentence(statement)。
+
 - 在 validate 中通过`validateimpl`方法进行 check，校验是否满足 schema 以及是否数据未超范围。
 
   ```c++
@@ -74,6 +79,7 @@ Graphd 大体上分为 parse，validate，planner，optimize，execute 这几个
   ```
 
 - 将逻辑执行计划树交给 Optimizer 进行优化，nebula 现在的优化是 **Rule-based optimization，每个执行计划需要遍历所有的 rules，得到最优的物理执行计划。**
+
 - 然后将整个物理计划交给 Scheduler 进行执行，在 Scheduler 中按照计划树的父子关系，从下之上依此执行计划，所有的计划都是用 Future 异步执行。
 
   - 首先先根据 Logical Plan 构造出 Physical Plan(Execution Plan)
@@ -128,6 +134,7 @@ Storaged 接收到 graphd 发送的 executor 请求，启动对应的 Processor�
 ![](img/processor.png)
 
 - 对于查询语句来说，实际上 `doProcess` 方法也会生成 Storage 的执行计划，对 RocksDB 进行操作，这里对于 Insert 语句来说就是简单的执行 `doPut` 操作，通过 raft-wal 向 RockDB 中写入数据
+
 - 在执行完逻辑后，将所有的更改写入集群，最后在回调中执行`handleAsync`方法，实际上是执行`onFinished`方法，`onFinished`方法中设置 promise 的 value 为 RESP，RESP 中包含查询的结果，一层层返回直到返回给客户端。
 
   ```c++
@@ -175,9 +182,10 @@ Storaged 接收到 graphd 发送的 executor 请求，启动对应的 Processor�
   ![](img/doPut.png)
 
 - Raft 的日志复制过程大致分为三个步骤：
+
   1. Leader：首先检查自身状态，然后先写入本地 WAL，然后将所有 log 复制到所有 follower
-  2. Follower：Followers 也会将新日志写入自己的 WAL，并向 Leader 回复 “成功”。
-  3. Leader：包括自己在内的大多数（Majority） 节点都已成功将该日志写入其 WAL，Leader 就会认为这条日志是 **“已提交” (Committed)** 的。Leader 就可以安全地将该日志（即 KV 操作）应用到其状态机（即真正执行 multiPut）
+  1. Follower：Followers 也会将新日志写入自己的 WAL，并向 Leader 回复 “成功”。
+  1. Leader：包括自己在内的大多数（Majority） 节点都已成功将该日志写入其 WAL，Leader 就会认为这条日志是 **“已提交” (Committed)** 的。Leader 就可以安全地将该日志（即 KV 操作）应用到其状态机（即真正执行 multiPut）
 
 ```c++
 void RaftPart::appendLogsInternal(AppendLogsIterator iter, TermID termId) {
@@ -267,7 +275,7 @@ void RaftPart::replicateLogs(folly::EventBase* eb,
 Nebula Graph 的实际类型存储是以 KV 对的形式存储在 RocksDB 中的，Key 有自己特殊的结构，Value 则是属性值的二进制序列化结果。因此我们需要做两方面的工作：
 
 1. 设计向量类型 (Vector Data Type)：实现向量数据类型和属性、序列化和反序列化
-2. 设计向量存储 (Vector Storage)：修改存储引擎，支持向量属性的单独存储和读取，设计向量属性的 Key 和 Value 格式
+1. 设计向量存储 (Vector Storage)：修改存储引擎，支持向量属性的单独存储和读取，设计向量属性的 Key 和 Value 格式
    > 为了方便后面的向量索引设计，我们将向量属性单独存储在一个 Column Family 中，其他属性存储在默认的 Column Family 中。
 
 ### 向量类型设计

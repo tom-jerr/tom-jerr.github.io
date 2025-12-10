@@ -1,8 +1,11 @@
 ---
+
 title: 7_B+Tree Indexes
-date: 2024-10-31
+created: 2024-10-31
 tags:
-  - Database
+
+- Database
+
 ---
 
 # 7-B+Tree Indexes
@@ -32,7 +35,7 @@ DBMS 在执行查询的时候，更多是查询索引而不是查询数据库中
 
 $M$阶搜索树
 
-- $$ \frac{M}{2} - 1 \le keys \le M - 1$$
+- $$ \\frac{M}{2} - 1 \\le keys \\le M - 1$$
 - 每个中间结点，$k$个关键字有$k+1$个非空孩子
 - 叶子结点存放关键字和数据
 
@@ -65,7 +68,7 @@ value
 
 1. Record IDs
    > 存放 tuple 的指针
-2. Tuple Data
+1. Tuple Data
    > 直接存放 tuple 的内容
 
 #### **B+树 Insert / Delete**
@@ -82,16 +85,16 @@ value
 
 只有少数系统支持前缀查找及后缀查找
 
-> $Find \ Key=(A,B), Find \ Key=(A, *)$；很多数据库不支持匹配$Find \ Key=(*, B)$；该查询可能需要遍历整张表
+> $Find \\ Key=(A,B), Find \\ Key=(A, *)$；很多数据库不支持匹配$Find \\ Key=(*, B)$；该查询可能需要遍历整张表
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/b+tree_find1.png)
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/b+tree_find2.png)
 
 ### 7.2.3 Duplicate Keys
 
-1. append recordID: 联合主键（<key, (page, slot)>）
+1. append recordID: 联合主键（\<key, (page, slot)>）
 
-2. overflow leaf nodes: 外接一个溢出(overflow)叶子结点；将重复的键放置在溢出叶子结点上
+1. overflow leaf nodes: 外接一个溢出(overflow)叶子结点；将重复的键放置在溢出叶子结点上
    ![](https://github.com/tom-jerr/MyblogImg/raw/15445/overflow_leaf_node.png)
 
 ### 7.2.4 clustered indexs
@@ -99,13 +102,13 @@ value
 - 数据按照主键索引来组织
 - 索引与文件一一对应，对于线性遍历有好处
 
-![](img\cluster.png)
+![](img%5Ccluster.png)
 
 非聚簇索引，遍历可以优化
 
 > 扫描叶节点不立即检索元组，而是找到它们后再进行检索
 
-![](img\non-cluster.png)
+![](img%5Cnon-cluster.png)
 
 ### 7.2.5 Node size
 
@@ -130,9 +133,9 @@ value
 
 1. 存放 Key 的指针
    > 大量非顺序 IO 操作，查找成本太高
-2. 使用变长结点
-3. Padding
-4. Key Map / Indirection
+1. 使用变长结点
+1. Padding
+1. Key Map / Indirection
    > 在结点内部使用指针来对应 KV
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/variable_length_key.png)
@@ -141,8 +144,8 @@ value
 
 1. Linear：从开始到结尾线性搜索；使用 SIMD 进行向量化比较
    ![](https://github.com/tom-jerr/MyblogImg/raw/15445/linear_inner_search.png)
-2. Binary：二分查找
-3. Interpolation：推断需要查找关键字的位置(单调递增且无间隙)
+1. Binary：二分查找
+1. Interpolation：推断需要查找关键字的位置(单调递增且无间隙)
    ![](https://github.com/tom-jerr/MyblogImg/raw/15445/interpolation_inner_search.png)
 
 ### 7.2.8 Optimization
@@ -157,7 +160,7 @@ Deduplication
 
 > 将冗余的键压缩
 
-![](img\deduplicate.png)
+![](img%5Cdeduplicate.png)
 
 suffix truncation
 

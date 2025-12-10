@@ -1,9 +1,13 @@
 ---
+
 title: RadixAttention 你需要知道的细节
 tags:
-  - LLMInference
-date: 2025/11/24
+
+- LLMInference
+  date: 2025/11/24
+
 ---
+
 # RadixAttention 你需要知道的细节
 
 ## Why Radix Attention?
@@ -64,7 +68,7 @@ class RadixKey:
 - **合并**: 当你插入一个序列  `[A, B, C]`  时，如果树是空的，它会创建一个包含完整序列  `[A, B, C]`  的节点，而不是三个节点。
 - **分裂 (Split)**: 当树中已有  `[A, B, C]`，而新请求是  `[A, F, DG]`  时，`_match_prefix_helper()`  会发现匹配到  `[A]`，然后在  `[B, C]`  处分叉。此时会调用  `_split_node()`：
   1. 原来的节点  `[A, B, C]`  被切分为父节点  `[A]`  和子节点  `[B, C]`。
-  2. 新请求的后缀  `[F, G]`  成为  `[A]`  的另一个子节点。
+  1. 新请求的后缀  `[F, G]`  成为  `[A]`  的另一个子节点。
 
 ![](img/radix_split.png)
 
@@ -77,8 +81,8 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
 当新请求到来时，`match_prefix()`  函数会被调用。
 
 1. **遍历**: `_match_prefix_helper()`  从根节点开始，沿着边匹配 Token。
-2. **最长公共前缀**: 它会尽可能深地匹配，直到无法匹配为止。
-3. **返回结果**: 返回匹配到的所有节点的  `value` (KV Cache Indices) 拼接后的 Tensor。这就是  **Cache Hit**。
+1. **最长公共前缀**: 它会尽可能深地匹配，直到无法匹配为止。
+1. **返回结果**: 返回匹配到的所有节点的  `value` (KV Cache Indices) 拼接后的 Tensor。这就是  **Cache Hit**。
 
 #### 树的更新与插入（Update & Insertion）
 
@@ -98,7 +102,7 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
 1. **请求完成时 (`cache_finished_req()`)**:
    - 当一个请求生成结束（遇到 EOS 或达到最大长度），系统会将该请求完整的 Token 序列（Prompt + Output）作为一条路径插入到 Radix Tree 中。
    - 这使得后续相同的 Prompt 可以直接复用完整的 KV Cache。
-2. **分块 Prefill 结束时 (`cache_unfinished_req()`)**:
+1. **分块 Prefill 结束时 (`cache_unfinished_req()`)**:
    - 对于超长 Prompt，SGLang 会将其切分为多个 Chunk 进行 Prefill。
    - 每处理完一个 Chunk，系统会调用 `cache_unfinished_req()`  将当前已计算好的部分前缀插入 Radix Tree。
    - 这样，即使请求还没完全处理完，其中间状态也可以被保存，防止被意外驱逐，并允许在后续 Chunk 中继续复用。
@@ -121,9 +125,9 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
 - **引用计数（Reference Counting）：** 每个节点都有一个引用计数，表示当前有多少个正在运行的请求正在使用这个节点对应的 KV Cache。
 - **LRU 驱逐**: `evict()` 函数
   1. **收集叶子**: `_collect_leaves()`  找到所有引用计数为 0 的叶子节点。
-  2. **排序**: 对叶子节点排序。
-  3. **删除**: 循环删除最近最少使用的叶子节点，并释放其对应的 KV Cache (`self.token_to_kv_pool_allocator.free(x.value)`).
-  4. **递归删除**: 如果删除叶子后，其父节点变成了无子节点的叶子且引用计数为 0，父节点也会被加入驱逐候选队列。
+  1. **排序**: 对叶子节点排序。
+  1. **删除**: 循环删除最近最少使用的叶子节点，并释放其对应的 KV Cache (`self.token_to_kv_pool_allocator.free(x.value)`).
+  1. **递归删除**: 如果删除叶子后，其父节点变成了无子节点的叶子且引用计数为 0，父节点也会被加入驱逐候选队列。
 
 ##### 何时进行驱逐？
 
@@ -147,7 +151,7 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
 
 当一个请求被“杀掉”或回退时，系统会立即调用 `evict()`  来确保其占用的资源被彻底释放并转化为可用的空闲块。
 
----
+______________________________________________________________________
 
 ## Cache-Aware Scheduling
 
@@ -156,9 +160,10 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
 要启用这个逻辑，启动服务时需要设置  `--schedule-policy lpm`。默认情况下调度策略是  `fcfs`，此时不会进行基于前缀长度的排序。
 
 ![](img/cache_aware_scheduling.png)
+
 ### 流程
 
-1. **调用入口**：在  `scheduler.py`  的  `get_new_batch_prefill()`  方法中。  
+1. **调用入口**：在  `scheduler.py`  的  `get_new_batch_prefill()`  方法中。\
    在从  `waiting_queue`  取出请求之前，会调用  `self.policy.calc_priority()`。
    ```python
    # python/sglang/srt/managers/scheduler.py
@@ -168,7 +173,7 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
        self.policy.calc_priority(self.waiting_queue)  # <--- 这里触发排序
        # ...
    ```
-2. **排序实现**：在  schedule_policy.py  中。  
+1. **排序实现**：在  schedule_policy.py  中。\
    `calc_priority()`  方法会根据当前的策略（如  `lpm`）计算前缀匹配并排序。
    > “全量遍历收集 -> 堆排序”
    ```python
@@ -177,15 +182,15 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
        # ...
        if isinstance(policy, CacheAwarePolicy):
            # 1. 计算前缀匹配 (对应图中 Search for the prefix matching)
-           temporary_deprioritized = self._compute_prefix_matches(
-               waiting_queue, policy
-           )
+           temporary_deprioritized = self._compute_prefix_matches(waiting_queue, policy)
            if policy == CacheAwarePolicy.LPM:
                # 2. 根据前缀长度排序 (对应图中 requests.sort())
                SchedulePolicy._sort_by_longest_prefix(
                    waiting_queue, temporary_deprioritized
                )
        # ...
+
+
    @staticmethod
    def _sort_by_longest_prefix(
        waiting_queue: List[Req], temporary_deprioritized: Set[int]
@@ -200,9 +205,7 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
        )
    ```
 
-
-
----
+______________________________________________________________________
 
 ## 补充
 
@@ -225,6 +228,7 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
 - **Prefix Matching:** 依然精确匹配 token。假设匹配了 20 个 token (page_size=16)，这意味着匹配了完整的 Page 0 和 Page 1 的前 4 个 token。
 
 - **Memory Allocation:** 假设新输入有 10 个 token。如果 Page 1 还有剩余空间（当前用了 4 个，剩 12 个），则直接填入 Page 1。如果空间不足，则分配新的 Page。`alloc_extend_kernel`分配逻辑被明确分为了三部分：
+
   - **Part 1 (Fill old partial page)**: 计算前缀最后一个 Page 剩余的 slot 数量 (num_part1)，并将新生成的 Token 填入这个 Page 的剩余位置。
   - **Part 2 (Fill new full pages)**: 如果还有剩余 Token，分配新的完整 Page。
   - **Part 3 (Fill new partial page)**: 处理最后剩余的不足一个 Page 的 Token。
@@ -244,7 +248,7 @@ SGLang 的 Decode 内存分配主要由 `alloc_decode_kernel` 和 `alloc_for_dec
 - **写入数据 (Write Data):**
 
   - 未满 (Append): 直接获取 last_loc (上一个 token 的物理位置)，新 token 写入 last_loc + 1。
-  - 已满 (New Page): 从 free_page_ptr 拿一个新的物理 Page ID (例如 p)，新 token 写入 p \* page_size (即该 Page 的第 0 个 slot)。
+  - 已满 (New Page): 从 free_page_ptr 拿一个新的物理 Page ID (例如 p)，新 token 写入 p * page_size (即该 Page 的第 0 个 slot)。
 
 - **更新映射 (Update Mapping):**: 将新分配的物理位置写入 `req_to_token_pool` 的对应位置。
 
@@ -285,25 +289,26 @@ def init_forward_metadata(self, forward_batch: ForwardBatch):
 
 在 SGLang 的架构中，Radix Tree 的线程安全**不是靠锁（Lock）来实现的，而是靠“串行化”**。
 
-- **单线程调度器 (Single-threaded Scheduler)**：  
-   SGLang 的核心调度逻辑（`event_loop()`）运行在一个**单线程**的主循环中。
+- **单线程调度器 (Single-threaded Scheduler)**：\
+  SGLang 的核心调度逻辑（`event_loop()`）运行在一个**单线程**的主循环中。
   - 所有的请求（Request）通过 ZMQ 队列进入，被串行地取出。
   - 所有的 Radix Tree 操作（`insert`, `match_prefix`, `evict`）都只在这个主线程中执行。
   - 因此，**同一时刻只有一个线程在修改 Radix Tree**，从根本上避免了多线程竞争（Race Condition），不需要复杂的互斥锁（Mutex）。
-- **逻辑引用计数 (Logical Ref Counting)**：  
-   虽然没有线程锁，但 Radix Tree 内部维护了  `lock_ref`（引用计数）。
+- **逻辑引用计数 (Logical Ref Counting)**：\
+  虽然没有线程锁，但 Radix Tree 内部维护了  `lock_ref`（引用计数）。
   - **作用**：这**不是**为了线程同步，而是为了**内存安全**。它防止调度器在处理当前 Batch 时，错误地把正在使用的 KV Cache 页（Page）给驱逐（Evict）掉。
   - **机制**：当一个 Request 正在运行（Running）时，它所占用的 Radix Tree 节点的 `lock_ref`  会增加，确保  `evict()`  函数不会回收这些节点。
 
 **GIL 是 Python 实现版本的主要瓶颈之一。**
 
-- **Python 版 Radix Tree (默认)**：  
-   默认情况下，RadixCache  是用纯 Python 实现的。
+- **Python 版 Radix Tree (默认)**：\
+  默认情况下，RadixCache  是用纯 Python 实现的。
 
   - **GIL 的限制**：由于 Python 的全局解释器锁（GIL），调度器只能利用一个 CPU 核心。
   - **高并发下的瓶颈**：在高并发（High Concurrency）或高吞吐（High Throughput）场景下，大量的  `insert`（插入）、`match_prefix`（前缀匹配）和  `evict`（驱逐）操作会消耗大量 CPU 时间。如果这些操作太慢，会阻塞调度循环，导致 GPU 等待（GPU Starvation），从而降低整体推理性能。
 
 - 为了解决 GIL 带来的效率问题，SGLang 引入了 **C++ 实现的 Radix Tree**。
+
   - **原理**：将树的数据结构和操作下沉到 C++ 层。在执行耗时的树操作时，C++ 扩展可以**释放 GIL (Release GIL)**，允许其他 Python 线程（如数据接收、监控线程）并行运行，且 C++ 本身执行效率远高于 Python。
 
 ### Q2：为什么尾部 (Tail) 不足一个 Page 的 Token 不共享？真的无法共享吗？
@@ -334,6 +339,7 @@ def init_forward_metadata(self, forward_batch: ForwardBatch):
 - **内存分配复杂度**：如果允许尾部共享，内存分配器需要跟踪哪些 Block 是部分共享的，哪些是完全私有的。这会大大增加分配器的复杂度。
 
 - **Memcpy 代价大于 Recompute**：在 GPU 推理中，为了减少碎片，`page_size`  通常很小（16 或 32）。在这种粒度下，**“丢弃尾部，直接重算”是工程上的最优解**。
+
   - **计算 vs. 拷贝的开销对比**：
     - **重算（Recompute）**：计算 4 个 Token 的 Attention（Prefill 阶段）在 GPU 上极快，通常是微秒级。
     - **拷贝（Memcpy）**：启动一个 CUDA Kernel 来做内存拷贝（D2D Copy）也有固定开销（Kernel Launch Latency 约为 5-10us）。
@@ -343,7 +349,7 @@ def init_forward_metadata(self, forward_batch: ForwardBatch):
 
 通常不能，KV Cache 得到前会经过 RoPE，该算子利用绝对位置编码来得到相对位置信息，所以改变 token 位置会对 KV Cache 有不可逆影响。而且 KV Cache 强依赖于前序所有 Token。中间变了，后面的 KV 值全变
 
-> 因为 RoPE（Rotary Positional Embedding）是绝对位置编码的一种变体。KV Cache 中的 Key 向量携带了位置 $m$ 的旋转信息 $R_m$。如果在中间插入 Token，后续所有 Token 的绝对位置索引都会发生平移 ($m \to m+k$)，导致其对应的旋转矩阵发生变化。旧的 KV Cache 中的 $K$ 值是基于旧位置计算的，数学上无法直接复用，必须重新计算
+> 因为 RoPE（Rotary Positional Embedding）是绝对位置编码的一种变体。KV Cache 中的 Key 向量携带了位置 $m$ 的旋转信息 $R_m$。如果在中间插入 Token，后续所有 Token 的绝对位置索引都会发生平移 ($m \\to m+k$)，导致其对应的旋转矩阵发生变化。旧的 KV Cache 中的 $K$ 值是基于旧位置计算的，数学上无法直接复用，必须重新计算
 
 ### Q4：在 Tensor Parallel (TP) 模式下，Radix Tree 如何维护？
 

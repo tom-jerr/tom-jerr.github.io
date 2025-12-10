@@ -1,14 +1,17 @@
 ---
+
 title: LibOS
-date: 2024/4/17 13:41
+created: 2024-04-17
 update:
 comments: true
 description: LibOS介绍
 katex: true
 tags:
-  - Operator System
-  - rust
-categories: Project
+
+- Operator System
+- rust
+  categories: Project
+
 ---
 
 # LibOS

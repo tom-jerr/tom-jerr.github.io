@@ -51,9 +51,9 @@ class VectorIndexManager final {
 ### Storage 中 VectorIndexManager 的传递
 
 1. 在 `StorageServer::start()` 方法创建了 StorageEnv 实例并将 env 传递给 AdminTaskManager
-2. 初始化 Ann Index Manager 实例
-3. 然后将 Ann Index Manager 实例与 StorageEnv 关联
-4. StorageEnv 结构定义
+1. 初始化 Ann Index Manager 实例
+1. 然后将 Ann Index Manager 实例与 StorageEnv 关联
+1. StorageEnv 结构定义
    - 我们增加了一个新的成员变量 `annIndexMan_`，用于管理 ANN 索引。
    - 需要在 Storaged 启动时初始化
 
@@ -91,6 +91,7 @@ storageServer->setEnvAnnIndexMgr(vectorIndexMgr.get());
 ### Ann Index Item
 
 - 通用的 Index Item 是对单个 Schema 的多个 field 的索引定义，同时索引参数只有`s2_max_level`和`s2_max_cells`，不能满足 Ann Index 对多个 Schema 同名属性进行索引创建的要求，所以我们设计了新的 Ann Index Item。
+
 - Ann Index Item 是对多个 Schema 的同名属性进行索引创建的定义，包含了所有需要索引的 Schema 的信息。同时通过一个`list<binary>`来存储 ann index 创建的参数。
 
   > ```cpp
@@ -166,8 +167,8 @@ struct ListEdgeAnnIndexesResp {
 ## Create Ann Index Plan
 
 1. Graphd 生成 `Start->CreateTagAnnIndex->SubmitJob` 的计划
-2. 执行时，metad 先在内部创建 Ann 索引条目，创建成功后，会进行 AdminJob 的提交
-3. Metad 将 Job 的参数打包传给 Storaged 的 AdminTask，Storaged 通过内部的 AdminTaskManager 处理这些任务，完成任务。这里涉及到分布式的时序问题：
+1. 执行时，metad 先在内部创建 Ann 索引条目，创建成功后，会进行 AdminJob 的提交
+1. Metad 将 Job 的参数打包传给 Storaged 的 AdminTask，Storaged 通过内部的 AdminTaskManager 处理这些任务，完成任务。这里涉及到分布式的时序问题：
    > Meta Client 缓存更新机制：Storage 节点的 IndexManager 通过 MetaClient 获取索引信息，但 MetaClient 的缓存是通过心跳周期更新的:
    >
    > - 时序问题：Meta 服务创建索引后，Storage 节点需要等待下一个心跳周期才能看到新索引
@@ -182,8 +183,8 @@ struct ListEdgeAnnIndexesResp {
 对每个 Partition 做相同的操作：
 
 1. 扫描 KVStore(RocksDB)中的所有符合 property name 的 vector 属性的数据
-2. 将 Vertex ID/Edge Type 与 VectorID 存入 KVStore 的 id-vid column family
+1. 将 Vertex ID/Edge Type 与 VectorID 存入 KVStore 的 id-vid column family
    > Vertex ID 是 std::string 类型，这里通过 hash 计算 VectorID，所以需要存入两份映射`VectorID->VertexID`和`VertexID->VectorID`
-3. 通过这些数据构建内存中的 Ann Index
+1. 通过这些数据构建内存中的 Ann Index
 
 ![](../create_ann_index_storaged.png)

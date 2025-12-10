@@ -1,8 +1,11 @@
 ---
+
 title: lecture14_DataPath_Hazards
-date: 2023-09-11 22:17:49
+created: 2023-09-11
 tags:
-  - System Arch
+
+- System Arch
+
 ---
 
 # Hazards
@@ -54,6 +57,7 @@ tags:
   - No control hazard
 
 - If branch is taken, or there’s a jump:
+
   - The next two instructions still in the pipeline are incorrect
   - Need to convert incorrect instructions in the pipeline to nops
   - Called “flushing” the pipeline

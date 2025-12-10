@@ -1,8 +1,11 @@
 ---
+
 title: 8_Index Concurrency
-date: 2024-10-31
+created: 2024-10-31
 tags:
-  - Database
+
+- Database
+
 ---
 
 # 8-Index Concurrency
@@ -45,7 +48,7 @@ Blocking OS Mutex：阻塞式实现；不能大规模并发；std::mutex
 
 > 涉及到 OS 的系统调用，可能会拖慢整个系统的速度
 
-![](img\mutex.png)
+![](img%5Cmutex.png)
 
 Reader-Writer Latches
 

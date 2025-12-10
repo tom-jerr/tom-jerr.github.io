@@ -1,11 +1,14 @@
 ---
+
 title: Attention & Transformers
-date: 2025/9/30
+created: 2025-09-30
 update:
 comments: true
 katex: true
 tags:
-  - LLMInference
+
+- LLMInference
+
 ---
 
 # Attention & Transformers
@@ -198,9 +201,9 @@ class GroupedQueryAttention(nn.Module):
 
 1. 列长度的灵活性：
    Transformer 处理的是序列数据，序列长度可能因输入样本而异。LayerNorm 对每个样本自身的一层神经元的输入进行归一化，与其他样本的序列长度无关，**能够很好地处理不同长度的输入序列**。而 batch norm 对长度大小不同的 NLP 任务计算的超参数泛化能力差。
-2. 并行计算的适应性：
+1. 并行计算的适应性：
    Transformer 的多头注意力机制高度并行化，LayerNorm 只需要**对单个样本的一层进行计算，不需要等待其他样本的信息，因此更适合并行计算环境**。
-3. 模型的稳定性：
+1. 模型的稳定性：
    LayerNorm 基于每一层自身的输入进行归一化，能够更好地控制每一层输入的范围和分布，避免梯度消失或梯度爆炸问题。
 
 ### post-norm 与 pre-norm

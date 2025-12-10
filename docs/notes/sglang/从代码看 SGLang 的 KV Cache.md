@@ -1,8 +1,11 @@
 ---
+
 title: 从代码看 SGLang 的 KV Cache
-date: 2025/11/02
+created: 2025-11-02
 tags:
-  - LLMInference
+
+- LLMInference
+
 ---
 
 # 从代码看 SGLang 的 KV Cache
@@ -28,9 +31,10 @@ tags:
 
 ### req_to_token_pool
 
-这是从请求到其令牌的键值缓存索引的映射。这就是我们在注意力后端图中提到的 `req_to_token` 
+这是从请求到其令牌的键值缓存索引的映射。这就是我们在注意力后端图中提到的 `req_to_token`
 
 - 形状：最大允许请求数（由参数 `max-running-requests` 设置，用于指定可同时运行的最大请求数）\* 每个请求的最大上下文长度（由配置 model_config.context_len 设置）
+
 - 访问：
 
   - Dim0： `req_pool_indices` 标识具体请求
@@ -41,7 +45,7 @@ tags:
 
 `req_to_token_pool` 维护了 Request 到 token KV 缓存索引的映射关系， `token_to_kv_pool` 进一步将 token 从其 KV 缓存索引映射到其实际的 KV 缓存数据。
 
-- Layout: Number of Layers _ Max Allowed Tokens Number _ Number of Head \* Head Dimension
+- Layout: Number of Layers _ Max Allowed Tokens Number _ Number of Head * Head Dimension
 - 访问：
   - Dim0：`layer_id` 标识特定图层
   - Dim1：`out_cache_loc` 标识特定的 KV 缓存索引（空闲槽位）
@@ -52,16 +56,16 @@ tags:
 请注意，我们通常会一次性检索整个层的 KV 缓存，因为我们**需要请求中所有先前 token 的 KV 才能进行 forward**。
 
 ### Example
-|请求|prefix|新chunk|decode|状态|
-|---|---|---|---|---|
-|**req₀**|[A, B, C]|[D, E]|生成 [F] 后结束|✅先结束|
-|**req₁**|[A, B, C]（共享prefix）|[G, H]|生成 [I, J] 后结束|后结束|efill 阶段
+
+| 请求     | prefix                  | 新chunk | decode             | 状态     |
+| -------- | ----------------------- | ------- | ------------------ | -------- |
+| **req₀** | [A, B, C]               | [D, E]  | 生成 [F] 后结束    | ✅先结束 |
+| **req₁** | [A, B, C]（共享prefix） | [G, H]  | 生成 [I, J] 后结束 | 后结束   |
+
 - 系统中已经有一个 prefix cache：
 
 ```python
-prefix_cache = {
-    "ABC": [0, 1, 2]  # KV槽位
-}
+prefix_cache = {"ABC": [0, 1, 2]}  # KV槽位
 
 token_to_kv_pool = {
     0: (k_A, v_A),
@@ -82,12 +86,14 @@ req_to_token_pool = {
     1: [0, 1, 2, 5, 6],
 }
 
-token_to_kv_pool.update({
-    3: (k_D, v_D),
-    4: (k_E, v_E),
-    5: (k_G, v_G),
-    6: (k_H, v_H),
-})
+token_to_kv_pool.update(
+    {
+        3: (k_D, v_D),
+        4: (k_E, v_E),
+        5: (k_G, v_G),
+        6: (k_H, v_H),
+    }
+)
 ```
 
 **第一次Decode**
@@ -101,18 +107,18 @@ req_to_token_pool = {
     1: [0, 1, 2, 5, 6, 8],
 }
 
-token_to_kv_pool.update({
-    7: (k_F, v_F),
-    8: (k_I, v_I),
-})
+token_to_kv_pool.update(
+    {
+        7: (k_F, v_F),
+        8: (k_I, v_I),
+    }
+)
 ```
 
-`req₀` 已生成完毕，因此系统释放其 **非prefix槽位** `[3,4,7]`，prefix `[0,1,2]` 保留以供复用。`req₁` 继续进行 decode 
+`req₀` 已生成完毕，因此系统释放其 **非prefix槽位** `[3,4,7]`，prefix `[0,1,2]` 保留以供复用。`req₁` 继续进行 decode
 
 ```python
-req_to_token_pool = {
-    1: [0, 1, 2, 5, 6, 8]
-}
+req_to_token_pool = {1: [0, 1, 2, 5, 6, 8]}
 
 token_to_kv_pool = {
     0: (k_A, v_A),
@@ -123,6 +129,7 @@ token_to_kv_pool = {
     8: (k_I, v_I),
 }
 ```
+
 ## 模型推理中的 KV Cache 管理流程
 
 这里为了简化提取关键流程，我们假设设置 `page_size=1` ，即逐 token 精确匹配。
@@ -134,7 +141,7 @@ token_to_kv_pool = {
    - 当有新请求到达时， `tree_cache.match_prefix()` 方法会遍历基数树以找到最长的缓存前缀
    - `match_prefix()` 函数返回 `prefix_indices` （键值缓存位置张量）和 `last_node` （表示匹配前缀的树节点）。这些 `prefix_indices` 直接指向可重用的物理键值缓存槽位。
 
-2. Step 2: Memory Allocation
+1. Step 2: Memory Allocation
 
    - 为批次分配键值缓存时，系统会使用树缓存中已缓存的`prefix_indices`，并且仅为未缓存的标记分配新的缓存
 
@@ -149,18 +156,19 @@ token_to_kv_pool = {
    write_cache_indices(...)
    ```
 
-3. Step 3: Cache Insertion
+1. Step 3: Cache Insertion
 
    - 计算完成后，新的键值缓存通过 `cache_finished_req()` 或者 `cache_unfinished_req()`被插入回树缓存中，插入过程中，树缓存：
      - 识别树中已存在的重复前缀（返回 new_prefix_len ）
      - 通过 `token_to_kv_pool_allocator.free()` 释放重复的 KV 索引
      - 使用新节点更新 radix tree
      - 增加/减少锁引用以保护缓存节点免受驱逐
-     
-4. Step 4：经过 Scheduler 调度后，modelrunner 进行模型真正执行，这里以 flash attention 作为后端为例
 
-    - 获取 metadata，比如多个序列 `cur_q_len`，`cur_q_len` 以及每个序列的 token 需要的 KV cache 索引
-    - 调用 `flash-attn.flash_attn_with_kvcache()`，将 page table 和 meta data 作为参数传入，就结束了 prefill 的过程
+1. Step 4：经过 Scheduler 调度后，modelrunner 进行模型真正执行，这里以 flash attention 作为后端为例
+
+   - 获取 metadata，比如多个序列 `cur_q_len`，`cur_q_len` 以及每个序列的 token 需要的 KV cache 索引
+   - 调用 `flash-attn.flash_attn_with_kvcache()`，将 page table 和 meta data 作为参数传入，就结束了 prefill 的过程
+
 ### Decode
 
 Decode 的流程实际上与 Prefill 相似，只是分配内存时，每个 token 只需要分配 1 个即可，其余操作基本相同
@@ -173,4 +181,4 @@ Decode 的流程实际上与 Prefill 相似，只是分配内存时，每个 tok
 
 ## Reference
 
-[^kvcache]: [KV Cache 代码解析](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/kvcache-code-walk-through/readme-CN.md)
+\[^kvcache\]: [KV Cache 代码解析](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/kvcache-code-walk-through/readme-CN.md)

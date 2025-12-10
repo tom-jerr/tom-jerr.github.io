@@ -5,9 +5,9 @@
 ### Graphd Process
 
 1. Insert 语句首先由 Graphd 从 client 接收，Graph Service 将 Query、Session、Storage 等打包成 Request Context，随后将 Request Context 打包成 Query Context，创建 Query Instance 随后开始执行 parse、validate、optimize、execute 整个流程。
-2. 经过 Graphd 的 validate，进入 Planner 阶段对应的时 InsertVertices，此时已经构建了一个逻辑执行计划。
-3. 通过 Optimizer 优化逻辑执行计划，生成物理执行计划。
-4. 物理执行计划这里只涉及到一个 Executor，InsertVerticesExecutor。InsertVerticesExecutor 实际上会调用 StorageClient 的 insertVertices 方法，向 Storaged 发送 Insert 请求。
+1. 经过 Graphd 的 validate，进入 Planner 阶段对应的时 InsertVertices，此时已经构建了一个逻辑执行计划。
+1. 通过 Optimizer 优化逻辑执行计划，生成物理执行计划。
+1. 物理执行计划这里只涉及到一个 Executor，InsertVerticesExecutor。InsertVerticesExecutor 实际上会调用 StorageClient 的 insertVertices 方法，向 Storaged 发送 Insert 请求。
 
 ### Storaged Process
 
@@ -20,7 +20,7 @@
 
 1. Storaged has the meta client, when metad is ready, storaged will get the schema from metad.
    <img src = "../img/meta_client_schema.png" style="width: 40%">
-2. So if we want to insert vertices in a cluster, we need to add vector columns for the schema in the metaClient not only the metad.
+1. So if we want to insert vertices in a cluster, we need to add vector columns for the schema in the metaClient not only the metad.
 
 ## Write data by Raft-wal
 

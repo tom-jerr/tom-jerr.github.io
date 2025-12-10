@@ -1,6 +1,6 @@
 ---
 title: 下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路
-date: 2025/11/13
+created: 2025-11-13
 tags:
   - Database
 ---

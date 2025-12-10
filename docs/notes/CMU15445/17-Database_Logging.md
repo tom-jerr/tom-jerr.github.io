@@ -1,8 +1,11 @@
 ---
+
 title: 17 Database Logging
-date: 2024-10-31
+created: 2024-10-31
 tags:
-  - Database
+
+- Database
+
 ---
 
 # Database Logging
@@ -10,20 +13,20 @@ tags:
 ## Crash Recovery
 
 1. Actions during normal txn processing to ensure that the DBMS can recover from a failure
-2. Actions after a failure to recovver the database to a state that ensures atomicity, consistency, and durability
+1. Actions after a failure to recovver the database to a state that ensures atomicity, consistency, and durability
 
 ## Failure Classification
 
 ### Transaction Failures
 
 1. Logical Errors: 事务因为一些内部原因没有完成（完整性约束失效）
-2. Internal State Errors: DBMS 必须终止一个活跃的事务因为一个错误的条件（死锁）
+1. Internal State Errors: DBMS 必须终止一个活跃的事务因为一个错误的条件（死锁）
 
 ### System Failures
 
 1. Software Failure: OS 或者 DBMS 实现的错误
-2. Hardware Failure:
-   > the computer hosting the DBMS crahsed(电源线被拉了)  
+1. Hardware Failure:
+   > the computer hosting the DBMS crahsed(电源线被拉了)\
    > Fail-stop Assumption: 非易失性存储的内容被假设不会被 system crash 破坏
 
 ### Storage Media Failures
@@ -31,7 +34,7 @@ tags:
 Non-Repairable（无法修复的） Hardware Failure
 
 1. head crash 或者相似的磁盘 failure 破坏了所有或者部分的 non-volatile storage
-2. 重建被假设可以被 detectable(磁盘控制器使用校验和来检测错误)
+1. 重建被假设可以被 detectable(磁盘控制器使用校验和来检测错误)
 
 **_数据库不能从这种错误中恢复数据_**
 
@@ -57,7 +60,7 @@ NO-force: is not required
 
 #### NO-STEAL + FORCE
 
-> 不必 undo，因为改变还未写入磁盘；  
+> 不必 undo，因为改变还未写入磁盘；\
 > 不必 redo，因为所有的改变在提交时已经确保写入磁盘
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/nosteal_force.png)
@@ -83,7 +86,7 @@ NO-force: is not required
 > 每次事务提交需要等待 log 落盘，这可能会成为瓶颈；所以 DBMS 使用 group commit optimization 来 batch multiple log flushed；这会提高吞吐量
 >
 > 1. 如果 buffer 满了，写磁盘
-> 2. 如果超时了，写磁盘（5ms）
+> 1. 如果超时了，写磁盘（5ms）
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/WAL_PROTOCOL2.png)
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/group_commit.png)
@@ -104,7 +107,7 @@ NO-force: is not required
 ### Blocking/Consistent Checkpoint Protocol
 
 1. 暂停所有查询
-2. 将所有的 WAL 记录落盘
-3. 将所有在 Buffer Pool 中的更改的页落盘
-4. 在 WAL 中写入<CHEKCKPOINT>并落盘
-5. 恢复查询
+1. 将所有的 WAL 记录落盘
+1. 将所有在 Buffer Pool 中的更改的页落盘
+1. 在 WAL 中写入<CHEKCKPOINT>并落盘
+1. 恢复查询

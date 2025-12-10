@@ -1,11 +1,14 @@
 ---
+
 title: 3D Active Metric-Semantic SLAM 论文精读
-date: 2025/10/13
+created: 2025-10-13
 update:
 comments: true
 katex: true
 tags:
-  - VINS
+
+- VINS
+
 ---
 
 # 3D Active Metric-Semantic SLAM 论文精读

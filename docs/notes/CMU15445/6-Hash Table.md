@@ -1,8 +1,11 @@
 ---
+
 title: 6_Hash_Table
-date: 2023-09-21 22:17:49
+created: 2023-09-21
 tags:
-  - Database
+
+- Database
+
 ---
 
 # 6 Hash Table
@@ -30,6 +33,7 @@ tags:
   - 计算速度和碰撞率的取舍
 
 - Hashing Scheme
+
   - 静态哈希表
   - 可扩展哈希表
 
@@ -58,7 +62,9 @@ tags:
 #### optimization
 
 - 按照类型和大小对哈希表进行特例化实现
+
 - 使用 hash table 存储元数据
+
 - 使用 table+slot+version 来快速对 hash table 中的所有条目进行 Invalid
 
   > 如果 table 的 version 与 slot 的 version 不匹配，将该 slot 作为空 slot 处理

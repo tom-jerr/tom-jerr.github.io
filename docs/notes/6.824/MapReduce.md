@@ -1,13 +1,17 @@
 ---
+
 title: MapReduce
-date: 2025/5/21
+created: 2025-05-21
 update:
 comments: true
 description: MapReduce 论文笔记
 katex: true
 tags:
-  - Distributed System
+
+- Distributed System
+
 # categories: Project
+
 ---
 
 # Implement with C++ personal
@@ -35,8 +39,8 @@ tags:
 
 Job。整个 MapReduce 计算称为 Job。
 
-- 对于一个完整的 MapReduce Job，它由一些 Map Task 和一些 Reduce Task 组成  
-  Task。每一次 MapReduce 调用称为 Task。  
+- 对于一个完整的 MapReduce Job，它由一些 Map Task 和一些 Reduce Task 组成\
+  Task。每一次 MapReduce 调用称为 Task。\
   Shuffle。MapReduce 中从一种形式数据到另一种数据形式的转换
 
 ## 流程
@@ -45,11 +49,15 @@ Job。整个 MapReduce 计算称为 Job。
 
 1. MapReduce 启动时，会查找 Map 函数。之后，MapReduce 框架会为每个输入文件运行 Map 函数。这里可以并行运行多个只关注输入和输出的 Map 函数。
 
-2. 所有的输入文件都运行了 Map 函数，并得到了论文中称之为中间输出（intermediate output），也就是每个 Map 函数输出的 key-value 对。此时这些 kv 对在内存 Buffer 中。
-3. Buffered KV pairs 会通过分区函数定期刷写到本地磁盘上，本地磁盘会按照 partitioning function 进行逻辑分区分成 R 个区域，kv paris 在磁盘中的位置告知给 master，后续 reduce worker 需要知道 kv pairs 的位置。
-4. reduce worker 使用 RPC 获取某个区域的 kv pairs，当 reduce 获取到所有 map worker 的某个分区的 kv pair 后，按照 key 来排序，如果排序无法在内存中完成，使用外部排序来实现。
-5. reduce worker 对于每个唯一的 key，将 key 和对应的一系列 values 传递给用户定义的 reduce 函数
-6. 当所有 map 任务和 reduce 任务都完成后，master 会唤醒用户进程。
+1. 所有的输入文件都运行了 Map 函数，并得到了论文中称之为中间输出（intermediate output），也就是每个 Map 函数输出的 key-value 对。此时这些 kv 对在内存 Buffer 中。
+
+1. Buffered KV pairs 会通过分区函数定期刷写到本地磁盘上，本地磁盘会按照 partitioning function 进行逻辑分区分成 R 个区域，kv paris 在磁盘中的位置告知给 master，后续 reduce worker 需要知道 kv pairs 的位置。
+
+1. reduce worker 使用 RPC 获取某个区域的 kv pairs，当 reduce 获取到所有 map worker 的某个分区的 kv pair 后，按照 key 来排序，如果排序无法在内存中完成，使用外部排序来实现。
+
+1. reduce worker 对于每个唯一的 key，将 key 和对应的一系列 values 传递给用户定义的 reduce 函数
+
+1. 当所有 map 任务和 reduce 任务都完成后，master 会唤醒用户进程。
 
 # 故障处理
 

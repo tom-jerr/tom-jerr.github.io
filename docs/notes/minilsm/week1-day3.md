@@ -1,14 +1,18 @@
 ---
+
 title: Block
-date: 2025/4/6
+created: 2025-04-06
 update:
 comments: true
 description: Block 的基本介绍
 katex: true
 tags:
-  - MiniLSM
-  - rust
+
+- MiniLSM
+- rust
+
 # categories: Project
+
 ---
 
 # Block
@@ -63,20 +67,20 @@ tags:
 
 - cursor 会停在 block.offsets.len()处，此时返回的 key 是空的，value_range 是(0, 0)
 
-### 3. So Block is simply a vector of raw data and a vector of offsets. Can we change them to Byte and Arc<[u16]>, and change all the iterator interfaces to return Byte instead of &[u8]? (Assume that we use Byte::slice to return a slice of the block without copying.) What are the pros/cons?
+### 3. So Block is simply a vector of raw data and a vector of offsets. Can we change them to Byte and Arc\<[u16]>, and change all the iterator interfaces to return Byte instead of &[u8]? (Assume that we use Byte::slice to return a slice of the block without copying.) What are the pros/cons?
 
 #### 优点 ​​
 
 - 零拷贝操作 ​：Bytes 类型天然支持零拷贝切片（通过 Bytes::slice），避免数据复制，尤其适用于大块数据或多处共享的场景。
 
-- 线程安全 ​​：Arc<[u16]> 是线程安全的不可变结构，允许多线程安全共享偏移量数组，无需额外同步。Bytes 内部通过原子引用计数管理数据，支持跨线程安全共享。
+- 线程安全 ​​：Arc\<[u16]> 是线程安全的不可变结构，允许多线程安全共享偏移量数组，无需额外同步。Bytes 内部通过原子引用计数管理数据，支持跨线程安全共享。
 
-- 性能优化 ​​：偏移量数组 Arc<[u16]> 在多次引用时共享同一内存，比 Vec<u16> 的独立存储更节省内存。
+- 性能优化 ​​：偏移量数组 Arc\<[u16]> 在多次引用时共享同一内存，比 Vec<u16> 的独立存储更节省内存。
   ​
 
 #### 缺点 ​​
 
-- 内存碎片化 ​​：Arc<[u16]> 的每个实例独立分配内存，可能导致内存碎片（尤其是大量小 Block 时）。对比 Vec<u16> 的连续内存布局，Arc<[u16]> 的随机分配可能降低缓存局部性。
+- 内存碎片化 ​​：Arc\<[u16]> 的每个实例独立分配内存，可能导致内存碎片（尤其是大量小 Block 时）。对比 Vec<u16> 的连续内存布局，Arc\<[u16]> 的随机分配可能降低缓存局部性。
 - 引用计数开销 ​​：Arc 和 Bytes 的原子操作（增减引用计数）在高并发场景下有轻微性能损耗。频繁创建/销毁 Block 时，原子操作的开销可能累积。
 - 灵活性降低 ​​：不可变设计使得无法动态修改 Block 的数据或偏移量，若需原地更新则需重建整个 Block。若系统需要动态调整偏移量（如合并 Block），需额外的数据拷贝。
 

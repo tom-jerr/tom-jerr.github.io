@@ -1,8 +1,11 @@
 ---
+
 title: lecture21_Virtual_Memory
-date: 2023-09-11 22:17:49
+created: 2023-09-11
 tags:
-  - System Arch
+
+- System Arch
+
 ---
 
 # Virtual Memory
@@ -16,6 +19,7 @@ tags:
 ### Benefits
 
 - 允许运行自身大小比主存大得多的程序；只有工作的页放在主存，其他页放在磁盘；由 OS 进行页的请求和置换
+
 - OS 可以共享内存并实现程序的互相保护
 
 - 隐藏机器级的不同

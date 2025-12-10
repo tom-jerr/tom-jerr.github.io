@@ -132,7 +132,7 @@ void RaftPart::processAppendLogRequest(const cpp2::AppendLogRequest& req,
 }
 ```
 
----
+______________________________________________________________________
 
 ### 场景 2: 故障节点重新加入
 
@@ -262,7 +262,7 @@ void RaftPart::processAppendLogRequest(const cpp2::AppendLogRequest& req,
 }
 ```
 
----
+______________________________________________________________________
 
 ### 场景 3: Vector 数据的重放
 
@@ -399,7 +399,7 @@ void rebuildVectorIndexFromWal() {
 }
 ```
 
----
+______________________________________________________________________
 
 ### 监控和调试
 
@@ -787,8 +787,8 @@ std::tuple<nebula::cpp2::ErrorCode, LogID, TermID> Part::commitLogs(
 #### 为什么 Snapshot 阶段不写入 VectorIndexWal？
 
 1. **性能考虑**: Snapshot 是全量数据传输，如果每个 vector 都写 VectorIndexWal，会产生大量额外 I/O
-2. **一致性保证**: Snapshot 代表的是一个一致性状态点，不需要额外的 WAL 记录
-3. **重建机制**: 后续的增量日志会确保 VectorIndexWal 的完整性
+1. **一致性保证**: Snapshot 代表的是一个一致性状态点，不需要额外的 WAL 记录
+1. **重建机制**: 后续的增量日志会确保 VectorIndexWal 的完整性
 
 ### Vector 索引状态的最终一致性
 
@@ -1175,8 +1175,8 @@ std::tuple<nebula::cpp2::ErrorCode, LogID, TermID> Part::commitLogs(
 #### 为什么 Snapshot 阶段不写入 VectorIndexWal？
 
 1. **性能考虑**: Snapshot 是全量数据传输，如果每个 vector 都写 VectorIndexWal，会产生大量额外 I/O
-2. **一致性保证**: Snapshot 代表的是一个一致性状态点，不需要额外的 WAL 记录
-3. **重建机制**: 后续的增量日志会确保 VectorIndexWal 的完整性
+1. **一致性保证**: Snapshot 代表的是一个一致性状态点，不需要额外的 WAL 记录
+1. **重建机制**: 后续的增量日志会确保 VectorIndexWal 的完整性
 
 ### Vector 索引状态的最终一致性
 

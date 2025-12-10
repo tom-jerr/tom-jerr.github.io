@@ -1,13 +1,17 @@
 ---
+
 title: C++-Makefile语法学习
 tags:
-  - C++
+
+- C++
+
 ---
+
 # Makefile
 
 ## 使用条件判断
 
-~~~makefile
+```makefile
 libs_for_gcc = -lgnu
 normal_libs =
 foo: $(objects)
@@ -16,13 +20,13 @@ ifeq ($(CC),gcc)
 else
 	$(CC) -o foo $(objects) $(normal_libs)
 endif
-~~~
+```
 
 ## 使用函数
 
 ### 字符串处理函数
 
-~~~makefile
+```makefile
 $(subst <from>,<to>,<text>)
 • 名称：字符串替换函数
 • 功能：把字串 <text> 中的 <from> 字符串替换成 <to> 。
@@ -88,11 +92,11 @@ $(firstword <text>)
 • 名称：首单词函数——firstword。
 • 功能：取字符串 <text> 中的第一个单词。
 • 返回：返回字符串 <text> 的第一个单词。
-~~~
+```
 
 ### 文件名操作函数
 
-~~~makefile
+```makefile
 $(dir <names...>)
 • 名称：取目录函数——dir。
 • 功能：从文件名序列 <names> 中取出目录部分。目录部分是指最后一个反斜杠（/ ）之前的部分。
@@ -128,28 +132,28 @@ $(join <list1>,<list2>)
 • 返回：返回连接过后的字符串。
 
 
-~~~
+```
 
 ### vpath
 
-- vpath %.h include    //指定.h类型文件的搜索路径是include
+- vpath %.h include //指定.h类型文件的搜索路径是include
 
-  vpath %.cpp src      //指定.cpp类型文件的搜索路径是src
+  vpath %.cpp src //指定.cpp类型文件的搜索路径是src
 
 ### foreach函数
 
-~~~makefile
+```makefile
 names := a b c d
 files := $(foreach n,$(names),$(n).o)
 $(files) 的值是 a.o b.o c.o d.o
-~~~
+```
 
 ### call函数
 
-~~~makefile
+```makefile
 reverse = $(1) $(2)
 foo = $(call reverse,a,b)
-~~~
+```
 
 ### origin函数
 
@@ -157,25 +161,25 @@ foo = $(call reverse,a,b)
 
 ### shell函数
 
-~~~makefile
+```makefile
 contents := $(shell cat foo)
 files := $(shell echo *.c)
-~~~
+```
 
 ### 控制make的函数
 
-~~~makefile
+```makefile
 $(error <text...>)
 
 $(warning <text...>)
-~~~
+```
 
 ## 伪目标
 
-~~~makefile
+```makefile
 .PHONY: all
 all: prog1 prog2 prog3
-~~~
+```
 
 ## 隐含规则
 
@@ -193,7 +197,7 @@ all: prog1 prog2 prog3
 
 ### 自动化变量
 
-~~~makefile
+```makefile
 • $@ : 表示规则中的目标文件集。在模式规则中，如果有多个目标，那么，$@ 就是匹配于目标中模
 式定义的集合。
 
@@ -219,7 +223,7 @@ a.%.b ，那么，$* 的值就是 dir/a.foo 。这个变量对于构造有关联
 以，你应该尽量避免使用 $* ，除非是在隐含规则或是静态模式中。如果目标中的后缀是 make 所
 不能识别的，那么 $* 就是空值。
 
-~~~
+```
 
 ## -nostdlib
 
@@ -234,11 +238,11 @@ a.%.b ，那么，$* 的值就是 dir/a.foo 。这个变量对于构造有关联
 ## ld -e
 
 - 设置入口函数
-- _entry
+- \_entry
 
 ## 例子
 
-~~~makefile
+```makefile
 CC=gcc
 CFLAGS=-Wall -Wformat=0
 ODIR=obj
@@ -265,9 +269,9 @@ $(PROGRAM): $(patsubst %, $(ODIR)/%,$(addsuffix .o,$(PROGRAM))) $(DEPS)
 .PHONY: clean
 clean: 
     rm $(ODIR)/*.o $(PROGRAM)
-~~~
+```
 
-~~~makefile
+```makefile
  CC = gcc
  TARGET = prog
  SOURCE = $(wildcard ./src/*.c)      #获取src目录下所有.c文件
@@ -280,5 +284,4 @@ clean:
  .PHONY:clean
  clean:
      rm $(OBJS) $(TARGET) 
-~~~
-
+```

@@ -7,7 +7,7 @@ icon: /octicons/link-24
 # Links 🥰
 
 !!! abstract
-    My friends!
+My friends!
 
 <!-- <div class="flink-list">
 

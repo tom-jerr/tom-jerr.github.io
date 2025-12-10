@@ -1,8 +1,11 @@
 ---
+
 title: 13 Concurrency Control Theory
-date: 2024-10-31
+created: 2024-10-31
 tags:
-  - Database
+
+- Database
+
 ---
 
 # Concurrency Control Theory

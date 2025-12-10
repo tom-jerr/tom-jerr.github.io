@@ -1,6 +1,6 @@
 ---
 title: 从代码看 SGLang 的 KV Cache
-date: 2025/11/02
+created: 2025-11-02
 tags:
   - LLMInference
 ---

@@ -1,8 +1,11 @@
 ---
+
 title: lecture2_Intro_to_C
-date: 2023-09-11 22:17:49
+created: 2023-09-11
 tags:
-  - System Arch
+
+- System Arch
+
 ---
 
 # Intro to C
@@ -45,6 +48,7 @@ tags:
 - C compilers map C programs directly into architecture-specific machinecode (string of 1s and 0s)
 
 - Java converts to architecture-independent bytecode which is then compiled by a just-in-time (JIT) compiler.
+
 - Python environments converts to Python bytecode at runtime instead of at compile-time.
 
   - Runtime versus JIT compilation differ in when the program is converted to low-level assembly language that is eventually translated into machine code.
@@ -62,6 +66,7 @@ tags:
   - 很好的运行时表现(because it optimizes for a given architecture)
 
 - 缺点
+
   - 依赖特定的硬件平台
   - 在新系统上必须重新 build
   - “Change → Compile → Run [repeat]” iteration cycle can be slow during development

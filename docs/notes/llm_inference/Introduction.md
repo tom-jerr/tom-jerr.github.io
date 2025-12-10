@@ -1,11 +1,14 @@
 ---
+
 title: Introduction
-date: 2025/9/12
+created: 2025-09-12
 update:
 comments: true
 katex: true
 tags:
-  - LLMInference
+
+- LLMInference
+
 ---
 
 # Introduction
@@ -24,8 +27,8 @@ tags:
 我们一般分析计算模式如何影响计算机系统时，主要关注三个维度：
 
 1. 内存需求
-2. 计算需求
-3. 数据移动
+1. 计算需求
+1. 数据移动
 
 ## MLP： Dense Pattern Processing
 
@@ -63,16 +66,18 @@ def mlp_layer_matrix(X, W, b):
     H = activation(matmul(X, W) + b)
     # One clean line of math
     return H
+
+
 def mlp_layer_compute(X, W, b):
     # Process each sample in the batch
     for batch in range(batch_size):
         # Compute each output neuron
         for out in range(num_outputs):
             # Initialize with bias
-            Z[batch,out] = b[out]
+            Z[batch, out] = b[out]
             # Accumulate weighted inputs
             for in_ in range(num_inputs):
-                Z[batch,out] += X[batch,in_] * W[in_,out]
+                Z[batch, out] += X[batch, in_] * W[in_, out]
 
     H = activation(Z)
     return H
@@ -147,7 +152,7 @@ CNNs 的核心计算涉及在空间位置上反复应用小型滤波器。每个
 RNNs 通过引入循环连接，不仅将输入映射到输出，而是在每个时间步更新内部状态。这创建了一种记忆机制，使网络能够将信息在时间上传递。
 
 $$
-h_t = f(W_{hh}h_{t-1} + W_{xh}x_t + b_h)
+h_t = f(W\_{hh}h\_{t-1} + W\_{xh}x_t + b_h)
 $$
 
 ![](img/rnn.png)
@@ -185,7 +190,7 @@ RNNs 的核心计算涉及在时间步长上反复应用权重矩阵。对于每
 ### Basic Attention Mechanism
 
 $$
-Attention(Q, K, V) = softmax\left(\frac{QK^T}{\sqrt{d_k}}\right)V
+Attention(Q, K, V) = softmax\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V
 $$
 
 ![](img/attention.png)
@@ -198,7 +203,7 @@ $$
 
 #### Computation Needs
 
-计算需求在注意力机制中主要集中在两个主要阶段：生成注意力权重和将它们应用于值。对于每个注意力层，系统在多个计算阶段执行大量的乘加运算。仅查询-键交互就需要 $N\times N \times d$次乘加运算，应用注意力权重到值上也需要相同数量的运算。还需要额外的计算用于投影矩阵和 softmax 操作。这种计算模式与之前的架构不同，因为它与序列长度呈二次关系，并且需要对每个输入进行新鲜的计算。
+计算需求在注意力机制中主要集中在两个主要阶段：生成注意力权重和将它们应用于值。对于每个注意力层，系统在多个计算阶段执行大量的乘加运算。仅查询-键交互就需要 $N\\times N \\times d$次乘加运算，应用注意力权重到值上也需要相同数量的运算。还需要额外的计算用于投影矩阵和 softmax 操作。这种计算模式与之前的架构不同，因为它与序列长度呈二次关系，并且需要对每个输入进行新鲜的计算。
 
 #### Data Movement
 
@@ -207,7 +212,7 @@ $$
 ### Transformer and Self-Attention
 
 $$
-SelfAttention(X) = softmax(\frac{XW_Q (XW_K)^T}{\sqrt{d_k}})XW_V
+SelfAttention(X) = softmax(\\frac{XW_Q (XW_K)^T}{\\sqrt{d_k}})XW_V
 $$
 
 - 自注意力使得序列中所有位置的并行处理成为可能。这在计算所有位置上的 Q 、 K 和 V 的矩阵乘法中表现得非常明显。

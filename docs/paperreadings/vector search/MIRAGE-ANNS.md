@@ -1,30 +1,34 @@
 ---
-title: MIRAGE-ANNS: Mixed Approach Graph-based Indexing for Approximate Nearest Neighbor Searcha Layout for Vector Similarity Search 
-date: 2025/6/10
+
+title: MIRAGE-ANNS: Mixed Approach Graph-based Indexing for Approximate Nearest Neighbor Searcha Layout for Vector Similarity Search
+created: 2025-06-10
 update:
 comments: true
 description: MIRAGE-ANNS: Mixed Approach Graph-based Indexing for Approximate Nearest Neighbor Searcha Layout for Vector Similarity Search
-  - Constructs the index as fast as refinement-based  approaches while retaining search performance comparable or better than increment-based ones
+
+- Constructs the index as fast as refinement-based approaches while retaining search performance comparable or better than increment-based ones
 
 katex: true
 tags:
-  - Paper Notes
-  - Vector Search
+
+- Paper Notes
+- Vector Search
+
 ---
 
 # Findings
 
 1. Refinement-based approaches such as NSG and NN-Descent use the most memory to build the index, because they first build an approximate KNN graph
-2. Reverse edge addition to the Layer 0 of MIRAGE for optimal search performance.
-3. When the **out-degree is the same, the hierarchical solution is able to achieve better search performance** due to providing better entry points to the bottom layer than randomly choosing a start point.
+1. Reverse edge addition to the Layer 0 of MIRAGE for optimal search performance.
+1. When the **out-degree is the same, the hierarchical solution is able to achieve better search performance** due to providing better entry points to the bottom layer than randomly choosing a start point.
    > having longer edges that can **traverse the whole graph quickly and provide good entry points** for the lower layer
-4. The reason for the fewer computations is because MIRAGE has **a lower average out-degree than HNSW at Layer 0.**
-5. HNSW does not benefit from hierarchy due to a small subset of well-connected nodes (hubs)，while Layer 0 and upper layers of MIRAGE are constructed using different approaches.
+1. The reason for the fewer computations is because MIRAGE has **a lower average out-degree than HNSW at Layer 0.**
+1. HNSW does not benefit from hierarchy due to a small subset of well-connected nodes (hubs)，while Layer 0 and upper layers of MIRAGE are constructed using different approaches.
 
 # Highlights
 
 1. We propose MIRAGE, a new approach to constructing graph-based indexes using refinementbased construction to create the bottom layer of the graph, and then building layers above in an increment-based manner, with upper layers containing fewer points and longer links, and lower layers containing more points and shorter links.
-2. The search uses a greedy algorithm starting from the highest layer and continuing down to the lowest layer.
+1. The search uses a greedy algorithm starting from the highest layer and continuing down to the lowest layer.
 
 # BackGround
 

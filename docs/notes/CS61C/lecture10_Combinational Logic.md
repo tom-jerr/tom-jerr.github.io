@@ -1,8 +1,11 @@
 ---
+
 title: lecture10_Combinational_Logic
-date: 2023-09-11 22:17:49
+created: 2023-09-11
 tags:
-  - System Arch
+
+- System Arch
+
 ---
 
 # Combinational Logic

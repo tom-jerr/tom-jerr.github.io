@@ -1,8 +1,11 @@
 ---
+
 title: 10-Join Algorithm
-date: 2024-10-31
+created: 2024-10-31
 tags:
-  - Database
+
+- Database
+
 ---
 
 # 10-Join Algorithm
@@ -51,14 +54,14 @@ tags:
 
 Key Takeaways
 
-> 选择更小的表作为 Outer table  
-> 尽可能在 bufferpool 中缓存 outer table  
+> 选择更小的表作为 Outer table\
+> 尽可能在 bufferpool 中缓存 outer table\
 > 使用索引快速访问 inner table
 
 Algorithms
 
-> Naive  
-> Block  
+> Naive\
+> Block\
 > Index
 
 ## Sort-Merge Join
@@ -81,7 +84,7 @@ Algorithms
 ### when is sort-merge join useful
 
 1. 其中一个或多个表在 Join key 上已经排序
-2. 输出必须在 join key 上排序
+1. 输出必须在 join key 上排序
 
 ## Hash Join
 
@@ -97,7 +100,7 @@ Algorithms
 ### Partitioned hash join
 
 1. partiion phase
-2. probe phase
+1. probe phase
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/partition_hash_join.png)
 
@@ -111,8 +114,8 @@ Algorithms
 
 ## Join algorithms summary
 
-> hashing is almost always better than sorting for operator executino  
-> sorting is better on non-uniform data  
+> hashing is almost always better than sorting for operator executino\
+> sorting is better on non-uniform data\
 > sorting si better when result needs to be sorted
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/join_summary.png)

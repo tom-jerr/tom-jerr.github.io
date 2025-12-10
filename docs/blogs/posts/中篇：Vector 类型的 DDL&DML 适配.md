@@ -1,8 +1,11 @@
 ---
+
 title: 中篇：Vector 类型的 DDL & DML 适配
-date: 2025/11/5
+created: 2025-11-05
 tags:
-  - Database
+
+- Database
+
 ---
 
 # 中篇：Vector 类型的 DDL & DML 适配
@@ -47,6 +50,7 @@ CREATE TAG IF NOT EXISTS test1(name string, embedding vector(3) DEFAULT vector(1
 Meta 服务使用 RocksDB 存储，将 schema 对应的 KV 对存入其中
 
 - Key 结构： `SpaceId + TagId + Version`
+
 - Value 是 Thrift 序列化的 Schema 定义，我们复用了原有的 Schema 结构，只是扩展了 ColumnTypeDef 来支持 Vector 类型
 
   > 这里我们复用了 `ColumnTypeDef` 中的 `type_length` 字段来表示 Vector 的维度
@@ -220,6 +224,7 @@ UPDATE VERTEX on tag1 'v5', 'v6' SET vec1 = vector (0.1, 0.2, 0.3), vec2 = vecto
   ```
 
 - Regular 属性的编码我们沿用之前的逻辑不变，**所有 Regular 属性会被编码到同一个 rowstr 中**。
+
 - 具体编码调用如下：`encodeRowVal()` -> `RowWriterV2::setValue()` -> `RowWriterV2::write()`
 
   ```cpp
@@ -293,6 +298,7 @@ UPDATE VERTEX on tag1 'v5', 'v6' SET vec1 = vector (0.1, 0.2, 0.3), vec2 = vecto
 ##### Vector Key Design
 
 - 在 `Type` 中新增 `VECTOR` 类型，便于后面直接根据 rowstr 的第一字节判断写入 RocksDB 的哪个 CF。
+
 - 增加 `PropId` 来区分不同的 Vector 属性。
 
   ![](img/vector_key1.png)
@@ -579,7 +585,7 @@ v2: 最终我们选择在一个 TagNode 中读取所有 Vector 属性，并在 U
 - RowReader/RowWriter：
   - Regular 的读写沿用 RowReader/RowWriter 既有逻辑（单个 rowstr）。
   - Vector 的读写采用 RowWriterV2 的 Vector 模式：
-    - 固定区域存放 [offset, length]（8 bytes，或两个 4-byte），实际 float 数组追加在 rowstr 尾部（N \* 4 bytes for float）。
+    - 固定区域存放 [offset, length]（8 bytes，或两个 4-byte），实际 float 数组追加在 rowstr 尾部（N * 4 bytes for float）。
   - 每个 vector 字段对应单独的 rowstr，因此读取时需要单独发起 kv get（使用 vectorKey）。
 - TagNode：
   - 读取正常 tagKey 的值并初始化主 `reader_`；

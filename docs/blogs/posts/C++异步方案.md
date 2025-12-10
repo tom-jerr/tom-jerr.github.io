@@ -1,12 +1,15 @@
 ---
+
 title: The history of C++ Asynchronous Solutions
-date: 2025/6/10
+created: 2025-06-10
 update:
 comments: true
 description: C++ 的异步执行方案历程
 katex: true
 tags:
-  - C++
+
+- C++
+
 ---
 
 # Key Concept
@@ -32,8 +35,8 @@ tags:
 设线程 1 需要线程 2 的数据，那么组合使用方式如下：
 
 1. 线程 1 初始化一个 promise 对象和一个 future 对象，promise 传递给线程 2，相当于线程 2 对线程 1 的一个承诺；future 相当于一个接受一个承诺，用来获取未来线程 2 传递的值
-2. 线程 2 获取到 promise 后，需要对这个 promise 传递有关的数据，之后线程 1 的 future 就可以获取数据了。
-3. 如果线程 1 想要获取数据，而线程 2 未给出数据，则线程 1 阻塞，直到线程 2 的数据到达
+1. 线程 2 获取到 promise 后，需要对这个 promise 传递有关的数据，之后线程 1 的 future 就可以获取数据了。
+1. 如果线程 1 想要获取数据，而线程 2 未给出数据，则线程 1 阻塞，直到线程 2 的数据到达
 
 ![](img/future-promise-cpp.png)
 
@@ -75,12 +78,12 @@ Future 的执行通过 Executor 执行，Folly 允许 Future 进行链式调用�
 ## Example
 
 1. 启动: 主线程创建了所有组件并启动了事件循环。
-2. 阶段 1: 第一个 .thenValue() 回调在主线程上执行，因为这是 mainEventBase 运行的地方。这符合预期。
-3. 切换到线程池: via(cpuExecutor.get()) 生效。
-4. 阶段 2: 第二个 .thenValue() 回调被调度到 CPUThreadPoolExecutor 的一个工作线程上。线程 ID 的变化是 via() 起作用的最直接证明。 耗时的计算在这里进行，完全不会影响主事件循环的响应。
-5. 切换回 EventBase: via(&mainEventBase) 生效。
-6. 阶段 3: 第三个 .thenValue() 回调被调度回主线程。这对于需要与特定线程（如 UI 线程）交互或对共享资源进行串行访问的场景至关重要。
-7. 结束: 回调中调用 terminateLoopSoon()，事件循环结束，程序退出。
+1. 阶段 1: 第一个 .thenValue() 回调在主线程上执行，因为这是 mainEventBase 运行的地方。这符合预期。
+1. 切换到线程池: via(cpuExecutor.get()) 生效。
+1. 阶段 2: 第二个 .thenValue() 回调被调度到 CPUThreadPoolExecutor 的一个工作线程上。线程 ID 的变化是 via() 起作用的最直接证明。 耗时的计算在这里进行，完全不会影响主事件循环的响应。
+1. 切换回 EventBase: via(&mainEventBase) 生效。
+1. 阶段 3: 第三个 .thenValue() 回调被调度回主线程。这对于需要与特定线程（如 UI 线程）交互或对共享资源进行串行访问的场景至关重要。
+1. 结束: 回调中调用 terminateLoopSoon()，事件循环结束，程序退出。
 
 ```c++
 // 辅助函数，打印当前线程ID和消息

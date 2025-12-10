@@ -1,12 +1,15 @@
 ---
+
 title: std::thread & std::jthread
-date: 2025/6/10
+created: 2025-06-10
 update:
 comments: true
 description: C++11 的线程和 C++20 的RAII线程
 katex: true
 tags:
-  - C++
+
+- C++
+
 ---
 
 # std::thread
@@ -27,6 +30,7 @@ tags:
   ```
 
 - 如果 thread 执行的函数参数是一个引用的话，需要`std::ref`
+
   ```c++
    void update_data_for_widget(widget_id w,widget_data& data); // 1
    void oops_again(widget_id w)  {
@@ -36,7 +40,9 @@ tags:
     process_widget_data(data);
    }
   ```
+
 - 这依赖于 std::thread 实例的可移动且不可复制性。不可复制性表示在某一时间点,一个 std::thread 实例只能关联一个执行线程。可移动性使得开发者可以自己决定,哪个实例拥有线程实际执行的所有权
+
 - `std::thread::hardware_concurrency()` 会返回并发线程的数量。例如,多核系统中, 返回值可以是 CPU 核芯的数量。返回值也仅仅是一个标识,当无法获取时,函数返回 0。
 
 ## 并发 accumlate 的例子

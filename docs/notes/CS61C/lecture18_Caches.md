@@ -1,8 +1,11 @@
 ---
+
 title: lecture18_Caches
-date: 2023-09-11 22:17:49
+created: 2023-09-11
 tags:
-  - System Arch
+
+- System Arch
+
 ---
 
 # Caches
@@ -31,15 +34,16 @@ tags:
   - 利用空间局部性和时间局部性，减少和主存之间的数据传输
 
   - 缓存中存放被主存使用的数据副本
+
   - 主存中存放磁盘上的数据副本
 
 ### 层次化管理
 
-- Registers <---> Memory
+- Registers \<---> Memory
   - 通过编译器或者汇编级别编程
-- Cache <---> 主存
+- Cache \<---> 主存
   - 通过缓存控制硬件
-- Main Memory <---> Disks
+- Main Memory \<---> Disks
   - 通过操作系统（虚拟内存）
   - 通过编程者 (files)
 
@@ -117,6 +121,7 @@ tags:
   - Further, no other cache has this block
 
 - Owner:
+
   - The block is in some other cache
   - If we make modifications, it's our responsibility to tell all the other caches in shared state about thesechanges
   - Allows for writing while other threads read the same data.

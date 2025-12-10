@@ -9,4 +9,3 @@
 for (auto s : std::span{arrayOfConst()}.last(3)) 
 // fatal runtime ERROR  
 ```
-

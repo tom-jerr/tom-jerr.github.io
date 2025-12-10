@@ -1,12 +1,15 @@
 ---
+
 title: Bustub 通关指北
-date: 2025/6/23
+created: 2025-06-23
 update:
 comments: true
 description: Bustub 通关指北
 katex: true
 tags:
-  - Database
+
+- Database
+
 ---
 
 # Basic Knowledge
@@ -81,8 +84,8 @@ OCC 则是一种乐观的并发控制机制，它假设事务之间不会发生�
 这个任务实际上包括三个小任务：
 
 1. LRU-K Policy
-2. Disk Scheduler
-3. Buffer Pool Manager
+1. Disk Scheduler
+1. Buffer Pool Manager
 
 ## LRU-K Policy
 
@@ -156,10 +159,10 @@ BufferPoolManager 负责使用 DiskScheduler 从磁盘获取数据库页面，�
 在实现多线程缓冲池管理器时，我们必须注意同步数据访问。这意味着我们不想在缓冲池的不同帧中存在相同页面的多个副本。如果我们允许这种情况，我们会遇到这样的场景：
 
 1. 线程 T1 将页 X1 从磁盘加载到缓冲区帧中，并开始修改页 X1 ，我们将这个新版本称为页 X2 。
-2. 线程 T2 将页 X1 从磁盘加载到不同的缓冲区帧中，并开始修改这个版本的页 X1 ，我们将这个其他修改过的版本称为页 X3 。
-3. 线程 T2 完成写入并将 X3 写回磁盘。
-4. 线程 T1 完成写入并将 X2 写回磁盘。
-5. 数据竞争 ☠️！
+1. 线程 T2 将页 X1 从磁盘加载到不同的缓冲区帧中，并开始修改这个版本的页 X1 ，我们将这个其他修改过的版本称为页 X3 。
+1. 线程 T2 完成写入并将 X3 写回磁盘。
+1. 线程 T1 完成写入并将 X2 写回磁盘。
+1. 数据竞争 ☠️！
 
 因此，Bustub 每次只在内存中保留一页的版本，以防止数据同步竞争。此外，为了防止在线程访问页时将其驱逐，我们在存储该页的帧上维护一个引用计数/固定计数。最后，为了跟踪哪些页存储在哪些帧中，我们还使用哈希映射维护一个页表，该哈希映射将页 ID 映射到帧。
 
@@ -183,10 +186,10 @@ std::condition_variable flush_cv_;
 操作流程如下：
 
 1. 获取 FreeFrame，如果是脏页进行标记并将该页加入到 dirty_pages，脏页刷盘不应该在 bpm_latch 中进行，而是应该在获取到 frame 的 rw_latch 后进行。
-2. 修改 Buffer Pool Manager 的元数据然后释放 bpm_latch，获取 frame 的 rw_latch。
-3. 如果是脏页且需要刷盘，将 frame 刷写到磁盘 中，并重置 frame 的状态，然后将脏页从 dirty_pages 中删除，并通知 flusher 线程。
-4. 等待 flush*cv* 的通知，直到 dirty_pages 中不包含当前页，然后加载页面到 frame 中。
-5. 返回 WritePageGuard 或 ReadPageGuard。
+1. 修改 Buffer Pool Manager 的元数据然后释放 bpm_latch，获取 frame 的 rw_latch。
+1. 如果是脏页且需要刷盘，将 frame 刷写到磁盘 中，并重置 frame 的状态，然后将脏页从 dirty_pages 中删除，并通知 flusher 线程。
+1. 等待 flush*cv* 的通知，直到 dirty_pages 中不包含当前页，然后加载页面到 frame 中。
+1. 返回 WritePageGuard 或 ReadPageGuard。
 
 # Concurrent BPlusTree Index
 
@@ -207,9 +210,9 @@ B+树也是按照页面来进行存储的，B+树的每个节点都是一个页�
 #### Insert
 
 1. 如果是空树，直接开始新树。
-2. 从根节点开始一直向下查找叶子节点，获取读锁，如果叶子节点未满，则直接插入。
-3. 如果叶子节点已满，释放所有读锁，重新从根节点开始查找叶子节点，获取写锁。
-4. 开始执行递归插入节点直到 B+树达到平衡。
+1. 从根节点开始一直向下查找叶子节点，获取读锁，如果叶子节点未满，则直接插入。
+1. 如果叶子节点已满，释放所有读锁，重新从根节点开始查找叶子节点，获取写锁。
+1. 开始执行递归插入节点直到 B+树达到平衡。
 
 ```c++
 INDEX_TEMPLATE_ARGUMENTS
@@ -264,10 +267,10 @@ auto BPLUSTREE_TYPE::OptiInsert(Context *ctx, const KeyType &key, const ValueTyp
 #### Remove
 
 1. 首先先获取读锁，找到叶子节点。
-2. 如果叶子节点未满，则直接删除。
-3. 如果叶子节点已满，释放所有读锁，重新从根节点开始查找叶子节点，获取写锁。
-4. 开始执行递归删除节点直到 B+树达到平衡。
-5. 删除时我们这里先进行 Redistribute，如果 Redistribute 失败，则进行 Coalesce。
+1. 如果叶子节点未满，则直接删除。
+1. 如果叶子节点已满，释放所有读锁，重新从根节点开始查找叶子节点，获取写锁。
+1. 开始执行递归删除节点直到 B+树达到平衡。
+1. 删除时我们这里先进行 Redistribute，如果 Redistribute 失败，则进行 Coalesce。
    - Redistribute 是将当前节点和兄弟节点的键值对进行重新分配，保证两个节点的键值对数量都大于等于最小值。
    - Coalesce 是将当前节点和兄弟节点合并，保证两个节点的键值对数量都大于等于最小值。
    - 如果当前节点是根节点且只有一个子节点，则将根节点删除，子节点作为新的根节点，树高度减一。
@@ -320,7 +323,7 @@ auto BPLUSTREE_TYPE::DeleteEntry(Context *ctx, const KeyType &key, int delete_in
 #### Search
 
 1. 从根节点开始，获取读锁，向下查找叶子节点。
-2. 如果找到叶子节点，则返回叶子节点中的值。
+1. 如果找到叶子节点，则返回叶子节点中的值。
 
 #### Iterator
 
@@ -463,7 +466,7 @@ auto HashJoinExecutor::Next(Tuple *tuple, RID *rid) -> bool {
 External Merge Sort 是一种外部排序算法，主要用于处理无法完全加载到内存中的大数据集。它的基本思路是将数据分成多个小块，每个小块在内存中进行排序，然后将这些已排序的小块合并成一个大的有序结果。
 
 1. 我们这里使用 2-way merge sort，使用 MergeSortRun 来表示一个已排序的小块。每个 MergeSortRun 包含一个当前排好序 tuple 的迭代器。
-2. 所有的排序工作在 Init 阶段完成，Next 方法只需要从最后的排序结果中读取数据。
+1. 所有的排序工作在 Init 阶段完成，Next 方法只需要从最后的排序结果中读取数据。
 
 ```c++
 template <size_t K>
@@ -613,7 +616,7 @@ BusTub 将事务数据存储在三个地方：表堆、事务管理器和每个�
 
 ### UndoLog
 
-时间戳（ ts* ）是指这个 UndoLog 对应的提交时间戳。我们还存储了一个指向下一个 UndoLog 的链接（ prev_version* 通过 UndoLink 存储）。如果一个 UndoLog 是版本链中的最后一个，TxnId（在代码中对应 prev*txn* ）将被设置为 INVALID_TXN 。
+时间戳（ ts\* ）是指这个 UndoLog 对应的提交时间戳。我们还存储了一个指向下一个 UndoLog 的链接（ prev_version\* 通过 UndoLink 存储）。如果一个 UndoLog 是版本链中的最后一个，TxnId（在代码中对应 prev*txn* ）将被设置为 INVALID_TXN 。
 
 ![](img/UndoLog.png)
 
@@ -690,6 +693,7 @@ class Transaction {
 在 BusTub 中，每个事务将被分配两个时间戳：一个读取时间戳和一个提交时间戳。
 
 - 当事务开始时，它将被分配一个读取时间戳，该时间戳等于最近提交的事务的提交时间戳。从高层次来看，你可以将其理解为记录数据库中最新原子写入的时间戳。读取时间戳决定了事务可以安全且正确读取哪些数据。换句话说，读取时间戳决定了当前事务可以看到的元组的最新版本。
+
 - 当事务提交时，它将被分配一个单调递增的提交时间戳。提交时间戳决定了事务的序列化顺序。由于这些提交时间戳是唯一的，我们也可以通过提交时间戳唯一地识别已提交的事务。
 
   ![](img/version_chain.png)
@@ -700,9 +704,9 @@ class Transaction {
 
 1. 更新：在这种情况下，基于基础元组和目标元组生成 UndoLog 。如果这不是该事务中的第一次更新，则通过 GenerateUpdatedUndoLog 将其与原始 UndoLog 合并。请注意，每个事务最多应保留一个针对每个 RID 的撤销日志。如果事务需要两次更新元组，它应该只更新基础元组及其当前的撤销日志。
 
-2. 删除：如果不是当前事务修改，生成新 UndoLog；如果是当前事务修改，则需要将元数据更新为删除状态，并 UpdateUndoLog 保证每个 tuple 对每个事务只有一个 UndoLog。
+1. 删除：如果不是当前事务修改，生成新 UndoLog；如果是当前事务修改，则需要将元数据更新为删除状态，并 UpdateUndoLog 保证每个 tuple 对每个事务只有一个 UndoLog。
 
-3. 插入：tuple 被当前事务删除，但是索引还存在，更新 tuple 元数据以及 Undolog；如果被另一事务删除，需要生成新的 undolog 插入到 undo_link 中。
+1. 插入：tuple 被当前事务删除，但是索引还存在，更新 tuple 元数据以及 Undolog；如果被另一事务删除，需要生成新的 undolog 插入到 undo_link 中。
 
 ## Optimistic Concurrency Control
 
@@ -734,9 +738,9 @@ Optimistic Concurrency Control (OCC) 是一种乐观的并发控制机制，主�
 ### Bustub OCC 实现
 
 1. 不需要验证只读事务，因为 RAW 冲突不可能发生。
-2. 收集所有在当前事务的读时间戳之后提交的事务。我们将这些事务称为“冲突事务”。（WAR/WAW Conflict）
-3. 对于每个元组，遍历其版本链以验证当前事务是否读取了任何“幽灵”。你可以收集所有在事务读时间戳之前的撤销日志。然后逐个重放以检查交集。
-4. 对于版本链中的每个更新:
+1. 收集所有在当前事务的读时间戳之后提交的事务。我们将这些事务称为“冲突事务”。（WAR/WAW Conflict）
+1. 对于每个元组，遍历其版本链以验证当前事务是否读取了任何“幽灵”。你可以收集所有在事务读时间戳之前的撤销日志。然后逐个重放以检查交集。
+1. 对于版本链中的每个更新:
    - 对于插入操作，你应该检查新元组是否满足当前事务的任何扫描谓词。如果满足，则中止。
    - 对于删除操作，你应该检查被删除的元组是否满足当前事务的任何扫描谓词。如果满足，则中止。
    - 存在一种边缘情况，即一个事务插入然后删除一个元组，这会在表堆中留下一个删除标记。这种情况应该被视为无操作，而不是删除。

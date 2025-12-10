@@ -1,8 +1,11 @@
 ---
+
 title: 12 Query Planning and Optimization
-date: 2024-10-31
+created: 2024-10-31
 tags:
-  - Database
+
+- Database
+
 ---
 
 # Query Planning and Optimization
@@ -78,7 +81,7 @@ tags:
 
 #### Nested Sub-queries
 
-> 相关子查询很容易被扁平化为 join 的查询  
+> 相关子查询很容易被扁平化为 join 的查询\
 > 不相关的子查可以拆分成不同的语句进行执行
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/nested_sub_query.png)
@@ -99,12 +102,13 @@ tags:
 
 - Physical Costs
 
-  > predict CPU-cycles, I/O, cache misses, RAM consumption, network messages...  
+  > predict CPU-cycles, I/O, cache misses, RAM consumption, network messages...\
   > Depends heavily on hardware
 
 - Logical Costs
-  > estimate output size per operator  
-  > independent of the operator algorithm  
+
+  > estimate output size per operator\
+  > independent of the operator algorithm\
   > need estimations for operator result sizes
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/postgres_cost_model.png)

@@ -1,8 +1,11 @@
 ---
+
 title: 一步步实现 CUDA Vector Add 优化
-date: 2025/10/21 23:15
+created: 2025-10-21
 tags:
-  - LLMInference
+
+- LLMInference
+
 ---
 
 # 一步步实现 CUDA Vector Add 优化
@@ -22,12 +25,12 @@ tags:
 
 **2. 为什么它如此重要？** AI 决定了一个程序**理论上的性能瓶颈**。我们可以用它来对比一个程序和一个硬件（GPU）的特性：
 
-- **硬件的“AI”**：GPU 也有一个平衡点，即它的 `峰值计算能力 (GFLOPs/s)` / `峰值内存带宽 (GB/s)
+- **硬件的“AI”**：GPU 也有一个平衡点，即它的 `峰值计算能力 (GFLOPs/s)` / \`峰值内存带宽 (GB/s)
 - **程序的 AI**：内核的 `FLOPs / Bytes`。
 
 ### Roofline
 
-Roofline 模型（屋顶线模型）是一种用来**分析程序性能瓶颈**（计算受限还是带宽受限）的方法。  
+Roofline 模型（屋顶线模型）是一种用来**分析程序性能瓶颈**（计算受限还是带宽受限）的方法。\
 它把**计算性能**（FLOPs/s）和**访存性能**（Bytes/s）联系在一起，。以可视化的方式展示性能上限
 
 $$
@@ -38,16 +41,18 @@ $$
 
 ### Stall in NCU
 
-| 类型                       | 代表等待       | 典型瓶颈 | 优化方向      |
-| ------------------------ | ---------- | ---- | --------- |
-| **All Scoreboard**       | 所有依赖未满足    | 完全等待 | 提高并发、异步访问 |
-| **Long Scoreboard**      | DRAM 访问未返回 | 内存延迟 | 优化访存、共享内存 |
-| **Short Scoreboard**     | L1/寄存器依赖   | 数据依赖 | 调整指令顺序    |
-| **Execution Dependency** | 算术指令结果未就绪  | 运算链长 | 增加 ILP    |
-| **Barrier/Branch**       | 同步或分支等待    | 控制流  | 减少分支/同步   |
+| 类型                     | 代表等待           | 典型瓶颈 | 优化方向           |
+| ------------------------ | ------------------ | -------- | ------------------ |
+| **All Scoreboard**       | 所有依赖未满足     | 完全等待 | 提高并发、异步访问 |
+| **Long Scoreboard**      | DRAM 访问未返回    | 内存延迟 | 优化访存、共享内存 |
+| **Short Scoreboard**     | L1/寄存器依赖      | 数据依赖 | 调整指令顺序       |
+| **Execution Dependency** | 算术指令结果未就绪 | 运算链长 | 增加 ILP           |
+| **Barrier/Branch**       | 同步或分支等待     | 控制流   | 减少分支/同步      |
+
 ## Settings
 
 这里测试环境是 RTX 3080 Ti
+
 - 理论带宽约为 912 GB/s
 - FP32 peak FLOPs：**34 TFLOPS**
 - **最大线程数 / SM：** 1536 个。
@@ -59,7 +64,8 @@ $$
 
 ### Compute Throughput
 
-$$\text{Compute Throughput} \approx \frac{\text{Total Instructions Executed (指令总数)}}{\text{Execution Time (执行时间)}}$$
+$$\\text{Compute Throughput} \\approx \\frac{\\text{Total Instructions Executed (指令总数)}}{\\text{Execution Time (执行时间)}}$$
+
 ### Memory Throughput
 
 **影响该指标的问题**
@@ -69,63 +75,61 @@ $$\text{Compute Throughput} \approx \frac{\text{Total Instructions Executed (指
 这是 `float4` 优化的直接作用域。
 
 - **LSU (Load Store Unit) 压力：**
-    
-    - **Scalar (`float`):** 搬运同样多的数据，需要发射 **4 倍** 的指令数。这会大量占用前端（Fetch/Decode）带宽，并增加 LSU 维护 In-flight 状态的开销。
-        
-    - **Vectorized (`float4`):** **单指令高吞吐**。一条指令即可搬运 128-bit 数据。LSU 队列占用少，更容易维持流水线饱和。
-        
-    - _修正点：_ 即使是标量访问，如果是 Coalesced 的，Warp 也只会生成 1 个 Transaction，但需要 **4 条指令** 才能完成 4 个元素的加载。
-        
+
+  - **Scalar (`float`):** 搬运同样多的数据，需要发射 **4 倍** 的指令数。这会大量占用前端（Fetch/Decode）带宽，并增加 LSU 维护 In-flight 状态的开销。
+
+  - **Vectorized (`float4`):** **单指令高吞吐**。一条指令即可搬运 128-bit 数据。LSU 队列占用少，更容易维持流水线饱和。
+
+  - _修正点：_ 即使是标量访问，如果是 Coalesced 的，Warp 也只会生成 1 个 Transaction，但需要 **4 条指令** 才能完成 4 个元素的加载。
+
 - **指令发射延迟掩盖 (Issue Latency Hiding)：**
-    
-    - **气泡问题：** 指令发射有固有延迟。如果每条指令搬运的数据量太小（如 4 Bytes），指令发射的速度可能跟不上内存总线的消耗速度，导致总线出现“空闲气泡”。
-        
-    - **优势：** `float4` (16 Bytes/thread) 让每次发射的“含金量”更高，更容易填满内存管道。
-        
+
+  - **气泡问题：** 指令发射有固有延迟。如果每条指令搬运的数据量太小（如 4 Bytes），指令发射的速度可能跟不上内存总线的消耗速度，导致总线出现“空闲气泡”。
+
+  - **优势：** `float4` (16 Bytes/thread) 让每次发射的“含金量”更高，更容易填满内存管道。
 
 #### 2. 数据层级：内存级并行度 (MLP, Memory Level Parallelism)
 
 这是决定带宽上限的关键软件策略。
 
 - **原理：** HBM 延迟极高 (~600 cycles)。为了掩盖延迟，必须让总线上同时飞着足够多的请求 (In-flight Requests)。
-    
+
 - **优化手段：** **循环展开 (Loop Unrolling)**。
-    
-    - _Bad:_ `Load -> Use -> Load -> Use` (串行依赖，延迟无法掩盖)。
-        
-    - _Good:_ `Load1 -> Load2 -> Load3 -> Load4 ... -> Use1` (并行发射，一次等待，全部返回)。
-        
+
+  - _Bad:_ `Load -> Use -> Load -> Use` (串行依赖，延迟无法掩盖)。
+
+  - _Good:_ `Load1 -> Load2 -> Load3 -> Load4 ... -> Use1` (并行发射，一次等待，全部返回)。
 
 #### 3. 硬件层级：传输粒度与利用率 (Transaction & Utilization)
 
 即使软件写得好，硬件机制也可能导致浪费。
 
 - **扇区利用率 (Sector Utilization):**
-    
-    - **机制：** DRAM 到 L2 的最小传输粒度是 **32 Bytes (Sector)**。
-        
-    - **浪费：** 如果你只读 1 个 Byte (`char`) 且未打包，硬件也被迫搬运 32 Bytes。**有效带宽 (Effective Bandwidth)** 只有 1/32。
-        
-    - **对策：** 对于小数据类型（INT8/FP16），必须使用打包对齐（Pack Alignment）访问。
-        
+
+  - **机制：** DRAM 到 L2 的最小传输粒度是 **32 Bytes (Sector)**。
+
+  - **浪费：** 如果你只读 1 个 Byte (`char`) 且未打包，硬件也被迫搬运 32 Bytes。**有效带宽 (Effective Bandwidth)** 只有 1/32。
+
+  - **对策：** 对于小数据类型（INT8/FP16），必须使用打包对齐（Pack Alignment）访问。
+
 - **地址对齐 (Address Alignment):**
-    
-    - **机制：** 硬件要求访问地址按 32B 或 128B 对齐。
-        
-    - **后果：** 如果指针地址偏移（Misaligned），一次 128 Bytes 的读取可能会跨越两个 128B 块，导致硬件必须发起 **2 个 Transactions**。这会直接导致带宽性能减半。
-        
+
+  - **机制：** 硬件要求访问地址按 32B 或 128B 对齐。
+
+  - **后果：** 如果指针地址偏移（Misaligned），一次 128 Bytes 的读取可能会跨越两个 128B 块，导致硬件必须发起 **2 个 Transactions**。这会直接导致带宽性能减半。
 
 #### 4. 架构层级：物理冲突 (Physical Conflict)
 
 通常由硬件解决，但在极端优化时需注意。
 
 - **分区冲突 (Partition Camping / Channel Conflict):**
-    
-    - **原理：** 显存被划分为多个物理分区（Memory Controllers）。
-        
-    - **现象：** 特定的访问步长（Stride，通常是 2 的幂次）可能导致所有请求集中打向同一个 Controller，造成局部拥堵（Serialization），而其他 Controller 空闲。
-        
-    - **现状：** 现代 GPU (Pascal+) 已通过物理地址哈希（Address Swizzling）极大缓解了此问题，但在写极限 Kernel 时仍需避免完美的 2 的幂次跨度。
+
+  - **原理：** 显存被划分为多个物理分区（Memory Controllers）。
+
+  - **现象：** 特定的访问步长（Stride，通常是 2 的幂次）可能导致所有请求集中打向同一个 Controller，造成局部拥堵（Serialization），而其他 Controller 空闲。
+
+  - **现状：** 现代 GPU (Pascal+) 已通过物理地址哈希（Address Swizzling）极大缓解了此问题，但在写极限 Kernel 时仍需避免完美的 2 的幂次跨度。
+
 ## baseline
 
 ```cpp
@@ -146,14 +150,15 @@ __global__ void vector_add_kernel(const float *a, const float *b, float *c,
 该版本的 vector add，执行一次计算需要三次访存，每次读 4 bytes (read A, read B, write C)
 
 $$
-	AI = 1 / (3 \times 4) =1/12\approx 0.083
+AI = 1 / (3 \\times 4) =1/12\\approx 0.083
 $$
 
 说明这是一个 **memory-bound** 的程序
 
 - 查看 ncu 的 SLO 我们可以看到
-	- Memory Throughput: 75%
-	- Compute Throughput: 15%
+
+  - Memory Throughput: 75%
+  - Compute Throughput: 15%
 
 - 查看 Memory Workload Analysis，我们可以发现我们完全没有用到 shared memory，直接用 L2 Cache 和 L1 Cache
 
@@ -192,16 +197,17 @@ __global__ void elementwise_add_f32x4_kernel(const float *a, const float *b,
 ### 结果
 
 - 内存吞吐增加，内存利用率提升至 80 %；计算利用率下降
-![](img/vector_add_slo.png)
+  ![](img/vector_add_slo.png)
 
 - Occupancy 从 67% 提升至 100%
+
 ### 分析
+
 - **Compute Throughput 下降：** 因为 Vector Add 是 Memory-Bound 的，性能瓶颈在于带宽而非计算。使用 `float4` 并没有改变总的数据传输量，但它通过向量化指令**大幅减少了 SM 需要发射的指令总数**（减少了 Load/Store 指令数和循环开销）。根据 `吞吐率 = 指令数 / 时间`，在时间不变的情况下，指令数减少导致了 Compute Throughput 下降。这实际上意味着**指令效率的提升**。
-    
+
 - **关于 Memory 上升：** `float4` 生成了更宽的内存事务（Memory Transactions），减少了 LSU（Load Store Unit）处理请求的开销，并减少了指令发射带来的延迟气泡，从而能更紧密地填满显存带宽，因此 Memory Utilization 不降反升。
 
-
-## Optimization V2 -- fp16 
+## Optimization V2 -- fp16
 
 ### 优化
 
@@ -230,20 +236,23 @@ __global__ void elementwise_add_f16_kernel(half *a, half *b, half *c, int N) {
 **单次搬运粒度变小了，导致总线利用率低。**
 
 - **FP32 + float4 (Baseline):**
-    - 每个线程一条指令搬运：$4 \times 4 \text{ Bytes} = \mathbf{16 \text{ Bytes}}$。
-        
+
+  - 每个线程一条指令搬运：$4 \\times 4 \\text{ Bytes} = \\mathbf{16 \\text{ Bytes}}$。
+
 - **FP16 (Current):**
-    - 每个线程一条指令搬运：$\mathbf{2 \text{ Bytes}}$。单次请求太小了。
-    - **后果：**
-        1. **LSU 拥堵：** 发射指令的频率太高，LSU 处理不过来。
-        2. **Sector 浪费：** 显存传输最小单位是 32 Bytes。如果你没做好合并访问（Coalescing），每次为了拿 2 Bytes 都要动用 32 Bytes 的带宽，**有效带宽（Effective Bandwidth）** 就会很低。
+
+  - 每个线程一条指令搬运：$\\mathbf{2 \\text{ Bytes}}$。单次请求太小了。
+  - **后果：**
+    1. **LSU 拥堵：** 发射指令的频率太高，LSU 处理不过来。
+    1. **Sector 浪费：** 显存传输最小单位是 32 Bytes。如果你没做好合并访问（Coalescing），每次为了拿 2 Bytes 都要动用 32 Bytes 的带宽，**有效带宽（Effective Bandwidth）** 就会很低。
 
 所以，我们需要一次搬运更多数据
+
 ## Optimization V3 -- fp16 * 8
 
 ### 优化
 
-- 一次取 $\mathbf{16 \text{ Bytes}}$ 数据
+- 一次取 $\\mathbf{16 \\text{ Bytes}}$ 数据
 
 ```cpp
 __global__ void elementwise_add_f16x8_kernel(const half *a, const half *b, half *c, int n) {
@@ -271,27 +280,30 @@ __global__ void elementwise_add_f16x8_kernel(const half *a, const half *b, half 
 
 ### 分析
 
-- **数据量：** $1M \text{ elements} \times 3 \text{ arrays} \times 2 \text{ Bytes} = \mathbf{6 \text{ MB}}$。
-- **耗时：** $8.96 \mu s$。
+- **数据量：** $1M \\text{ elements} \\times 3 \\text{ arrays} \\times 2 \\text{ Bytes} = \\mathbf{6 \\text{ MB}}$。
+- **耗时：** $8.96 \\mu s$。
 - 理论有效带宽：
-    $$\frac{6 \text{ MB}}{8.96 \mu s} = 0.669 \text{ TB/s} \approx \mathbf{670 \text{ GB/s}}$$
-- **利用率：** $670 / 912 \approx \mathbf{73\%}$。
+  $$\\frac{6 \\text{ MB}}{8.96 \\mu s} = 0.669 \\text{ TB/s} \\approx \\mathbf{670 \\text{ GB/s}}$$
+- **利用率：** $670 / 912 \\approx \\mathbf{73%}$。
 
 #### 为什么没有达到 FP32 * 4 的 Memory Throughput 呢？
 
 **猜想**
+
 - **物理规律：** 内存控制器从收到请求到数据真正占满总线，有一段固定的**物理延迟 (Latency)**。
 - **FP32 场景:**
-    - 总搬运量 12MB。
-    - 耗时 ~16μs。
-    - 这个时间足够长，让总线在大部分时间里处于“满载”状态，从而拉高了平均带宽。
+  - 总搬运量 12MB。
+  - 耗时 ~16μs。
+  - 这个时间足够长，让总线在大部分时间里处于“满载”状态，从而拉高了平均带宽。
 - **FP16 场景:**
-    - 总搬运量 6MB。
-    - 耗时 **8.96μs**。
-    - **结果：** Nsight Compute 统计的是**整个生命周期的平均带宽**。因为“满载”的时间段变短了，固定的“延迟”时间段占比变大了，导致平均带宽被拉低了。
+  - 总搬运量 6MB。
+  - 耗时 **8.96μs**。
+  - **结果：** Nsight Compute 统计的是**整个生命周期的平均带宽**。因为“满载”的时间段变短了，固定的“延迟”时间段占比变大了，导致平均带宽被拉低了。
+
 #### 验证
 
 验证 10 M 的 vector add，结果：
+
 - 不管是 fp32 * 4 还是 fp16 * 8，Memory Throughput 都有明显增加，说明我们的猜想基本正确
 
 ![](img/vector_add_slo_2.png)
@@ -303,56 +315,66 @@ vector add 算子是一个典型的 memory-bound 的算子，我们需要尽可�
 > 下面我们使用 benchmark 测试所有算子的开销，分析产生这种结果的原因
 
 ![](img/vector_add_bench.png)
+
 ### 阶段一：小数据量区间 (Latency Bound / 启动开销主导)
 
 - **数据：** S=256, K=256
+
 - **现象1：**
-    - **PyTorch (`f32_th`):** 0.0116 ms
-    - **Your Kernel (`f32x4`):** 0.0080 ms (**快了 ~30%**)
+
+  - **PyTorch (`f32_th`):** 0.0116 ms
+  - **Your Kernel (`f32x4`):** 0.0080 ms (**快了 ~30%**)
+
 - **原因：**
-	- **通用性 vs 专用性 (Generality vs Specialization)：**
-		- **PyTorch:** 为了通用性，PyTorch 的 Element-wise 算子（`TensorIterator`）必须处理各种复杂情况：非连续内存（Strided Memory）、广播（Broadcasting）、类型转换（Type Casting）。即便数据是连续的，它内部的索引计算逻辑也比你复杂的索引计算更重，消耗更多寄存器和指令。
-		- **f32x4 Kernel:** 假设了数据绝对连续、无广播。。
-			
-	- **启动配置 (Launch Heuristics)：**
-		- PyTorch 有一套通用的 Block/Grid 计算公式。对于极小形状，它的配置可能不是针对当前 GPU 最优的。而你是针对性调优的。
+
+  - **通用性 vs 专用性 (Generality vs Specialization)：**
+
+    - **PyTorch:** 为了通用性，PyTorch 的 Element-wise 算子（`TensorIterator`）必须处理各种复杂情况：非连续内存（Strided Memory）、广播（Broadcasting）、类型转换（Type Casting）。即便数据是连续的，它内部的索引计算逻辑也比你复杂的索引计算更重，消耗更多寄存器和指令。
+    - **f32x4 Kernel:** 假设了数据绝对连续、无广播。。
+
+  - **启动配置 (Launch Heuristics)：**
+
+    - PyTorch 有一套通用的 Block/Grid 计算公式。对于极小形状，它的配置可能不是针对当前 GPU 最优的。而你是针对性调优的。
 
 - **现象2：**
 
-| **内核版本**    | **执行时间 (ms)** |
-| ----------- | ------------- |
-| `out_f32x4` | **0.0079**    |
-| `out_f16x8` | **0.0063**    |
+| **内核版本** | **执行时间 (ms)** |
+| ------------ | ----------------- |
+| `out_f32x4`  | **0.0079**        |
+| `out_f16x8`  | **0.0063**        |
+
 - **原因：**
-	- FP16 传输数据更少，读写这几百 KB 数据的**序列化延迟（Serialization Delay）** 差异正好就在微秒级别
-		- **FP32x4:** 需要搬运 $65536 \times 4 \text{B} \times 3 \approx \mathbf{786 \text{ KB}}$。
-		- **FP16x8:** 需要搬运 $65536 \times 2 \text{B} \times 3 \approx \mathbf{393 \text{ KB}}$。
+  - FP16 传输数据更少，读写这几百 KB 数据的**序列化延迟（Serialization Delay）** 差异正好就在微秒级别
+    - **FP32x4:** 需要搬运 $65536 \\times 4 \\text{B} \\times 3 \\approx \\mathbf{786 \\text{ KB}}$。
+    - **FP16x8:** 需要搬运 $65536 \\times 2 \\text{B} \\times 3 \\approx \\mathbf{393 \\text{ KB}}$。
 
 ### 阶段二：中等数据量区间
 
 **关注点：** $S=1024, K=1024$ 左右。
 
 - **现象：**
-    - FP32 的时间开始显著增加（0.017ms）。
-    - FP16 的时间约为 FP32 的一半甚至更少（0.006ms - 0.011ms）。
-        
+
+  - FP32 的时间开始显著增加（0.017ms）。
+  - FP16 的时间约为 FP32 的一半甚至更少（0.006ms - 0.011ms）。
+
 - **原因：**
-    - 数据量开始大到足以掩盖启动开销。
-    - 此时 **Memory Bound (带宽限制)** 的特征开始显现，FP16 因为数据量减半，优势开始扩大。
-        
+
+  - 数据量开始大到足以掩盖启动开销。
+  - 此时 **Memory Bound (带宽限制)** 的特征开始显现，FP16 因为数据量减半，优势开始扩大。
+
 ### 阶段三：大数据量区间 (Bandwidth Bound)
 
 **关注点：** $S=4096, K=4096$ (最大规模)。
 
 - **现象：** **2 倍线性加速 (FP32 vs FP16)**
 
-| **内核版本**     | **执行时间 (ms)** | **分析** |
-| ------------ | ------------- | ------ |
-| `out_f32x4`  | **0.240**     | 向量化加载  |
-| `out_f16x8`  | **0.122**     | 向量化加载  |
+| **内核版本** | **执行时间 (ms)** | **分析**   |
+| ------------ | ----------------- | ---------- |
+| `out_f32x4`  | **0.240**         | 向量化加载 |
+| `out_f16x8`  | **0.122**         | 向量化加载 |
 
 - **原因：** 这证明了这是彻底的 **Memory Bound** 场景。FP16 的数据量是 16-bit，FP32 是 32-bit。**计算单元（ALU）在这里完全是在等数据**。
-        
+
 ## 附录
 
 ```shell

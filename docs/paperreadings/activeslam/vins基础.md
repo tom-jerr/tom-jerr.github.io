@@ -1,11 +1,14 @@
 ---
+
 title: VINS 基础知识
-date: 2025/9/26
+created: 2025-09-26
 update:
 comments: true
 katex: true
 tags:
-  - VINS
+
+- VINS
+
 ---
 
 # VINS 基础知识
@@ -17,6 +20,7 @@ VINS 可以分为 filter-based 和 optimization-based。
 - 基于滤波器 (Filter-based) 的方法：**将 VINS 看作一个在线的、递归的状态估计问题**。它像一个流水线，新的传感器数据（测量值）源源不断地流入，滤波器利用这些新数据来更新对当前时刻状态的估计。它**不回头修改过去的状态**
 
 - 基于优化 (Optimization-based) 的方法：将 VINS 看作一个**批量处理的非线性最小二乘问题**。它会收集一段时间内（一个“窗口”或全部历史）的所有传感器数据，然后**寻找一条最优的轨迹（包含多个时刻的姿态、位置等），使得这条轨迹能够最好地“解释”所有观测到的数据**。
+
   - Point-based methods：VINS-Mono，由于对点提取的依赖性，T 可能会在充满挑战的场景中产生低临界性姿势估计
   - Point and line-based methods：会为后面优化提供额外的约束
     - 同时跟踪点和线路特征，并预先整合 IMU 测量信息，包括陀螺仪和加速度计
@@ -41,58 +45,59 @@ VINS 可以分为 filter-based 和 optimization-based。
 - Mapping（地图管理）
 
   - 决定是否 插入关键帧（keyframe）与三角化新的 3D 地点（landmarks）。
-  - 构建观测（观测 = 某 keyframe 对某 3D 点的投影 $z_{ij}$），并把这些观测加入因子图 / 图结构（nodes = keyframe poses + landmarks，edges = 观测约束）。
+  - 构建观测（观测 = 某 keyframe 对某 3D 点的投影 $z\_{ij}$），并把这些观测加入因子图 / 图结构（nodes = keyframe poses + landmarks，edges = 观测约束）。
 
 - Local Mapping（局部优化）: 在滑动窗口/局部子图内获得高精度、一致的局部地图；保证实时性（窗口大小限制计算量）
 
   - Bundle Adjustment（局部 BA）：对最近的**若干关键帧与它们观测到的 3D 点同时做联立非线性最小二乘，目标是最小化重投影误差(联合优化位姿与 3D 点, 重投影误差最小化)**
 
     $$
-    \min_{\{T_i\},\{X_j\}} \sum_{i,j} \rho\!\left(\left\| z_{ij} - \pi(T_i, X_j) \right\|_{\Sigma_{ij}}^2\right)
+    \\min\_{{T_i},{X_j}} \\sum\_{i,j} \\rho!\\left(\\left| z\_{ij} - \\pi(T_i, X_j) \\right|_{\\Sigma_{ij}}^2\\right)
     $$
 
     - $T_i$：第 $i$ 个相机位姿（$SE(3)$）
     - $X_j$：第 $j$ 个 3D 点坐标
-    - $\pi(\cdot)$：投影函数（把 3D 点投到图像平面）
-    - $z_{ij}$: 实际观测到的像素坐标
-    - $\rho$：鲁棒核函数（如 Huber），处理外点
+    - $\\pi(\\cdot)$：投影函数（把 3D 点投到图像平面）
+    - $z\_{ij}$: 实际观测到的像素坐标
+    - $\\rho$：鲁棒核函数（如 Huber），处理外点
 
-    **优点**：精度高（同时优化结构与位姿）  
-     **缺点**：计算昂贵（尤其地图点很多时）
+    **优点**：精度高（同时优化结构与位姿）\
+    **缺点**：计算昂贵（尤其地图点很多时）
 
   - Remove Outliers：根据重投影误差、可观测性、被观测次数等**剔除不可靠的地图点与观测**。
 
 - Loop Closure（回环检测）: 回环约束是在全局尺度上把两个远处时刻连接起来，是纠正累计漂移的关键证
 
   - Place Recognition（BoW / NetVLAD / DBoW）发现“现在的关键帧与过去某一关键帧表示相同地点”。
-  - Geometric Verification：对候选回环做几何验证（匹配 + 估计相对位姿 + RANSAC）。若通过，则产生一个回环约束（一条新的边 $z_{ij}$）加入
+  - Geometric Verification：对候选回环做几何验证（匹配 + 估计相对位姿 + RANSAC）。若通过，则产生一个回环约束（一条新的边 $z\_{ij}$）加入
 
 - Global / Pose-Graph Optimization（后端全局一致性修正）
 
   - 收到回环后，系统会把新增的回环边加入图，并运行全局优化（pose-graph optimization 或全局 BA），把局部误差沿整张图传播，矫正累积漂移。
 
   - 常见策略：先做较轻量的 pose-graph 优化（只调整位姿），随后根据需要做一次全局 BA（同时调整位姿与地图点）以获得最优解。
+
   - pose graph opimization: **只优化位姿，利用相机 i 到相机 j 的相对位姿约束**
 
     - 残差定义为：
 
     $$
-    e_{ij} = \mathrm{Log}\!\left( z_{ij}^{-1} \left( T_i^{-1} T_j \right) \right)
+    e\_{ij} = \\mathrm{Log}!\\left( z\_{ij}^{-1} \\left( T_i^{-1} T_j \\right) \\right)
     $$
 
     - 优化目标为：
 
     $$
-    \min_{\{T_i\}} \sum_{(i,j)} \rho\!\left( e_{ij}^\top \Omega_{ij} e_{ij} \right)
+    \\min\_{{T_i}} \\sum\_{(i,j)} \\rho!\\left( e\_{ij}^\\top \\Omega\_{ij} e\_{ij} \\right)
     $$
 
     - $T_i$：第 $i$ 个相机位姿
-    - $z_{ij}$：观测到的相对位姿约束
-    - $e_{ij}$：该约束下的误差项
-    - $\Omega_{ij}$：信息矩阵（测量协方差的逆）
+    - $z\_{ij}$：观测到的相对位姿约束
+    - $e\_{ij}$：该约束下的误差项
+    - $\\Omega\_{ij}$：信息矩阵（测量协方差的逆）
 
-    **优点**：轻量，能在大规模节点上快速运行  
-     **缺点**：只优化位姿，不直接修正地图点
+    **优点**：轻量，能在大规模节点上快速运行\
+    **缺点**：只优化位姿，不直接修正地图点
 
 ## Active SLAM
 
@@ -123,6 +128,7 @@ frontiers 会被聚类（clustered），形成更大的“前沿区域”。
 - 继续执行基于 COP(Correlated Orienteering Problem)的探索路径，以获取新知识。
 
 - 中断探索，执行一次基于 SLC(Active Semantic Loop Closure)的利用任务，以巩固和修正现有知识。
+
 - 主动规划器通过将上述两个目标分别建模并持续评估，来制定具体的行动计划。
 
 #### 探索规划：基于“相关性寻路问题”（Correlated Orienteering Problem, COP）
@@ -184,8 +190,8 @@ frontiers 会被聚类（clustered），形成更大的“前沿区域”。
 
 ### 后端优化
 
-- 里程计约束 (Odometry Factors): 连接连续两个机器人位姿节点（例如，$Pose_t$ 和 $Pose_{t+1}$）。这种约束来源于前端的运动估计（如视觉-惯性里程计），它描述了机器人从一个时刻到下一个时刻的相对运动 。
+- 里程计约束 (Odometry Factors): 连接连续两个机器人位姿节点（例如，$Pose_t$ 和 $Pose\_{t+1}$）。这种约束来源于前端的运动估计（如视觉-惯性里程计），它描述了机器人从一个时刻到下一个时刻的相对运动 。
 
 - 物体-机器人观测约束 (Object-Robot Observation Factors): 这是系统的核心约束。当**机器人在某个位姿（$Pose_t$）观测到一个语义地标（$Object_j$）时，就会在$Pose_t$节点和$Object_j$节点之间添加一个因子**。这个因子编码了机器人与物体之间的相对位姿关系 。论文中明确提到，系统通过**定制化的因子 customized factors**来编码这种物体-机器人约束，从而最小化定位漂移 。
 
-- 语义闭环约束 (Semantic Loop Closure Factors): 这是一种特殊但极其强大的观测约束。当机器人通过其主动规划，重新观测到一个很久以前就已经加入地图的语义地标时（例如，**在$Pose_t$时刻重新看到了在$Pose_{t-k}$时刻首次发现的$Object_j$**），系统就会在$Pose_t$和$Object_j$之间添加一个新的观测约束。由于$Object_j$已经与$Pose_{t-k}$等历史位姿相关联，这个新的约束就有效地在当前位姿和遥远的历史位姿之间建立了一座“桥梁”，从而在全局优化时校正整个轨迹的累积误差
+- 语义闭环约束 (Semantic Loop Closure Factors): 这是一种特殊但极其强大的观测约束。当机器人通过其主动规划，重新观测到一个很久以前就已经加入地图的语义地标时（例如，**在$Pose_t$时刻重新看到了在$Pose\_{t-k}$时刻首次发现的$Object_j$**），系统就会在$Pose_t$和$Object_j$之间添加一个新的观测约束。由于$Object_j$已经与$Pose\_{t-k}$等历史位姿相关联，这个新的约束就有效地在当前位姿和遥远的历史位姿之间建立了一座“桥梁”，从而在全局优化时校正整个轨迹的累积误差

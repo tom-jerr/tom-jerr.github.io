@@ -1,8 +1,11 @@
 ---
+
 title: lecture16_Thread_Level_Parallelism
-date: 2023-09-11 22:17:49
+created: 2023-09-11
 tags:
-  - System Arch
+
+- System Arch
+
 ---
 
 # Thread-Level Parallelism
@@ -61,9 +64,11 @@ tags:
   - 线程容易通信
 
 - Multithreading Framework
+
   - Registers
   - PC
   - Stach
+
 - Threads of same process share:
 
   - Heap

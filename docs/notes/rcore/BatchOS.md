@@ -1,14 +1,17 @@
 ---
+
 title: BatchOS
-date: 2024/4/17 14:03
+created: 2024-04-17
 update:
 comments: true
 description: BatchOS介绍
 katex: true
 tags:
-  - Operator System
-  - rust
-categories: Project
+
+- Operator System
+- rust
+  categories: Project
+
 ---
 
 # BatchOS

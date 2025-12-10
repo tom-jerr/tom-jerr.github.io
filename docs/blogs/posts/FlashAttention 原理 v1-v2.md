@@ -1,8 +1,11 @@
 ---
+
 title: FlashAttention 原理 v1-v2
 tags:
-  - LLMInference
-date: 2025/11/03
+
+- LLMInference
+  date: 2025/11/03
+
 ---
 
 # FlashAttention 原理 v1-v2
@@ -22,8 +25,8 @@ attention 的计算对计算和内存要求都很高（b 是 batch size，s 是 
 
 我们希望尽可能将 attention 分块，部分加载到 shared memory 进行一次计算后直接写回，避免多次的读取和写入。这就带来了挑战，我们必须避免显式地（在内存中）构建出矩阵 **S**，同时还要做到：
 
-- **在前向传播中**，在无法访问完整的 $N \times N$ 矩阵的情况下，计算出 softmax 的归一化结果 $O$；
-- **在反向传播中**，即使没有保存前向传播时的 $N \times N$ softmax 激活值，也能够正确计算梯度。
+- **在前向传播中**，在无法访问完整的 $N \\times N$ 矩阵的情况下，计算出 softmax 的归一化结果 $O$；
+- **在反向传播中**，即使没有保存前向传播时的 $N \\times N$ softmax 激活值，也能够正确计算梯度。
 
 ![](img/tile_softmax.png)
 
@@ -34,7 +37,7 @@ attention 的计算对计算和内存要求都很高（b 是 batch size，s 是 
 ### basic softmax
 
 $$
-\bar{x_i} = \frac{e^{x_i}}{\sum_j^N{e^{x_j}}}
+\\bar{x_i} = \\frac{e^{x_i}}{\\sum_j^N{e^{x_j}}}
 $$
 
 ### safe softmax
@@ -42,22 +45,22 @@ $$
 将变量的指数统一减去最大值，防止指数数值上溢
 
 $$
-\bar{x_i} = \frac{e^{x_i - max(x_{:N})}}{\sum_j^N{e^{x_j - max(x_{:N})}}}
+\\bar{x_i} = \\frac{e^{x_i - max(x\_{:N})}}{\\sum_j^N{e^{x_j - max(x\_{:N})}}}
 $$
 
 ![](img/safe_softmax.png)
 
 ### online softmax
 
-实际上我们的 $d_i^{\prime}$ 可以由 $d_i$ 递推得到：
+实际上我们的 $d_i^{\\prime}$ 可以由 $d_i$ 递推得到：
 
 $$
-\begin{aligned}
-d_i' &= \sum_{j=1}^{i} e^{x_j - m_i} \\
-     &= \left( \sum_{j=1}^{i-1} e^{x_j - m_i} \right) + e^{x_i - m_i} \\
-     &= \left( \sum_{j=1}^{i-1} e^{x_j - m_{i-1}} \right) e^{m_{i-1} - m_i} + e^{x_i - m_i} \\
-     &= d_{i-1}' e^{m_{i-1} - m_i} + e^{x_i - m_i}
-\end{aligned}
+\\begin{aligned}
+d_i' &= \\sum\_{j=1}^{i} e^{x_j - m_i} \\
+&= \\left( \\sum\_{j=1}^{i-1} e^{x_j - m_i} \\right) + e^{x_i - m_i} \\
+&= \\left( \\sum\_{j=1}^{i-1} e^{x_j - m\_{i-1}} \\right) e^{m\_{i-1} - m_i} + e^{x_i - m_i} \\
+&= d\_{i-1}' e^{m\_{i-1} - m_i} + e^{x_i - m_i}
+\\end{aligned}
 $$
 
 ![](img/online_softmax.png)
@@ -90,23 +93,23 @@ $$
 寻找 $o_i$ 的递推公式：
 
 $$
-\mathbf{o}'_i = \sum_{j=1}^{i} \frac{e^{x_j - m_i}}{d'_i} V[j,:]
+\\mathbf{o}'_i = \\sum_{j=1}^{i} \\frac{e^{x_j - m_i}}{d'\_i} V[j,:]
 $$
 
 $$
-= \left( \sum_{j=1}^{i-1} \frac{e^{x_j - m_i}}{d'_i} V[j,:] \right) + \frac{e^{x_i - m_i}}{d'_i} V[i,:]
+= \\left( \\sum\_{j=1}^{i-1} \\frac{e^{x_j - m_i}}{d'\_i} V[j,:] \\right) + \\frac{e^{x_i - m_i}}{d'\_i} V[i,:]
 $$
 
 $$
-= \left( \sum_{j=1}^{i-1} \frac{e^{x_j - m_{i-1}}}{d'_{i-1}} \frac{e^{x_j - m_i}}{e^{x_j - m_{i-1}}} \frac{d'_{i-1}}{d'_i} V[j,:] \right) + \frac{e^{x_i - m_i}}{d'_i} V[i,:]
+= \\left( \\sum\_{j=1}^{i-1} \\frac{e^{x_j - m\_{i-1}}}{d'_{i-1}} \\frac{e^{x_j - m_i}}{e^{x_j - m_{i-1}}} \\frac{d'\_{i-1}}{d'\_i} V[j,:] \\right) + \\frac{e^{x_i - m_i}}{d'\_i} V[i,:]
 $$
 
 $$
-= \left( \sum_{j=1}^{i-1} \frac{e^{x_j - m_{i-1}}}{d'_{i-1}} V[j,:] \right) \frac{d'_{i-1} e^{m_{i-1} - m_i}}{d'_i} + \frac{e^{x_i - m_i}}{d'_i} V[i,:]
+= \\left( \\sum\_{j=1}^{i-1} \\frac{e^{x_j - m\_{i-1}}}{d'_{i-1}} V[j,:] \\right) \\frac{d'_{i-1} e^{m\_{i-1} - m_i}}{d'\_i} + \\frac{e^{x_i - m_i}}{d'\_i} V[i,:]
 $$
 
 $$
-= \mathbf{o}'_{i-1} \frac{d'_{i-1} e^{m_{i-1} - m_i}}{d'_i} + \frac{e^{x_i - m_i}}{d'_i} V[i,:]
+= \\mathbf{o}'_{i-1} \\frac{d'_{i-1} e^{m\_{i-1} - m_i}}{d'\_i} + \\frac{e^{x_i - m_i}}{d'\_i} V[i,:]
 $$
 
 此时就得到`Flash Attention`的 **`one-pass` 迭代形式**
@@ -117,18 +120,18 @@ $$
 
 - 外层循环遍历 K 和 V 的 ”列块“（**一次 I/O 读**）
 - 内存循环遍历 Q 的 "行块"（**一次 I/O 读**）
-  - 计算 $Q \cdot K^T$产生了一个 $B_r \times B_c$ 的小矩阵 $S_{ij}$。**它从不被写入 HBM**
-  - 针对刚刚得到的 $S_{ij}$ 块，计算**这个块的**“局部”Softmax 统计量：
-    - $\tilde{m}_{ij}$：$S_{ij}$ 这一块的**行最大值** (rowmax)。
-    - $\tilde{P}_{ij}$：$S_{ij}$ 减去块最大值后的 $\exp$ 结果，即 $e^{S_{ij} - \tilde{m}_{ij}}$。
-    - $\tilde{\ell}_{ij}$：$\tilde{P}_{ij}$ 的**行和** (rowsum)，即 $\sum e^{S_{ij} - \tilde{m}_{ij}}$。
+  - 计算 $Q \\cdot K^T$产生了一个 $B_r \\times B_c$ 的小矩阵 $S\_{ij}$。**它从不被写入 HBM**
+  - 针对刚刚得到的 $S\_{ij}$ 块，计算**这个块的**“局部”Softmax 统计量：
+    - $\\tilde{m}_{ij}$：$S_{ij}$ 这一块的**行最大值** (rowmax)。
+    - $\\tilde{P}_{ij}$：$S_{ij}$ 减去块最大值后的 $\\exp$ 结果，即 $e^{S\_{ij} - \\tilde{m}\_{ij}}$。
+    - $\\tilde{\\ell}_{ij}$：$\\tilde{P}_{ij}$ 的**行和** (rowsum)，即 $\\sum e^{S\_{ij} - \\tilde{m}\_{ij}}$。
   - 更新 $m_i^{new}$ 和 $l_i^{new}$
-  - 更新输出 $O_i$ （**一次 I/O 写**）：$O_i \leftarrow \text{diag}(\ell_i^{new})^{-1} \left( \text{diag}(e^{m_i - m_i^{new}}) O_i + e^{\tilde{m}_{ij} - m_i^{new}} \tilde{P}_{ij} V_j \right)$
+  - 更新输出 $O_i$ （**一次 I/O 写**）：$O_i \\leftarrow \\text{diag}(\\ell_i^{new})^{-1} \\left( \\text{diag}(e^{m_i - m_i^{new}}) O_i + e^{\\tilde{m}_{ij} - m_i^{new}} \\tilde{P}_{ij} V_j \\right)$
     - $e^{m_i - m_i^{new}} O_i$：用缩放因子**修正**“历史”输出 $O_i$。
-    - $e^{\tilde{m}_{ij} - m_i^{new}} \tilde{P}_{ij} V_j$：计算“当前块”的（未归一化的）输出，并用缩放因子修正它。
+    - $e^{\\tilde{m}_{ij} - m_i^{new}} \\tilde{P}_{ij} V_j$：计算“当前块”的（未归一化的）输出，并用缩放因子修正它。
     - 两者相加，得到（未归一化的）新输出。
-    - $\text{diag}(\ell_i^{new})^{-1}$：最后，除以新的“全局”分母 $\ell_i^{new}$，完成归一化。
-  - **第二次 I/O 写：** 将更新后的“在线”统计量 $\ell_i^{new}$ 和 $m_i^{new}$ 也写回 HBM，以便**下一个外循环**（$j+1$）可以使用它们。
+    - $\\text{diag}(\\ell_i^{new})^{-1}$：最后，除以新的“全局”分母 $\\ell_i^{new}$，完成归一化。
+  - **第二次 I/O 写：** 将更新后的“在线”统计量 $\\ell_i^{new}$ 和 $m_i^{new}$ 也写回 HBM，以便**下一个外循环**（$j+1$）可以使用它们。
 
 ![](img/tiling_flash_attention.png)
 
@@ -174,49 +177,51 @@ FlashAttention 在 batch 和 heads 两个维度上进行了并行化：
 
 ### Optimize non-matmul
 
-`Flash Attnetion v1`  每次都要做 `Scaled` ($O \times L_i^{-1}$)，都是额外的非乘法计算；
+`Flash Attnetion v1`  每次都要做 `Scaled` ($O \\times L_i^{-1}$)，都是额外的非乘法计算；
 
 ![](img/flash_v1.jpg)
 
-1.  在计算局部 attention 时，先不考虑 softmax 的分母 $\sum e^{x_i}$，即
-    $\ell^{(i+1)} = e^{m^{(i)}-m^{(i+1)}} \ell^{(i)} + \text{rowsum}( e^{S^{(i+1)}-m^{(i+1)}} )$，例如计算 $\mathbf{O}^{(1)}$ 时去除了
-    $\text{diag}\left(\ell^{(1)}\right)^{-1}$
+1. 在计算局部 attention 时，先不考虑 softmax 的分母 $\\sum e^{x_i}$，即
+   $\\ell^{(i+1)} = e^{m^{(i)}-m^{(i+1)}} \\ell^{(i)} + \\text{rowsum}( e^{S^{(i+1)}-m^{(i+1)}} )$，例如计算 $\\mathbf{O}^{(1)}$ 时去除了
+   $\\text{diag}\\left(\\ell^{(1)}\\right)^{-1}$
 
-    **FlashAttention:**
+   **FlashAttention:**
 
-    $$
-    \mathbf{O}^{(1)} = \tilde{\mathbf{P}}^{(1)} \mathbf{V}^{(1)} = \text{diag}\left(\ell^{(1)}\right)^{-1} e^{S^{(1)}-m^{(1)}} \mathbf{V}^{(1)}
-    $$
+   $$
+   \\mathbf{O}^{(1)} = \\tilde{\\mathbf{P}}^{(1)} \\mathbf{V}^{(1)} = \\text{diag}\\left(\\ell^{(1)}\\right)^{-1} e^{S^{(1)}-m^{(1)}} \\mathbf{V}^{(1)}
+   $$
 
-    **FlashAttention-2:**
+   **FlashAttention-2:**
 
-    $$
-    \tilde{\mathbf{O}}^{(1)} = e^{S^{(1)}-m^{(1)}} \mathbf{V}^{(1)}
-    $$
+   $$
+   \\tilde{\\mathbf{O}}^{(1)} = e^{S^{(1)}-m^{(1)}} \\mathbf{V}^{(1)}
+   $$
 
-2.  由于去除了 $\text{diag}\left(\ell^{(i)}\right)^{-1}$，更新 $\tilde{\mathbf{O}}^{(i+1)}$ 时不需要 rescale $\ell^{(i)} / \ell^{(i+1)}$，但是得弥补之前局部 max 值，例如示例中：
+1. 由于去除了 $\\text{diag}\\left(\\ell^{(i)}\\right)^{-1}$，更新 $\\tilde{\\mathbf{O}}^{(i+1)}$ 时不需要 rescale $\\ell^{(i)} / \\ell^{(i+1)}$，但是得弥补之前局部 max 值，例如示例中：
 
-    **FlashAttention:**
+   **FlashAttention:**
 
-    $$
-    \mathbf{O}^{(2)} = \text{diag}\left(\ell^{(1)} / \ell^{(2)}\right) \mathbf{O}^{(1)} + \text{diag}\left(\ell^{(2)}\right)^{-1} e^{S^{(2)}-m^{(2)}} \mathbf{V}^{(2)}
-    $$
+   $$
+   \\mathbf{O}^{(2)} = \\text{diag}\\left(\\ell^{(1)} / \\ell^{(2)}\\right) \\mathbf{O}^{(1)} + \\text{diag}\\left(\\ell^{(2)}\\right)^{-1} e^{S^{(2)}-m^{(2)}} \\mathbf{V}^{(2)}
+   $$
 
-    **FlashAttention-2:**
+   **FlashAttention-2:**
 
-    $$
-    \tilde{\mathbf{O}}^{(2)} = \text{diag}\left(e^{m^{(1)}-m^{(2)}}\right) \tilde{\mathbf{O}}^{(1)} + e^{S^{(2)}-m^{(2)}} \mathbf{V}^{(2)} = e^{S^{(1)}-m^{(2)}} \mathbf{V}^{(1)} + e^{S^{(2)}-m^{(2)}} \mathbf{V}^{(2)}
-    $$
+   $$
+   \\tilde{\\mathbf{O}}^{(2)} = \\text{diag}\\left(e^{m^{(1)}-m^{(2)}}\\right) \\tilde{\\mathbf{O}}^{(1)} + e^{S^{(2)}-m^{(2)}} \\mathbf{V}^{(2)} = e^{S^{(1)}-m^{(2)}} \\mathbf{V}^{(1)} + e^{S^{(2)}-m^{(2)}} \\mathbf{V}^{(2)}
+   $$
 
-3.  由于更新 $\tilde{\mathbf{O}}^{(i+1)}$ 未进行 rescale，最后一步时需要将 $\tilde{\mathbf{O}}^{(\text{last})}$ 乘以 $\text{diag}\left(\ell^{(\text{last})}\right)^{-1}$ 来得到正确的输出，例如示例中：
+1. 由于更新 $\\tilde{\\mathbf{O}}^{(i+1)}$ 未进行 rescale，最后一步时需要将 $\\tilde{\\mathbf{O}}^{(\\text{last})}$ 乘以 $\\text{diag}\\left(\\ell^{(\\text{last})}\\right)^{-1}$ 来得到正确的输出，例如示例中：
 
-        **FlashAttention-2:**
+   ```
+   **FlashAttention-2:**
+   ```
 
-    $$
-        \mathbf{O} = \text{diag}\left(\ell^{(2)}\right)^{-1} \tilde{\mathbf{O}}^{(2)}
-    $$
+   $$
+   \\mathbf{O} = \\text{diag}\\left(\\ell^{(2)}\\right)^{-1} \\tilde{\\mathbf{O}}^{(2)}
+   $$
 
-    ![](img/flash_v2.jpg)
+   ![](img/flash_v2.jpg)
 
 ### 忽略 mask block 的 Attention 计算
 
@@ -230,8 +235,8 @@ FlashAttention 在 batch 和 heads 两个维度上进行了并行化：
 Flash-Decoding 分 3 个步骤进行：
 
 1. 首先，我们将键/值拆分成更小的块。
-2. 我们使用 FlashAttention 并行计算每个分割后的查询注意力值。此外，我们还为每行和每个分割写入一个额外的标量：注意力值的对数和指数。
-3. 最后，我们通过对所有分割进行归约来计算实际输出，使用对数求和指数来缩放每个分割的贡献。
+1. 我们使用 FlashAttention 并行计算每个分割后的查询注意力值。此外，我们还为每行和每个分割写入一个额外的标量：注意力值的对数和指数。
+1. 最后，我们通过对所有分割进行归约来计算实际输出，使用对数求和指数来缩放每个分割的贡献。
 
 这一切之所以可行，是因为注意力/softmax 可以迭代计算。在 Flash-Decoding 中，它被用于两个层面：在 splits 内（类似于 FlashAttention），以及跨 splits 进行最终的 reduce。
 

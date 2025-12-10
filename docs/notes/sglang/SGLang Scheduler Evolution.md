@@ -1,8 +1,11 @@
 ---
+
 title: Evolution of SGLang Scheduler
-date: 2025/11/21 18:01
+created: 2025-11-21
 tags:
-  - LLMInference
+
+- LLMInference
+
 ---
 
 # Evolution of SGLang Scheduler
@@ -89,10 +92,10 @@ class ScheduleBatch:
 ```python
 class ModelWorkerBatch:
     forward_mode: ForwardMode
-    input_ids: torch.Tensor # Input token IDs
-    req_pool_indices: torch.Tensor # Indices of out_cache_loc corresponding to req
-    seq_lens: torch.Tensor # Sequence lengths
-    out_cache_loc: torch.Tensor # Allocated KV cache
+    input_ids: torch.Tensor  # Input token IDs
+    req_pool_indices: torch.Tensor  # Indices of out_cache_loc corresponding to req
+    seq_lens: torch.Tensor  # Sequence lengths
+    out_cache_loc: torch.Tensor  # Allocated KV cache
 
     # Extension related (seq - prefix)
     extend_num_tokens: Optional[int]
@@ -128,22 +131,23 @@ def run_batch(self, batch: ScheduleBatch):
     # 2. Convert to ModelWorkerBatch
     model_worker_batch = batch.get_model_worker_batch()
 
+
 # 3. TpModelWorker processing
 def forward_batch_generation(self, model_worker_batch: ModelWorkerBatch):
-        # 4. Convert to ForwardBatch
-        forward_batch = ForwardBatch.init_new(model_worker_batch, self.model_runner)
+    # 4. Convert to ForwardBatch
+    forward_batch = ForwardBatch.init_new(model_worker_batch, self.model_runner)
 
-        # 5. ModelRunner executes forward pass
-        logits_output, can_run_cuda_graph = self.model_runner.forward(forward_batch)
+    # 5. ModelRunner executes forward pass
+    logits_output, can_run_cuda_graph = self.model_runner.forward(forward_batch)
 
-        # 6. Sample to generate token
-        next_token_ids = self.model_runner.sample(logits_output, forward_batch)
+    # 6. Sample to generate token
+    next_token_ids = self.model_runner.sample(logits_output, forward_batch)
 
-        return GenerationBatchResult(
-            logits_output=logits_output,
-            next_token_ids=next_token_ids,
-            can_run_cuda_graph=can_run_cuda_graph,
-        )
+    return GenerationBatchResult(
+        logits_output=logits_output,
+        next_token_ids=next_token_ids,
+        can_run_cuda_graph=can_run_cuda_graph,
+    )
 ```
 
 ### Cache
@@ -175,12 +179,12 @@ KV Cache Pool:
 
 ```python
 class ReqToTokenPool:
-    def __init__(self, size: int, max_context_len: int, device: str, enable_memory_saver: bool):
+    def __init__(
+        self, size: int, max_context_len: int, device: str, enable_memory_saver: bool
+    ):
         # Main storage structure: [number of requests, max context length]
         self.req_to_token = torch.zeros(
-            (size, max_context_len),
-            dtype=torch.int32,
-            device=device
+            (size, max_context_len), dtype=torch.int32, device=device
         )
         self.free_slots = list(range(size))  # List of free slots
         self.size = size
@@ -198,10 +202,12 @@ class ReqToTokenPool:
 It is essentially the organizational structure connecting the two pools. The scheduler accesses it frequently during scheduling to allocate slots in `req_to_token_pool` and `token_to_kv_pool` for requests.
 
 - `tree_cache` plays a key role in scheduling policy, determining when the current request is prefilled based on prefix matching.
+
 - `page_size` determines the granularity of prefix matching, key matching strategy, and paged matching algorithm.
 
   - `page_size = 1` means exact token-by-token matching, capable of matching prefixes of any length.
   - `page_size > 1` means prefix matching by page (using `tuple(tokens)` as key).
+
   ```python
   # page_size = 1
   root
@@ -217,8 +223,6 @@ It is essentially the organizational structure connecting the two pools. The sch
   └── (5,6,7,8) (child_key=(5,6,7,8))
   ```
 
-
-
 #### Relationship
 
 When a new request enters:
@@ -233,12 +237,12 @@ When a new request enters:
 out_cache_loc = alloc_token_slots(batch.tree_cache, batch.extend_num_tokens)
 # update mapping (prefix + extend)
 req_to_token_pool.write(
-	(req_idx, slice(0, prefix_len)),
-	prefix_tensors[i],
+    (req_idx, slice(0, prefix_len)),
+    prefix_tensors[i],
 )
 req_to_token_pool.write(
-	(req_idx, slice(prefix_len, seq_len)),
-	out_cache_loc[pt : pt + extend_len],
+    (req_idx, slice(prefix_len, seq_len)),
+    out_cache_loc[pt : pt + extend_len],
 )
 ```
 
@@ -311,12 +315,12 @@ class PrefillAdder:
 - **Content**: Includes top-k probabilities, indices, hidden states, etc.
 - **Usage**: Preparing input data for the next round of speculative decoding.
 
-#### **5. extend_input_len_per_req: Optional[List[int]]**
+#### **5. extend_input_len_per_req: Optional\[List[int]\]**
 
 - **Role**: Extended input length for each request.
 - **Usage**: Knowing **how many new tokens were actually processed** for each request when processing batch results.
 
-#### **6. extend_logprob_start_len_per_req: Optional[List[int]]**
+#### **6. extend_logprob_start_len_per_req: Optional\[List[int]\]**
 
 - **Role**: The position where each request starts calculating logprob.
 - **Usage**: Determining from which position to start returning logprob information to the user.
@@ -376,28 +380,29 @@ New requests enter the Prefill phase, and after Prefill ends, they enter the Dec
 ##### Prefill Schedule
 
 1. `get_next_batch_to_run`: Prefill takes precedence here, so `get_new_batch_prefill` is called, and the returned `new_batch` is directly used **as the batch for this execution round (i.e., `cur_batch`)**.
-2. `get_new_batch_prefill`:
+
+1. `get_new_batch_prefill`:
 
    - Create `PrefillAdder` to manage batch construction, selecting requests from `waiting_queue`.
    - **`init_next_round_input` updates the prefix of the radix tree cache.**
    - Create a new `ScheduleBatch`, call `prepare_for_extend`:
      - Allocate `req_pool_indices`: Assign a unique index position in the request pool for each request. This index is used to store the request's token-to-KV mapping in `req_to_token_pool`.
-      - allocate KV cache
-       - Write the mapping of req to kv cache into `req_to_token_pool`.
+     - allocate KV cache
+     - Write the mapping of req to kv cache into `req_to_token_pool`.
 
-3. `run_batch()`: Execute Prefill inference, call `TpModelWorker::forward_batch_generation()` -> `ModelRunner::forward()` -> `ModelRunner::_forward_raw()` -> `ModelRunner::forward_extend()`, then execute backend operators and wait for results.
+1. `run_batch()`: Execute Prefill inference, call `TpModelWorker::forward_batch_generation()` -> `ModelRunner::forward()` -> `ModelRunner::_forward_raw()` -> `ModelRunner::forward_extend()`, then execute backend operators and wait for results.
 
 ##### Decode Schedule
 
 1. `get_next_batch_to_run()`: Process completed requests from the previous batch, then merge with `running_batch`.
-2. `update_running_batch()`:
+1. `update_running_batch()`:
    - Call `prepare_for_decode()`:
      - `output_ids` from the previous schedule become `input_ids` for this one.
      - Allocate (batch size * 1) slots for `out_cache_loc`, because in decode mode we generate only one token per batch at a time.
      ```python
-       out_cache_loc = alloc_token_slots(batch.tree_cache, bs * 1)
+     out_cache_loc = alloc_token_slots(batch.tree_cache, bs * 1)
      ```
-3. `run_batch()`: Execute Decode inference, call `TpModelWorker::forward_batch_generation()` -> `ModelRunner::forward()` -> `ModelRunner::_forward_raw()` -> `ModelRunner::forward_decode()`, then execute backend operators and wait for results.
+1. `run_batch()`: Execute Decode inference, call `TpModelWorker::forward_batch_generation()` -> `ModelRunner::forward()` -> `ModelRunner::_forward_raw()` -> `ModelRunner::forward_decode()`, then execute backend operators and wait for results.
 
 #### Sample
 
@@ -463,12 +468,13 @@ def event_loop_normal(self):
   - `work_reqs` are broadcast in `attn_tp`; system `control_reqs` are broadcast across the entire `tp_size`.
 
 - Then execute `process_input_requests`
-  1.  **Extract worker_id**: `worker_id = recv_req.worker_id`
-  2.  **Unpack request**: `recv_req = recv_req.obj`
-  3.  **Dispatch processing**: `output = self._request_dispatcher(recv_req)` Call request dispatcher.
-      - Construct `recv_req` as a new `Req` object.
-      - Call `_add_request_to_queue()` to insert `Req` into `waiting_queue`.
-  4.  **Send response**: Send output back to the corresponding tokenizer worker process.
+
+  1. **Extract worker_id**: `worker_id = recv_req.worker_id`
+  1. **Unpack request**: `recv_req = recv_req.obj`
+  1. **Dispatch processing**: `output = self._request_dispatcher(recv_req)` Call request dispatcher.
+     - Construct `recv_req` as a new `Req` object.
+     - Call `_add_request_to_queue()` to insert `Req` into `waiting_queue`.
+  1. **Send response**: Send output back to the corresponding tokenizer worker process.
 
 #### Waiting_queue/running_batch -> cur_batch
 
@@ -477,6 +483,7 @@ def event_loop_normal(self):
 ##### Get prefill batch `get_new_batch_prefill`
 
 - Create `PrefillAdder`, chunk new requests, then process multiple chunks at a time.
+
   - `init_next_round_input()`:
     - Construct full sequence: original input tokens + generated output tokens.
     - Max prefix length calculation: Cache up to the second to last token (`input_len - 1`).
@@ -485,7 +492,9 @@ def event_loop_normal(self):
       - When Request `ABC` arrives, assume there is a node `AFG` in the current radix cache.
       - `match_prefix` will try to find the longest prefix of existing `ABC` in the current radix cache, meaning it will find `A` in the `AFG` node.
       - Radix cache will split this node `AFG` into `A` and `FG`, with node `A` becoming the last node of the current Request.
+
 - Create a new `ScheduleBatch`.
+
 - Call `ScheduleBatch::prepare_for_extend()`
 
   - Allocate `req_pool_indices` to assign a unique index position in the request pool for each request. This index is used to store the request's token-to-KV mapping in `req_to_token_pool`.
@@ -513,11 +522,15 @@ def event_loop_normal(self):
 ##### Get decode batch
 
 - First remove completed or errored batches from the batch, then merge the previous round's decode batch with `running_batch`.
+
   - Essentially concatenating `seq_lens`, `orig_seq_lens`, `output_ids`, etc. using `torch.cat`.
+
 - Call `update_running_batch()` to get decode batch.
 
   - First check if requests need to be retracted.
+
   - If so, re-insert requests to be retracted into `waiting_queue` and re-queue for scheduling.
+
   - Call `ScheduleBatch::prepare_for_decode()`
 
     - Previous round output as this round's input.
@@ -615,13 +628,14 @@ SGLang's inference process is mainly divided into the following four stages:
    - Schedule from waiting queue and `running_batch`. (`Scheduler::get_batch_to_run()`)
      - Prefill involves Radix Tree and Longest Prefix Matching algorithm. (`Req::init_next_round_input()`)
    - Allocate memory resources required for Tokens for each request. (`ScheduleBatch::prepare_for_extend()` & `ScheduleBatch::prepare_for_decode()`)
-2. **Compute batch:**
+1. **Compute batch:**
    - Send batch to GPU for one step (i.e., one iter of Continue Batch) inference. (`Scheduler::run_batch()`)
-3. **Sample:**
+1. **Sample:**
    - Sample based on Logit output from model to generate next Token. (`ModelRunner::sample()`)
-4. **Post schedule:**
+1. **Post schedule:**
    - After one inference step, dynamically check if requests meet finish condition (Check Finish Condition). (`Scheduler::process_batch_result()`)
-  - Remove completed requests from the batch, send them to the detokenizer, then return results to the DetokenizerManager, and finally forward them to the TokenizerManager.
+
+- Remove completed requests from the batch, send them to the detokenizer, then return results to the DetokenizerManager, and finally forward them to the TokenizerManager.
 
 #### Overlap Overview[^overlap]
 
@@ -666,7 +680,7 @@ We implement overlap by using Forward CUDA Stream, specifically:
 def init_overlap(self):
     if not self.enable_overlap:
         return
-    self.forward_stream = torch.cuda.Stream()      # GPU forward computation stream
+    self.forward_stream = torch.cuda.Stream()  # GPU forward computation stream
     # Future map manages asynchronous results
     self.future_map = FutureMap(max_running_requests, device, spec_algorithm)
     # batch buffer (prevents GPU tensors from being GC'd)
@@ -679,7 +693,9 @@ def init_overlap(self):
 **Stored on GPU.**
 
 - `future_ct`: Current ring counter (pointer), used to generate new future indices (not "number of unfinished").
+
 - `future_limit`: Modulo for ring pointer (used for `% self.future_limit`). The code uses a factor of `*3` to **reduce index collision probability** (preventing `future_ct` from wrapping around quickly and overwriting slots not yet written back).
+
 - `future_buffer_len`: Actual physical buffer length (`*5`), longer than `future_limit` to ensure enough space in write interval (preventing slice out-of-bounds or wrap-around write/read conflicts).
 
 - These two factors (3 and 5) are engineering empirical values used to increase safety margin; you can adjust based on concurrency and outstanding futures.
@@ -725,7 +741,7 @@ def event_loop_overlap(self):
             self.self_check_during_idle()
 
         # === Launch Sample 2 ===
-        self.launch_batch_sample_if_needed(batch_result) # update vocab mask
+        self.launch_batch_sample_if_needed(batch_result)  # update vocab mask
         self.last_batch = batch
 ```
 
@@ -799,6 +815,6 @@ with self.forward_stream_ctx:
 
 ## Reference
 
-[^overlap]: [Zero-Overhead Batch Scheduler](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/zero-overhead-scheduler/zero-overhead-batch-scheduler.md)
-[^overhead]: [Can Scheduling Overhead Dominate LLM Inference Performance? A Study of CPU Scheduling Overhead on Two Popular LLM Inference Systems](https://mlsys.wuklab.io/posts/scheduling_overhead/)
-[^code-walk]: [SGLang Code Walk Through](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/code-walk-through/readme-CN.md)
+\[^overlap\]: [Zero-Overhead Batch Scheduler](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/zero-overhead-scheduler/zero-overhead-batch-scheduler.md)
+\[^overhead\]: [Can Scheduling Overhead Dominate LLM Inference Performance? A Study of CPU Scheduling Overhead on Two Popular LLM Inference Systems](https://mlsys.wuklab.io/posts/scheduling_overhead/)
+\[^code-walk\]: [SGLang Code Walk Through](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/code-walk-through/readme-CN.md)

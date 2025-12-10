@@ -1,12 +1,15 @@
 ---
+
 title: Thread Shared Data Protection
-date: 2025/6/10
+created: 2025-06-10
 update:
 comments: true
 description: C++ 中线程共享数据的保护方式
 katex: true
 tags:
-  - C++
+
+- C++
+
 ---
 
 # Mutex

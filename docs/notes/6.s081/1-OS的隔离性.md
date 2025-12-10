@@ -1,8 +1,11 @@
 ---
+
 title: 1-OS的隔离性
-date: 2023-09-11 22:17:49
+created: 2023-09-11
 tags:
-  - Operator System
+
+- Operator System
+
 ---
 
 # OS 的隔离性

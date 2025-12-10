@@ -1,7 +1,10 @@
 ---
+
 title: 5_Database_Storage
-date: 2023-09-16 22:17:49
-  - Database
+created: 2023-09-16
+
+- Database
+
 ---
 
 # 5 Buffer Pool
@@ -16,6 +19,7 @@ date: 2023-09-16 22:17:49
 - 是一个有着固定页数的数组；每个数组元素叫 frame (帧)
 
 - 通过 page table 去索引内存池中的页
+
 - page table 可以 pin 某个页，也可以锁住某个索引
 
 ### Mete-Data
@@ -23,6 +27,7 @@ date: 2023-09-16 22:17:49
 - 页表跟踪现在在内存中的页
 
 - Dirty flag
+
 - Pin/Reference Counter
 
 ### locks vs latches

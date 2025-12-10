@@ -1,13 +1,16 @@
 ---
+
 title: 15 Timestamp Ordering Concurrency Control
-date: 2024-10-31
+created: 2024-10-31
 tags:
-  - Database
+
+- Database
+
 ---
 
 # Timestamp Ordering Concurrency Control
 
-> 2PL 和时间戳排序算法是悲观并发控制算法  
+> 2PL 和时间戳排序算法是悲观并发控制算法\
 > 还有乐观并发控制算法
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/concunrrency_control_approach.png)
@@ -20,8 +23,8 @@ tags:
 ### Timestamp allocation
 
 1. System/Wall Clock
-2. Logical Counter
-3. Hybrid
+1. Logical Counter
+1. Hybrid
 
 ### Basic T/O
 
@@ -73,15 +76,15 @@ tags:
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/occ_write_phase.png)
 
-> OCC 在冲突比较少的情况下工作比较好：  
->  所有的事务都是只读的(ideal)  
->  事务访问的数据没有交集
+> OCC 在冲突比较少的情况下工作比较好：\
+> 所有的事务都是只读的(ideal)\
+> 事务访问的数据没有交集
 
 ### OCC-performance issues
 
 1. 本地复制数据的高成本
-2. Validation/Write 阶段的瓶颈
-3. abort 比 2PL 更加浪费(因为发生在事务已经执行后才进行 abort)
+1. Validation/Write 阶段的瓶颈
+1. abort 比 2PL 更加浪费(因为发生在事务已经执行后才进行 abort)
 
 ## The phantom Problem(幻读问题)
 
@@ -95,8 +98,8 @@ tags:
 ### solution
 
 1. 完成事务之前，重新读取查询指定的所有数据
-2. 谓词锁：在查询真正开始运行之前逻辑上决定覆盖哪些谓词
-3. 索引锁：类似谓词锁
+1. 谓词锁：在查询真正开始运行之前逻辑上决定覆盖哪些谓词
+1. 索引锁：类似谓词锁
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/phantom_solution.png)
 
@@ -111,9 +114,9 @@ tags:
 谓词锁的工作原理可以概述为以下几个步骤：
 
 > 1. 定义谓词：在执行查询或更新操作时，定义一个谓词条件（如 age > 18），描述想要锁定的条件。这一谓词会根据查询或操作涉及的数据范围而变化。
-> 2. 应用谓词锁：数据库将这一谓词应用于当前数据表的范围，标记出符合条件的数据项（如年龄大于 18 的所有行）。在没有具体数据信息时，它并不是直接锁住某一行，而是锁住满足条件的数据区域。
-> 3. 判断冲突：当其他事务尝试访问数据库时，系统会检查它们是否涉及到已经被谓词锁锁定的区域。如果其他事务的谓词条件与当前锁产生冲突，系统会阻止该事务继续，直至锁释放。
-> 4. 锁释放：完成对被锁定区域的操作后，事务提交或回滚，系统随即释放谓词锁。
+> 1. 应用谓词锁：数据库将这一谓词应用于当前数据表的范围，标记出符合条件的数据项（如年龄大于 18 的所有行）。在没有具体数据信息时，它并不是直接锁住某一行，而是锁住满足条件的数据区域。
+> 1. 判断冲突：当其他事务尝试访问数据库时，系统会检查它们是否涉及到已经被谓词锁锁定的区域。如果其他事务的谓词条件与当前锁产生冲突，系统会阻止该事务继续，直至锁释放。
+> 1. 锁释放：完成对被锁定区域的操作后，事务提交或回滚，系统随即释放谓词锁。
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/predicate_locking1.png)
 

@@ -1,18 +1,23 @@
 ---
+
 title: Synchronizing concurrent operation
-date: 2025/6/10
+created: 2025-06-10
 update:
 comments: true
 description: C++ 中的同步并发操作
 katex: true
 tags:
-  - C++
+
+- C++
+
 ---
 
 # Condition Variable
 
 - 在并发编程中，一种常见的需求是，一个线程等待另一个线程完成某个事件后，再继续执行任务。对于这种情况，标准库提供了 std::condition_variable
+
 - 但是 std::condition_variable 只能与 std::unique_lock 协作，std::condition_variable_any 可以和其他类型的锁来协作。
+
 - 有多个能唤醒的任务时，notify_one() 会随机唤醒一个
 
   ```c++

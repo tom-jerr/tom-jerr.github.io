@@ -1,17 +1,21 @@
 ---
+
 title: PDX: A Data Layout for Vector Similarity Search
-date: 2025/7/9
+created: 2025-07-09
 update:
 comments: true
 description: PDX: A Data Layout for Vector Similarity Search
-  - The design of PDX, a new data layout for vectors alongside PDXearch: a framework to perform pruned VSS dimension-by-dimension.
-  - The design and evaluation of PDX-BOND: A VSS algorithm that leverages the PDX layout to visit first the most relevant dimensions relative to the incoming query.
-  - To incorporate hidden dimensions not embedded into  vectors (e.g., temporal information), we propose a new  proximity graph construction algorithm and a graph  memory layout optimization.
+
+- The design of PDX, a new data layout for vectors alongside PDXearch: a framework to perform pruned VSS dimension-by-dimension.
+- The design and evaluation of PDX-BOND: A VSS algorithm that leverages the PDX layout to visit first the most relevant dimensions relative to the incoming query.
+- To incorporate hidden dimensions not embedded into vectors (e.g., temporal information), we propose a new proximity graph construction algorithm and a graph memory layout optimization.
 
 katex: true
 tags:
-  - Paper Notes
-  - Vector Search
+
+- Paper Notes
+- Vector Search
+
 ---
 
 # Perspectives

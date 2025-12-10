@@ -1,14 +1,18 @@
 ---
+
 title: Memtables
-date: 2025/4/3
+created: 2025-04-03
 update:
 comments: true
 description: Memtable 的基本介绍
 katex: true
 tags:
-  - MiniLSM
-  - rust
+
+- MiniLSM
+- rust
+
 # categories: Project
+
 ---
 
 # Memtables
@@ -36,11 +40,11 @@ tags:
 
 - SLM-DB 论文中提出可以用 B+树作为内存索引；Oceanbase 使用的存储引擎也是 lsm-tree based，它的 memtable 使用 B+tree 或者 hash index
 - 使用跳表优点
-  > 插入、删除、查找都是 O(logn)级别，实现简单  
-  > 天然有序  
+  > 插入、删除、查找都是 O(logn)级别，实现简单\
+  > 天然有序\
   > 并发控制简单
 - 跳表缺点
-  > 写放大  
+  > 写放大\
   > 删除操作可能级联操作多级指针
 
 ### 4. Why do we need a combination of state and state_lock? Can we only use state.read() and state.write()?
@@ -57,11 +61,14 @@ tags:
 ### 6. Is the memory layout of the memtable efficient / does it have good data locality? (Think of how Byte is implemented and stored in the skiplist...) What are the possible optimizations to make the memtable more efficient?
 
 - 如果是短数据，Byte 会内联存储在结构体中，内存连续；对大值（如超过 1KB 的 Blob），Bytes 通过引用计数共享底层 Vec<u8>，避免复制
+
 - 间接指针访问会增加内存间接性，影响预取效率
+
 - Byte 元数据占用额外内存，如果使用内部内存分配，可能造成内存不连续
+
 - 优化
 
-  > 构造统一的内存分配器，同一分配内存  
+  > 构造统一的内存分配器，同一分配内存\
   > 将 key 和 value 分开存储
 
 ### 7. So we are using parking_lot locks in this course. Is its read-write lock a fair lock? What might happen to the readers trying to acquire the lock if there is one writer waiting for existing readers to stop?
@@ -77,6 +84,7 @@ tags:
 ### 9. There are several places that you might first acquire a read lock on state, then drop it and acquire a write lock (these two operations might be in different functions but they happened sequentially due to one function calls the other). How does it differ from directly upgrading the read lock to a write lock? Is it necessary to upgrade instead of acquiring and dropping and what is the cost of doing the upgrade?
 
 - 结论：需要根据不同的工作负载来确定，读多写少的负载就可以采用分步锁，写少读多的负载可以采用锁升级
+
 - ​ 先释放读锁再获取写锁：
 
   > 在这两个操作之间，其他线程可能会修改状态，导致之前读取的信息失效。例如，线程 A 读取 memtable 未满，释放读锁，此时线程 B 可能获取写锁并填满 memtable，导致线程 A 再次获取写锁时发现需要 flush，但此时可能已经被处理过了，或者需要重新检查条件。
@@ -93,9 +101,10 @@ tags:
 
 - acquire read -> drop read -> acquire write
 
-  > ​ 优势：释放读锁后，其他线程可以继续获取读锁，提高并发读取性能。  
+  > ​ 优势：释放读锁后，其他线程可以继续获取读锁，提高并发读取性能。\
   > 劣势：写入线程可能需要等待更长时间获取写锁（因中间存在其他竞争）。
 
 - ​ 锁升级
-  > ​ 优势：减少写锁竞争，因为升级时已持有读锁，可能更快获得写锁。  
+
+  > ​ 优势：减少写锁竞争，因为升级时已持有读锁，可能更快获得写锁。\
   > 劣势：若其他线程持有读锁，升级会阻塞直到所有读锁释放（类似直接获取写锁）。在高并发读场景下，可能导致长时间阻塞。

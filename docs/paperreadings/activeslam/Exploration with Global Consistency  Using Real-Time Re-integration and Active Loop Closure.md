@@ -1,11 +1,14 @@
 ---
-title: Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure 论文精读
-date: 2025/10/14
+
+title: Exploration with Global Consistency Using Real-Time Re-integration and Active Loop Closure 论文精读
+created: 2025-10-14
 update:
 comments: true
 katex: true
 tags:
-  - VINS
+
+- VINS
+
 ---
 
 # Exploration with Global Consistency Using Real-Time Re-integration and Active Loop Closure
@@ -31,14 +34,14 @@ ICRA 2022
 现有方法问题：
 
 1. 现有方法大多假设定位是无漂移的，但现实中 VIO 会随着时间积累漂移，导致地图严重扭曲，影响后续的探索和导航。
-2. 现有方法大多依赖被动闭环检测，难以发现闭环，导致地图质量不高。
+1. 现有方法大多依赖被动闭环检测，难以发现闭环，导致地图质量不高。
 
 本文贡献：
 
 1. 提出基于 TSDF 的建图框架，该框架具有实时重积分功能和基于集合覆盖公式化选择标准的帧剪枝机制，生成一个全局一致的地图。
    - 对所有帧进行实时重积分对无人机设备算力要求过高，应用了一种**基于集合覆盖公式的关键帧选择方法来剪枝冗余的帧**。
    - 利用空间划分来增量式地解决集合覆盖问题，从而提升了实时性能。
-2. 在探索规划中采用了一种**主动闭环检测**策略，以获得更高的回环检测机会，这进一步减少了定位漂移并提升了地图质量。
+1. 在探索规划中采用了一种**主动闭环检测**策略，以获得更高的回环检测机会，这进一步减少了定位漂移并提升了地图质量。
 
 ## Background
 
@@ -86,21 +89,21 @@ ICRA 2022
 
 #### Truncated Signed Distance Field(TSDF)
 
-- **Signed Distance Field (SDF)** 是一种隐式的空间表示方式。  
-  它为空间中的每一个点 \( \mathbf{x} = (x, y, z) \) 定义一个符号距离值：
+- **Signed Distance Field (SDF)** 是一种隐式的空间表示方式。\
+  它为空间中的每一个点 ( \\mathbf{x} = (x, y, z) ) 定义一个符号距离值：
 
 \[
-\text{SDF}(\mathbf{x}) =
-\begin{cases}
-+d(\mathbf{x}, \text{surface}), & \text{if outside the surface} \\
--d(\mathbf{x}, \text{surface}), & \text{if inside the surface}
-\end{cases}
+\\text{SDF}(\\mathbf{x}) =
+\\begin{cases}
++d(\\mathbf{x}, \\text{surface}), & \\text{if outside the surface} \\
+-d(\\mathbf{x}, \\text{surface}), & \\text{if inside the surface}
+\\end{cases}
 \]
 
-- **TSDF**: 在实际计算中，我们不需要（也存不下）全空间的距离，因此引入**截断半径** \( \mu \)：
+- **TSDF**: 在实际计算中，我们不需要（也存不下）全空间的距离，因此引入**截断半径** ( \\mu )：
 
 \[
-\text{TSDF}(\mathbf{x}) = \text{clip}\left(\frac{d(\mathbf{x})}{\mu}, -1, +1\right)
+\\text{TSDF}(\\mathbf{x}) = \\text{clip}\\left(\\frac{d(\\mathbf{x})}{\\mu}, -1, +1\\right)
 \]
 
 - 若距离太远（>|μ|），直接截断为 ±1；
@@ -116,21 +119,21 @@ V(x, y, z)
 
 每个体素存储两项数据：
 
-- **距离值** \( f \)：表面到该体素中心的截断符号距离；
-- **权重** \( w \)：融合置信度（用于融合多个深度帧）。
+- **距离值** ( f )：表面到该体素中心的截断符号距离；
+- **权重** ( w )：融合置信度（用于融合多个深度帧）。
 
 **当新的深度图到来时，会通过相机模型投影更新 TSDF**：
 
 \[
-f' = \frac{w \cdot f + w*{new} \cdot f*{new}}{w + w*{new}}
+f' = \\frac{w \\cdot f + w\*{new} \\cdot f\*{new}}{w + w\*{new}}
 \]
 \[
-w' = w + w*{new}
+w' = w + w\*{new}
 \]
 
 也就是说，每帧深度都会对 TSDF 网格做一次**加权平均更新**，最终形成平滑稳定的三维表面。
 
----
+______________________________________________________________________
 
 ## Method
 
@@ -138,15 +141,17 @@ w' = w + w*{new}
 
 1. 感知与定位: 机器人启动，通过深度相机观察环境，并通过状态估计模块得出自己的初始位置。
 
-2. 建图与记录: 机器人向前移动，不断将新的观测数据更新到 TSDF 地图中，并将有代表性的 viewpoints 存为关键帧。
+1. 建图与记录: 机器人向前移动，不断将新的观测数据更新到 TSDF 地图中，并将有代表性的 viewpoints 存为关键帧。
 
-3. loop closure: 在移动过程中，闭环检测模块一直在工作。如果机器人碰巧回到了一个老地方并认了出来，系统会立刻触发一次大规模修正：**更新历史轨迹，并重积分整个地图**，使其恢复一致性。
+1. loop closure: 在移动过程中，闭环检测模块一直在工作。如果机器人碰巧回到了一个老地方并认了出来，系统会立刻触发一次大规模修正：**更新历史轨迹，并重积分整个地图**，使其恢复一致性。
 
-4. exploration planning:
+1. exploration planning:
+
    - 找到地图上的 frontiers
    - 找到历史 viewpoints 中适合闭环的点
    - 决策：是去探索新的 frontier，还是回去做闭环校准
-5. 循环: 机器人沿着规划好的路径移动，然后回到第 1 步，不断循环这个“感知-建图-决策”的过程，直到整个环境被探索完毕。
+
+1. 循环: 机器人沿着规划好的路径移动，然后回到第 1 步，不断循环这个“感知-建图-决策”的过程，直到整个环境被探索完毕。
 
 ![](img/explore_re_intergration.png)
 

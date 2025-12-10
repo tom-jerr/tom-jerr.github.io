@@ -1,14 +1,18 @@
 ---
+
 title: Merge Iterator
-date: 2025/4/5
+created: 2025-04-05
 update:
 comments: true
 description: Merge Iterator 的基本介绍
 katex: true
 tags:
-  - MiniLSM
-  - rust
+
+- MiniLSM
+- rust
+
 # categories: Project
+
 ---
 
 # Merge Iterator
@@ -38,7 +42,7 @@ tags:
 - 不会，只会看到最新的一个
 - 在`lsm_iterator`的 next 中进行处理，最前面的 iterator 中的记录是 lastest 的，会覆盖其他 iterator 的查询结果
 
-### 5. if we want to get rid of self-referential structure and have a lifetime on the memtable iterator (i.e., MemtableIterator<'a>, where 'a = memtable or LsmStorageInner lifetime), is it still possible to implement the scan functionality?
+### 5. if we want to get rid of self-referential structure and have a lifetime on the memtable iterator (i.e., MemtableIterator\<'a>, where 'a = memtable or LsmStorageInner lifetime), is it still possible to implement the scan functionality?
 
 - 我对这个不是很熟悉，但是我的看法是 memtable 被刷写到磁盘后，iterator 仍然保存着对 memtable 的引用；这是 memtable 的生命周期已经结束，该 iterator 失效，但是 scan 正在进行迭代，出现意料之外的错误
 
@@ -59,16 +63,16 @@ tags:
 ### 9. Is it possible to implement a Rust-style iterator (i.e., next(&self) -> (Key, Value)) for LSM iterators? What are the pros/cons?
 
 - 可行，但是状态变更必须通过 ​ 共享且可变的内存实现，而不是直接修改 self
-  > single thread: 使用 Cell/RefCell  
+  > single thread: 使用 Cell/RefCell\
   > multi thread: 使用 Mutex/RwLock
 - 优点
-  > 共享迭代器状态: &self 允许迭代器被多个线程或上下文共享（例如通过 Arc<LsmIterator>）  
+  > 共享迭代器状态: &self 允许迭代器被多个线程或上下文共享（例如通过 Arc<LsmIterator>）\
   > lazy init: 迭代器状态可以按需初始化
 - 缺点
-  > 性能开销：内部可变性成本，RefCell 在运行时检查借用规则（可能导致 panic）；Mutex 引入线程同步开销（锁竞争）  
+  > 性能开销：内部可变性成本，RefCell 在运行时检查借用规则（可能导致 panic）；Mutex 引入线程同步开销（锁竞争）\
   > 可能存在悬垂引用：若外部数据（如 SSTable 文件）在迭代过程中被删除，可能引发未定义行为。
 
-### 10. The scan interface is like fn scan(&self, lower: Bound<&[u8]>, upper: Bound<&[u8]>). How to make this API compatible with Rust-style range (i.e., key_a..key_b)? If you implement this, try to pass a full range .. to the interface and see what will happen.
+### 10. The scan interface is like fn scan(&self, lower: Bound\<&[u8]>, upper: Bound\<&[u8]>). How to make this API compatible with Rust-style range (i.e., key_a..key_b)? If you implement this, try to pass a full range .. to the interface and see what will happen.
 
 - 实现了，需要我们提供新的 trait，转换为 Bound<Bytes>
 

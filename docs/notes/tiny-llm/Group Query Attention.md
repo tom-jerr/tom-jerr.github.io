@@ -1,8 +1,11 @@
 ---
+
 title: Group Query Attention
-date: 2025/10/12 23:15
+created: 2025-10-12
 tags:
-  - LLMInference
+
+- LLMInference
+
 ---
 
 # GQA: Group Query Attention

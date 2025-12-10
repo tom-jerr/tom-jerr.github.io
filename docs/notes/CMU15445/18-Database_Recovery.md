@@ -1,8 +1,11 @@
 ---
+
 title: 18 Database Recovery
-date: 2024-10-31
+created: 2024-10-31
 tags:
-  - Database
+
+- Database
+
 ---
 
 # Database Recovery
@@ -19,9 +22,9 @@ tags:
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/LSN2.png)
 
-> 仅仅当 pageLSN <= flushLSN，才能将 log 刷入磁盘  
-> 所有的记录都有一个 LSN  
-> 每次一个事务修改一个页上的 record，pageLSN 会改变  
+> 仅仅当 pageLSN \<= flushLSN，才能将 log 刷入磁盘\
+> 所有的记录都有一个 LSN\
+> 每次一个事务修改一个页上的 record，pageLSN 会改变\
 > 每次 DBMS 将 WAL buffer 中的东西写入磁盘，flushedLSN 会更新
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/writing_log_records.png)
@@ -34,7 +37,7 @@ tags:
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/transaction_commit.png)
 
-> 我们只需要保证在刷新 flushLSN 之前先将日志记录刷新到磁盘即可  
+> 我们只需要保证在刷新 flushLSN 之前先将日志记录刷新到磁盘即可\
 > TXN-END 写入后说明 commit 已经成功，所以 wal 可以清除没有用的 Log
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/transaction_commit2.png)
@@ -51,7 +54,7 @@ tags:
 
 ### Compensation Log records
 
-> 是对 update 的撤销操作  
+> 是对 update 的撤销操作\
 > undoNextLSN 是一个效率优化，而不是一个核心优化
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/CLR.png)
@@ -65,12 +68,12 @@ tags:
 ### Non-Fuzzy Checkpoints
 
 1. 任何新事务开始都会被停止
-2. 所有活跃的事务等待直到 checkpoint 执行完成
-3. 将所有的脏页刷新到磁盘
+1. 所有活跃的事务等待直到 checkpoint 执行完成
+1. 将所有的脏页刷新到磁盘
 
 ### Slightly better Checkpoints
 
-> 暂停事务，然后将部分提交的数据写入磁盘；  
+> 暂停事务，然后将部分提交的数据写入磁盘；\
 > 缩短了等待时间，但是磁盘上存储的并非是稳定快照
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/slightly_checkpoint.png)

@@ -48,13 +48,20 @@
 订阅：
 
 - /quadrotor/vio/odom (VIO 里程计)
+
 - /semantic_range_bearing_measurements (语义测量)
+
 - /loop_closure/odom (回环检测结果)
   发布：
+
 - /quadrotor/high_freq_pose (高频位姿)
+
 - /quadrotor/high_freq_odom (高频里程计)
+
 - /optimized_trajectory (优化后轨迹 MarkerArray)
+
 - /optimized_point_landmarks (优化后地标 MarkerArray)
+
 - /quadrotor/sloam_to_vio_odom (漂移补偿变换)
   **Action Server：**
 
@@ -116,7 +123,7 @@
 
 /quadrotor/sloam_to_vio_odom
 发布者 ： ActiveSlamInputNode
-功能 ：发布从 SLOAM 框架到 VIO 框架的转换，计算结果为 vio_odom \* sloam_odom.inverse() 。探索规划器使用它来补偿坐标系之间的漂移。
+功能 ：发布从 SLOAM 框架到 VIO 框架的转换，计算结果为 vio_odom * sloam_odom.inverse() 。探索规划器使用它来补偿坐标系之间的漂移。
 
 ### Sensor Simulation Topics (pcl_render_node)
 
@@ -238,37 +245,37 @@ Function: Publishes the Euclidean Signed Distance Field computed via distance tr
 语义检测模块使用 YOLOv8 对 RGB-D 图像进行实例分割
 
 1. 系统订阅同步 RGB 图像、对齐深度图像和里程计消息
-2. YOLOv8 对 RGB 图像进行实例分割，检测椅子、餐桌、电视等物体
-3. 使用对齐的深度图和相机内部函数将每个检测到的实例投影到 3D 中，从而创建具有类标签、实例 ID 和置信度分数的语义点云
-4. 输出以 syncPcOdom 消息的形式发布，其中包含与里程计检测同步的语义点云
+1. YOLOv8 对 RGB 图像进行实例分割，检测椅子、餐桌、电视等物体
+1. 使用对齐的深度图和相机内部函数将每个检测到的实例投影到 3D 中，从而创建具有类标签、实例 ID 和置信度分数的语义点云
+1. 输出以 syncPcOdom 消息的形式发布，其中包含与里程计检测同步的语义点云
 
 #### 语义处理模块
 
 处理模块接收语义点云并提取长方体地标
 
 1. 点云过滤 ：该模块通过范围、置信度阈值和深度百分位数过滤语义点
-2. 初始长方体拟合 ：对于每个实例，系统执行初始边界框拟合
-3. 对象跟踪 ：使用匈牙利分配法跨帧跟踪对象，以保持一致的 ID
-4. 点云累积 ：每个跟踪实例的点云被累积并下采样
-5. 最终长方体检测 ：PCA 用于将定向 3D 边界框（长方体）拟合到累积点云
-6. 测距测量生成 ：长方体在机器人身体框架中转换为测距测量 ​
-7. 输出包括方位矢量（单位方向）、范围（距离）、身体框架中的地标位置以及作为 ROSRangeBearing 消息发布的测量 ID
+1. 初始长方体拟合 ：对于每个实例，系统执行初始边界框拟合
+1. 对象跟踪 ：使用匈牙利分配法跨帧跟踪对象，以保持一致的 ID
+1. 点云累积 ：每个跟踪实例的点云被累积并下采样
+1. 最终长方体检测 ：PCA 用于将定向 3D 边界框（长方体）拟合到累积点云
+1. 测距测量生成 ：长方体在机器人身体框架中转换为测距测量 ​
+1. 输出包括方位矢量（单位方向）、范围（距离）、身体框架中的地标位置以及作为 ROSRangeBearing 消息发布的测量 ID
 
 #### SLAM 优化模块
 
 SLAM 模块将语义观察整合到因子图中以进行姿势优化：对于通用 SLOAM（包含圆柱体和长方体）：runSLOAMNode 函数负责协调 SLAM 过程
 
 1. 使用网格图检测对圆柱体（树）进行模型估计
-2. 当前观测结果与地图地标之间的数据关联
-3. 当前扫描和子图之间的长方体模型匹配
-4. 长方体匹配使用基于距离的关联
-5. addSLOAMObservation 函数将圆柱体和立方体因子添加到 GTSAM 因子图中
+1. 当前观测结果与地图地标之间的数据关联
+1. 当前扫描和子图之间的长方体模型匹配
+1. 长方体匹配使用基于距离的关联
+1. addSLOAMObservation 函数将圆柱体和立方体因子添加到 GTSAM 因子图中
 
 ##### ALC (Range-Bearing Mode):
 
 1. 主动 SLAM 输入节点接收测距测量
-2. 这些测量值在因子图更新中进行处理
-3. addOdomBearingObservation 函数使用最近邻搜索执行数据关联，并将方位和范围因子添加到图中
+1. 这些测量值在因子图更新中进行处理
+1. addOdomBearingObservation 函数使用最近邻搜索执行数据关联，并将方位和范围因子添加到图中
 
 ## Active Loop Closure 与 Metric-Semantic SLAM 结合
 

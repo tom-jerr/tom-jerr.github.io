@@ -1,8 +1,11 @@
 ---
+
 title: 4_Database_Storage II
-date: 2023-09-15 23:49:49
+created: 2023-09-15
 tags:
-  - Database
+
+- Database
+
 ---
 
 # 4 Database Storage II
@@ -133,9 +136,13 @@ DBMS 把数据库元数据存放在 internal catalog 中；数据库将其存为
   - 快速读写小数据
 
 - On-Line Analytical Processing (OLAP)
+
   - 复杂查询，对数据进行分析
+
 - Hybrid (混合) Transaction + Analytical Processing
+
   - OLTP + OLAP
+
 - OLTP 收集数据，提取后进行数据变换和加载；存入 OLAP，OLAP 进行分析后可以写回 OLTP
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/OLTP+OLAP.png)
@@ -145,6 +152,7 @@ DBMS 把数据库元数据存放在 internal catalog 中；数据库将其存为
 - N-ary Storage Model (行存储)；对小数据更新和查询十分有效，效率很高
 
 - 复杂查询大量数据，可以使用列存储；如果使用行存储，需要扫描所有数据，仅仅取出某几个属性；浪费大量时间进行扫描；
+
 - 列存储更适合分析数据的情况
 
 ### tuple edentification

@@ -1,8 +1,11 @@
 ---
+
 title: 16 Multi-Version Concurrency
-date: 2024-10-31
+created: 2024-10-31
 tags:
-  - Database
+
+- Database
+
 ---
 
 # Mutli-Version Concurrency
@@ -39,7 +42,7 @@ tags:
 > 可以看作是一个多版本的单链表
 
 1. Oldest to Newest(O2N)
-2. Newest to Oldest(N2O)
+1. Newest to Oldest(N2O)
 
 ### Time-Travel Storage
 
@@ -85,7 +88,7 @@ tags:
 
    ![](https://github.com/tom-jerr/MyblogImg/raw/15445/logical_pointer2.png)
 
-2. Physical Pointers: 直接指向版本链的头部
+1. Physical Pointers: 直接指向版本链的头部
 
    > 如果我要更新版本链，我会更新多个指针的指向；开销过大
 
@@ -100,9 +103,9 @@ tags:
 
 ## MVCC Deletes
 
-> 逻辑删除：  
+> 逻辑删除：\
 > 在某些 MVCC 实现中，删除操作可能只是将数据标记为“已删除”，而不是物理移除。这意味着数据仍然存在于数据库中，但在查询时不会被返回。
-> 这样可以保持数据的一致性和可追溯性。  
+> 这样可以保持数据的一致性和可追溯性。\
 > 真正的物理删除由后台线程自动清理过期的版本
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/mvcc_deletes.png)

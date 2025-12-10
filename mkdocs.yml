@@ -347,6 +347,9 @@ nav:
           - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
   - Blogs:
       - index: blogs/index.md
+      - Diffusion Model:
+        - DiT Generate Model in SGLang: notes/diffusion/DiT Video Generate.md
+        - Masked Diffusion Model: notes/diffusion/Masked Diffusion LLM.md
       - SGLang 专题:
           - 一条 Request 在 SGLang 的前世今生: notes/sglang/一条 Request 在 SGLang 的前世今生.md
           - SGLang Schedular 技术变迁: notes/sglang/SGLang Scheduler 技术变迁.md
@@ -355,17 +358,19 @@ nav:
           - DP Attention: notes/sglang/DP Attention.md
           - 从代码看 SGLang 的 KV Cache: blogs/posts/从代码看 SGLang 的 KV Cache.md
           - 🚧 SGLang 中的 Speculative Decoding: notes/sglang/SGlang 中的 Speculative Decoding.md
-          - 🚧 SGLang 中的并行: notes/sgalng/SGLang 中的并行.md
-      - LLM Inference:
+          - 🚧 SGLang 中的 TP + PP: notes/sgalng/SGLang 中的 TP + PP.md
+      - LLM Basic Concepts:
           - Attention & Transformers: notes/llm_inference/attention&transformer.md
           - Transformer-Based LLM Architecture: notes/llm_inference/transformerbasedllm.md
-          - Introduction for LLM Inference: blogs/llm_inference/Introduction.md
+          - Introduction for LLM Inference: notes/llm_inference/Introduction.md
           - Parallelizatoin Concepts: notes/llm_inference/parallelization.md
           - Parallelization in LLM Inference: notes/llm_inference/LLMparallelization.md
+      - LLM Serving:
           - PageAttention: blogs/posts/PageAttention.md
           - FlashAttention: blogs/posts/FlashAttention 原理 v1-v2.md
           - 大模型推理服务中的 Batching: notes/sglang/大模型推理服务中的 Batching.md
       - CUDA:
+          - 从 GEMM 实践 CUDA 优化: notes/cuda/从GEMM实践CUDA优化.md
           - GPU 内存系统演进: notes/cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md
           - CUDA Optimization for LLM Inference: notes/cuda/cudaopt.md
           - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md

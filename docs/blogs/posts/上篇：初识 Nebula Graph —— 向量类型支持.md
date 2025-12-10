@@ -1,6 +1,6 @@
 ---
 title: 上篇：初识 Nebula Graph —— 向量类型支持
-date: 2025/10/28 23:15
+created: 2025-10-28
 tags:
   - Database
 ---

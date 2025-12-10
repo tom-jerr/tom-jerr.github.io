@@ -17,7 +17,7 @@ LIMIT 3;
    - 没有属性过滤条件
    - 别名为 v，类型为 AliasType::kNode
 
-2. MatchPathPlanner 路径规划阶段
+1. MatchPathPlanner 路径规划阶段
    StartVidFinder 寻找起始点
    在 MatchPathPlanner::findStarts() 中
 

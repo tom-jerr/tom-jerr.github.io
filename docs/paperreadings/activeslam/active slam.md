@@ -13,13 +13,13 @@ Active Slam 的工作流程:
 - Monitor & Replan: 监控执行状态，若出现意外（新障碍、定位不确定性过大等）则重新规划
 
 ```python
-while not exploration_done: # we have stop standards
-  obs = read_sensors() # RGB_D, Lidar, IMU, etc.
-  pose, map, cov = SLAM.update(obs) # state estimation + loop closure + mapping
-  candidates = CandidateGenerator(map, pose) # viewpoints
-  scores = Evaluator(candidates, map, cov) # info gain - lambda * cost
-  plan = Planner.select_and_plan(candidates, scores) # A*(global) + local planner
-  execute_first_phase(plan) # Controller + obstacle replan + Monitor
+while not exploration_done:  # we have stop standards
+    obs = read_sensors()  # RGB_D, Lidar, IMU, etc.
+    pose, map, cov = SLAM.update(obs)  # state estimation + loop closure + mapping
+    candidates = CandidateGenerator(map, pose)  # viewpoints
+    scores = Evaluator(candidates, map, cov)  # info gain - lambda * cost
+    plan = Planner.select_and_plan(candidates, scores)  # A*(global) + local planner
+    execute_first_phase(plan)  # Controller + obstacle replan + Monitor
 ```
 
 **:warning: 何时停止探索？**
@@ -43,12 +43,13 @@ while not exploration_done: # we have stop standards
 ### Frontier-based Exploration
 
 - 获取已知-未知的交界点作为候选目标
+
 - raycast:
   从候选观测点（viewpoint）出发，向各个方向发射射线（rays），模拟传感器的视线；射线会穿过占据栅格地图（occupancy grid），直到：
 
   1. 碰到障碍物（occupied cell）
 
-  2. 达到传感器最大探测距离（sensor range）
+  1. 达到传感器最大探测距离（sensor range）
 
   在射线穿过的栅格中，统计那些当前地图中标记为 unknown（未探索） 的单元格数量；
 

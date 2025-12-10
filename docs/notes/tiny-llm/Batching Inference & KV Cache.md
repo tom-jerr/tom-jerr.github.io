@@ -1,8 +1,11 @@
 ---
+
 title: Batching Inference & KV Cache
-date: 2025/10/13 23:15
+created: 2025-10-13
 tags:
-  - LLMInference
+
+- LLMInference
+
 ---
 
 # Batching Inference & KV Cache
@@ -83,10 +86,11 @@ class SimplestKVCache:
 静态批处理是最简单的批处理形式。在这种模式下，服务器会等待，直到积累了固定数量的请求，然后将它们作为一个整体进行处理  。
 
 - **机制**：所有请求被组合成一个批次，并**被填充（gpaddin）到该批次中最长序列的长度**（包括 prompt 和预期的最大生成长度）。然后，这个批次从头到尾被作为一个不可分割的单元进行处理  。
+
 - **缺陷**：这种方法导致了严重的 GPU 资源浪费和性能瓶颈，主要源于两个问题：
 
-  1.  **队头阻塞（Head-of-Line Blocking）**：批次中的所有请求必须等待最长的那个请求完成生成。这意味着那些早已完成生成（例如，生成了较短回复）的请求所占用的 GPU 资源将处于闲置状态，无法被释放或用于处理新请求  。
-  2.  **填充开销（Padding Overhead）**：为了将不同长度的序列组合成一个规整的张量，系统必须添加大量的填充令牌。GPU 在这些填充令牌上执行的计算是完全无效的，不产生任何有意义的输出，构成了巨大的计算浪费  。
+  1. **队头阻塞（Head-of-Line Blocking）**：批次中的所有请求必须等待最长的那个请求完成生成。这意味着那些早已完成生成（例如，生成了较短回复）的请求所占用的 GPU 资源将处于闲置状态，无法被释放或用于处理新请求  。
+  1. **填充开销（Padding Overhead）**：为了将不同长度的序列组合成一个规整的张量，系统必须添加大量的填充令牌。GPU 在这些填充令牌上执行的计算是完全无效的，不产生任何有意义的输出，构成了巨大的计算浪费  。
 
 #### Dynamic Batching
 
@@ -102,8 +106,8 @@ class SimplestKVCache:
 ![](img/continuous_batching.png)
 
 1. **单次迭代调用**：调度器每次只调用执行引擎运行模型的一个**迭代步骤**，而不是运行整个请求的生成过程  。
-2. **late-arrived enter**：这种细粒度的调度使得**新到达的请求几乎可以立即加入到当前正在运行的批次**中，只需等待当前迭代（通常是毫秒级）结束即可。这极大地缩短了请求在队列中的等待时间  。
-3. **early exit**：一旦某个请求完成，它可以在下一次迭代开始前就立即将结果返回给客户端，彻底解决了“早完成、晚返回”的问题  。
+1. **late-arrived enter**：这种细粒度的调度使得**新到达的请求几乎可以立即加入到当前正在运行的批次**中，只需等待当前迭代（通常是毫秒级）结束即可。这极大地缩短了请求在队列中的等待时间  。
+1. **early exit**：一旦某个请求完成，它可以在下一次迭代开始前就立即将结果返回给客户端，彻底解决了“早完成、晚返回”的问题  。
 
 | **特性**           | **静态批处理 (Static Batching)**                 | **动态批处理 (Dynamic Batching)**                | **连续批处理 (Continuous Batching)**                 |
 | ------------------ | ------------------------------------------------ | ------------------------------------------------ | ---------------------------------------------------- |
@@ -169,7 +173,9 @@ while requests_in_queue_or_in_progress:
 #### Resolutions
 
 - **PD 分离**：Prefill 和 Decode 任务被物理地分配到不同的 GPU 集群或“工作节点”（workers）上  。一个专用的 GPU 池负责处理计算密集的 Prefill 任务，生成 KV Cache，然后将计算好的 KV Cache 传输给另一个专用于处理 Decode 任务的 GPU 池。
+
   > 计算密集的 Prefill 任务不再与延迟敏感的 Decode 任务在同一个 GPU 上争抢资源，从而极大地提升了 ITL 的稳定性和系统的可预测性  。
+
 - **Flash Attention**：FlashAttention 是一种 I/O 感知的注意力算法，它可以在不将完整的注意力矩阵写入 HBM 的情况下，计算出完全相同的精确结果
 
   > 将小的 Query 块加载到 SRAM，然后高效地迭代处理庞大的 Key/Value 矩阵的各个分块，避免了性能退化。
@@ -313,5 +319,5 @@ vLLM 的 PagedAttention **自定义 CUDA 核** 被设计为可以直接处理这
 
 ## Reference
 
-[^orca]: [Orca: A Distributed Serving System for Transformer-Based Generative Models](https://www.usenix.org/system/files/osdi22-yu.pdf)
-[^vllm]: [vllm](https://github.com/vllm-project/vllm/tree/main)
+\[^orca\]: [Orca: A Distributed Serving System for Transformer-Based Generative Models](https://www.usenix.org/system/files/osdi22-yu.pdf)
+\[^vllm\]: [vllm](https://github.com/vllm-project/vllm/tree/main)

@@ -1,8 +1,11 @@
 ---
+
 title: 11 Query Execution
-date: 2024-10-31
+created: 2024-10-31
 tags:
-  - Database
+
+- Database
+
 ---
 
 # 11. Query Execution
@@ -27,7 +30,7 @@ tags:
 
 ### Vectorized/Batch MOdel
 
-> 在物化模型和火山模型间是一个良好的平衡  
+> 在物化模型和火山模型间是一个良好的平衡\
 > 可以使用 SIMD 指令加速
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/vector_model.png)
@@ -60,7 +63,7 @@ tags:
 
 ###### ZONE MAPS
 
-> one zone map in one zone，zone 的大小取决于我们的实现，一般为页  
+> one zone map in one zone，zone 的大小取决于我们的实现，一般为页\
 > 当 zone map 存储在区域之外，与索引的工作流程很像
 
 ![](https://github.com/tom-jerr/MyblogImg/raw/15445/zone_maps.png)
@@ -101,9 +104,9 @@ tags:
 
 1. Process per DBMS Worker
    ![](https://github.com/tom-jerr/MyblogImg/raw/15445/process_worker.png)
-2. Thread per DBMS Worker
+1. Thread per DBMS Worker
    ![](https://github.com/tom-jerr/MyblogImg/raw/15445/thread_worker.png)
-3. Embedded DBMS
+1. Embedded DBMS
    ![](https://github.com/tom-jerr/MyblogImg/raw/15445/embedded_worker.png)
 
 ## Execution Parallelism

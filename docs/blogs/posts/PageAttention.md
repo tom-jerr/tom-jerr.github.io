@@ -1,11 +1,14 @@
 ---
+
 title: Page Attention
-date: 2025/10/30
+created: 2025-10-30
 update:
 comments: true
 katex: true
 tags:
-  - LLMInference
+
+- LLMInference
+
 ---
 
 # Page Attention
@@ -76,7 +79,7 @@ for p from 0 to K_tile-1:
 
 - 进行 QK 点积计算我们需要**复用一段 Key 向量的元素**做多次运算 **(tile d 方式)**
   $$
-  score_{i,j}​= Q_i​·K_j​=\sum_{d=1}^{head\_size} Q_{i,d}​×K_{j,d}​
+  score\_{i,j}​= Q_i​·K_j​=\\sum\_{d=1}^{head_size} Q\_{i,d}​×K\_{j,d}​
   $$
 - 如果每个线程单独拉取 Key 向量的话
   - 内存访问地址不连续（stride 大）
@@ -87,7 +90,7 @@ for p from 0 to K_tile-1:
 **对于 Value 向量**
 
 $$
-output_i = \sum_{j=1}^{num\_tokens} softmax(score_{i,j}) × V_j​
+output_i = \\sum\_{j=1}^{num_tokens} softmax(score\_{i,j}) × V_j​
 $$
 
 - 每个线程负责生成一个 query 的输出向量一部分，不需要进行 tile K 方式加载，所以每个线程自己加载自己的 Value 向量即可。
@@ -148,21 +151,27 @@ vLLM 中的逻辑概念：小型、自定义大小的线程集合，通常是一
 
 1. Query 数据向量化从 global memory 加载到 shared memory(只处理一个 query)
 
-2. 按照 context 的 block 数量迭代
+1. 按照 context 的 block 数量迭代
+
    - Key 数据向量化从 global memory 加载到 register
      - 一个 warp 内的 thread_group 协作加载一个 page 的 key cache 到 register
      - 假设每个 block 有 128 个 Key token，每个 warp 有 32 个线程，每个线程组（例如 4 线程）负责 8 个 token，所以一个 warp 一轮只能处理 64 个 token，**为了覆盖完整的 block（128 token），就要循环 2 次**
      - 在每次循环中，通过 `(thread_group_idx + i * WARP_SIZE) % BLOCK_SIZE` 计算出本轮要处理的 token 在 block 内的偏移位置。
    - 计算 QK 点积，每个 thread_group 的 0 号线程计算最大的 qk 并存入 logits 数组(shared memory)
-3. 计算 Softmax
+
+1. 计算 Softmax
+
    - 规约 qk_max
    - 规约 exp_sum
    - 归一化 logits 数组
-4. 计算 LV
+
+1. 计算 LV
+
    - 按输出向量维度划分每个线程负责的 v_vec
    - 计算 logits_vec 和 v_vec 的点积并累加到 accs 数组
    - 规约 accs 数组
-5. 输出结果到 out_ptr
+
+1. 输出结果到 out_ptr
 
 ```python
 # from q_ptr to q_vecs
@@ -269,13 +278,17 @@ for (int i = 0; i < NUM_ROWS_PER_THREAD; i++) {
 现在 Query 数据已经准备就绪，线程块进入一个主循环（即文档中的 outer loop），迭代遍历所有需要计算的 Key Token。
 
 - 外层循环处理所有的 Key cache block
+
 - 中间循环处理为了覆盖完整的 block（128 token），就要循环 2 次
+
 - 内层循环处理一个 thread_group 负责的所有 token
+
 - 对于循环 warp 负责的一组 Key Token：
 
   - 定位 Key 数据：在每次循环开始时，计算指向当前 Key Token 的指针 k_ptr。这个指针在每次迭代时都会更新，指向下一个新的 Key Token。
 
   - 加载 Key 数据到寄存器：使用内存合并模式，从 k_ptr 指向的全局内存中读取当前 Key Token 的向量数据。**关键区别：这次，Key 数据被加载到每个线程私有的寄存器 k_vecs 中。**
+
     > 为什么是寄存器？ 因为当前这个 Key 向量只会被用于和 Query 向量做一次点积运算。**计算完成后，在下一次循环中它就会被新的 Key 向量覆盖掉。因此，使用最快但私有的寄存器是最高效的选择。**
 
   <img src="img/key.png" alt="key" style="width:600px;" />
