@@ -1,11 +1,8 @@
 ---
-
 title: RadixAttention 你需要知道的细节
 tags:
-
-- LLMInference
-  date: 2025/11/24
-
+  - LLMInference
+created: 2025/11/24
 ---
 
 # RadixAttention 你需要知道的细节
@@ -125,9 +122,9 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
 - **引用计数（Reference Counting）：** 每个节点都有一个引用计数，表示当前有多少个正在运行的请求正在使用这个节点对应的 KV Cache。
 - **LRU 驱逐**: `evict()` 函数
   1. **收集叶子**: `_collect_leaves()`  找到所有引用计数为 0 的叶子节点。
-  1. **排序**: 对叶子节点排序。
-  1. **删除**: 循环删除最近最少使用的叶子节点，并释放其对应的 KV Cache (`self.token_to_kv_pool_allocator.free(x.value)`).
-  1. **递归删除**: 如果删除叶子后，其父节点变成了无子节点的叶子且引用计数为 0，父节点也会被加入驱逐候选队列。
+  2. **排序**: 对叶子节点排序。
+  3. **删除**: 循环删除最近最少使用的叶子节点，并释放其对应的 KV Cache (`self.token_to_kv_pool_allocator.free(x.value)`).
+  4. **递归删除**: 如果删除叶子后，其父节点变成了无子节点的叶子且引用计数为 0，父节点也会被加入驱逐候选队列。
 
 ##### 何时进行驱逐？
 
@@ -136,7 +133,7 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
 这是最常见的触发点。当系统尝试为新的 Token 分配物理显存（KV Cache Block）但发现  allocator 中的空闲块不足时，释放 Radix Tree 中最近最少使用（LRU）的节点。
 
 - **Prefill 阶段**: alloc_paged_token_slots_extend（为 Prompt 阶段分配显存时）。
-- **Decode 阶段**: alloc_paged_token_slots_decode)（为生成新 Token 分配显存时）。
+- **Decode 阶段**: alloc_paged_token_slots_decode（为生成新 Token 分配显存时）。
 - **通用分配**: alloc_token_slots（非分页模式或通用分配时）。
 
 ###### 2. 解码前的内存检查 (Memory Check)
@@ -151,7 +148,7 @@ Radix Attention 主要涉及最长前缀匹配，Radix Tree 的更新，内存�
 
 当一个请求被“杀掉”或回退时，系统会立即调用 `evict()`  来确保其占用的资源被彻底释放并转化为可用的空闲块。
 
-______________________________________________________________________
+---
 
 ## Cache-Aware Scheduling
 
@@ -175,7 +172,9 @@ ______________________________________________________________________
    ```
 1. **排序实现**：在  schedule_policy.py  中。\
    `calc_priority()`  方法会根据当前的策略（如  `lpm`）计算前缀匹配并排序。
+
    > “全量遍历收集 -> 堆排序”
+
    ```python
    # python/sglang/srt/managers/schedule_policy.py
    def calc_priority(self, waiting_queue: List[Req]) -> bool:
@@ -205,7 +204,7 @@ ______________________________________________________________________
        )
    ```
 
-______________________________________________________________________
+---
 
 ## 补充
 
@@ -248,7 +247,7 @@ SGLang 的 Decode 内存分配主要由 `alloc_decode_kernel` 和 `alloc_for_dec
 - **写入数据 (Write Data):**
 
   - 未满 (Append): 直接获取 last_loc (上一个 token 的物理位置)，新 token 写入 last_loc + 1。
-  - 已满 (New Page): 从 free_page_ptr 拿一个新的物理 Page ID (例如 p)，新 token 写入 p * page_size (即该 Page 的第 0 个 slot)。
+  - 已满 (New Page): 从 free_page_ptr 拿一个新的物理 Page ID (例如 p)，新 token 写入 p \* page_size (即该 Page 的第 0 个 slot)。
 
 - **更新映射 (Update Mapping):**: 将新分配的物理位置写入 `req_to_token_pool` 的对应位置。
 
@@ -330,7 +329,7 @@ def init_forward_metadata(self, forward_batch: ForwardBatch):
   - 请求 A 正在生成第 21 个 Token，它会写入 Block Y 的第 5 个槽位（Slot 4）。
   - 请求 B 也要生成第 21 个 Token（可能是不同的内容），它也试图写入 Block Y 的第 5 个槽位。
   - **冲突！**  两个请求会互相覆盖数据。
-- **结论**：为了保证请求 B 的独立生成，它  **必须**  拥有一个属于自己的、独立的物理 Block 来存放这 4 个 Token 以及未来生成的 Token。
+- **结论**：为了保证请求 B 的独立生成，它**必须**拥有一个属于自己的、独立的物理 Block 来存放这 4 个 Token 以及未来生成的 Token。
 
 ![](img/write_conflict.png)
 
@@ -347,9 +346,9 @@ def init_forward_metadata(self, forward_batch: ForwardBatch):
 
 ### Q3：在 Radix Attention 中，如果在一个长 Prompt 中间插入（Insert）或修改（Edit）了一个 Token，整个后续的 KV Cache 还能复用吗？如果不能，有没有什么办法让它复用？
 
-通常不能，KV Cache 得到前会经过 RoPE，该算子利用绝对位置编码来得到相对位置信息，所以改变 token 位置会对 KV Cache 有不可逆影响。而且 KV Cache 强依赖于前序所有 Token。中间变了，后面的 KV 值全变
+通常不能，KV Cache 得到前会经过 RoPE，该算子利用绝对位置编码来得到相对位置信息，所以**改变 token 位置会对 KV Cache 有不可逆影响**。而且 KV Cache 强依赖于前序所有 Token。中间变了，后面的 KV 值全变
 
-> 因为 RoPE（Rotary Positional Embedding）是绝对位置编码的一种变体。KV Cache 中的 Key 向量携带了位置 $m$ 的旋转信息 $R_m$。如果在中间插入 Token，后续所有 Token 的绝对位置索引都会发生平移 ($m \\to m+k$)，导致其对应的旋转矩阵发生变化。旧的 KV Cache 中的 $K$ 值是基于旧位置计算的，数学上无法直接复用，必须重新计算
+> 因为 RoPE（Rotary Positional Embedding）是绝对位置编码的一种变体。KV Cache 中的 Key 向量携带了位置 $m$ 的旋转信息 $R_m$。如果在中间插入 Token，后续所有 Token 的绝对位置索引都会发生平移 ($m \to m+k$)，导致其对应的旋转矩阵发生变化。旧的 KV Cache 中的 $K$ 值是基于旧位置计算的，数学上无法直接复用，必须重新计算
 
 ### Q4：在 Tensor Parallel (TP) 模式下，Radix Tree 如何维护？
 

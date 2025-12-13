@@ -1,11 +1,8 @@
 ---
-
 title: Evolution of SGLang Scheduler
 created: 2025-11-21
 tags:
-
-- LLMInference
-
+  - LLMInference
 ---
 
 # Evolution of SGLang Scheduler
@@ -267,7 +264,7 @@ class PrefillAdder:
         self.new_chunked_req = None   # new chunked request
         self.log_hit_tokens = 0     # number of cache hit tokens
         self.log_input_tokens = 0   # input token statistics
-        
+
     @property
     def rem_total_tokens(self):
         """Calculate total remaining available tokens"""
@@ -277,7 +274,7 @@ class PrefillAdder:
 
     def add_chunked_req(self, req: Req):
         """Handle chunked prefill request"""
-        
+
     def preempt_to_schedule(self, req: Req, server_args: ServerArgs) -> bool:
         """Preempt low-priority requests to make way for high-priority ones"""
 ```
@@ -315,12 +312,12 @@ class PrefillAdder:
 - **Content**: Includes top-k probabilities, indices, hidden states, etc.
 - **Usage**: Preparing input data for the next round of speculative decoding.
 
-#### **5. extend_input_len_per_req: Optional\[List[int]\]**
+#### **5. extend_input_len_per_req: Optional[List[int]]**
 
 - **Role**: Extended input length for each request.
 - **Usage**: Knowing **how many new tokens were actually processed** for each request when processing batch results.
 
-#### **6. extend_logprob_start_len_per_req: Optional\[List[int]\]**
+#### **6. extend_logprob_start_len_per_req: Optional[List[int]]**
 
 - **Role**: The position where each request starts calculating logprob.
 - **Usage**: Determining from which position to start returning logprob information to the user.
@@ -398,7 +395,7 @@ New requests enter the Prefill phase, and after Prefill ends, they enter the Dec
 1. `update_running_batch()`:
    - Call `prepare_for_decode()`:
      - `output_ids` from the previous schedule become `input_ids` for this one.
-     - Allocate (batch size * 1) slots for `out_cache_loc`, because in decode mode we generate only one token per batch at a time.
+     - Allocate (batch size \* 1) slots for `out_cache_loc`, because in decode mode we generate only one token per batch at a time.
      ```python
      out_cache_loc = alloc_token_slots(batch.tree_cache, bs * 1)
      ```
@@ -815,6 +812,6 @@ with self.forward_stream_ctx:
 
 ## Reference
 
-\[^overlap\]: [Zero-Overhead Batch Scheduler](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/zero-overhead-scheduler/zero-overhead-batch-scheduler.md)
-\[^overhead\]: [Can Scheduling Overhead Dominate LLM Inference Performance? A Study of CPU Scheduling Overhead on Two Popular LLM Inference Systems](https://mlsys.wuklab.io/posts/scheduling_overhead/)
-\[^code-walk\]: [SGLang Code Walk Through](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/code-walk-through/readme-CN.md)
+[^overlap]: [Zero-Overhead Batch Scheduler](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/zero-overhead-scheduler/zero-overhead-batch-scheduler.md)
+[^overhead]: [Can Scheduling Overhead Dominate LLM Inference Performance? A Study of CPU Scheduling Overhead on Two Popular LLM Inference Systems](https://mlsys.wuklab.io/posts/scheduling_overhead/)
+[^code-walk]: [SGLang Code Walk Through](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/code-walk-through/readme-CN.md)

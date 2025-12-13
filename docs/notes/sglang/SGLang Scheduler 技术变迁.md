@@ -1,11 +1,8 @@
 ---
-
 title: SGLang Scheduler 技术变迁
 created: 2025-10-28
 tags:
-
-- LLMInference
-
+  - LLMInference
 ---
 
 # SGLang Scheduler 技术变迁
@@ -152,7 +149,7 @@ def forward_batch_generation(self, model_worker_batch: ModelWorkerBatch):
 
 ### Cache
 
-cache 在 sglang 中，相关的主要是\`\`req_to_token_pool`, `token_to_kv_pool`,`tree_cache\` 三个结构。
+cache 在 sglang 中，相关的主要是`req_to_token_pool`, `token_to_kv_pool`,`tree_cache` 三个结构。
 
 ```python
 req_to_token_pool[req_idx]:
@@ -271,7 +268,7 @@ class PrefillAdder:
         self.new_chunked_req = None   # new chunked request
         self.log_hit_tokens = 0     # number of cache hit tokens
         self.log_input_tokens = 0   # input token statistics
-        
+
     @property
     def rem_total_tokens(self):
         """Calculate total remaining available tokens"""
@@ -281,7 +278,7 @@ class PrefillAdder:
 
     def add_chunked_req(self, req: Req):
         """Handle chunked prefill request"""
-        
+
     def preempt_to_schedule(self, req: Req, server_args: ServerArgs) -> bool:
         """Preempt low-priority requests to make way for high-priority ones"""
 ```
@@ -319,12 +316,12 @@ class PrefillAdder:
 - **内容**: 包含 top-k 概率、索引、隐藏状态等
 - **用途**: 为下一轮推测解码准备输入数据
 
-#### **5. extend_input_len_per_req: Optional\[List[int]\]**
+#### **5. extend_input_len_per_req: Optional[List[int]]**
 
 - **作用**: 每个请求的扩展输入长度
 - **用途**: 在处理 batch 结果时，知道每个请求**实际处理了多少个新 token**
 
-#### **6. extend_logprob_start_len_per_req: Optional\[List[int]\]**
+#### **6. extend_logprob_start_len_per_req: Optional[List[int]]**
 
 - **作用**: 每个请求开始计算 logprob 的位置
 - **用途**: 确定从哪个位置开始返回 logprob 信息给用户
@@ -402,7 +399,7 @@ Req -> Pre Schedule(CPU) -> Compute Batch -> Sample(GPU) -> Post Schedule(CPU) -
 1. `update_running_batch()`：
    - 调用  `prepare_for_decode()`：
      - 上一次 schedule 的 `output_ids` 变为这一次的 `input_ids`
-     - 为  `out_cache_loc`  分配（batch size * 1）个 slot，因为在 decode 模式下我们对每个 batch 一次只生成一个 token
+     - 为  `out_cache_loc`  分配（batch size \* 1）个 slot，因为在 decode 模式下我们对每个 batch 一次只生成一个 token
      ```python
      out_cache_loc = alloc_token_slots(batch.tree_cache, bs * 1)
      ```
@@ -817,6 +814,6 @@ with self.forward_stream_ctx:
 
 ## Reference
 
-\[^overlap\]: [Zero-Overhead Batch Scheduler](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/zero-overhead-scheduler/zero-overhead-batch-scheduler.md)
-\[^overhead\]: [Can Scheduling Overhead Dominate LLM Inference Performance? A Study of CPU Scheduling Overhead on Two Popular LLM Inference Systems](https://mlsys.wuklab.io/posts/scheduling_overhead/)
-\[^code-walk\]: [SGLang Code Walk Through](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/code-walk-through/readme-CN.md)
+[^overlap]: [Zero-Overhead Batch Scheduler](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/zero-overhead-scheduler/zero-overhead-batch-scheduler.md)
+[^overhead]: [Can Scheduling Overhead Dominate LLM Inference Performance? A Study of CPU Scheduling Overhead on Two Popular LLM Inference Systems](https://mlsys.wuklab.io/posts/scheduling_overhead/)
+[^code-walk]: [SGLang Code Walk Through](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/code-walk-through/readme-CN.md)

@@ -1,11 +1,8 @@
 ---
-
 title: SGlang 中的 Sepeculative Decoding
 tags:
-
-- LLMInference
-  date: 2025/11/4
-
+  - LLMInference
+created: 2025/11/4
 ---
 
 # SGlang 中的 Sepeculative Decoding
@@ -72,7 +69,7 @@ LLM 是自回归（autoregressive）的：生成一个 token 要依赖前面的�
     - **Tree Mask**：**每个 token 只能看到来自同一条候选序列（continuation）的历史 token**，不能“越支访问”其他候选的 token。
       ![](img/tree_mask.png)
 
-______________________________________________________________________
+---
 
 #### Lookahead Decoding
 
@@ -92,7 +89,7 @@ ______________________________________________________________________
 
 ![](img/lookahead.png)
 
-______________________________________________________________________
+---
 
 #### EAGLE
 
@@ -111,6 +108,7 @@ ______________________________________________________________________
     ![](img/eagle_draft.png)
 
 - **EAGLE 的生成循环**：
+
   $$
   (feature_seq,token_seq)→next_feature→next_token→concat→next_step
   $$
@@ -119,7 +117,7 @@ ______________________________________________________________________
 
 ![](img/eagle1.png)
 
-______________________________________________________________________
+---
 
 #### EAGLE-2
 
@@ -161,10 +159,10 @@ ______________________________________________________________________
 
   ![](img/eagle2_rerank.png)
 
-______________________________________________________________________
+---
 
 ## Eagle in SGLang
 
 ## Reference
 
-\[^spec1\]: [Clover: Regressive Lightweight Speculative Decoding with Sequential Knowledge](https://arxiv.org/pdf/2405.00263)
+[^spec1]: [Clover: Regressive Lightweight Speculative Decoding with Sequential Knowledge](https://arxiv.org/pdf/2405.00263)

@@ -355,10 +355,10 @@ nav:
           - SGLang Schedular 技术变迁: notes/sglang/SGLang Scheduler 技术变迁.md
           - SGLang Scheduler Evolution: notes/sglang/SGLang Scheduler Evolution.md
           - RadixAttention 你需要知道的细节: notes/sglang/RadixAttention 你需要知道的全部细节.md
-          - DP Attention: notes/sglang/DP Attention.md
+          - SGLang 中的 TP + PP 流程浅析(以 Qwen2 为例): notes/sgalng/SGLang 中的 TP + PP.md
           - 从代码看 SGLang 的 KV Cache: blogs/posts/从代码看 SGLang 的 KV Cache.md
+          - 🚧 DP Attention: notes/sglang/DP Attention.md
           - 🚧 SGLang 中的 Speculative Decoding: notes/sglang/SGlang 中的 Speculative Decoding.md
-          - 🚧 SGLang 中的 TP + PP: notes/sgalng/SGLang 中的 TP + PP.md
       - LLM Basic Concepts:
           - Attention & Transformers: notes/llm_inference/attention&transformer.md
           - Transformer-Based LLM Architecture: notes/llm_inference/transformerbasedllm.md
@@ -384,13 +384,9 @@ nav:
       - 实现一个TCP: blogs/posts/CS144.md
   - Summaries:
       - index: summary/index.md
-      - "plan":
-          - "研一下规划": summary/2025/semester-plan.md
-          - "大模型技能掌握": summary/2025/LLM 推理系统技能图谱.md
-      - "研究生总结":
-          - "研一上总结": summary/研究生总结/研一上总结.md
-          - "研一下总结": summary/研究生总结/研一下总结.md
-          - "研二上总结": summary/研究生总结/研二上总结.md
+      - "研一上总结": summary/研究生总结/研一上总结.md
+      - "研一下总结": summary/研究生总结/研一下总结.md
+      - "研二上总结": summary/研究生总结/研二上总结.md
 
   - Tags: tags/index.md
   - Links: links/index.md

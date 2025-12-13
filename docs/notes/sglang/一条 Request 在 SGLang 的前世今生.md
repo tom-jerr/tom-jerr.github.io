@@ -1,18 +1,15 @@
 ---
-
 title: 一条 Request 在 SGLang 的前世今生
 tags:
+  - LLMInference
+created: 2025-11-25
 
-- LLMInference
-  created: 2025-11-25
-  ai_summary_lang: zh
-  include:
-- ai-summary
-  ai-summary-config:
+include:
+  - ai-summary
+ai-summary-config:
   api: "tongyi"
   model: "qwen-turbo"
   prompt: "帮我把这篇文章总结为500字以内的摘要："
-
 ---
 
 # 一条 Request 在 SGLang 的前世今生
@@ -44,12 +41,12 @@ Continuous Batching[^orca] 放弃了“请求级”同步，转而采用**迭代
 
 - **工作原理**：
   1. 推理引擎在每一个 Token 生成步骤（Iteration）结束时，都会检查当前 Batch 中哪些请求已经完成了生成（遇到了 `<EOS>` 符）。
-  1. 如果有请求完成，系统会立即将其移除，释放其占用的显存槽位。
-  1. **关键点**：系统会立即从等待队列（Waiting Queue）中拉取一个新的请求，填补刚刚空出来的槽位，加入到**下一个 Token 的生成迭代**中 [^cse234]。
+  2. 如果有请求完成，系统会立即将其移除，释放其占用的显存槽位。
+  3. **关键点**：系统会立即从等待队列（Waiting Queue）中拉取一个新的请求，填补刚刚空出来的槽位，加入到**下一个 Token 的生成迭代**中 [^cse234]。
 
 ![](img/continuous_batching.png)
 
-______________________________________________________________________
+---
 
 ### Chunked Prefill
 
@@ -61,9 +58,9 @@ Chunked Prefill [^chunk]的核心思想是：**把长 Prompt 把它切成小块�
 
 - **工作原理**：
   1. 假设有一个 1000 Token 的 Prompt 进来，系统设定 Chunk Size 为 256。
-  1. 在第 1 个迭代，系统处理这个 Prompt 的前 256 个 Token，同时处理其他用户的 Decode 任务。
-  1. 在第 2 个迭代，处理接下来的 256 个 Token（利用 KV Cache 累积），继续与其他用户的 Decode 并行。
-  1. 直到 Prompt 处理完，转入 Decode 阶段。
+  2. 在第 1 个迭代，系统处理这个 Prompt 的前 256 个 Token，同时处理其他用户的 Decode 任务。
+  3. 在第 2 个迭代，处理接下来的 256 个 Token（利用 KV Cache 累积），继续与其他用户的 Decode 并行。
+  4. 直到 Prompt 处理完，转入 Decode 阶段。
 - **混合批处理 (Mixed Batching)**：这就形成了一个特殊的 Batch，里面既包含一些请求的 **Decode Token**，也包含另一些请求的 **Prefill Chunk**。
   - 优先处理上一轮的 decode batch
   - 如果 budget 还有剩余，对 chunked prefill 后续的 chunk 进行处理
@@ -71,7 +68,7 @@ Chunked Prefill [^chunk]的核心思想是：**把长 Prompt 把它切成小块�
 
 ![](img/stall_free_scheduling.png)
 
-______________________________________________________________________
+---
 
 ### PrefillAdder in SGLang
 
@@ -98,7 +95,7 @@ ______________________________________________________________________
 
 1. 系统会对 `can_run_list` 实际执行 prefill。若是 chunked，后续再提交剩余 chunk（`add_chunked_req`）时会继续处理。
 
-______________________________________________________________________
+---
 
 ## Overview
 
@@ -134,29 +131,27 @@ ______________________________________________________________________
 
    ```python
     flash_attn_with_kvcache(
+      q=q.contiguous().view(-1, layer.tp_q_head_num, layer.head_dim),
+      k_cache=key_cache,
+      v_cache=value_cache,
+      page_table=page_table,
+      cache_seqlens=cache_seqlens,
+      cu_seqlens_q=cu_seqlens_q,
+      cu_seqlens_k_new=cu_seqlens_k if not use_local_attn else None,
+      max_seqlen_q=max_seqlen_q,
+      softmax_scale=layer.scaling,
+      causal=False if use_cascade_attn else causal,
+      window_size=window_size,
+      softcap=layer.logit_cap,
+      k_descale=k_descale,
+      v_descale=v_descale,
+      return_softmax_lse=use_cascade_attn,
+      num_splits=self.num_splits,
+      **kwargs,
+   )
    ```
 
-q=q.contiguous().view(-1, layer.tp_q_head_num, layer.head_dim),
-k_cache=key_cache,
-v_cache=value_cache,
-page_table=page_table,
-cache_seqlens=cache_seqlens,
-cu_seqlens_q=cu_seqlens_q,
-cu_seqlens_k_new=cu_seqlens_k if not use_local_attn else None,
-max_seqlen_q=max_seqlen_q,
-softmax_scale=layer.scaling,
-causal=False if use_cascade_attn else causal,
-window_size=window_size,
-softcap=layer.logit_cap,
-k_descale=k_descale,
-v_descale=v_descale,
-return_softmax_lse=use_cascade_attn,
-num_splits=self.num_splits,
-\*\*kwargs,
-)
-\`\`\`
-
-______________________________________________________________________
+---
 
 ## Scenario 2: Next Chunked Prefill
 
@@ -174,7 +169,7 @@ ______________________________________________________________________
      - 该函数内部调用  `tree_cache.match_prefix()`。
      - **关键点**：它会从 RadixCache 中匹配到上一个 chunk 刚刚存入的 KV Cache 索引，并将这些索引赋值给  `req.prefix_indices`。此时  `req.prefix_indices`  包含了第一个 chunk 的所有 KV 位置。
    - 调用  `PrefillAdder::add_chunked_req()`。
-     - 计算本次 chunk 需要处理的 token 数量（[extend_input_len](vscode-file://vscode-app/c:/Users/lzy/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/code/electron-browser/workbench/workbench.html)）。
+     - 计算本次 chunk 需要处理的 token 数量（`extend_input_len`）。
      - 更新  `req.fill_ids`  为本次 chunk 的 token。
      - 将请求加入`can_run_list`。
    - 创建新的  `ScheduleBatch`。
@@ -193,7 +188,7 @@ ______________________________________________________________________
      - `prefix_lens`  是第一个 chunk 的长度。
      - `extend_lens`  是本次 chunk 的长度。
      - `req_pool_indices`  指向包含了完整 KV 历史的映射表。
-1. **Attention 执行 (`FlashAttentionBackend`)**\
+1. **Attention 执行 (`FlashAttentionBackend`)**
    调用  `flash_with_kv_cache()`（或类似接口）：
    - Attention Kernel 会读取  `req_pool_indices`  获取 KV Cache 的物理地址。
    - 对于本次 chunk 的 Query，它会计算与  **Self (本次 chunk 的 KV)**  以及  **Prefix (第一个 chunk 的 KV)**  的 Attention。
@@ -233,7 +228,7 @@ ______________________________________________________________________
 
 在 Overlap 模式下，当 Scheduler 安排下一个 Batch 时，上一个 Batch 刚刚生成的 Token 还没有更新到  `req.output_ids`  中，即 **`req.output_ids` 的更新有一个 step 的延迟**
 
-______________________________________________________________________
+---
 
 ### Just One Chunked Prefill
 
@@ -289,7 +284,7 @@ def budget_state(self):
     return AddReqResult.CONTINUE
 ```
 
-______________________________________________________________________
+---
 
 ### Processing
 
@@ -354,7 +349,7 @@ def get_next_batch_to_run(self) -> Optional[ScheduleBatch]:
     return ret
 ```
 
-______________________________________________________________________
+---
 
 ### 2. Prefill 和 Decode 如何在一个 Batch 中进行推理？
 
@@ -366,7 +361,7 @@ SGLang 支持  **Mixed Batch**（混合批处理），即在一个 Batch 中同
    - `input_ids`  和  `out_cache_loc`  会被拼接。
    - Batch 的  `forward_mode`  被设置为  `ForwardMode.MIXED`。
 
-______________________________________________________________________
+---
 
 ### 3. 一个 batch 中可以有多个 chunked prefill 吗？
 
@@ -375,7 +370,7 @@ ______________________________________________________________________
 1. **调度器状态**：Scheduler  类中维护的是单个  `self.chunked_req`  变量，而不是列表。
 1. **添加策略**：在  `PrefillAdder.add_one_req`  中，一旦决定将某个请求进行 Chunk（因为它太长放不下），代码会立即消耗完所有剩余的  `rem_chunk_tokens`，并返回  `AddReqResult.OTHER`，这会直接终止当前 Batch 的构建循环。
 
-______________________________________________________________________
+---
 
 ### 4. Chunked Prefill 如何处理 KV Cache？
 
@@ -392,11 +387,11 @@ Chunked Prefill 的核心在于**利用 Radix Cache 保存中间状态**。每�
    - `req.last_node`  更新为新的树节点。
 1. **下一轮调度**：当该请求再次被调度时，它会发现自己有很长的  `prefix_indices`（即上一次处理完的 Chunk），从而只需计算剩余的部分。
 
-______________________________________________________________________
+---
 
 ## Reference
 
-\[^orca\]: [Orca: A Distributed Serving System for Transformer-Based Generative Models](https://www.usenix.org/conference/osdi22/presentation/yu)
-\[^cse234\]: [cse234-w25](https://hao-ai-lab.github.io/cse234-w25/assets/slides/mar11.pdf)
-\[^chunk\]: [SARATHI: Efficient LLM Inference by Piggybacking Decodes with Chunked Prefills](https://arxiv.org/abs/2308.16369)
-\[^sglang\]: [SGLang](https://github.com/sgl-project/sglang)
+[^orca]: [Orca: A Distributed Serving System for Transformer-Based Generative Models](https://www.usenix.org/conference/osdi22/presentation/yu)
+[^cse234]: [cse234-w25](https://hao-ai-lab.github.io/cse234-w25/assets/slides/mar11.pdf)
+[^chunk]: [SARATHI: Efficient LLM Inference by Piggybacking Decodes with Chunked Prefills](https://arxiv.org/abs/2308.16369)
+[^sglang]: [SGLang](https://github.com/sgl-project/sglang)

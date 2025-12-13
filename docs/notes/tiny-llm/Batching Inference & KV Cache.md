@@ -319,5 +319,5 @@ vLLM 的 PagedAttention **自定义 CUDA 核** 被设计为可以直接处理这
 
 ## Reference
 
-\[^orca\]: [Orca: A Distributed Serving System for Transformer-Based Generative Models](https://www.usenix.org/system/files/osdi22-yu.pdf)
-\[^vllm\]: [vllm](https://github.com/vllm-project/vllm/tree/main)
+[^orca]: [Orca: A Distributed Serving System for Transformer-Based Generative Models](https://www.usenix.org/system/files/osdi22-yu.pdf)
+[^vllm]: [vllm](https://github.com/vllm-project/vllm/tree/main)

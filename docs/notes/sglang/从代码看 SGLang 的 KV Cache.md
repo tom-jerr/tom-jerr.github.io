@@ -181,4 +181,4 @@ Decode 的流程实际上与 Prefill 相似，只是分配内存时，每个 tok
 
 ## Reference
 
-\[^kvcache\]: [KV Cache 代码解析](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/kvcache-code-walk-through/readme-CN.md)
+[^kvcache]: [KV Cache 代码解析](https://github.com/zhaochenyang20/Awesome-ML-SYS-Tutorial/blob/main/sglang/kvcache-code-walk-through/readme-CN.md)

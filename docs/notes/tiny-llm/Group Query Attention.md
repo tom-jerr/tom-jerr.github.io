@@ -1,11 +1,8 @@
 ---
-
 title: Group Query Attention
 created: 2025-10-12
 tags:
-
-- LLMInference
-
+  - LLMInference
 ---
 
 # GQA: Group Query Attention
@@ -68,7 +65,7 @@ def scaled_dot_product_attention(query, key, value, attn_mask=None, dropout_p=0.
 0   0   0   0    0
 ```
 
-⚠ **我们的实现实际上与 PyTorch API 不同**
+:warning: **我们的实现实际上与 PyTorch API 不同**
 
 ```python
 def causal_mask(L: int, S: int, dtype: torch.dtype, device: str) -> torch.Tensor:

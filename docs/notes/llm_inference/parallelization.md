@@ -1,14 +1,9 @@
 ---
-
 title: Parallelization Concepts
 created: 2025-09-18
-update:
-comments: true
-katex: true
+updated: 2025-12-13
 tags:
-
-- LLMInference
-
+  - LLMInference
 ---
 
 # Parallelization Concepts
@@ -24,9 +19,9 @@ tags:
 ### 参数量
 
 - 每个 transformer 层的参数量为
-  $$ \\text{Params per layer} = 12h^2 + 13h $$
+  $$ \text{Params per layer} = 12h^2 + 13h $$
 - 当隐藏维度 $h$ 较大时，可以忽略一次项，模型参数量近似为
-  $$ \\text{Params per layer} \\approx 12lh^2 $$
+  $$ \text{Params per layer} \approx 12lh^2 $$
 
 ### 计算量(FLOPs)
 
@@ -34,14 +29,14 @@ tags:
   - self-attention 与 seq_len 平方成正比
   - mlp 与 hidden_size 平方成正比
 
-$$ \\text{FLOPs per iteration} = l\\cdot(24hsh^2+4bs^2h)+2bshV $$
+$$ \text{FLOPs per iteration} = l\cdot(24hsh^2+4bs^2h)+2bshV $$
 
 - $l$: Transformer 层数
 - $h$: 隐藏层维度
 - $s$: 序列长度
 - $b$: 批量大小
 - $V$: 词汇表大小
-- 当 $h$ 较大且$s \\ll h$时，可以忽略低阶项，我们可以近似认为：在一次前向传递中，对于每个 token，每个模型参数，需要进行 2 次浮点数运算，即一次乘法法运算和一次加法运算
+- 当 $h$ 较大且$s \ll h$时，可以忽略低阶项，我们可以近似认为：在一次前向传递中，对于每个 token，每个模型参数，需要进行 2 次浮点数运算，即一次乘法法运算和一次加法运算
 - 一次训练迭代包含了前向传递和后向传递，**后向传递的计算量是前向传递的 2 倍**。
   > 一次训练迭代中，**对于每个 token，每个模型参数，需要进行 6 次浮点数运算**
 
@@ -51,13 +46,13 @@ $$ \\text{FLOPs per iteration} = l\\cdot(24hsh^2+4bs^2h)+2bshV $$
    - 训练时需要存储模型参数、梯度和优化器状态
    - 每个可训练模型参数都会对应 1 个梯度，并对应 2 个优化器状态（Adam 优化器梯度的一阶动量和二阶动量），使用混合精度训练
      $$
-     \\text{Total Memory for Parameters} = 20 \\times \\text{Params num}
+     \text{Total Memory for Parameters} = 20 \times \text{Params num}
      $$
-1. 中间激活值的显存
+2. 中间激活值的显存
    - 对于 l 层 transformer 模型，中间激活占用的显存大小可以近似为
      - self-attention: 仍然与 seq_len 平方成正比
        $$
-       \\text{Activation Memory} = (34bsh+5hs^2a)\\cdot l
+       text{Activation Memory} = (34bsh+5hs^2a)\cdot l
        $$
 
 - 通常会尝试减小批次大小来避免显存不足的问题，这种方式减少的其实是中间激活占用的显存，**而不是模型参数、梯度和优化器的显存**
@@ -65,14 +60,16 @@ $$ \\text{FLOPs per iteration} = l\\cdot(24hsh^2+4bs^2h)+2bshV $$
 3. KV Cache 的显存
    - 设输入序列的长度为 $s$ ，输出序列的长度为 $n$ ，以 float16 来保存 KV cache，那么 KV cache 的**峰值显存占用大小**为
      $$
-     b(s+n)lh \\times 2 \\times 2= 4blh(s+n)
+     b(s+n)lh \times 2 \times 2= 4blh(s+n)
      $$
      这里第一个 2 表示 K/V cache，第二个 2 表示 float16 占 2 个 bytes。
 
 ## Why Parallelism?
 
 - `Computation Bottleneck`: LLM 的参数量巨大，以 GPT-3 为例，1750 亿参数，对 GPU 计算能力要求极高，单个 GPU 无法满足。(TP, PP, SP)
+
   > FLOPs 近似 $6 * 1750 * 10 ^9$FLOPs
+
 - `Memory Bottleneck`: LLM 的模型参数和中间激活值占用大量内存，单个 GPU 的显存有限，无法容纳整个模型。(TP, PP, ZeRO, SP)
   > **参数训练时的显存近似 $20 * 1750 * 10 ^9$ bytes 远大于 目前单个 GPU 的显存容量**
   > 中间激活值的显存占用取决于批次大小、序列长度和模型层数，通常也非常大。
@@ -141,16 +138,20 @@ $$ \\text{FLOPs per iteration} = l\\cdot(24hsh^2+4bs^2h)+2bshV $$
 - Idea: 尽可能减少 Pipeline Bubbles
 - Pros: 保证收敛语义，训练过程和在单张卡上相同
 - Cons:
-  - compute: 流水线气泡
-  - compute: 为了消除流水线气泡，我们必须切分 input 变成更小的 micro-batches，**但是 micro-batch 太小会影响硬件计算的效率($AI \\space = \\space #ops \\space/ \\space #bytes$)**
-    > 算法上其实对 global batch size 也有限制
+  - compute:
+    - 流水线气泡
+    - 为了消除流水线气泡，我们必须切分 input 变成更小的 micro-batches，**但是 micro-batch 太小会影响硬件计算的效率($AI = \frac{ops}{bytes}$)**
+      > 算法上其实对 global batch size 也有限制
 
 ##### GPipe[^gpipe]
 
 把 input 切分成多个 micro-batches，把 micro-batches 依次送入 pipeline。梯度计算如下：
 
+> [!WARNING]
+> 这里有峰值内存问题，见下面 Memory Usage 问题部分
+
 $$
-\\nabla L\_{\\theta}(x) = \\frac{1}{N} \\sum\_{i=1}^{N} \\nabla L\_{\\theta}(x_i)
+\nabla L_{\theta}(x) = \frac{1}{N} \sum_{i=1}^{N} \nabla L_{\theta}(x_i)
 $$
 
 ![](img/gpipe.png)
@@ -188,7 +189,7 @@ $$
 
 - 传统方式：在反向传播的主计算流中同步地进行重计算，导致主流程需要等待重计算完成。
 
-- TeraPipe 方式：将激活值的重计算任务放到一个\*\*独立的、并行的计算流（Asynchronous Stream）\*\*中执行。这样，主计算流在进行反向梯度计算的同时，另一个计算流在“后台”悄悄地准备好下一步需要的激活值。
+- TeraPipe 方式：将激活值的重计算任务放到一个**独立的、并行的计算流（Asynchronous Stream）**中执行。这样，主计算流在进行反向梯度计算的同时，另一个计算流在“后台”悄悄地准备好下一步需要的激活值。
 
 ![](img/terapipe.png)
 
@@ -208,7 +209,7 @@ $$
 - **ZB-H1**：device 1 的峰值内存与 1F1B 相比没有变化，其他 device 相对增加，但是 bubble 减少了 2/3
   ![](img/ZB-H1.png)
 
-- **ZB-H2**：device 1 的峰值增加到 2 * 1F1B，bubbles 接近为 0
+- **ZB-H2**：device 1 的峰值增加到 2 \* 1F1B，bubbles 接近为 0
 
   - :warning: 这里实际上有一个问题，optimizer 一般需要全局同步，但是 ZB-H2 里每个 device 都有自己的 optimizer state，需要额外的机制来实现
     ![](img/ZB-H2.png)
@@ -265,7 +266,7 @@ $$
   - compute: 打破了同步训练语义(**forward 和 backward 必须匹配同一份权重**)，训练过程中可能有滞后 gradient
   - memory: 算法会存储多个版本的 weights 来保证一致性
 
-**AMPNet**\[^ampnet\]: 完全异步。每个设备在空闲时就执行前向传播，并在每次反向传播后更新权重。
+**AMPNet**[^ampnet]: 完全异步。每个设备在空闲时就执行前向传播，并在每次反向传播后更新权重。
 
 - Techniques:
   - Task Queue: 每个计算单元维护一个本地队列，forward 和 backward 都被表示为任务。任务只有在依赖的数据 (activation 或梯度) 到达时，才会被触发
@@ -277,13 +278,13 @@ $$
 
 ![](img/ampnet.png)
 
-**Pipedream**\[^pipedream\]: 每个 batch 存储多个权重版本(类似 MVCC)
+**Pipedream**[^pipedream]: 每个 batch 存储多个权重版本(类似 MVCC)
 
 - Techniques:
   - Weight Versioning:
     1. forward 时保存一份当前参数快照 (stash)。
-    1. backward 时必须使用对应 forward 时的那份参数（确保一致性）。
-    1. 更新是异步的，但保证 forward/backward 用的是同一版本的权重。
+    2. backward 时必须使用对应 forward 时的那份参数（确保一致性）。
+    3. 更新是异步的，但保证 forward/backward 用的是同一版本的权重。
   - 采用 1F1B (one forward, one backward) pipeline 调度。
 - :skull: **No Memory saving compared to single device case, which is opposite to the purpose of model parrallelism**
 
@@ -353,7 +354,7 @@ $$
 
 ##### Systems for Intra-op Parallelism
 
-**ZeRO Optimizer**\[^zero\]: 解决数据并行中内存瓶颈，将 gradients, optimizer states and model weights 分区并分发到不同设备上
+**ZeRO Optimizer**[^zero]: 解决数据并行中内存瓶颈，将 gradients, optimizer states and model weights 分区并分发到不同设备上
 
 > 这里 Optimizer States 使用了 Adam 优化器，需要为每个参数额外存储一阶动量 + 二阶动量 + 参数副本(fp32 copy)，ZeRO 论文中使用了 **FP16 + FP32 混合精度训练**，所以会存储两倍的 Optimizer States
 
@@ -379,9 +380,7 @@ $$
 
 因为 LLM 现在的架构基本是 Transformer，Transformer 的计算图比较简单，**手动设计的并行策略已经足够好，并且自动并行化方法的搜索空间和计算开销都比较大，收益不明显**。
 
-#### Communication in Different Parallelism
-
-[^UB-mesh]
+#### Communication in Different Parallelism[^UB-mesh]
 
 | Parallelism Techniques | Communication Pattern | Data Volume Per Transfer | Total Transfer | Total Volume | Data Traffic |
 | :--------------------- | :-------------------- | :----------------------- | :------------- | :----------- | :----------- |
@@ -424,7 +423,7 @@ $$
 
    > 在 DDP 构建时将模型状态从一个进程广播到所有其他进程来实现
 
-1. 在每次迭代中消耗相同的梯度来保证正确性。
+2. 在每次迭代中消耗相同的梯度来保证正确性。
 
    > 一个简单的解决方案可以在本地反向传播之后和更新本地参数之前插入一个梯度同步阶段。
 
@@ -504,27 +503,29 @@ $$
 
 ## 参考资料
 
-\[^params\]: [分析 transformer 模型的参数量、计算量、中间激活、KV cache](https://zhuanlan.zhihu.com/p/624740065)
-\[^NCCL\]: [NCCL 官方文档](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/operations.html#allgather)
-\[^ZB\]: [Zero Bubble Pipeline Parallelism](https://arxiv.org/abs/2401.10241)
-\[^dualpipe\]: [Deepseek-v3 技术报告-图的逐步解析-4-DualPipe](https://zhuanlan.zhihu.com/p/22681871459)
-\[^deepseekv3\]: [DeepSeek-V3 Technical Report](https://arxiv.org/pdf/2412.19437)
-\[^UB-mesh\]: [UB-Mesh: a Hierarchically Localized nD-FullMesh Datacenter Network Architecture](https://arxiv.org/abs/2503.20377)
-\[^ddp\]:
+[^params]: [分析 transformer 模型的参数量、计算量、中间激活、KV cache](https://zhuanlan.zhihu.com/p/624740065)
+[^NCCL]: [NCCL 官方文档](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/operations.html#allgather)
+[^ZB]: [Zero Bubble Pipeline Parallelism](https://arxiv.org/abs/2401.10241)
+[^dualpipe]: [Deepseek-v3 技术报告-图的逐步解析-4-DualPipe](https://zhuanlan.zhihu.com/p/22681871459)
+[^deepseekv3]: [DeepSeek-V3 Technical Report](https://arxiv.org/pdf/2412.19437)
+[^UB-mesh]: [UB-Mesh: a Hierarchically Localized nD-FullMesh Datacenter Network Architecture](https://arxiv.org/abs/2503.20377)
+[^ddp]:
+
 [PyTorch Distributed: Experiences on Accelerating
 Data Parallel Training](https://arxiv.org/pdf/2006.15704)
 
-\[^gpipe\]: [GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism](https://arxiv.org/abs/1811.06965)
-\[^gshard\]: [GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding](https://arxiv.org/abs/2006.16668)
-\[^megatonlm\]: [Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism](https://arxiv.org/abs/1909.08053)
-\[^zero\]: [ZeRO: Memory Optimization Towards Training A Trillion Parameter Models](https://arxiv.org/abs/1910.02054)
-\[^1f1b\]:
+[^gpipe]: [GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism](https://arxiv.org/abs/1811.06965)
+[^gshard]: [GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding](https://arxiv.org/abs/2006.16668)
+[^megatonlm]: [Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism](https://arxiv.org/abs/1909.08053)
+[^zero]: [ZeRO: Memory Optimization Towards Training A Trillion Parameter Models](https://arxiv.org/abs/1910.02054)
+[^1f1b]:
+
 [Efficient Large-Scale Language Model Training on GPU Clusters
 Using Megatron-LM](https://arxiv.org/pdf/2104.04473)
 
-\[^terapipe\]: [TeraPipe: Token-Level Pipeline Parallelism for Training Large-Scale Language Models](https://arxiv.org/abs/2102.07988)
-\[^chimera\]: [Chimera: Efficiently Training Large-Scale Neural Networks with Bidirectional Pipelines](https://arxiv.org/abs/2107.06925)
-\[^ampnet\]: [AMPNet: Asynchronous Model-Parallel Training for Dynamic Neural Networks](https://arxiv.org/abs/1705.09786)
-\[^pipedream\]: [PipeDream: Fast and Efficient Pipeline Parallel DNN Training](https://arxiv.org/abs/1806.03377)
-\[^alpa\]: [Alpa: Automating Inter- and Intra-Operator Parallelism for Distributed Deep Learning](http://arxiv.org/abs/2201.12023)
-\[^cse234\]:[CSE 234](https://hao-ai-lab.github.io/cse234-w25/)
+[^terapipe]: [TeraPipe: Token-Level Pipeline Parallelism for Training Large-Scale Language Models](https://arxiv.org/abs/2102.07988)
+[^chimera]: [Chimera: Efficiently Training Large-Scale Neural Networks with Bidirectional Pipelines](https://arxiv.org/abs/2107.06925)
+[^ampnet]: [AMPNet: Asynchronous Model-Parallel Training for Dynamic Neural Networks](https://arxiv.org/abs/1705.09786)
+[^pipedream]: [PipeDream: Fast and Efficient Pipeline Parallel DNN Training](https://arxiv.org/abs/1806.03377)
+[^alpa]: [Alpa: Automating Inter- and Intra-Operator Parallelism for Distributed Deep Learning](http://arxiv.org/abs/2201.12023)
+[^cse234]: [CSE 234](https://hao-ai-lab.github.io/cse234-w25/)

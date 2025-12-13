@@ -1,11 +1,8 @@
 ---
-
 title: Data Parallelism in Attention in SGLang
 created: 2025-10-27
 tags:
-
-- LLMInference
-
+  - LLMInference
 ---
 
 # Data Parallelism in Attention in SGLang
@@ -13,6 +10,7 @@ tags:
 ## What is Data Parallelism in Attention?
 
 ⚠ **这里的 `dp_size` 不是传统的数据并行而是 `attentnion dp`**
+
 其目的是将一个大的张量并行（TP）组**重组为几个较小的 TP 组** ，这些较小的 TP 组又形成一个**专门用于注意力层的新的数据并行（DP）组**。
 
 1. 对于模型中除 MLP 层以外的部分（如 Embedding, Self-Attention），每个数据并行单元（DP_Rank）内部的张量并行规模（TP_Size）设置为 1，即每个 DP_Rank 独立计算这些部分。
@@ -48,7 +46,7 @@ tags:
    				"max_req_input_len": scheduler.max_req_input_len,
    			}
    		)
-   		
+
    # PP + TP
    ┌─────────────── Pipeline Stage 0 ───────────────┐
    TP=0→ │ TP Rank 0 │ TP Rank 1 │ TP Rank 2        │
@@ -142,7 +140,7 @@ logits_output.hidden_states = logits_output.hidden_states[:bs]
 
 在 Attention 层与 MoE 层之间需要进行同步通信，对各 dp rank atttention 部分计算得到的 hidden_state 集合进行同步，**如果采用 Allgather 或者 Allreduce 通信，其对数据性状有一定的要求**
 
-- allgather：要求每个 sub-batchsize 大小相同。因此需要把 local batchsize padding 到 max batchsize，且最后 gatheredbuffer 大小为：max_batchsize * sync_group_size
+- allgather：要求每个 sub-batchsize 大小相同。因此需要把 local batchsize padding 到 max batchsize，且最后 gatheredbuffer 大小为：max_batchsize \* sync_group_size
   ![](img/allgather.png)
 - allreduce：每个 dp rank 上都有完整的数据集合(**对应 padding 到 sum batchsize**). 最后 gatheredbuffer 大小为：sum_batchsize
   ![](img/allreduce.png)
@@ -151,13 +149,13 @@ logits_output.hidden_states = logits_output.hidden_states[:bs]
 
 这种为了“正确性”而做的 padding，反过来又会严重影响性能，主要体现在以下两方面：
 
-#### A. 负载不均与“掉队者” (Load Imbalance & Stragglers)
+#### A. Load Imbalance
 
 `GPU_0` 有 4 个**真实**的请求需要计算，而 `GPU_1, 2, 3` 只有 3 个**真实**的请求（和 1 个几乎不耗时的虚拟请求）。
 
 - **结果**：`GPU_1, 2, 3` 会很快完成它们的本地计算。
 - **等待**：然后，它们在 `All-Gather` 这个同步点（Barrier）上**被迫空转（Idle）**，等待 `GPU_0` 完成它那份更重的工作。
-- `GPU_0` 成为了这个批次的\*\*“掉队者” (Straggler)\*\*，它拖慢了所有其他 GPU 的进度。
+- `GPU_0` 成为了这个批次的 Straggler，它拖慢了所有其他 GPU 的进度。
 
 **结论：** 这导致了**极低的 GPU 利用率**。在 `dp_size=4` 的情况下，可能有 3/4 的 GPU 在大部分时间里处于空闲等待状态。
 
@@ -168,7 +166,7 @@ logits_output.hidden_states = logits_output.hidden_states[:bs]
    - 尽管是“虚拟”请求，但系统仍然需要启动 CUDA Kernel 来处理它们，这会带来一定的调度开销。
    - 更重要的是，`All-Gather` 操作本身。所有 GPU 现在都必须交换一个“大小为 4”的批次数据，而不是它们“实际”的 `[4, 3, 3, 3]`。通信量被放大了。
 
-1. **内存开销**：
+2. **内存开销**：
 
    - `All-Gather` 之后，每个 GPU 都需要分配**足够大的内存缓冲区**来接收来自所有其他 rank 的数据。
    - `GPU_1` 明明只需要 `4+3+3+3 = 13` 个请求的数据，但它**必须**按照 `4+4+4+4 = 16` 个请求（即`max_batch_per_rank * dp_size`）的**最大可能性**来分配内存。
