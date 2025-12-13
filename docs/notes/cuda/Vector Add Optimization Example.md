@@ -1,11 +1,8 @@
 ---
-
 title: 一步步实现 CUDA Vector Add 优化
 created: 2025-10-21
 tags:
-
-- LLMInference
-
+  - LLMInference
 ---
 
 # 一步步实现 CUDA Vector Add 优化
@@ -248,7 +245,7 @@ __global__ void elementwise_add_f16_kernel(half *a, half *b, half *c, int N) {
 
 所以，我们需要一次搬运更多数据
 
-## Optimization V3 -- fp16 * 8
+## Optimization V3 -- fp16 \* 8
 
 ### 优化
 
@@ -286,7 +283,7 @@ __global__ void elementwise_add_f16x8_kernel(const half *a, const half *b, half 
   $$\\frac{6 \\text{ MB}}{8.96 \\mu s} = 0.669 \\text{ TB/s} \\approx \\mathbf{670 \\text{ GB/s}}$$
 - **利用率：** $670 / 912 \\approx \\mathbf{73%}$。
 
-#### 为什么没有达到 FP32 * 4 的 Memory Throughput 呢？
+#### 为什么没有达到 FP32 \* 4 的 Memory Throughput 呢？
 
 **猜想**
 
@@ -304,7 +301,7 @@ __global__ void elementwise_add_f16x8_kernel(const half *a, const half *b, half 
 
 验证 10 M 的 vector add，结果：
 
-- 不管是 fp32 * 4 还是 fp16 * 8，Memory Throughput 都有明显增加，说明我们的猜想基本正确
+- 不管是 fp32 _ 4 还是 fp16 _ 8，Memory Throughput 都有明显增加，说明我们的猜想基本正确
 
 ![](img/vector_add_slo_2.png)
 
@@ -320,7 +317,7 @@ vector add 算子是一个典型的 memory-bound 的算子，我们需要尽可�
 
 - **数据：** S=256, K=256
 
-- **现象1：**
+- **现象 1：**
 
   - **PyTorch (`f32_th`):** 0.0116 ms
   - **Your Kernel (`f32x4`):** 0.0080 ms (**快了 ~30%**)
@@ -336,7 +333,7 @@ vector add 算子是一个典型的 memory-bound 的算子，我们需要尽可�
 
     - PyTorch 有一套通用的 Block/Grid 计算公式。对于极小形状，它的配置可能不是针对当前 GPU 最优的。而你是针对性调优的。
 
-- **现象2：**
+- **现象 2：**
 
 | **内核版本** | **执行时间 (ms)** |
 | ------------ | ----------------- |

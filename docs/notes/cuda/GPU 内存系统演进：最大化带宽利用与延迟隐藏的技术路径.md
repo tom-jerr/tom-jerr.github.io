@@ -1,11 +1,8 @@
 ---
-
 title: GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径
 tags:
-
-- CUDA
+  - CUDA
 created: 2025-11-3
-
 ---
 
 # GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径
@@ -18,17 +15,20 @@ created: 2025-11-3
 
 ## Little's Law
 
-长期平均顾客数（ _L_ ）等于长期平均有效到达率（ _λ_ ）乘以顾客在系统中停留的平均时间（ _W_ ）。该定律的代数表达式为：
+长期平均顾客数（ *L* ）等于长期平均有效到达率（ *λ* ）乘以顾客在系统中停留的平均时间（ *W* ）。该定律的代数表达式为：
+
 $$
 L = \\lambda W
 $$
+
 对于 GPU 来说，Little's Law 如下：
+
 $$
 bytes-in-flight = bandwidth * mean\\space latency
 $$
 
 > bandwidth 和 mean latency 由硬件决定
-> 硬件给定带宽与延迟；**软件需把“in-fight字节数”堆到这个水平，才能吃满带宽**
+> 硬件给定带宽与延迟；**软件需把“in-fight 字节数”堆到这个水平，才能吃满带宽**
 
 ## Motivation(Vector Add Example)
 
@@ -41,12 +41,14 @@ __global__ void kernel(float* a, float* b, float* c)
 ```
 
 每个 SM 的 `bytes-in-flight` 计算公式如下：
+
 $$
 bytes-in-flight / SM = (#loads/thread) \\times (#bytes/load) \\times (#threads/block) \\times (#blocks/SM)
 $$
-对于向量加法来说：2 × 4 × 256 × 8 = 16 KB/SM（假设100% Occupancy）
 
-> 简单 kernel 难以打满带宽。**真实带宽在上升但是简单kernel的利用率却在下降**
+对于向量加法来说：2 × 4 × 256 × 8 = 16 KB/SM（假设 100% Occupancy）
+
+> 简单 kernel 难以打满带宽。**真实带宽在上升但是简单 kernel 的利用率却在下降**
 
 ![](img/littleslaw.png)
 
@@ -60,12 +62,12 @@ $$
 
 ### 提升指令并行度 ILP
 
-`#pragma unroll 2` 或手工展开，让一个线程在使用前先发起两对独立加载：`a[i1], b[i1], a[i2], b[i2]`，再进行两次计算与写回。
+`#pragma unroll 2`  或手工展开，让一个线程在使用前先发起两对独立加载：`a[i1], b[i1], a[i2], b[i2]`，再进行两次计算与写回。
 
-估算每线程in-fight字节数翻倍：`#loads/thread` = 4，4 × 4B = 16B。in-fight 请求更多，带宽利用更高。
+估算每线程 in-fight 字节数翻倍：`#loads/thread` = 4，4 × 4B = 16B。in-fight 请求更多，带宽利用更高。
 
 ```cpp
-__global__ void(int n, 
+__global__ void(int n,
 const float* __restrict__ a,
 const float* __restrict__ b,
 float* __restrict__ c
@@ -101,7 +103,7 @@ float* __restrict__ c
 > 一次迭代有 16B 数据在 in-fight，指令/事务更少。需要确保对齐与边界处理（`N%2`、`N%4` 的尾部）、可能的寄存器压力
 
 ```cpp
-__global__ void(int n, 
+__global__ void(int n,
 const float2* __restrict__ a,
 const float2* __restrict__ b,
 float2* __restrict__ c
@@ -115,7 +117,7 @@ float2* __restrict__ c
 
 		mul a[i1], b[i1]
 		mul a[i2], b[i2]
-		
+
 		store c[i1], c[i2]
 	*/
 	#pragma unroll 2
@@ -125,7 +127,7 @@ float2* __restrict__ c
 }
 ```
 
-新架构要吃满带宽更依赖增大 `bytes‑in‑flight`；**优先尝试向量化到 128bit（保证对齐），再配合适度 unroll**，注意寄存器与占用(Occupancy)权衡。
+新架构要吃满带宽更依赖增大  `bytes‑in‑flight`；**优先尝试向量化到 128bit（保证对齐），再配合适度 unroll**，注意寄存器与占用(Occupancy)权衡。
 
 ### 异步加载
 
@@ -134,14 +136,14 @@ float2* __restrict__ c
 
 #### 原理
 
-通过**跳过寄存器直接将数据从全局内存传输到共享内存**，既节省了宝贵的寄存器资源用于计算，又减少了L1缓存的流量负担，相比传统的同步复制（需要经过寄存器中转），异步复制提供了两种模式——L1绕过模式和L1访问模式，实现了更高效的内存数据传输。
+通过**跳过寄存器直接将数据从全局内存传输到共享内存**，既节省了宝贵的寄存器资源用于计算，又减少了 L1 缓存的流量负担，相比传统的同步复制（需要经过寄存器中转），异步复制提供了两种模式——L1 绕过模式和 L1 访问模式，实现了更高效的内存数据传输。
 
 ![](img/async_load.jpg)
 
 #### Async Load & TMA
 
-- 普通异步加载需要**多个线程参与复制并在线程作用域pipeline中完成同步**
-- TMA只需要一个线程启动复制操作，通过**共享内存屏障完成同步控制**，实现了更高效的大块数据传输，减少了线程协调的开销。
+- 普通异步加载需要**多个线程参与复制并在线程作用域 pipeline 中完成同步**
+- TMA 只需要一个线程启动复制操作，通过**共享内存屏障完成同步控制**，实现了更高效的大块数据传输，减少了线程协调的开销。
 
 ![](img/tma.jpg)
 
@@ -149,7 +151,7 @@ float2* __restrict__ c
 
 通过`cuda::memcpy_async`，只需单个线程就能启动大块数据复制，使用共享内存屏障（`cuda::barrier`）进行完成同步控制，
 
-> 当源/目标地址16字节对齐且大小为16的倍数时会**自动使用TMA硬件加速**，否则回退到同步复制模式。
+> 当源/目标地址 16 字节对齐且大小为 16 的倍数时会**自动使用 TMA 硬件加速**，否则回退到同步复制模式。
 
 ```cpp
 #include <cuda/barrier>
@@ -179,7 +181,7 @@ bar.wait(cuda::std::move(token));
 
 ### 总结
 
-从"START HERE"开始，首先判断当前是否有足够的在途字节数（bytes-in-flight），如果足够就无需优化；如果不够，接下来判断数据加载目标是寄存器（REG）还是共享内存（SMEM）——选择寄存器就进行展开/向量化优化，选择共享内存则需要进一步考虑对齐方式和数据块大小：4/8字节对齐时使用异步加载，16字节对齐时根据Tile大小选择策略（小于1KB用普通异步加载，1-2KB之间可选择批量或非批量异步加载，大于2KB则使用异步批量加载）
+从"START HERE"开始，首先判断当前是否有足够的在途字节数（bytes-in-flight），如果足够就无需优化；如果不够，接下来判断数据加载目标是寄存器（REG）还是共享内存（SMEM）——选择寄存器就进行展开/向量化优化，选择共享内存则需要进一步考虑对齐方式和数据块大小：4/8 字节对齐时使用异步加载，16 字节对齐时根据 Tile 大小选择策略（小于 1KB 用普通异步加载，1-2KB 之间可选择批量或非批量异步加载，大于 2KB 则使用异步批量加载）
 
 ![](img/opt.jpg)
 
@@ -201,9 +203,9 @@ bar.wait(cuda::std::move(token));
 
 #### Usage
 
-- 捕获阶段（Capture）通过 `cudaStreamBeginCapture` 和 `cudaStreamEndCapture` 将1000次kernel调用序列记录成图结构
+- 捕获阶段（Capture）通过 `cudaStreamBeginCapture` 和 `cudaStreamEndCapture` 将 1000 次 kernel 调用序列记录成图结构
 - 创建阶段（Create）用 `cudaGraphInstantiate` 将捕获的图转换为可执行的图实例
-- 启动阶段（Launch）通过 `cudaGraphLaunch` 一次性提交整个工作负载而不是逐个启动kernel
+- 启动阶段（Launch）通过 `cudaGraphLaunch` 一次性提交整个工作负载而不是逐个启动 kernel
 - 清理阶段（Cleanup）释放相关资源
 
 ```cpp
@@ -233,23 +235,23 @@ CUDA_CHECK(cudaGraphExecDestroy(gEx));
 
 ### Programmatic Dependent Launch(PDL)
 
-这是一种更细粒度的优化方法：在 kernel 函数中需要调用 `cudaGridDependencySynchronize()` 来确保前一个kernel的全局内存写入操作对当前 kernel 可见，而在启动配置中通过设置`cudaLaunchAttributeProgrammaticStreamSerialization` 属性和相关参数来启用这一特性
+这是一种更细粒度的优化方法：在 kernel 函数中需要调用 `cudaGridDependencySynchronize()` 来确保前一个 kernel 的全局内存写入操作对当前 kernel 可见，而在启动配置中通过设置`cudaLaunchAttributeProgrammaticStreamSerialization` 属性和相关参数来启用这一特性
 
-- **允许kernel提前启动**，即在前一个kernel的全局内存存储操作完全可见之前就开始执行，这样可以实现更多的预取操作
-- 保证程序正确性，kernel必须在需要访问前一个kernel写入的数据之前**显式调用`cudaGridDependencySynchronize()` 进行同步**
+- **允许 kernel 提前启动**，即在前一个 kernel 的全局内存存储操作完全可见之前就开始执行，这样可以实现更多的预取操作
+- 保证程序正确性，kernel 必须在需要访问前一个 kernel 写入的数据之前**显式调用`cudaGridDependencySynchronize()` 进行同步**
 - **最大化地重叠 kernel 启动和执行**
 
 ![](img/pdl.jpg)
 
 #### TriggerProgrammaticLaynchCompletion
 
-- 该函数允许块在实际退出之前就向GPU调度器发送完成信号，**只需要块中的一个线程执行该调用即可**
-- 改变了传统的kernel间同步模式：正常情况下下一个 kernel 必须等待前一个 kernel 的所有块真正退出后才能启动，而现在下一个 kernel 只需等待所有块都执行了`cudaTriggerProgrammaticLaunchCompletion()` 就可以提前启动，这样就**实现了计算和下一个kernel启动的重叠**，进一步减少了 kernel 间的空闲等待时间
+- 该函数允许块在实际退出之前就向 GPU 调度器发送完成信号，**只需要块中的一个线程执行该调用即可**
+- 改变了传统的 kernel 间同步模式：正常情况下下一个 kernel 必须等待前一个 kernel 的所有块真正退出后才能启动，而现在下一个 kernel 只需等待所有块都执行了`cudaTriggerProgrammaticLaunchCompletion()` 就可以提前启动，这样就**实现了计算和下一个 kernel 启动的重叠**，进一步减少了 kernel 间的空闲等待时间
 
 ### 总结
 
-- CUDA Graph解决了批量kernel提交的开销问题
-- PDL + TriggerProgrammaticLaynchCompletion 通过提前启动和更细粒度的依赖管理以及提前退出减少了kernel间的同步等待时间
-- 在最小规模（10KB左右）时，三种组合优化技术可以实现高达3倍的加速比，但随着数据量增加，加速效果逐渐递减，当数据量达到1GB以上时加速比趋近于1倍（即基本无提升）
+- CUDA Graph 解决了批量 kernel 提交的开销问题
+- PDL + TriggerProgrammaticLaynchCompletion 通过提前启动和更细粒度的依赖管理以及提前退出减少了 kernel 间的同步等待时间
+- 在最小规模（10KB 左右）时，三种组合优化技术可以实现高达 3 倍的加速比，但随着数据量增加，加速效果逐渐递减，当数据量达到 1GB 以上时加速比趋近于 1 倍（即基本无提升）
 
 ![](img/result.jpg)
