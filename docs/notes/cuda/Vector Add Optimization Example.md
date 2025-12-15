@@ -61,7 +61,7 @@ $$
 
 ### Compute Throughput
 
-$$\\text{Compute Throughput} \\approx \\frac{\\text{Total Instructions Executed (指令总数)}}{\\text{Execution Time (执行时间)}}$$
+$$\text{Compute Throughput} \approx \frac{\text{Total Instructions Executed (指令总数)}}{\text{Execution Time (执行时间)}}$$
 
 ### Memory Throughput
 
@@ -147,7 +147,7 @@ __global__ void vector_add_kernel(const float *a, const float *b, float *c,
 该版本的 vector add，执行一次计算需要三次访存，每次读 4 bytes (read A, read B, write C)
 
 $$
-AI = 1 / (3 \\times 4) =1/12\\approx 0.083
+AI = 1 / (3 \times 4) =1/12\approx 0.083
 $$
 
 说明这是一个 **memory-bound** 的程序
@@ -161,7 +161,7 @@ $$
 
 ![](img/memory_chat.png)
 
-- Kernel 的主要瓶颈是 **`Stall Long Scoreboard`**——即**内存延迟停顿**。GPU 隐藏这种“等待”的唯一机制，就是 **Occupancy (占用率)**
+- Kernel 的主要瓶颈是 **`Stall Long Scoreboard`**——即**内存延迟停顿**。GPU 隐藏这种**延迟等待**的机制，就是通过调度多个 ready 的 warp，所有保持一个高的**Occupancy (占用率)**很重要
 
 ## Optimization V1 -- vectorized access
 
@@ -234,11 +234,11 @@ __global__ void elementwise_add_f16_kernel(half *a, half *b, half *c, int N) {
 
 - **FP32 + float4 (Baseline):**
 
-  - 每个线程一条指令搬运：$4 \\times 4 \\text{ Bytes} = \\mathbf{16 \\text{ Bytes}}$。
+  - 每个线程一条指令搬运：$4 \times 4 \text{ Bytes} = \mathbf{16 \text{ Bytes}}$。
 
 - **FP16 (Current):**
 
-  - 每个线程一条指令搬运：$\\mathbf{2 \\text{ Bytes}}$。单次请求太小了。
+  - 每个线程一条指令搬运：$\mathbf{2 \text{ Bytes}}$。单次请求太小了。
   - **后果：**
     1. **LSU 拥堵：** 发射指令的频率太高，LSU 处理不过来。
     1. **Sector 浪费：** 显存传输最小单位是 32 Bytes。如果你没做好合并访问（Coalescing），每次为了拿 2 Bytes 都要动用 32 Bytes 的带宽，**有效带宽（Effective Bandwidth）** 就会很低。
@@ -249,7 +249,7 @@ __global__ void elementwise_add_f16_kernel(half *a, half *b, half *c, int N) {
 
 ### 优化
 
-- 一次取 $\\mathbf{16 \\text{ Bytes}}$ 数据
+- 一次取 $\mathbf{16 \text{ Bytes}}$ 数据
 
 ```cpp
 __global__ void elementwise_add_f16x8_kernel(const half *a, const half *b, half *c, int n) {
@@ -277,11 +277,11 @@ __global__ void elementwise_add_f16x8_kernel(const half *a, const half *b, half 
 
 ### 分析
 
-- **数据量：** $1M \\text{ elements} \\times 3 \\text{ arrays} \\times 2 \\text{ Bytes} = \\mathbf{6 \\text{ MB}}$。
-- **耗时：** $8.96 \\mu s$。
+- **数据量：** $1M \text{ elements} \times 3 \text{ arrays} \times 2 \text{ Bytes} = \mathbf{6 \text{ MB}}$。
+- **耗时：** $8.96 \mu s$。
 - 理论有效带宽：
-  $$\\frac{6 \\text{ MB}}{8.96 \\mu s} = 0.669 \\text{ TB/s} \\approx \\mathbf{670 \\text{ GB/s}}$$
-- **利用率：** $670 / 912 \\approx \\mathbf{73%}$。
+  $$\frac{6 \text{ MB}}{8.96 \mu s} = 0.669 \text{ TB/s} \approx \mathbf{670 \text{ GB/s}}$$
+- **利用率：** $670 / 912 \approx \mathbf{73\%}$。
 
 #### 为什么没有达到 FP32 \* 4 的 Memory Throughput 呢？
 
@@ -295,9 +295,9 @@ __global__ void elementwise_add_f16x8_kernel(const half *a, const half *b, half 
 - **FP16 场景:**
   - 总搬运量 6MB。
   - 耗时 **8.96μs**。
-  - **结果：** Nsight Compute 统计的是**整个生命周期的平均带宽**。因为“满载”的时间段变短了，固定的“延迟”时间段占比变大了，导致平均带宽被拉低了。
+  - **结果：** Nsight Compute 统计的是**整个生命周期的平均带宽**。因为“满载”的时间段变短了，固定的延迟时间段占比变大了，导致平均带宽被拉低了。
 
-#### 验证
+**验证**
 
 验证 10 M 的 vector add，结果：
 
@@ -342,8 +342,8 @@ vector add 算子是一个典型的 memory-bound 的算子，我们需要尽可�
 
 - **原因：**
   - FP16 传输数据更少，读写这几百 KB 数据的**序列化延迟（Serialization Delay）** 差异正好就在微秒级别
-    - **FP32x4:** 需要搬运 $65536 \\times 4 \\text{B} \\times 3 \\approx \\mathbf{786 \\text{ KB}}$。
-    - **FP16x8:** 需要搬运 $65536 \\times 2 \\text{B} \\times 3 \\approx \\mathbf{393 \\text{ KB}}$。
+    - **FP32x4:** 需要搬运 $65536 \times 4 \text{B} \times 3 \approx \mathbf{786 \text{ KB}}$。
+    - **FP16x8:** 需要搬运 $65536 \times 2 \text{B} \times 3 \approx \mathbf{393 \text{ KB}}$。
 
 ### 阶段二：中等数据量区间
 

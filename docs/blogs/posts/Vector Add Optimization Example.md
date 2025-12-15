@@ -89,7 +89,7 @@ $$
 ### 优化
 
 - 矢量化内存访问：我们不再一次读取一个 float，而是同时取 4 个 float，**一个 wrap 里面的所有线程同时获取 4 float，可以变为 LDG.128 一次性获取 128 bit 数据**
-- ⚠ 这里有个 trade-off，如果我们每个 thread 使用了过多的寄存器，那么 SM 上活跃的 Warp 会变少，导致 Occupany 会下降，这同样对性能影响很大
+- :warning: 这里有个 trade-off，如果我们每个 thread 使用了过多的寄存器，那么 SM 上活跃的 Warp 会变少，导致 Occupany 会下降，这同样对性能影响很大
 
 ```cpp
 // ElementWise Add + Vec4
@@ -146,10 +146,10 @@ __global__ void elementwise_add_f16_kernel(half *a, half *b, half *c, int N) {
 ### 分析
 
 $$
-AI = \\frac{1 FLOPs}{2 * 3 Bytes} = 1/6 \\approx 0.17 FLOPs /Byte
+AI = \frac{1 FLOPs}{2 * 3 Bytes} = 1/6 \approx 0.17 FLOPs /Byte
 $$
 
-⚠ **fp16 计算的精度会比 fp32 低很多**，需要考虑应用的场景是否可以接受，测试发现基本精度在 0.2 以下
+:warning: **fp16 计算的精度会比 fp32 低很多**，需要考虑应用的场景是否可以接受，测试发现基本精度在 0.2 以下
 
 - **Memory Throughput 下降 (96%→71%)**：FP16 数据量只有 float 的一半，显存传输压力小。
 - **Compute Throughput 上升 (14%→22%)**：虽然数据变小，但 ALU 对 FP16 处理更快（部分架构可双发射或更高密度处理）。
@@ -179,7 +179,7 @@ __global__ void elementwise_add_f16x2_kernel(half *a, half *b, half *c, int N) {
 ### 分析
 
 $$
-AI = \\frac{2\*(\_hadd) FLOPs}{4 * 3 Bytes} = 1/6 \\approx 0.17 FLOPs /Byte
+AI = \frac{2*(_hadd) FLOPs}{4 * 3 Bytes} = 1/6 \approx 0.17 FLOPs /Byte
 $$
 
 - **执行时间继续下降**：13.41 μs → 11.17 μs
@@ -226,7 +226,7 @@ __global__ void elementwise_add_f16x8_pack_kernel(half *a, half *b, half *c, int
 ### 分析
 
 $$
-AI = \\frac{4\*(\_hadd2) FLOPs}{16 * 3 Bytes} = 1/6 \\approx 0.17 FLOPs /Byte
+AI = \frac{4*(_hadd2) FLOPs}{16 * 3 Bytes} = 1/6 \approx 0.17 FLOPs /Byte
 $$
 
 - 一次加载 128 bit 数据，减少内存事务数量，节省时间
@@ -243,7 +243,7 @@ vector add 算子是一个典型的 memory-bound 的算子，我们需要尽可�
 
 这个测试完美地展示了为什么 GPU 不适合处理“小任务”。
 
-- \*\*在 1K (N=1024) 时：CPU 获胜
+- 在 1K (N=1024) 时
 
   - CPU Time: **0.0030 ms**
 
@@ -251,7 +251,7 @@ vector add 算子是一个典型的 memory-bound 的算子，我们需要尽可�
 
   - **原因：** 调用一个 CUDA 内核（`__global__ void`）本身就有**固定的开销**（`Kernel Launch Overhead`），这个开销通常需要几个微秒 (microseconds)。对于 1K 这样的小问题，GPU 实际执行计算的时间（可能只有 1-2 微秒）远小于启动它所花费的时间（5-6 微秒）。CPU 直接在本地执行循环，没有任何启动开销，所以更快。
 
-- **在 1M (N=1048576) 时：GPU 完胜**
+- 在 1M (N=1048576) 时
 
   - CPU Time: **3.0058 ms**
   - GPU (最快): **0.0132 ms** (即 `GPU FP16 x2` 版本)
@@ -265,13 +265,13 @@ ______________________________________________________________________
 
 这个测试结果清楚地证明了这一点：
 
-- \*\*FP32 vs. FP16 (在 1M 数据集)
+-  FP32 vs. FP16 (在 1M 数据集)
 
   - `GPU Standard` (FP32): 0.0250 ms
 
   - `GPU FP16 Std`: 0.0163 ms
 
-- **原因：** FP32 内核需要移动的数据量是 $1M \\times (4+4+4) = 12 \\text{ MB}$。而 FP16 内核只需要移动 $1M \\times (2+2+2) = 6 \\text{ MB}$。
+- **原因：** FP32 内核需要移动的数据量是 $1M \times (4+4+4) = 12 \text{ MB}$。而 FP16 内核只需要移动 $1M \times (2+2+2) = 6 \text{ MB}$。
 
 - **数据量减半，性能几乎翻倍**（`0.0250 / 0.0163 = 1.53x` 加速）。这证实了瓶颈在内存，而不是计算。
 
@@ -321,9 +321,9 @@ Standard vs FP16x8_pack:  0.88x
 在最大的 1M 测试中，我们看 FP16 的各种实现：
 
 1. **`GPU FP16 x2`**: **0.0132 ms** (🏆)
-1. `GPU FP16 x8_pack`: 0.0158 ms
-1. `GPU FP16 x8`: 0.0161 ms
-1. `GPU FP16 Std`: 0.0163 ms
+2. `GPU FP16 x8_pack`: 0.0158 ms
+3. `GPU FP16 x8`: 0.0161 ms
+4. `GPU FP16 Std`: 0.0163 ms
 
 - **`FP16 Std` (1 线程/1 元素)** 是最慢的，因为它最朴素，每个线程只做了最少的工作，调度的开销相对最大。
 - **`FP16 x8` 和 `x8_pack` (1 线程/8 元素)** 表现更好，因为它们让每个线程做了更多工作，减少了总的调度开销并使用了向量化指令（如 Nsight 分析所示）。

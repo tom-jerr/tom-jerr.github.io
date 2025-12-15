@@ -3,8 +3,6 @@
 title: Page Attention
 created: 2025-10-30
 update:
-comments: true
-katex: true
 tags:
 
 - LLMInference
