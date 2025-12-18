@@ -5,7 +5,8 @@ created: 2025-11-02
 tags:
 
 - LLMInference
-
+description: 本文将深入解析 SGLang 的 KV Cache 实现细节，介绍其组件结构、工作原理以及在模型推理中的应用。
+cover: /img/sglang_cache.png
 ---
 
 # 从代码看 SGLang 的 KV Cache

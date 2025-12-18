@@ -3,6 +3,8 @@ title: 下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实�
 created: 2025-11-13
 tags:
   - Database
+description: 本篇主要介绍如何支持 Ann 索引和 Ann Search。
+cover: /img/create_ann_index_storaged.png
 ---
 
 # 下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路

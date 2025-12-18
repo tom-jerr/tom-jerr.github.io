@@ -3,6 +3,8 @@ title: 一步步实现 CUDA Vector Add 优化
 created: 2025-10-21
 tags:
   - LLMInference
+description: 本文将通过一个简单的 CUDA Vector Add 例子，介绍如何使用 Nsight Compute 工具进行性能分析，并一步步进行优化。
+cover: /img/vector_add_bench.png
 ---
 
 # 一步步实现 CUDA Vector Add 优化

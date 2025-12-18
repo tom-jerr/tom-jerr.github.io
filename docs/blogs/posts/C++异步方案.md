@@ -3,13 +3,11 @@
 title: The history of C++ Asynchronous Solutions
 created: 2025-06-10
 update:
-comments: true
-description: C++ 的异步执行方案历程
-katex: true
+description: C++ 的异步执行方案历史演进，从标准库的 Future 和 Promise，到 Folly 的扩展封装，再到 C++26 中的 std::execution 和协程的结合，详细介绍了各个方案的原理和使用方法。
 tags:
 
 - C++
-
+cover: /img/async.png
 ---
 
 # Key Concept

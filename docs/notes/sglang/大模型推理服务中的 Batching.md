@@ -3,6 +3,8 @@ title: 大模型推理服务中的 Batching
 tags:
   - LLMInference
 created: 2025-11-20
+description: 现在的大模型推理的框架基本都实现了 Continuous Batching，本文将从大模型推理服务为什么需要 Batching 开始，逐步讲解该领域的技术演进，包含调度层和计算层的相关优化技术。
+cover: /img/chunked_prefill.png
 include:
   - ai-summary
 ai-summary-config:

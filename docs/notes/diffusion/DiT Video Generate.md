@@ -295,3 +295,162 @@ def step(
 
 **multistep_uni_p_bh_update 函数**
 实际上是上述 UniP 公式的实现
+
+
+### 推理过程中 shape 的变化
+
+#### Unpatchify（反切片）
+
+将 Transformer 输出的扁平序列还原为 5D 视频张量 `(B, C_out, F, H, W)`
+
+| 符号 | 含义 |
+| --- | --- |
+| B | Batch Size |
+| L | 序列长度 `= F' × H' × W'` |
+| D | 隐藏维度（inner_dim） |
+| C_out | 输出通道数 |
+| F', H', W' | Patch 后的时间、高、宽维度 |
+| p_t, p_h, p_w | Patch 尺寸 |
+
+1. **输入**  
+   `hidden_states: [B, L, D]`
+
+2. `proj_out` 线性映射  
+   把 `D` → `C_out × p_t × p_h × p_w`  
+   输出形状：`[B, L, C_out * p_t * p_h * p_w]`
+
+3. `reshape`  
+   将 `L` 拆回 `(F', H', W')`，并把像素段拆回 `(p_t, p_h, p_w, C_out)`  
+   形状：`[B, F', H', W', p_t, p_h, p_w, C_out]`
+
+4. `permute(0, 7, 1, 4, 2, 5, 3, 6)`  
+   维度顺序变为：  
+   `B, C_out, F', p_t, H', p_h, W', p_w`
+
+5. 逐级 `flatten`  
+   - `flatten(6, 7)` → 合并 `W'` 与 `p_w` 得原始宽度 `W`  
+   - `flatten(4, 5)` → 合并 `H'` 与 `p_h` 得原始高度 `H`  
+   - `flatten(2, 3)` → 合并 `F'` 与 `p_t` 得原始帧数 `F`
+
+6. **最终结果**  
+   `output: [B, C_out, F, H, W]`
+
+#### Latent Prepare
+**ImageVAEEncodingStage:**
+
+把参考图视作视频的首帧条件，将参考图 + 补零帧一起进行 VAE 编码，这样得到的 latent 在时间维度上是对齐的。
+
+编码后会做后处理，我们显式构造一个**首帧条件 mask**，并将其作为 per-token condition feature 拼接到 latent token 的特征向量中。
+- 压缩原始视频到 latent 空间：原始视频帧数 $T$ 会被压缩为潜在时间长度 $T_{lat} = \frac{T + r - 1}{r}$，同时Height/Width 也会被压缩到原来的 $\frac{1}{s_h}$和 $\frac{1}{s_w}$
+
+- 增加首帧图片条件约束：该 mask 指示每个 压缩时间 token 是否应受到首帧条件的强约束，从而使后续的 DiT 能在不改变 token 序列结构的前提下，区分 **conditioned tokens（首帧相关） 与 unconditioned tokens（自由生成）**。
+  - 原始 token 表示  
+  $$x_{t,h,w} \in \mathbb{R}^{C_{\text{lat}}}$$
+  - 增强后的 token 表示  
+  $$\tilde{x}_{t,h,w} = [x_{t,h,w};\; c_t] \in \mathbb{R}^{C_{\text{lat}}+r}$$
+    其中 $c_t \in \{0,1\}^r$
+    - 对于 $t=0$: $c_0 = (1,1,\dots ,1)$
+    - 对于 $t>0$: $c_t = (0,0,\dots ,0)$
+
+
+
+#### DiT
+Video DiT/Transformer 看到的输入，本质是一个 token 序列，latent 是 5D 向量：
+
+$$
+\text{latent} \in \mathbb{R}^{B \times C_{\text{lat}} \times X \times H \times W}
+$$
+
+真正进 Transformer 之前，会被 patchify 成：
+
+$$
+\underbrace{\mathbb{R}^{B \times L \times D}}_{\text{token 序列}}
+$$
+其中最常见的做法是把 $(X,H,W)$ 展开成 token 数：
+
+- **token 数**：  
+  $
+  L = X \cdot H \cdot W \quad (\text{或再乘 patch 分块因子})
+  $
+
+- **token 维度**：  
+  $D$ 通常来自通道维 $C$（再经过线性映射）
+
+
+对于每个位置 $(t,h,w)$，有一个 token 向量：
+
+$$
+x_{t,h,w} \in \mathbb{R}^{C_{\text{lat}}}
+$$
+
+Transformer 做的是让这些 token 互相注意力交互。
+
+
+
+### Wan Animate 接入 SGLang Diffusion
+| 特性 | Wan 2.1 (T2V/I2V) | Wan Animate |
+| --- | --- | --- |
+| 目标 | 生成一个短视频片段 (如 5s) | 根据长姿态生成任意长度视频 |
+| 生成方式 | One-shot (一次性) | Autoregressive (分段接力) |
+| 循环结构 | 只有 Denoising 循环 | Segment 循环嵌套 Denoising 循环 |
+| 条件输入 | 文本/首帧图片 | 文本/首帧 + Pose序列 + 上一段视频尾部 |
+| 显存占用 | 固定 (取决于预设帧数) | 固定 (取决于分段长度 segment_frame_length) |
+
+#### 方案
+
+方案 A（更干净）：改 PipelineExecutor，支持 segment micro-batch + 重放 + merge
+
+核心思想：把“外层 segment 循环”从某个 stage 里拿出来，交给 executor 做“控制流”。stage 仍保持“处理一个 Req → 返回一个 Req”的纯函数式风格，但 executor 能把同一个请求拆成多个 segment 子请求，跑一段 stage 子图，然后把结果 merge 回主请求。
+
+新增的抽象（建议最小集合）
+SegmenterStage（或叫 SegmentPlanStage）
+输入主 Req，输出一个“segment 计划/列表”，本质是 List[Req]（每个元素是一个 segment micro-batch），以及一个可选的 merge_context。
+例如：按 start/end 切 pose_video[:, :, start:end] / face_video[:, :, start:end]，为每段设置 batch.is_segment=True、batch.num_frames=segment_frame_length、batch.extra["segment"]={start,end,idx,...}。
+MergerStage（或叫 SegmentMergeStage）
+输入 List[Req]（每段已完成 denoise/decode 的结果）+ 主 Req，输出合并后的主 Req：拼接 out_frames/latents，更新 prev_segment_cond_*，写最终 batch.output。
+executor 怎么执行（一个典型编排）
+把 pipeline 的 stage 列表切成三段：
+前置一次：[input_validation, text/image encoding, conditioning, timestep prep, ...]
+segment 内重放：[latent prep(每段), prev_segment_cond prep(每段), pose prep(每段), denoising(每段), decoding(每段)]
+末端一次：[merge, save]
+伪代码示意（关键点是 executor 负责重放）：
+
+并行/分布式要点（这也是它“更干净”的价值）
+CFG parallel / SP parallel 的 barrier 与通信：现在 ParallelExecutor 每个 stage 都知道自己的 parallelism_type，executor 在 stage 边界做 barrier/broadcast。
+改造后，重放仍然是“按 stage 边界”执行，所以通信语义不变；你只是在 executor 多套了一层“循环”，不会把 barrier 藏进某个 stage 的 forward() 里（这点对正确性和可维护性很关键）。
+段间依赖（prev_segment_cond_*)：可以通过两种方式传递
+方式 1（推荐）：executor 在跑每个 segment 前，把上一段的 prev_segment_cond_* 写入下一段的 Req（显式、可测）。
+方式 2：在 MergerStage 里一次性算出所有段需要的 prev 信息（通常做不到，因为它依赖上一段的输出）。
+profile/timings：仍能在 stage 级别计时；还能自然得到 per-segment 的分解数据（比把循环藏在 stage 里更好观测）。
+优缺点
+优点
+真正“pipeline 图可组合”：segment 内要不要 decode、要不要额外 stage（如背景/mask replace）都能在列表层面拼装。
+分布式语义清晰：barrier/broadcast 不会被埋进某个大 stage，后续更好做并行优化（并行跑多个 segment、pipeline parallel 等）。
+更容易做“跳过某些 stage 的重放”（比如 timesteps 与 prompt encoding 不必每段重复）。
+代价
+需要改 PipelineExecutor 的接口与实现：从 execute(stages, batch)->batch 变成能处理 [Union[Req, List[Req]]](http://vscodecontentref/21) 或引入显式的 segment 执行模式。
+需要定义清楚“哪些 stage 在 segment 内重放、哪些只跑一次”的边界；并保证 Req 字段在复制/切片时不会引入共享可变引用（尤其是 tensor 的 view/clone 策略）。
+方案 B（最小侵入）：新增 SegmentLoopStage，在 stage 内部自己 for-loop + 调用 DenoisingStage
+
+核心思想：pipeline 列表不变或变化很小；新增一个 stage 把外层 for segment in ... 藏在 forward() 里，循环里直接调用“每段需要的逻辑”（可直接复用 DenoisingStage 实例或抽一个函数）。
+
+怎么落地
+SegmentLoopStage.forward(batch)：
+先根据 batch 计算 num_segments/start/end
+每段：切 pose/face/background/mask，准备 prev_segment_cond_video/latents，然后调用 denoise + decode，得到 out_frames，再更新下一段的 prev
+最后拼接所有段的输出写回 batch.output
+优缺点
+优点
+改动范围小：不动 executor、不引入新执行模型，最快能跑起来。
+对“只服务一个特定 pipeline（WanAnimate）”的短期目标很实用。
+代价 / 风险（通常是后期痛点）
+分布式语义容易变糊：现在 executor 的 barrier/broadcast 是按 stage 做的；你把循环塞进一个 stage，就等于把“多次 denoise/decode”塞进一次 barrier 区间里。
+如果内部还需要 CFG/SP 同步，很容易出现“有的 rank 在循环里走了不同分支/不同次数”的隐患（尤其是 error handling、interrupt、动态跳步）。
+可观测性差：profiling/timings 只能看到一个大 stage，很难分辨每段、每个子步骤耗时。
+可复用性差：将来想把“segment 内部”再拆成可插拔 stage（比如替换不同的 prev-segment 生成策略、不同的 stitch 策略）会很难，因为控制流已经硬编码在一个 stage 里。
+测试粒度粗：很难单测“segmenter/merger”这种逻辑单元。
+怎么选（经验判断）
+
+你现在的目标是“真正两个 stage 都在 pipeline 列表里、executor 驱动重放并 merge”——那就选方案 A；它的工程复杂度更高，但会把段式 video diffusion 变成平台能力。
+如果你只是想尽快把 WanAnimate 跑通、短期不考虑通用化/分布式鲁棒性/可观测性，方案 B 会更快。
+如果你愿意，我可以基于当前仓库的 ParallelExecutor 直接给出一个具体改造草案（新增 SegmenterStage/MergerStage 的最小接口、executor 如何识别“segment 子图边界”、以及 Req.extra["segment"] 的字段约定），这样你们可以按 PR 颗粒度逐步合入。

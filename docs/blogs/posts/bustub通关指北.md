@@ -3,9 +3,9 @@
 title: Bustub 通关指北
 created: 2025-06-23
 update:
-comments: true
-description: Bustub 通关指北
-katex: true
+
+description: Bustub 通关指北，带你快速了解 Bustub 的核心组件和实现细节，包括 Parser、Planner、Optimizer、Executor 以及 Storage 模块的工作原理。
+cover: /img/bustub.svg
 tags:
 
 - Database

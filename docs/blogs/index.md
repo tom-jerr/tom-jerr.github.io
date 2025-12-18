@@ -5,16 +5,8 @@ nostatistics: true
 
 # Blogs ✍
 
-!!! note "Abstract"
-个人博客，主要记录
-
-    - 在 Database 和Distributed System 相关方面的学习；
-    - 一些感兴趣论文的阅读。；
-    - 一些杂谈。
-
-    一些比较成体系的笔记会记录在 [Notes](../notes/index.md) 中。
-
-    本部分内容（除特别声明外）采用 [**署名-非商业性使用-保持一致 4.0 国际 (CC BY-NC-SA 4.0)**](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可协议进行许可。
+> [!NOTE]
+> 个人博客文章汇总，按时间倒序排列
 
 ## Archives :material-archive:
 

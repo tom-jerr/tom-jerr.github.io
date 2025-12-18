@@ -3,6 +3,8 @@ title: RadixAttention 你需要知道的细节
 tags:
   - LLMInference
 created: 2025/11/24
+description: 本文深入探讨 SGLang 中 RadixAttention 的实现细节，涵盖 Radix Tree 结构、前缀匹配、内存管理与驱逐策略，以及 Cache-Aware Scheduling 的工作原理。
+cover: /img/radixattention.jpg
 ---
 
 # RadixAttention 你需要知道的细节

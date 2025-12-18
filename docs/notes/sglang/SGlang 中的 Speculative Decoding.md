@@ -3,6 +3,8 @@ title: SGlang 中的 Sepeculative Decoding
 tags:
   - LLMInference
 created: 2025/11/4
+description: 介绍 SGLang 中 Speculative Decoding 的原理及其实现
+cover: /img/spec_decoding.png
 ---
 
 # SGlang 中的 Sepeculative Decoding

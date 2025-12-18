@@ -28,6 +28,10 @@ contact me: tomlzy213@gmail.com
 
 </h3>
 
+<div style="text-align: center; margin: 1.25rem 0;">
+  <img src="/img/me.png" alt="photo" style="max-width: 900px; width: 50%; height: auto; border-radius: .25rem;" />
+</div>
+
 
 
 <span style="display: block; text-align: center; font-size: 18px;">

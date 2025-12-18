@@ -69,6 +69,7 @@ plugins:
         - notes/sglang
         - notes/llm_inference
         - notes/cuda
+      template: blog-card-cover.html
       show_total: true
       features:
         tags:
@@ -347,18 +348,18 @@ nav:
           - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
   - Blogs:
       - index: blogs/index.md
-      - Diffusion Model:
-        - DiT Generate Model in SGLang: notes/diffusion/DiT Video Generate.md
-        - Masked Diffusion Model: notes/diffusion/Masked Diffusion LLM.md
+      # - Diffusion Model:
+        # - DiT Generate Model in SGLang: notes/diffusion/DiT Video Generate.md
+        # - Masked Diffusion Model: notes/diffusion/Masked Diffusion LLM.md
       - SGLang 专题:
           - 一条 Request 在 SGLang 的前世今生: notes/sglang/一条 Request 在 SGLang 的前世今生.md
           - SGLang Schedular 技术变迁: notes/sglang/SGLang Scheduler 技术变迁.md
-          - SGLang Scheduler Evolution: notes/sglang/SGLang Scheduler Evolution.md
+          # - SGLang Scheduler Evolution: notes/sglang/SGLang Scheduler Evolution.md
           - RadixAttention 你需要知道的细节: notes/sglang/RadixAttention 你需要知道的全部细节.md
           - SGLang 中的 TP + PP 流程浅析(以 Qwen2 为例): notes/sgalng/SGLang 中的 TP + PP.md
-          - 从代码看 SGLang 的 KV Cache: blogs/posts/从代码看 SGLang 的 KV Cache.md
-          - 🚧 DP Attention: notes/sglang/DP Attention.md
-          - 🚧 SGLang 中的 Speculative Decoding: notes/sglang/SGlang 中的 Speculative Decoding.md
+          - 从代码看 SGLang 的 KV Cache: notes/sglang/从代码看 SGLang 的 KV Cache.md
+          # - 🚧 DP Attention: notes/sglang/DP Attention.md
+          # - 🚧 SGLang 中的 Speculative Decoding: notes/sglang/SGlang 中的 Speculative Decoding.md
       - LLM Basic Concepts:
           - Attention & Transformers: notes/llm_inference/attention&transformer.md
           - Transformer-Based LLM Architecture: notes/llm_inference/transformerbasedllm.md
@@ -371,17 +372,17 @@ nav:
           - 大模型推理服务中的 Batching: notes/sglang/大模型推理服务中的 Batching.md
       - CUDA:
           - 从 GEMM 实践 CUDA 优化: notes/cuda/从GEMM实践CUDA优化.md
-          - GPU 内存系统演进: notes/cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md
+          # - GPU 内存系统演进: notes/cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md
           - CUDA Optimization for LLM Inference: notes/cuda/cudaopt.md
-          - Vector Add Optimization Example: blogs/posts/Vector Add Optimization Example.md
+          - Vector Add Optimization Example: notes/cuda/Vector Add Optimization Example.md
       - 上篇：初识 Nebula Graph —— 向量类型支持: blogs/posts/上篇：初识 Nebula Graph —— 向量类型支持.md
       - 中篇：Vector 类型的 DDL & DML 适配: blogs/posts/中篇：Vector 类型的 DDL&DML 适配.md
       - 下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路: blogs/posts/下篇：向量索引与相似度搜索 —— Nebula Graph 的 ANN 实现之路.md
-      - bision debug: blogs/posts/bision debug.md
+      # - bision debug: blogs/posts/bision debug.md
       - C++ 异步方案演进: blogs/posts/C++异步方案.md
       - Bustub 通关指北: blogs/posts/bustub通关指北.md
       - 并发组件实现浅析: blogs/posts/Implement of Concurrent.md
-      - 实现一个TCP: blogs/posts/CS144.md
+      # - 实现一个TCP: blogs/posts/CS144.md
   - Summaries:
       - index: summary/index.md
       - "研一上总结": summary/研究生总结/研一上总结.md

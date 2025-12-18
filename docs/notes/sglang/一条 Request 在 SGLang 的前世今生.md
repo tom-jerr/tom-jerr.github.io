@@ -3,7 +3,8 @@ title: 一条 Request 在 SGLang 的前世今生
 tags:
   - LLMInference
 created: 2025-11-25
-
+description: 本文将介绍在 SGLang 中，一条请求从到达系统到最终完成的全过程，涵盖请求的接收、调度、执行以及结果返回等关键环节。
+cover: /img/Scheduler.png
 include:
   - ai-summary
 ai-summary-config:

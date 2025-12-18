@@ -3,9 +3,12 @@ title: SGLang Scheduler 技术变迁
 created: 2025-10-28
 tags:
   - LLMInference
+description: 本文将结合代码分析 SGLang Scheduler 的技术演进，介绍其核心数据结构和工作流程，帮助读者深入理解调度器的实现细节。
+cover: /img/lazy_sampling.png
 ---
 
 # SGLang Scheduler 技术变迁
+[English Version](./SGLang%20Scheduler%20Evolution.md)
 
 - 最开始的 Scheduler 中 CPU 和 GPU 是串行的，导致 GPU 的大量空闲
 - 后面的 Scheduler 允许 CPU 和 GPU overlap，实现了 zero overhead scheduler

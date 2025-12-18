@@ -3,6 +3,8 @@ title: 从 GEMM 实践 CUDA 优化
 created: 2025-12-8
 tags:
   - LLMInference
+description: 本文将从最 naive 的 GEMM 实现开始，使用 nsight compute 工具进行性能分析寻找瓶颈并一步步进行优化。通过这种方式来实践 CUDA 中的各种优化技巧，包括 Tiling、Free Bank Conflict、Double Buffer、wmma 指令优化等。
+cover: /img/gemm_benchmark_line.png
 ---
 
 # 从 GEMM 实践 CUDA 优化

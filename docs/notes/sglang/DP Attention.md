@@ -3,6 +3,7 @@ title: Data Parallelism in Attention in SGLang
 created: 2025-10-27
 tags:
   - LLMInference
+description: 本文介绍 SGLang 中 Attention 层的数据并行（DP Attention）机制，涵盖其设计理念、实现细节及执行流程，旨在提升模型推理的效率和性能。
 ---
 
 # Data Parallelism in Attention in SGLang

@@ -3,6 +3,8 @@ title: SGLang 中的 TP + PP 流程浅析(以 Qwen2 为例)
 tags:
   - LLMInference
 created: 2025/11/22
+description: 这里我们以 Qwen2 模型为例，开启 PP + TP 分析一下 SGLang 是如何实现模型推理的并行的
+# cover: /img/sglang_tp_pp.png
 ---
 
 # SGLang 中的 TP + PP 流程浅析(以 Qwen2 为例)

@@ -6,6 +6,8 @@ tags:
 - LLMInference
 created: 2025-11-03
 updated: 2025-12-13
+description: 本文详细介绍 FlashAttention 的原理及其 v1 和 v2 版本的改进点，涵盖 Online Softmax、分块计算以及并行化优化等关键技术。
+cover: /img/parallelization_kv.gif
 ---
 
 # FlashAttention 原理 v1-v2

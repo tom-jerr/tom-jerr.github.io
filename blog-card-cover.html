@@ -1,0 +1,77 @@
+{#
+  Custom blog index entry template for mkdocs-blogging-plugin.
+  - Extends the built-in card theme
+  - Adds optional cover image from page meta: `cover` (or `image` as fallback)
+
+  Usage in markdown front-matter:
+  ---
+  title: ...
+  description: ...
+  cover: img/cover.png        # relative to the post URL
+  # or cover: /assets/...     # absolute to site root
+  # or cover: https://...     # external
+  ---
+#}
+
+{% extends "blog-card-theme.html" %}
+
+{% macro render_blog(title, description, time, url, page) -%}
+{% set cover = (page.meta.get("cover") if page and page.meta else none) %}
+{% if not cover %}
+  {% set cover = (page.meta.get("image") if page and page.meta else none) %}
+{% endif %}
+
+{% if cover %}
+  {% set cover_str = cover|string %}
+  {% if cover_str.startswith("http://") or cover_str.startswith("https://") or cover_str.startswith("/") %}
+    {% set cover_url = cover_str %}
+  {% else %}
+    {# Treat as relative to the post URL (which typically ends with '/'). #}
+    {% set cover_url = url ~ cover_str %}
+  {% endif %}
+{% endif %}
+
+<div class="card blog-post">
+  {% if cover %}
+    <a class="blog-post-cover" href="{{ url }}" aria-label="{{ title|e }}">
+      <img src="{{ cover_url }}" alt="{{ title|e }}" loading="lazy" />
+    </a>
+  {% endif %}
+
+  <div class="card-header blog-post-title blog-post-title--center">
+    <a href="{{ url }}" class="link">{{ title }}</a>
+  </div>
+
+  <div class="card-body">
+    {{ caller() }}
+
+    {% if description %}
+      <p class="blog-post-description">{{ description }}</p>
+    {% endif %}
+
+    <div class="blog-post-extra">{{ time }}</div>
+  </div>
+</div>
+{%- endmacro %}
+
+{% block style %}
+  {{ super() }}
+  <style>
+    .md-typeset .blog-post-cover {
+      display: block;
+      margin: 0;
+      border-radius: .25rem;
+      overflow: hidden;
+    }
+
+    .md-typeset .blog-post-cover img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .md-typeset .blog-post-title--center {
+      text-align: center;
+    }
+  </style>
+{% endblock %}

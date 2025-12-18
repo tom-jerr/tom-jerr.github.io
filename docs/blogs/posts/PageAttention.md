@@ -6,7 +6,8 @@ update:
 tags:
 
 - LLMInference
-
+description: 本文深入探讨 Page Attention 的实现细节，涵盖 GPU Tiling、矢量化访问、分层计算结构以及注意力内核的具体实现过程，帮助读者理解其高效计算注意力机制的原理。
+cover: /img/page_attention.png
 ---
 
 # Page Attention

@@ -8,7 +8,7 @@ katex: true
 tags:
 
 - LLMInference
-
+description: 本文介绍了不同神经网络架构（如 MLP、CNN、RNN 和 Transformer）对计算模式的影响，探讨了这些模式如何映射到计算机系统资源，包括内存访问模式、计算特性、数据移动和资源利用。
 ---
 
 # Introduction

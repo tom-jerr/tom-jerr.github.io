@@ -4,6 +4,8 @@ created: 2025-09-18
 updated: 2025-12-13
 tags:
   - LLMInference
+description: 本节主要介绍大模型训练中的并行化技术，涵盖数据并行、模型并行、流水线并行和张量并行等方法。我们将从 Transformer 的参数量、Flops 以及训练占用显存入手，分析为什么需要并行化技术，并介绍这些技术的基本原理。
+cover: /img/parallelism_in_training.png
 ---
 
 # Parallelization Concepts

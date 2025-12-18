@@ -3,6 +3,8 @@ title: torch.compile 原理和实践
 tags:
   - LLMInference
 created: 2025-12-12
+description: 介绍 torch.compile 的原理和在大模型推理中的实践应用
+cover: /img/torch_compile.png
 ---
 
 # torch.compile 原理和实践

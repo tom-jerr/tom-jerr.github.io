@@ -4,6 +4,8 @@ created: 2025-10-05
 updated: 2025-12-13
 tags:
   - LLMInference
+description: 本章介绍基于 Transformer 架构的大规模语言模型（LLM），涵盖其核心组件如位置编码、注意力机制、归一化方法和前馈网络。
+cover: /img/llm.png
 ---
 
 # Transformer-based LLM

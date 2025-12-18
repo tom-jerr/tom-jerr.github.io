@@ -6,7 +6,8 @@ updated: 2025-12-12
 tags:
 
 - LLMInference
-
+description: 介绍注意力机制（Attention）及其在 Transformer 架构中的应用，涵盖传统 self-attention、Multi-Head Attention、Multi-Query Attention 以及 Group-Query Attention 的原理和区别，并详细解析 Transformer 的结构和工作流程。
+cover: /img/transformer.png
 ---
 
 # Attention & Transformers

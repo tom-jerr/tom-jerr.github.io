@@ -5,6 +5,7 @@ created: 2025-06-24
 tags:
 
 - Database
+description: 本文介绍如何在使用 Bison 进行语法分析时进行冲突查看和调试，帮助开发者更好地理解和解决语法规则中的问题。
 
 ---
 

@@ -3,6 +3,8 @@ title: 上篇：初识 Nebula Graph —— 向量类型支持
 created: 2025-10-28
 tags:
   - Database
+description: 本篇文章介绍了 Nebula Graph 向量类型的设计与实现，涵盖向量数据类型的定义、序列化与反序列化方法，以及向量属性的存储结构和存储引擎的改动。
+cover: /img/exec.png
 ---
 
 # 上篇：初识 Nebula Graph —— 向量类型支持

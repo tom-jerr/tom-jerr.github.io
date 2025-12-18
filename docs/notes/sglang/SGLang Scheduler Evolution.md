@@ -3,6 +3,10 @@ title: Evolution of SGLang Scheduler
 created: 2025-11-21
 tags:
   - LLMInference
+hide:
+   - date
+   - navigation
+   - toc
 ---
 
 # Evolution of SGLang Scheduler
