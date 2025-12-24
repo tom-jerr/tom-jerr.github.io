@@ -16,9 +16,9 @@ comments: false
 
 :fontawesome-solid-inbox: 个人邮箱: [tomlzy213 [at] gmail [dot] com](mailto:tomlzy213@gmail.com)
 
-:material-file: 旧版简历: [点击查看](assets/CV_zh.pdf)
+<!-- :material-file: 旧版简历: [点击查看](assets/CV_zh.pdf) -->
 
-:material-file: 新版简历: :construction:
+:material-file: 简历: : [点击查看](assets/lzycv.pdf)
 
 <span style=font-size:2em;">[:fontawesome-brands-github:](https://github.com/tom-jerr/) [:fontawesome-brands-x-twitter:](https://x.com/tom_jerry_jack) [:fontawesome-brands-zhihu:](https://www.zhihu.com/people/chen-wen-de-jian-ke)</span>
 
