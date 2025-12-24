@@ -13,6 +13,7 @@ icon: /fontawesome/solid/face-smile-wink
     我对大模型推理，CUDA，分布式系统、数据库等领域很有热情，也喜欢分享自己的学习经验和思考🤓。如果感兴趣，可以看看我的 notes 和 blog，也许会找到一些对你有帮助的内容。
 
     想了解我的经历？可以查看我的[主页🎓](../academy.md)。
+    或者查看我的[简历📄](../assets/lzycv.pdf)。
 
     ---
 
@@ -37,6 +38,7 @@ icon: /fontawesome/solid/face-smile-wink
     I am passionate about LLM Inference, CUDA, Distributed System and Database, and I enjoy sharing my learning experiences and insights🤓. You can check out my notes and blogs (both in Chinese) for useful resources.
 
     For more details, please visit my [page 🎓](../academy.md).
+    Or check out my [CV 📄](../assets/lzycv.pdf).
 
     ---
 
@@ -51,6 +53,6 @@ icon: /fontawesome/solid/face-smile-wink
 
     In my spare time, I enjoy listening to music, watching anime, and reading. Occasionally, I write about these hobbies on my blog to share my thoughts✍.
 
-=== "Acadamy Page 🎓"
+<!-- === "Acadamy Page 🎓"
 
-    欢迎访问我的[主页🎓](../academy.md)，了解我的教育背景、项目经验和技能专长。如果你对我的经历感兴趣，或者想进一步交流，欢迎随时联系我！
+    欢迎访问我的[主页🎓](../academy.md)，了解我的教育背景、项目经验和技能专长。如果你对我的经历感兴趣，或者想进一步交流，欢迎随时联系我！ -->
