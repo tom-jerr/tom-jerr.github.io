@@ -6,3 +6,4 @@ TaskNotes/
 .ai_cache
 docs/assets
 _ai_summary*.json
+.python

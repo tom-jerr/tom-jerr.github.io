@@ -69,6 +69,7 @@ plugins:
         - notes/sglang
         - notes/llm_inference
         - notes/cuda
+        - feishu
       template: blog-card-cover.html
       show_total: true
       features:
@@ -89,12 +90,12 @@ plugins:
       use_material_social_cards: false
   - search
   - document-dates:
-      position: top            # Display position: top(after title) bottom(end of document), default: top
-      type: date               # Date type: date datetime timeago, default: date
-      exclude:                 # List of excluded files
-        - temp.md                  # Example: exclude the specified file
-        - blog/*                   # Example: exclude all files in blog folder, including subfolders
-        - index.md                    # 排除 index.md 文件
+      position: top # Display position: top(after title) bottom(end of document), default: top
+      type: date # Date type: date datetime timeago, default: date
+      exclude: # List of excluded files
+        - temp.md # Example: exclude the specified file
+        - blog/* # Example: exclude all files in blog folder, including subfolders
+        - index.md # 排除 index.md 文件
         - academy.md
         - links.md
         - changelog.md
@@ -349,9 +350,10 @@ nav:
   - Blogs:
       - index: blogs/index.md
       # - Diffusion Model:
-        # - DiT Generate Model in SGLang: notes/diffusion/DiT Video Generate.md
-        # - Masked Diffusion Model: notes/diffusion/Masked Diffusion LLM.md
+      # - DiT Generate Model in SGLang: notes/diffusion/DiT Video Generate.md
+      # - Masked Diffusion Model: notes/diffusion/Masked Diffusion LLM.md
       - SGLang 专题:
+          - PD Disaggregation in SGLang: feishu/PD Disaggregation in SGLang.md
           - 一条 Request 在 SGLang 的前世今生: notes/sglang/一条 Request 在 SGLang 的前世今生.md
           - SGLang Schedular 技术变迁: notes/sglang/SGLang Scheduler 技术变迁.md
           # - SGLang Scheduler Evolution: notes/sglang/SGLang Scheduler Evolution.md
