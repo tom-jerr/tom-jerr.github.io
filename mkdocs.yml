@@ -354,6 +354,7 @@ nav:
       # - Masked Diffusion Model: notes/diffusion/Masked Diffusion LLM.md
       - SGLang 专题:
           - PD Disaggregation in SGLang: feishu/PD Disaggregation in SGLang.md
+          - EAGLE2 in SGLang: feishu/Eagle2 in SGLang.md
           - 一条 Request 在 SGLang 的前世今生: notes/sglang/一条 Request 在 SGLang 的前世今生.md
           - SGLang Schedular 技术变迁: notes/sglang/SGLang Scheduler 技术变迁.md
           # - SGLang Scheduler Evolution: notes/sglang/SGLang Scheduler Evolution.md
