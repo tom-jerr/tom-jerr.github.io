@@ -631,13 +631,13 @@ SGLang 的推理过程主要分为以下四个阶段：
    - 从等待队列和 running_batch 中进行调度 (`Scheduler::get_batch_to_run()`)
      - Prefill 中涉及 Radix Tree 和最长前缀匹配（Longest Prefix Matching）算法。(`Req::init_next_round_input()`)
    - 为每个请求分配 Token 所需的内存资源。(`ScheduleBatch::prepare_for_extend()` & `ScheduleBatch::prepare_for_decode()`)
-1. **Compute batch：**
+2. **Compute batch：**
    - 将 batch 发送到 GPU 上进行一步（即 Continue Batch 的一个 iter）推理(`Scheduler::run_batch()`)
-1. **Sample：**
+3. **Sample：**
    - 根据模型输出的 Logit 进行采样，生成下一步的 Token。(`ModelRunner::sample()`)
 > [!WARNING]
 > 这里我们会应用 grammar 的 vocab mask 来确保采样的合法性，所以这里的采样会依赖模型的输出 Logits
-2. **Post schedule：**
+4. **Post schedule：**
    - 在一步推理完成后，动态检查请求是否满足结束条件（Check Finish Condition）。(`Scheduler::process_batch_result()`)
    - 将已完成的请求从批次中移除，并送入 Detokenizer 处理，最终将结果返回给前端。
 
@@ -656,6 +656,7 @@ Compute batch 和 Sample 这两个挨在一起的阶段是 GPU heavy 的，而 s
   - **这是由 CPU 侧调度逻辑保证的**
 - 我们需要在 Post Schedule 处理数据前对 CPU 和 GPU 做一个同步，保证可以处理到 CPU 的 `next_token_ids`
   - 我们**在 Post Schedule 中进行同步操作**，确保后续的处理可以正常运行且不影响 GPU 的流水线工作
+  - 更新 grammar 中状态机也在这个阶段，后续的 vocab mask 依赖这个步骤
     ```python
     def process_batch_result_decode(
             self: Scheduler,
@@ -669,8 +670,27 @@ Compute batch 和 Sample 这两个挨在一起的阶段是 GPU heavy 的，而 s
                 result.next_token_ids,
                 result.can_run_cuda_graph,
             )
-      next_token_ids = next_token_ids.tolist()
-      next_token_logprobs = logits_output.next_token_logprobs.tolist()
+              # 对每个 req 执行
+              if req.grammar is not None:
+                  # FIXME: this try-except block is for handling unexpected xgrammar issue.
+                  try:
+                      if batch.spec_algorithm.is_none():
+                          # Normal decode: single token
+                          req.grammar.accept_token(next_token_id)
+                      elif batch.is_spec_v2:
+                          # Speculative decode: next_token_id is a list of accepted tokens
+                          for token_id in next_token_id:
+                              req.grammar.accept_token(token_id)
+                  except ValueError as e:
+                      # Grammar accept_token can raise ValueError if the token is not in the grammar.
+                      # This can happen if the grammar is not set correctly or the token is invalid.
+                      logger.error(
+                          f"Grammar accept_token failed for req {req.rid} with token {next_token_id}: {e}"
+                      )
+                      self.abort_request(AbortReq(rid=req.rid))
+                  req.grammar.finished = req.finished()
+              next_token_ids = next_token_ids.tolist()
+              next_token_logprobs = logits_output.next_token_logprobs.tolist()
     ```
 
 ![](img/lazy_sampling.png)
@@ -807,6 +827,12 @@ with self.forward_stream_ctx:
 		model_worker_batch
 	)
 ```
+**vocab mask 依赖 grammar 的推进**
+由 CPU 侧调度逻辑保证，先处理 last batch 的 grammar 推进，然后根据 grammar 的状态生成本轮使用的 vocab mask
+
+**Sample 依赖 vocab mask**
+
+vocab mask 在 CPU 上分配和处理，这里是在 pinned memory 上分配的，我们通过异步拷贝拷贝到 GPU 上；所以这个依赖由 GPU 的 stream 保证顺序
 
 ### 与上一版 overlap 差异
 
@@ -823,7 +849,6 @@ with self.forward_stream_ctx:
 
 ##### CUDA stream 版本
 
-- 执行效率更高：`vocab_mask` 和 `token_ids_buf` 无 CPU-GPU 传输；充分利用 GPU 内存带宽
 - 延迟更低：`token_ids_buf` 直接在 GPU 上原地修改，不必反复传输
   - 与模型推理在同一设备上，便于流水线
 - 非模型占用显存大：`token_ids_buf` 占用 GPU 显存，开销固定
@@ -831,7 +856,7 @@ with self.forward_stream_ctx:
 ##### CPU launch 版本
 
 - 只有在使用时才占用 GPU 内存
-- 同步点增加：`vocab_mask` 会增加一次 CPU-GPU 同步
+- 同步点增加：`vocab_mask` 会增加一次 CPU-GPU 同步 (新版本使用的是异步拷贝)
   - CPU-GPU 同步会破坏流水线
 
 ## Reference

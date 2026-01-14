@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.2.9 Chrome/140.0.7339.249 Electron/38.7.2 Safari/537.36" version="29.2.9">
   <diagram name="第 1 页" id="5W9LDYfB34MqPqOQgma5">
-    <mxGraphModel dx="5271" dy="1814" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="4248" dy="1229" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -19,8 +19,8 @@
         <mxCell id="pC1JJ_T51gjZtwN1eGxU-36" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#ffe6cc;strokeColor=#d79b00;fontFamily=Times New Roman;fontSize=15;" value="" vertex="1">
           <mxGeometry height="347" width="320" x="-265" y="4184" as="geometry" />
         </mxCell>
-        <mxCell id="pC1JJ_T51gjZtwN1eGxU-7" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#ffe6cc;strokeColor=#d79b00;fontFamily=Times New Roman;fontSize=15;" value="0" vertex="1">
-          <mxGeometry height="412" width="320" x="167" y="4187" as="geometry" />
+        <mxCell id="pC1JJ_T51gjZtwN1eGxU-7" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#ffe6cc;strokeColor=#d79b00;fontFamily=Times New Roman;fontSize=15;" value="" vertex="1">
+          <mxGeometry height="412" width="320" x="170" y="4184" as="geometry" />
         </mxCell>
         <mxCell id="vUCgFglIrCBiRfFGcJWx-120" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=16;fillColor=#d5e8d4;strokeColor=#82b366;" value="" vertex="1">
           <mxGeometry height="80" width="120" x="-175" y="1363" as="geometry" />
@@ -1569,10 +1569,10 @@
         <mxCell id="vcdCnUWwaGh2R-P9l2uG-4" parent="1" style="whiteSpace=wrap;strokeWidth=2;fillColor=#dae8fc;strokeColor=#6c8ebf;fontFamily=Times New Roman;fontSize=15;" value="Bootstrap Server" vertex="1">
           <mxGeometry height="58" width="163" x="-313" y="3134" as="geometry" />
         </mxCell>
-        <mxCell id="ruSCJivZAPYPigGFgLbw-1" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-4" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#FFB570;" target="ruSCJivZAPYPigGFgLbw-9">
+        <mxCell id="ruSCJivZAPYPigGFgLbw-1" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-4" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;strokeColor=#FFB570;" target="ruSCJivZAPYPigGFgLbw-9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ruSCJivZAPYPigGFgLbw-2" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-4" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;strokeColor=#F19C99;" target="ruSCJivZAPYPigGFgLbw-9">
+        <mxCell id="ruSCJivZAPYPigGFgLbw-2" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-19" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#F19C99;" target="ruSCJivZAPYPigGFgLbw-9">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="ruSCJivZAPYPigGFgLbw-3" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-4" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=0;strokeColor=#FFB570;" target="ruSCJivZAPYPigGFgLbw-11">
@@ -1602,16 +1602,16 @@
         <mxCell id="ruSCJivZAPYPigGFgLbw-11" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Failed" vertex="1">
           <mxGeometry height="80" width="120" x="-564" y="3251.5" as="geometry" />
         </mxCell>
-        <mxCell id="ruSCJivZAPYPigGFgLbw-12" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#FFB570;" target="ruSCJivZAPYPigGFgLbw-4">
+        <mxCell id="ruSCJivZAPYPigGFgLbw-12" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#FFB570;" target="ruSCJivZAPYPigGFgLbw-4">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="ruSCJivZAPYPigGFgLbw-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="KVSender::__init__" vertex="1">
-          <mxGeometry height="60" width="120" x="-1013" y="3041.5" as="geometry" />
+          <mxGeometry height="60" width="120" x="-780" y="3037" as="geometry" />
         </mxCell>
-        <mxCell id="ruSCJivZAPYPigGFgLbw-14" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-17" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeColor=#FFB570;" target="ruSCJivZAPYPigGFgLbw-13">
+        <mxCell id="ruSCJivZAPYPigGFgLbw-14" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-17" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeColor=#FFB570;" target="ruSCJivZAPYPigGFgLbw-13">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ruSCJivZAPYPigGFgLbw-15" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-17" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;endArrow=none;endFill=0;strokeColor=#F19C99;" target="ruSCJivZAPYPigGFgLbw-19">
+        <mxCell id="ruSCJivZAPYPigGFgLbw-15" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-17" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;endFill=0;strokeColor=#F19C99;" target="ruSCJivZAPYPigGFgLbw-19">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="ruSCJivZAPYPigGFgLbw-16" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#F19C99;" target="ruSCJivZAPYPigGFgLbw-11">
@@ -1620,14 +1620,11 @@
         <mxCell id="ruSCJivZAPYPigGFgLbw-17" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Start" vertex="1">
           <mxGeometry height="80" width="120" x="-903" y="2921.5" as="geometry" />
         </mxCell>
-        <mxCell id="ruSCJivZAPYPigGFgLbw-18" edge="1" parent="1" source="ruSCJivZAPYPigGFgLbw-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#F19C99;" target="ruSCJivZAPYPigGFgLbw-4">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
         <mxCell id="ruSCJivZAPYPigGFgLbw-19" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="KVReceiver::__init__" vertex="1">
-          <mxGeometry height="60" width="120" x="-783" y="3041.5" as="geometry" />
+          <mxGeometry height="60" width="120" x="-1042" y="3039" as="geometry" />
         </mxCell>
         <mxCell id="ruSCJivZAPYPigGFgLbw-20" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Receive all decode worker TransferInfo" vertex="1">
-          <mxGeometry height="30" width="140" x="-1126" y="3190.5" as="geometry" />
+          <mxGeometry height="30" width="140" x="-1065" y="3188.5" as="geometry" />
         </mxCell>
         <mxCell id="ruSCJivZAPYPigGFgLbw-21" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Send Prefill KVArgs&lt;div&gt;(For RDMA connection)&lt;/div&gt;" vertex="1">
           <mxGeometry height="30" width="140" x="-1123" y="3251.5" as="geometry" />
@@ -1640,21 +1637,21 @@
         </mxCell>
         <mxCell id="ruSCJivZAPYPigGFgLbw-24" edge="1" parent="1" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;strokeColor=#FFB570;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="-559" y="3401.5" as="sourcePoint" />
-            <mxPoint x="-483" y="3401.5" as="targetPoint" />
+            <mxPoint x="-738" y="3433" as="sourcePoint" />
+            <mxPoint x="-662" y="3433" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="ruSCJivZAPYPigGFgLbw-25" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Prefill" vertex="1">
-          <mxGeometry height="30" width="60" x="-486" y="3387.5" as="geometry" />
+          <mxGeometry height="30" width="60" x="-665" y="3419" as="geometry" />
         </mxCell>
         <mxCell id="ruSCJivZAPYPigGFgLbw-26" edge="1" parent="1" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;strokeColor=#F19C99;">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="-559" y="3427.5" as="sourcePoint" />
-            <mxPoint x="-483" y="3427.5" as="targetPoint" />
+            <mxPoint x="-738" y="3459" as="sourcePoint" />
+            <mxPoint x="-662" y="3459" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="ruSCJivZAPYPigGFgLbw-27" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Decode" vertex="1">
-          <mxGeometry height="30" width="60" x="-482" y="3413.5" as="geometry" />
+          <mxGeometry height="30" width="60" x="-661" y="3445" as="geometry" />
         </mxCell>
         <mxCell id="ruSCJivZAPYPigGFgLbw-28" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Do not get prefill ip:port from BootstrapServer" vertex="1">
           <mxGeometry height="30" width="143" x="-652" y="3137.5" as="geometry" />
@@ -1840,8 +1837,8 @@
         <mxCell id="pC1JJ_T51gjZtwN1eGxU-24" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="4.1 Sync status" vertex="1">
           <mxGeometry height="30" width="161" x="48.5" y="4382" as="geometry" />
         </mxCell>
-        <mxCell id="pC1JJ_T51gjZtwN1eGxU-26" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="4.1 Wait to process(&lt;font style=&quot;color: rgb(126, 166, 224);&quot;&gt;Success&lt;/font&gt;)" vertex="1">
-          <mxGeometry height="30" width="161" x="294" y="4391" as="geometry" />
+        <mxCell id="pC1JJ_T51gjZtwN1eGxU-26" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="4.2 Wait to process(&lt;font style=&quot;color: rgb(126, 166, 224);&quot;&gt;Success&lt;/font&gt;)" vertex="1">
+          <mxGeometry height="30" width="161" x="301" y="4394" as="geometry" />
         </mxCell>
         <mxCell id="pC1JJ_T51gjZtwN1eGxU-29" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="4.0 Transfer finished(&lt;font style=&quot;color: rgb(126, 166, 224);&quot;&gt;Success&lt;/font&gt;)" vertex="1">
           <mxGeometry height="30" width="180" x="-146.5" y="4495" as="geometry" />
@@ -2320,6 +2317,9 @@
             <mxPoint x="2332.499999999999" y="4346" as="sourcePoint" />
             <mxPoint x="1904.2560000000003" y="4499.455" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="pC1JJ_T51gjZtwN1eGxU-230" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Connect prefill &amp;amp; send KVArgs and TransferInfo" vertex="1">
+          <mxGeometry height="30" width="140" x="-1182" y="3124" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
