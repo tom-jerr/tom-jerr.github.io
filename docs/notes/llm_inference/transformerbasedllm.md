@@ -1,7 +1,7 @@
 ---
 title: Transformer-based LLM
 created: 2025-10-05
-updated: 2025-12-13
+updated: 2025-01-18
 tags:
   - LLMInference
 description: 本章介绍基于 Transformer 架构的大规模语言模型（LLM），涵盖其核心组件如位置编码、注意力机制、归一化方法和前馈网络。
@@ -10,7 +10,7 @@ cover: /img/llm.png
 
 # Transformer-based LLM
 
-现在的大模型基本是 Transformer-based 的自回归预训练模型，本章我们将以 llama2 以及 GPT-3 为例介绍这种模型的基本结构。
+现在的大模型基本是 Transformer-based 的自回归预训练模型，本章我们将以 llama2 为例介绍这种模型的基本结构。
 
 - **Positional Encoding**: RoPE
 - **Attention**: Multi-Head Attention or Multi-Query Attention or Grouped-Query Attention or Multi-Head Latent Attention or DeepSeek Sparse Attention
@@ -26,6 +26,7 @@ cover: /img/llm.png
 LLMs 推理是一般分为两个阶段 prefill 阶段和 decode 阶段：
 
 - Prefill Stage: LLM 计算并存储初始输入 token 的 KV cache，并生成第一个 output token
+  > 只有这个阶段 Q*K 是矩阵，decode 阶段通过 KV 缓存只会生成新的一行
 - Decode Stage: LLM 通过 KV cache 逐个生成 output token，然后用新生成的 token 的 KV 对更新 KV cache
   ![](img/llm.png)
 
@@ -35,7 +36,7 @@ LLMs 推理是一般分为两个阶段 prefill 阶段和 decode 阶段：
 
 ### Why we need Position Encoding
 
-在自然语言处理领域，Transformer 模型已成为一项革命性的技术。然而，其核心的自注意力机制本身并**不具备捕捉序列中单词顺序的能力**，即“位置无关性”。为了解决这一问题，位置编码应运而生。
+在自然语言处理领域，Transformer 模型已成为一项革命性的技术。然而，其核心的自注意力机制本身并**不具备捕捉序列中单词顺序的能力**，即位置无关性。为了解决这一问题，位置编码应运而生。
 
 ### 绝对位置编码（Absolute Position Encoding）
 
@@ -56,9 +57,13 @@ $$
    PE_{pos} = \text{Embedding}(pos)
    $$
 
+---
+
 ### 相对位置编码（Relative Position Encoding）
 
 相对位置编码是根据单词之间的相对位置关系来计算位置编码。这种编码方式更加灵活，**能够捕捉到不同单词之间的相对位置信息**，有助于模型更好地理解序列中单词之间的关系。但是也有缺点，计算效率低下，同时大部分相对编码都没有落地可行性。
+
+---
 
 ### Rotary Position Embedding (RoPE)
 
@@ -76,21 +81,23 @@ $$
 
 - 适应不同长度的序列：RoPE 可以灵活处理不同长度的输入序列。
 
+---
+
 #### 目的
 
-我们假设通过下述运算来给 q,k 添加绝对位置信息：
+我们假设通过下述运算来给 q,k 添加绝对位置信息，然后通过 Attention 的内积运算，内积的结果带有相对位置信息：
 
 $$
 \tilde{q}_m = f(q, m), \quad \tilde{k}_n = f(k, n) \tag{1}
 $$
-
-也就是说，我们分别为 q,k 设计操作$f(\cdot,m),f(\cdot,n)$，使得经过该操作后，$\tilde{q}_m,\tilde{k}_n$就带有了位置 m,n 的绝对位置信息。Attention 的核心运算是内积，所以我们希望的内积的结果带有相对位置信息，因此假设存在恒等关系：
 
 $$
 ⟨f(q,m),f(k,n)⟩=g(q,k,m−n)\tag{2}
 $$
 
 所以我们要求出该恒等式的一个（尽可能简单的）解。求解过程还需要一些初始条件，显然我们可以合理地设 $f(q,0)=q$ 和 $f(k,0)=k$
+
+---
 
 #### 实现
 
@@ -120,9 +127,12 @@ $$
 由于内积满足线性叠加性，因此任意偶数维的 RoPE，我们都可以表示为二维情形的拼接，即
 
 ![](img/rope2.png)
-:warning: 由于$(R_m$)具有稀疏性，不建议使用 matmul 进行实现，建议使用下面的方式实现：其中$(\\odot$)是逐位对应相乘，即 Numpy、Tensorflow 等计算框架中的 ∗ 运算
+
+:warning: 由于$(R_m$)具有稀疏性，不建议使用 matmul 进行实现，建议使用下面的方式实现：其中$(\odot$)是逐位对应相乘，即 Numpy、Tensorflow 等计算框架中的 ∗ 运算
 
 ![](img/rope1.png)
+
+---
 
 ## Attention Series
 
@@ -134,11 +144,15 @@ $$
 
 ![](img/gqa.png)
 
+---
+
 ### Why GQA?
 
 ARM 中，Attention 的瓶颈并不在算力，而在 KV cache 的显存和带宽。
 
 MQA 和 GQA 的出发点都是**减少 KV Cache 的显存占用和内存带宽**，从而提升推理速度。但是 MQA 所有的 Query 头都共享同一组 Key 和 Value，导致模型表达能力下降。而 GQA 则通过将 Query 头分组，每组共享一组 Key 和 Value，在一定程度上保留了模型的表达能力，同时仍然减少了 KV Cache 的显存占用和内存带宽。
+
+---
 
 ### Multi-Head Latent Attention(MLA)
 
@@ -173,6 +187,8 @@ $$
 d_c \ll H d_k,\qquad d_r \ll d_c
 $$
 
+---
+
 #### 训练阶段
 
 - 在训练阶段，除了多了一步低秩投影以及只在部分维度加 RoPE 外，MLA 与 Q、K 的计算与 MHA 是基本相同的
@@ -180,13 +196,15 @@ $$
 
 **标准 MHA:**
 
-对第 s 个 head：
+对第 i 个 token 第 s 个 head：
 
 $$
 q^{(s)}_i=x_iW^{(s)}_q,\quad k^{(s)}_i=x_iW^{(s)}_k, \quad v^{(s)}_i=x_iW^{(s)}_v
 $$
 
 kv cache 需要存储所有的 $k^{(s)}_i、v^{(s)}_i$，与 head 数成正比。
+
+
 **MLA:**
 MLA 在 KV 计算前增加一层**共享低秩投影**
 
@@ -200,7 +218,9 @@ $$
 q^{(s)}_i=x_iW^{(s)}_q,\quad k^{(s)}_i=c_iW^{(s)}_k, \quad v^{(s)}_i=c_iW^{(s)}_v
 $$
 
-#### 推理阶段($MLA \Rightarrow MQA$)
+---
+
+#### 推理阶段
 
 注意力 logits：
 
@@ -272,8 +292,9 @@ $$
 \{ c_i \}_{i=1}^T
 $$
 
-与 head 数 $h$ 完全无关，所有 head 共享同一份 KV latent  
-**与 head 相关的信息全部吸收到 Query 和输出矩阵中。**
+与 head 数 $h$ 完全无关，所有 head 共享同一份 KV latent。**与 head 相关的信息全部吸收到 Query 和输出矩阵中。**
+
+---
 
 #### RoPE 解耦
 
@@ -299,9 +320,9 @@ o_t = \big[o_t^{(1)}, o_t^{(2)}, \cdots, o_t^{(h)} ,\big]
 $$
 
 $$
-o_t^{(s)} = Attention!\left(q_t^{(s)}, k_{\le t}^{(s)}, v_{\le t}^{(s)}\right)
-= \frac{\sum_{i \le t} \exp!\left(q_t^{(s)} k_i^{(s)\top}\right) v_i^{(s)}}
-{\sum_{i \le t} \exp!\left(q_t^{(s)} k_i^{(s)\top}\right)}
+o_t^{(s)} = Attention\left(q_t^{(s)}, k_{\le t}^{(s)}, v_{\le t}^{(s)}\right)
+= \frac{\sum_{i \le t} \exp\left(q_t^{(s)} k_i^{(s)\top}\right) v_i^{(s)}}
+{\sum_{i \le t} \exp\left(q_t^{(s)} k_i^{(s)\top}\right)}
 $$
 
 $$
@@ -311,9 +332,230 @@ v_i^{(s)} = c_i W_v^{(s)}, \quad
 c_i = x_i W_c
 $$
 
-##### Why RoPE-K shared?
+
+**Why RoPE-K shared?**
 
 K 矩阵仅需共享的 $W_{kr}$；head 间的差异完全由各自的 $W_{qr}^{(s)}$ 在 Q 侧体现。
+
+---
+
+#### 推理的例子
+
+- $d$：模型隐藏层维度（$d_{model}$）  
+- $d_c$：KV 压缩后的 Latent 维度（Compressed dimension）  
+- $d_h$：单个注意力头的维度  
+- $d_r$：RoPE 专用维度（Decoupled RoPE dimension）  
+- $H$：Head 数量  
+
+---
+
+在 MLA 中，输入 $x_t$ 经过投影后，Q、K、V 被拆解为以下部分：
+
+
+- $c_{KV}$ 承载所有内容信息（语义），不包含位置信息：
+
+  $$
+  c_{KV} = x_t W_{DKV}
+  $$
+
+  - $W_{DKV}$：下投影矩阵（Down-projection），形状 $d \times d_c$
+
+- $k^R$ 显式、共享的 Key 位置向量：
+
+  $$
+  k^R = \text{RoPE}(x_t W_{KR})
+  $$
+
+  - $W_{KR}$：RoPE Key 投影矩阵，形状 $d \times d_r$  
+  - 所有 Head 共享同一个 $k^R$
+
+
+- Query 拆为内容与位置两部分：
+
+  $$
+  c_Q = x_t W_{DQ}
+  $$
+
+  $$
+  q^C = c_Q W_{UQ} \quad (\text{按 Head 切分})
+  $$
+
+  $$
+  q^R = \text{RoPE}(c_Q W_{QR}) \quad (\text{按 Head 切分})
+  $$
+
+---
+
+##### Prefill Phase
+
+输入整个序列 $X \in \mathbb{R}^{B \times L \times d}$，并行计算注意力。
+
+- 生成 Q, K, V
+
+  - **共享 Latent：**
+
+  $$
+  C_{KV} = X W_{DKV} \quad (L \times d_c)
+  $$
+
+  - **Key：**
+
+    - 内容部分（上投影）：
+  $$
+  K^C = C_{KV} W_{UK} \quad (L \times H \times d_h)
+  $$
+
+    - 位置部分：
+  $$
+  K^R = \text{RoPE}(X W_{KR}) \quad (L \times 1 \times d_r)
+  $$
+
+    - 拼接：
+  $$
+  K_{full} = \text{Concat}(K^C, K^R)
+  $$
+
+  - **Value：**
+
+  $$
+  V_{full} = C_{KV} W_{UV} \quad (L \times H \times d_h)
+  $$
+
+  - **Query：**
+
+    - 同理构造 $Q^C, Q^R$ 并拼接成 $Q_{full}$。
+
+---
+
+- Attention 计算（FlashAttention）
+
+  $$
+  O = \text{Softmax}\left(\frac{Q_{full} K_{full}^T}{\sqrt{d_{head}}}\right) V_{full}
+  $$
+
+    - 利用分解性质：
+
+    $$
+    QK^T = q^C (k^C)^T + q^R (k^R)^T
+    $$
+
+---
+
+- KV Cache 写入
+
+  仅缓存压缩表示：
+
+  - Cache 1：$C_{KV}$，形状 $L \times d_c$  
+  - Cache 2：$K^R$，形状 $L \times d_r$
+
+  总显存：$L \times (d_c + d_r)$，与 Head 数 $H$ 无关。
+
+---
+
+##### Decode 阶段（Token Generation）
+
+利用矩阵吸收实现 MQA 级推理效率。
+
+- 矩阵吸收（Pre-computation）
+
+  - **吸收到 Query 的矩阵：**
+
+    $$
+    W_{Q\_Abs}^{(s)} = W_{UQ}^{(s)} (W_{UK}^{(s)})^T
+    $$
+
+    对应恒等变换：
+
+    $$
+    q^C (k^C)^T
+    = (c_Q W_{UQ})(c_{KV} W_{UK})^T
+    = c_Q (W_{UQ} W_{UK}^T) c_{KV}^T
+    $$
+
+  - **吸收到输出的矩阵：**
+
+    $$
+    W_{O\_Abs} = W_{UV} \cdot W_O
+    $$
+
+---
+
+- 单步 Decode（Step $t$）
+
+  - 生成 Query
+
+    - 内容部分（已吸收）：
+
+    $$
+    q_{absorb} = x_t W_{DQ} W_{Q\_Abs} \quad (H \times d_c)
+    $$
+
+    - 位置部分：
+
+    $$
+    q_{rope} = \text{RoPE}(x_t W_{DQ} W_{QR}) \quad (H \times d_r)
+    $$
+
+---
+
+  - 生成并缓存 KV
+
+    $$
+    c_{KV_t} = x_t W_{DKV}
+    $$
+
+    $$
+    k_{rope_t} = \text{RoPE}(x_t W_{KR})
+    $$
+
+    加入 Cache。
+
+---
+
+  - Attention 分数计算
+
+    - 内容分数：
+
+    $$
+    S_{content} = q_{absorb} \cdot C_{KV\_cache}^T
+    $$
+
+    - 位置分数：
+
+    $$
+    S_{rope} = q_{rope} \cdot K_{rope\_cache}^T
+    $$
+
+    - 总分数：
+
+    $$
+    Scores = \frac{S_{content} + S_{rope}}{\sqrt{d_{head}}} + \text{Mask}
+    $$
+
+    $$
+    Probs = \text{Softmax}(Scores)
+    $$
+
+---
+
+  - Value 聚合（在压缩空间）
+
+    $$
+    u_t = \sum_{i=1}^T Probs_i \cdot C_{KV_i}
+    $$
+
+    形状：$(H, d_c)$。
+
+---
+
+  - 输出投影
+
+    $$
+    y_t = \text{Flatten}(u_t) \cdot W_{O\_Abs}
+    $$
+
+    映射回 $d_{model}$ 维。
+---
 
 ## Normalization
 
@@ -328,6 +570,8 @@ K 矩阵仅需共享的 $W_{kr}$；head 间的差异完全由各自的 $W_{qr}^{
   \text{RMSNorm}(x) = \frac{x}{\sqrt{\frac{1}{d}\sum_{i=1}^{d} x_i^2 + \epsilon}} \cdot w
   $$
 
+---
+
 ### Why RMSNorm?
 
 - Layer-Norm 和 RMS-Norm 在测试集效果上没有明显差异，基本持平
@@ -335,7 +579,10 @@ K 矩阵仅需共享的 $W_{kr}$；head 间的差异完全由各自的 $W_{qr}^{
 
 ![](img/RMSnorm.png)
 
-## Feed Forward Network (Dense FFN)
+---
+
+## Feed Forward Network 
+### Dense FFN
 
 - MLP: 两层全连接网络，中间使用非线性激活函数（如 ReLU 或 SiLU）
 
@@ -351,7 +598,9 @@ K 矩阵仅需共享的 $W_{kr}$；head 间的差异完全由各自的 $W_{qr}^{
   \end{aligned}
   $$
 
-## Mixture of Experts (MoE)
+---
+
+### Mixture of Experts (MoE)
 
 - Mixture of Experts (MoE): 多个专家网络的集合，每个输入样本通过一个路由器选择部分专家进行处理，从而提高模型的表达能力
 
@@ -359,7 +608,7 @@ K 矩阵仅需共享的 $W_{kr}$；head 间的差异完全由各自的 $W_{qr}^{
   - GShard / GLaM：Top-2 gating，每个 token 走 2 个专家，结果加权。
     ![](img/MOE1.png)
 
-### Why we need MoE?
+#### Why we need MoE?
 
 Dense FFN 的**计算量随着模型规模的增大而迅速增加**，MoE 通过引入多个专家网络，并让每个输入样本只激活其中的一部分专家，从而在保持模型表达能力的同时，大幅降低了计算资源的消耗。
 
@@ -372,7 +621,7 @@ MoE(x) &= \sum_{e \in TopK(x)} g_e(x) \cdot Expert_e(x)
 \end{aligned}
 $$
 
-### MoE 优势
+#### MoE 优势
 
 - 参数效率极高：Dense 70B ≈ MoE 600B（激活 40B）
 - 推理成本可控：
@@ -380,16 +629,17 @@ $$
   - 理论 FLOPs 接近中型 Dense 模型
 - 每个专家可以学到不同的知识领域，模型的整体能力提升
 
-### MoE 挑战
+#### MoE 挑战
 
 - Routing 决策复杂，可能引入不稳定性
-  - 如果使用辅助损失（auxiliary loss） 来鼓励负载均衡，辅助损失过大会损害模型性能。
-  - Token-Dropping，每个 expert 在一次 forward 中能处理的 token 数是有限的：
-    $$capacity=capacity_factor \times \frac{tokens}{experts}$$
-    太多 token 同时路由到同一个 expert 时，就会发生丢 token。
-    > [!NOTE] > **路由不均 + 容量有限**共同造成了 token-dropping 现象
-  - 训练时负载不均衡，部分专家过载，其他专家不能学到知识
-- 通信开销大
+  - 如果使用辅助损失（auxiliary loss） 来鼓励负载均衡，**辅助损失过大会损害模型性能。**
+- Token-Dropping，每个 expert 在一次 forward 中能处理的 token 数是有限的：
+  $$capacity=capacity_factor \times \frac{tokens}{experts}$$
+  太多 token 同时路由到同一个 expert 时，就会发生丢 token。
+  > [!IMPORTANT] 
+  > **路由不均 + 容量有限**共同造成了 token-dropping 现象
+- 训练时负载不均衡，部分专家过载，其他专家不能学到知识
+- 通信开销大，需要两次 all2all 通信
   ```shell
   tokens
     ↓ routing
@@ -399,7 +649,7 @@ $$
   ```
   - 大规模集群中，需要将通信开销与计算开销 overlap
 
-![](img/overlap.png)
+    ![](img/overlap.png)
 
 ## LLAMA2 模型结构
 
@@ -420,7 +670,59 @@ $$
   \end{aligned}
   $$
 
+> [!IMPORTANT]
+> 一般 embedding 和最后模型输出前的 LMHead 层会共享权重
+
 ![](img/llama2.png)
+
+## 推理时的计算量和显存占用
+### FLOPs
+在推理时，只有前向传播，没有反向传播。
+1. 经验公式（Rule of Thumb）
+   对于任何 Transformer 模型，生成一个 Token 的浮点运算次数（FLOPs）约为：
+   $$\text{FLOPs/token} \approx 2 \times P$$
+   - 其中 $P$ 是模型参数数量。
+
+2. 两个阶段的具体计算假设模型参数量为 $P$（例如 7B 模型，$P \approx 7 \times 10^9$），输入 Prompt 长度为 $L_{in}$，生成长度为 $L_{gen}$。
+   - Prefill 阶段 (处理 Prompt)一次性并行处理 $L_{in}$ 个 token。
+     - 总 FLOPs $\approx 2 \cdot P \cdot L_{in}$
+     - 特点：Compute-bound（计算密集型）。GPU 利用率通常很高，像是在做矩阵乘法。
+   - Decode 阶段 (逐个生成)每步生成 1 个 token，共生成 $L_{gen}$ 次。
+     - 单步 FLOPs $\approx 2 \cdot P + \text{Attention Cost}$
+     - Attention Cost：随着序列变长，$Q \cdot K^T$ 的计算量是线性的 $O(T)$。但在常见的上下文长度（如 < 8k）下，相对于巨大的参数量 $P$，Attention 的计算量通常可以忽略不计。
+     - 特点：Memory-bound（访存密集型）。这是推理慢的核心原因——虽然计算量只有 $2P$，但每算一个 token 都要把几十 GB 的模型权重从显存搬到计算单元，显存带宽（Bandwidth）成为了瓶颈。
+### 显存占用
+显存占用主要由三部分组成：模型权重 (Weights)、KV Cache、激活值 (Activation)。
+
+1. 模型权重 (Model Weights) 
+   - 公式：$P \times \text{Precision}$
+   - 示例 (7B 模型)：FP16 (2 Bytes): $7 \times 10^9 \times 2 \approx \textbf{14 GB}$
+2. KV Cache —— 随着序列长度（Context Length）和 Batch Size 的增加，KV Cache 会迅速膨胀，甚至超过模型权重。
+   - 公式 (MHA)：$$\text{Mem}_{KV} = 2 \times B \times L \times H \times d_{head} \times \text{Precision}$$
+   - GQA: 将 $H$ 变为 $G$ (例如 32头变 8头)，KV Cache 减少 4 倍。
+   - MLA: 将 $H \times d_{head}$ 压缩为极小的 Latent 维度 $d_c + d_r$，KV Cache 极度压缩
+3. 激活值 (Activations)
+   - 这是前向传播时的中间结果（每一层的输出）。在推理时，我们不需要存反向传播的梯度，用完即丢。
+   - 占用相对较小，主要取决于 $B \times L \times d$
+
+### 场景分析
+- 场景 A：个人用户 / 边缘端推理 (Batch=1, 长度 < 4k)
+  - 模型权重以 LLaMA-7B (FP16) 为例：权重：~14 GB
+  - KV Cache (4k长度): $\approx 2 \times 1 \times 4096 \times 32 \times 128 \times 2 \approx 0.06 \text{ GB}$ 
+  - 此时优化 KV Cache 意义不大，量化权重（INT4）才是关键。
+- 场景 B：企业级服务 / 长文本推理 (Batch=64, 长度=32k)
+  - 以 LLaMA-7B (FP16) 为例：权重：~14 GB (固定不变)
+  - KV Cache: $2 \times 64 \times 32768 \times 32 \times 128 \times 2 \approx \textbf{34.3 GB}$
+    > KV Cache 远超模型权重
+  - 这就是为什么 DeepSeek (MLA) 和 LLaMA-3 (GQA) 如此重要的原因——如果不压缩 KV Cache，显存会在长窗口、高并发下瞬间爆满，导致 OOM (Out of Memory)。
+### 总结
+| 指标                        | Prefill 阶段              | Decode 阶段                  |
+| --------------------------- | ------------------------- | ---------------------------- |
+| 计算量 (FLOPs)              | 巨大：$2 \cdot P \cdot L$ | 较小：$2 \cdot P$            |
+| 瓶颈                        | 算力瓶颈（GPU Compute）   | 带宽瓶颈（Memory Bandwidth） |
+| 显存大头（短序列）          | 模型权重                  | 模型权重                     |
+| 显存大头（长序列 / 高并发） | KV Cache                  | KV Cache                     |
+
 
 ## 参考资料
 

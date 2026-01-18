@@ -17,30 +17,33 @@ cover: /img/parallelism_in_training.png
 下一篇文章我们将以 Transformer-based LLM 为例，对里面 Attention 以及 FFN or MoE 采用的并行化手段进行分析。
 
 ## Transformer 模型的参数量、计算量、显存占用[^params]
+### 符号设定
+- $l$: Transformer 层数
+- $h$: 隐藏层维度
+- $s$: 序列长度
+- $b$: 批量大小
+- $V$: 词汇表大小
 
 ### 参数量
 
 - 每个 transformer 层的参数量为
-  $$ \text{Params per layer} = 12h^2 + 13h $$
+  $$ \text{Params per layer} = 12lh^2 + 13h $$
 - 当隐藏维度 $h$ 较大时，可以忽略一次项，模型参数量近似为
   $$ \text{Params per layer} \approx 12lh^2 $$
 
 ### 计算量(FLOPs)
 
 - l 层的 Transformer 一次训练迭代计算量：
-  - self-attention 与 seq_len 平方成正比
-  - mlp 与 hidden_size 平方成正比
+  - self-attention 与 $s$ 平方成正比
+  - mlp 与 $h$ 平方成正比
 
-$$ \text{FLOPs per iteration} = l\cdot(24hsh^2+4bs^2h)+2bshV $$
 
-- $l$: Transformer 层数
-- $h$: 隐藏层维度
-- $s$: 序列长度
-- $b$: 批量大小
-- $V$: 词汇表大小
-- 当 $h$ 较大且$s \ll h$时，可以忽略低阶项，我们可以近似认为：在一次前向传递中，对于每个 token，每个模型参数，需要进行 2 次浮点数运算，即一次乘法法运算和一次加法运算
-- 一次训练迭代包含了前向传递和后向传递，**后向传递的计算量是前向传递的 2 倍**。
-  > 一次训练迭代中，**对于每个 token，每个模型参数，需要进行 6 次浮点数运算**
+- $$ 
+\text{FLOPs per iteration} = l\cdot(24sh^2+4bs^2h)+2bshV 
+$$
+  - 当 $h$ 较大且$s \ll h$时，可以忽略低阶项，我们可以近似认为：在一次前向传递中，对于每个 token，每个模型参数，需要进行 2 次浮点数运算，即一次乘法法运算和一次加法运算
+  - 一次训练迭代包含了前向传递和后向传递，**后向传递的计算量是前向传递的 2 倍**。
+    > 一次训练迭代中，**对于每个 token，每个模型参数，需要进行 6 次浮点数运算**
 
 ### 显存占用
 
@@ -54,17 +57,17 @@ $$ \text{FLOPs per iteration} = l\cdot(24hsh^2+4bs^2h)+2bshV $$
    - 对于 l 层 transformer 模型，中间激活占用的显存大小可以近似为
      - self-attention: 仍然与 seq_len 平方成正比
        $$
-       text{Activation Memory} = (34bsh+5hs^2a)\cdot l
+       \text{Activation Memory} = (34bsh+5hs^2a)\cdot l
        $$
 
-- 通常会尝试减小批次大小来避免显存不足的问题，这种方式减少的其实是中间激活占用的显存，**而不是模型参数、梯度和优化器的显存**
+   - 通常会尝试减小批次大小来避免显存不足的问题，这种方式减少的其实是中间激活占用的显存，**而不是模型参数、梯度和优化器的显存**
 
 3. KV Cache 的显存
    - 设输入序列的长度为 $s$ ，输出序列的长度为 $n$ ，以 float16 来保存 KV cache，那么 KV cache 的**峰值显存占用大小**为
      $$
      b(s+n)lh \times 2 \times 2= 4blh(s+n)
      $$
-     这里第一个 2 表示 K/V cache，第二个 2 表示 float16 占 2 个 bytes。
+    - 这里第一个 2 表示 K/V cache，第二个 2 表示 float16 占 2 个 bytes。
 
 ## Why Parallelism?
 
@@ -513,8 +516,7 @@ $$
 [^UB-mesh]: [UB-Mesh: a Hierarchically Localized nD-FullMesh Datacenter Network Architecture](https://arxiv.org/abs/2503.20377)
 [^ddp]:
 
-[PyTorch Distributed: Experiences on Accelerating
-Data Parallel Training](https://arxiv.org/pdf/2006.15704)
+[^pytorch][PyTorch Distributed: Experiences on Accelerating Data Parallel Training](https://arxiv.org/pdf/2006.15704)
 
 [^gpipe]: [GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism](https://arxiv.org/abs/1811.06965)
 [^gshard]: [GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding](https://arxiv.org/abs/2006.16668)

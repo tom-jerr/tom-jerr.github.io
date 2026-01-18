@@ -1,16 +1,5 @@
----
+# Basic Concepts in LLM Inference
 
-title: Attention & Transformers
-created: 2025-09-30
-updated: 2026-01-18
-tags:
-
-- LLMInference
-description: 首先从概率论角度介绍语言生成模型最终训练目标然后介绍注意力机制（Attention）及其在 Transformer 架构中的应用，并详细解析 Transformer 的结构和工作流程。
-cover: /img/transformer.png
----
-
-# Attention & Transformers
 ## 概率论相关知识
 
 ### 最大似然估计
@@ -142,28 +131,7 @@ $$
 \nabla_x \log p_{\text{data}}(x)
 $$
 
-| 模型          | 预测的是什么                                    | 训练目标公式                                                                                                          |
-| ------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| AR LLM        | 下一个 token 的条件分布                         | $$\min_\theta \; \mathrm{KL}\big(p_{\text{data}}(x)\;\|\;p_\theta(x)\big)$$                                           |
-| Diffusion LLM | 所有位置在去噪一步后的 token 分布（并行、全局） | $$\min_\theta \; \mathbb{E}_t\Big[ \mathrm{KL}\big(q(x_{t-1}\mid x_t, x_0)\;\|\;p_\theta(x_{t-1}\mid x_t)\big)\Big]$$ |
-
-
 ---
-## Attention
-
-### 传统的 self-attention
-
-#### 传统的序列模型处理方式
-
-在传统的序列处理模型（如 RNN、LSTM 和 GRU）中，模型是按顺序逐个处理序列中的元素（例如单词或字符），并且每个元素的处理依赖于前一个元素的隐藏状态。
-
-> [!IMPORTANT]
-> 这种方法在处理长序列时会面临**梯度消失或梯度爆炸的问题**，导致模型难以捕捉长距离的依赖关系。
-
-
-#### 自注意力机制核心思想
-
-对于序列中的每个元素，**模型可以同时考虑序列中所有其他元素的信息**，从而动态地计算每个元素与其他元素之间的**相关性（即“注意力”）**，并根据这些相关性对序列中的信息进行加权求和。这样，模型能够更高效地捕捉序列内部的长距离依赖关系，而不需要像 RNN 那样逐个处理序列元素。
 
 ## Transformer 推理过程
 
@@ -227,38 +195,27 @@ $$
 
 **形状变化**:
 
-$$
+- $$
   W_Q \in \mathbb{R}^{d \times (H \cdot d_h)}
   $$
-$$
+- $$
   W_K, W_V \in \mathbb{R}^{d \times (G \cdot d_h)}
   $$
 - 输出 reshape 后：
 
-   $$
+  - $$
     Q \in \mathbb{R}^{B \times H \times L \times d_h}
     $$
-   $$
+  - $$
     K \in \mathbb{R}^{B \times G \times L \times d_h}
     $$
-   $$
+  - $$
     V \in \mathbb{R}^{B \times G \times L \times d_h}
     $$
 
 #### 2.3. RoPE 旋转位置编码
 
 根据当前 token 在全局序列中的绝对位置 $pos$ 进行旋转。
-
-注意力机制只能看到语义相关性，而不能知道位置相关性。所以我们需要将位置相关性也编码到 Q*K 中，所以需要位置编码的存在。
-
-将位置编码与词向量通过旋转矩阵相乘，使得词向量不仅包含词汇的语义信息，还融入了位置信息
-
-$$
-(R_mq)^T(R_nk) = q^TR_m^TR_nk = q^TR_{m-n}k
-$$
-
-给位置为 m 的向量 q 乘上矩阵$(R_m$)、位置为 n 的向量 k 乘上矩阵$(R_n$)用变换后的 Q,K 序列做 Attention，Attention 就自动包含相对位置信息
-
 
 - **Prefill**: $pos$ 是向量 $[0, 1, \dots, L-1]$。
 - **Decode**: $pos$ 是标量 $T_{past}$ (即当前是第几个 token)。
@@ -285,7 +242,7 @@ $$
 
   - 历史 Cache 为空。
   - 直接将当前的 $K_{rope}, V$存入 Cache。
-    $$
+  - $$
     K_{cache} = K_{rope}, \quad V_{cache} = V
     $$
   - **Cache 形状**: $(B, G, L, d_h)$
@@ -293,10 +250,10 @@ $$
 
   - 历史 Cache 已有 $T_{past}$ 长度。
   - 将当前的 $K_{rope}$ (长度 1) 和 $V$ (长度 1) 拼接到 Cache 尾部。
-    $$
+  - $$
     K_{cache} \leftarrow \text{Concat}([K_{old}, K_{rope}], \text{dim}=2)
     $$
-    $$
+  - $$
     V_{cache} \leftarrow \text{Concat}([V_{old}, V], \text{dim}=2)
     $$
   - **Cache 形状**: $(B, G, T_{past}+1, d_h)$
@@ -304,9 +261,9 @@ $$
 > 总结: 进入注意力计算时，我们使用的是 完整的 Cache。
 > 令 $T_{total} = T_{past} + L$。
 >
-> $
+> $$
 > K_{cache}, V_{cache} \in \mathbb{R}^{B \times G \times T_{total} \times d_h}
-> $
+> $$
 
 #### 2.5. GQA Grouping & Broadcast
 
@@ -316,19 +273,19 @@ $group\_size = H / G$。
 
 1. Reshape Q:
 
-  $$
-  Q_{rope} \to (B, G, group\_size, L, d_h)
-  $$
+$$
+Q_{rope} \to (B, G, group\_size, L, d_h)
+$$
 
-2. Reshape K, V:
+1. Reshape K, V:
 
-  $$
-  K_{cache} \to (B, G, 1, T_{total}, d_h)
-  $$
+$$
+K_{cache} \to (B, G, 1, T_{total}, d_h)
+$$
 
-  $$
-  V_{cache} \to (B, G, 1, T_{total}, d_h)
-  $$
+$$
+V_{cache} \to (B, G, 1, T_{total}, d_h)
+$$
 
 #### 2.6. 注意力计算 (Scaled Dot-Product)
 
@@ -337,13 +294,13 @@ $$
 $$
 
 - **形状分析**:
-  $$
+  - $$
     Q: (B, G, group, L, d_h)
     $$
-  $$
+  - $$
     K^T: (B, G, 1, d_h, T_{total})
     $$
-  **Scores**(序列的相关性矩阵): $\in \mathbb{R}^{B \times G \times group \times L \times T_{total}}$
+  - **Scores**: $\in \mathbb{R}^{B \times G \times group \times L \times T_{total}}$
 
 > **Mask 的区别**:
 >
@@ -372,24 +329,19 @@ $$
 O_{heads} \to (B, L, H \cdot d_h) = (B, L, d)
 $$
 
-2. Output Linear:
+1. Output Linear:
 
 $$
 O = O_{heads} W_O
 $$
 
-3. Residual Add:
+1. Residual Add:
 
 $$
 X = X + O
 $$
-#### 总结
-一致性的好处：
-- 无缝残差： 每一层的输入输出维度由始至终保持不变，不需要 resize。
-- 避免瓶颈： 保证输入的原始信息量足以支撑后续 32+ 层网络的深层处理。
-- 工程友好： 在分布式训练（TP/PP）和推理优化（KV Cache）中，统一的维度让内存管理更容易。
 
-4. 形状回归：$X \in \mathbb{R}^{B \times L \times d}$
+1. 形状回归：$X \in \mathbb{R}^{B \times L \times d}$
 
 ---
 
@@ -439,7 +391,7 @@ $$
 X_{final} = \text{RMSNorm}(X_{final})
 $$
 
-2. Logits 生成:
+1. Logits 生成:
 
 $$
 \text{Logits} = X_{final} W_{head}
@@ -448,30 +400,11 @@ $$
 其中 $W_{head} \in \mathbb{R}^{d \times V_{vocab}}$。
 
 结果：$\text{Logits} \in \mathbb{R}^{B \times L \times V_{vocab}}$
-- Logits 是模型最后一层输出的原始打分（Raw Scores），还没有被转换成概率。
+
 ---
 
 ### 采样与更新 (Prefill vs Decode)
-在把 Logits 变成概率之前，我们通常会修改 Logits 的值。
-- Temperature (温度) $T$：
-  $$\text{New\_Logits} = \frac{\text{Logits}}{T}$$
-  - $T < 1$ (如 0.1)： 差距拉大。大的更大，小的更小。模型变得保守、确定。比如 12.5 / 0.1 = 125。
-  - $T > 1$ (如 1.5)： 差距缩小。分数高的和分数低的变接近了。模型变得发散、有创造力。比如 12.5 / 1.5 
-- Penalty (惩罚)：如果设置了重复惩罚，模型会检查刚才生成的词，把它们对应的 Logits 强行减去一个值（比如减 2.0），让它们不容易再被选中。
 
-然后使用 Softmax 将 Logits 变成 概率 (Probability)：
-$$P_i = \frac{e^{logit_i}}{\sum_{j} e^{logit_j}}$$
-
-
-有了概率 [0, 0.98, 0.019, 0, 0]，模型到底选哪个？
-这取决于采样策略：
-- Greedy Search (贪婪搜索):永远只选概率最大的那个。
-  - 特点：最稳定，但容易车轱辘话，缺乏创造力。
-- Random Sampling (随机采样):根据概率掷骰子。
-  - 有 98% 的几率选 "blue"，但也有 1.9% 的几率选 "green"（比如特意想说“绿色的天空”）。
-- Top-K / Top-P: 为了防止选到太离谱的词（比如 "apple"），我们会先截断，只在概率最高的几个词（K）或累积概率达到 P 的词里抽签。
-
-这里以贪婪采样为例
 #### **场景 A: Prefill 结束时**
 
 我们通常只关心最后一个 token 的输出，因为我们要预测提示词后的第一个新词。
@@ -556,7 +489,7 @@ $$P_i = \frac{e^{logit_i}}{\sum_{j} e^{logit_j}}$$
 
    - Transformer 模型极大，训练时显存吃紧，Batch Size 往往很小（甚至只有 1 或 2）。
    - BN 在小 Batch 下估计的均值/方差波动极大，导致训练不收敛。
-   - LayerNorm 基于每一层自身的输入进行归一化，能够更好地控制每一层输入的范围和分布，避免梯度消失或梯度爆炸问题。
+   - LN 对 Batch Size 大小完全不敏感（Batch=1 照样跑）。
 
 ---
 
@@ -597,7 +530,7 @@ $$
   - **表示坍塌风险**：有研究指出，在极深的网络中，Pre-Norm 结构会导致靠后的层 $F(x)$ 的贡献相对于主干 $x$ 越来越小，导致学不到太多新东西。
   - _注：虽然有这个理论劣势，但在几十亿、几千亿参数的 LLM 实践中，稳定性是第一位的，所以大家几乎全部倒向了 Pre-Norm。_
 
-## KV Cache 存储哪些东西？
+## KV Cache
 
 因果独立性：第 $t$ 步的注意力分布，完全独立于第 $t-1$ 步的注意力分布。
 
@@ -610,23 +543,3 @@ $$
 **不存 Q**：因为过去的 $Q$ 已经完成了生成过去 Token 的任务，对未来无影响。
 
 **不存 Attention Matrix**：因为那是 $Q$ 和 $K$ 的临时交互产物，每次新的 $Q$ 都要重新交互。
-
-
-
-### 为什么现代大模型（GPT/LLaMA）的 embedding dim 和 llm model dim 一致？
-
-如果 $D_{emb} \neq D_{model}$，模型必须在第一层加一个线性投影层（Projection Layer），把维度从 $D_{emb}$ 强行映射到 $D_{model}$，之后所有的残差连接才能在 $D_{model}$ 维度上进行
-> Add & Norm 操作要求输入输出维度一致，否则无法相加
-
-#### 为什么不故意把 Embedding 做小一点？（为了省显存？）
-ALBERT 的做法： 假设 $D_{model}=768$，但 $D_{emb}=128$。它认为词向量主要学的是“上下文无关”的浅层语义，不需要那么大维度。
-
-结果： 虽然参数量巨幅下降（Embedding 层参数变少），但计算量并没有减少（模型内部还是要算 768 维），而且性能下降了。
-
-现代大模型的共识： **Embedding 层不仅存储词义，还承载了模型的第一波“知识”**。将它压缩会造成信息瓶颈（Information Bottleneck），导致输入模型的信息“先天不足”。
-
-#### 为什么不把 Embedding 做大一点？（为了更强表达？）
-有些研究（如 Google 的 T5 或早期的 Transformer）尝试过让 $D_{emb} > D_{model}$ 或相反，但这就引入了额外的投影矩阵 $W_{proj}$。
-
-在大模型时代（Scaling Law 时代），大家发现 **“架构越简单越好”**。增加投影层不仅增加了代码实现的复杂度，还增加了额外的计算开销（虽然不大）。
-
