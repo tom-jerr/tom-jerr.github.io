@@ -6,7 +6,7 @@ tags:
 
 - Database
 description: 本篇主要介绍如何支持向量属性的 DDL 和 DML 语句，涵盖在 Nebula Graph 中添加 Vector 类型属性的实现细节。
-cover: /img/storage_plan.png
+# cover: /img/storage_plan.png
 ---
 
 # 中篇：Vector 类型的 DDL & DML 适配

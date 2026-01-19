@@ -7,7 +7,7 @@ tags:
 
 created: 2025-11-3
 description: 在大规模语言模型（LLM）推理中，优化 CUDA 代码对于提升性能和效率至关重要。本文档介绍了一些关键的 CUDA 优化技术，帮助开发者更好地利用 GPU 资源进行 LLM 推理。
-cover: /img/h100sm.png
+# cover: /img/h100sm.png
 ---
 
 # CUDA Optimization for LLM Inference

@@ -5,7 +5,7 @@ updated: 2025-12-13
 tags:
   - LLMInference
 description: 本文介绍了在基于 Transformer 的大规模语言模型（LLM）中常用的并行化技术，包括数据并行（DP）、张量并行（TP）、流水线并行（PP）、专家并行（EP）以及序列并行（SP）和上下文并行（CP）。通过 deepseek-V3 来进行具体分析这些并行化技术在训练和推理中的应用。
-cover: /img/deepseekve.png
+# cover: /img/deepseekve.png
 ---
 
 # Parallelism in Transformer-Based LLM
