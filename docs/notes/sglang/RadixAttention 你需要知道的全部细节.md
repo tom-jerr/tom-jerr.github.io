@@ -314,37 +314,21 @@ def init_forward_metadata(self, forward_batch: ForwardBatch):
 
 ### Q2：为什么尾部 (Tail) 不足一个 Page 的 Token 不共享？真的无法共享吗？
 
-- **假设：** 假设 `page_size=16`，请求 A 生成了 20 个 Token。前 16 个进树共享。后 4 个在私有显存。如果请求 B 来了，恰好也是这 20 个 Token，前 16 个命中。后 4 个其实是一样的，为什么不把那 4 个 Token 的 KV 从请求 A 的显存 **memcpy** 到一个新的完整 Block 里来强行凑单？
-
 **尾部不足一个 Page 的 Token 目前确实不共享。**
 
-这并非“无法”做到，而是基于  **写冲突（Write Conflict）**、**管理复杂度**  的权衡结果。
+Radix Cache 设计为只缓存完整的 page，未满的 page 不会被共享。这样做的原因是：
 
-#### 写冲突
+- 避免跨请求共享可变状态
+- 简化 page 的引用计数和释放逻辑
+  
+如果希望复用 page 的部分 token，需要修改 radix cache 的插入和匹配逻辑，使其能处理部分 page。但这会显著增加复杂性，因为：
 
-这是最致命的原因。KV Cache Block 在“生成阶段（Decode）”是  **可变（Mutable）**  的。
-
-- **场景复现**：
-  - **请求 A**：生成了 20 个 Token。前 16 个在 Block X（共享），后 4 个在 Block Y（私有）。
-  - **请求 B**：命中前 16 个。现在它需要那后 4 个 Token。
-- **如果共享 Block Y**：
-  - 请求 A 正在生成第 21 个 Token，它会写入 Block Y 的第 5 个槽位（Slot 4）。
-  - 请求 B 也要生成第 21 个 Token（可能是不同的内容），它也试图写入 Block Y 的第 5 个槽位。
-  - **冲突！**  两个请求会互相覆盖数据。
-- **结论**：为了保证请求 B 的独立生成，它**必须**拥有一个属于自己的、独立的物理 Block 来存放这 4 个 Token 以及未来生成的 Token。
+- 需要追踪每个 page 的填充程度
+- 共享部分 page 时需要处理并发写入问题
+- 释放时需要更精细的引用计数
 
 ![](img/write_conflict.png)
 
-#### 管理复杂度
-
-- **内存分配复杂度**：如果允许尾部共享，内存分配器需要跟踪哪些 Block 是部分共享的，哪些是完全私有的。这会大大增加分配器的复杂度。
-
-- **Memcpy 代价大于 Recompute**：在 GPU 推理中，为了减少碎片，`page_size`  通常很小（16 或 32）。在这种粒度下，**“丢弃尾部，直接重算”是工程上的最优解**。
-
-  - **计算 vs. 拷贝的开销对比**：
-    - **重算（Recompute）**：计算 4 个 Token 的 Attention（Prefill 阶段）在 GPU 上极快，通常是微秒级。
-    - **拷贝（Memcpy）**：启动一个 CUDA Kernel 来做内存拷贝（D2D Copy）也有固定开销（Kernel Launch Latency 约为 5-10us）。
-    - **结果**：对于小尾巴（< 16 tokens），**重算的耗时可能比启动拷贝 Kernel 还要短**，或者两者差不多。
 
 ### Q3：在 Radix Attention 中，如果在一个长 Prompt 中间插入（Insert）或修改（Edit）了一个 Token，整个后续的 KV Cache 还能复用吗？如果不能，有没有什么办法让它复用？
 
