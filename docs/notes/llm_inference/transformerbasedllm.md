@@ -161,6 +161,7 @@ MQA 和 GQA 的出发点都是**减少 KV Cache 的显存占用和内存带宽**
 - KV cache 与 head 数无关
 - 推理阶段 等价于 MQA
 - 训练阶段 仍保留 MHA 的多头表达能力
+- 吸收操作可防止 KV 缓存恢复到其原始大小。
 
 ![](img/MLA.png)
 
@@ -221,6 +222,10 @@ $$
 ---
 
 #### 推理阶段
+利用矩阵吸收实现 MQA 级推理效率。
+- 避免了在推理阶段将 K 恢复到原始大小的昂贵操作。
+- 在线阶段就不必先恢复 full value 再做 output projection，而是可以直接从 latent 输出映射到最终 hidden，减少中间张量和访存。
+
 
 注意力 logits：
 
@@ -298,7 +303,7 @@ $$
 
 #### RoPE 解耦
 
-- 和位置无关的“内容部分”已经被压成共享 latent $c_i$，per-head 的差异被全部搬到**Q / 输出侧的矩阵**里；
+- 和位置无关的内容部分已经被压成共享 latent $c_i$，per-head 的差异被全部搬到**Q / 输出侧的矩阵**里；
 - 和位置有关的 RoPE 部分，K 也是共享的，但每个 head 的 Q 不一样，所以每个 head 看到的 logits 还是不同的。
 
 为 RoPE 是一个跟位置相关分块对角矩阵$R_m$，满足$R_mR^⊤_n=R_{m−n}$，MLA 加入 RoPE 之后会让固定的投影矩阵与位置相关：
@@ -310,6 +315,7 @@ $$
 $$
 q^{(s)}_tk^{(s)T}_i=(x_tW^{(s)}_q)(c_iW^{(s)}_k)^T = x_t(W^{(s)}_qR_{t-i} W^{(s)T}_k)c_i^T
 $$
+
 
 这里的 $W^{(s)}_qR_{t-i} W^{(s)T}_k$ 就无法合并为一个固定的投影矩阵了（跟位置差 $t−i$ 相关），从而 MLA 的想法无法结合 RoPE 实现。
 
@@ -338,223 +344,74 @@ $$
 K 矩阵仅需共享的 $W_{kr}$；head 间的差异完全由各自的 $W_{qr}^{(s)}$ 在 Q 侧体现。
 
 ---
+### 完整推理过程
 
-#### 推理的例子
+- 生成 Query
 
-- $d$：模型隐藏层维度（$d_{model}$）  
-- $d_c$：KV 压缩后的 Latent 维度（Compressed dimension）  
-- $d_h$：单个注意力头的维度  
-- $d_r$：RoPE 专用维度（Decoupled RoPE dimension）  
-- $H$：Head 数量  
-
----
-
-在 MLA 中，输入 $x_t$ 经过投影后，Q、K、V 被拆解为以下部分：
-
-
-- $c_{KV}$ 承载所有内容信息（语义），不包含位置信息：
+  - 内容部分（已吸收）：
 
   $$
-  c_{KV} = x_t W_{DKV}
+  q_{absorb} = x_t W_{DQ} W_{Q_{absorb}} \quad (H \times d_c)
   $$
 
-  - $W_{DKV}$：下投影矩阵（Down-projection），形状 $d \times d_c$
-
-- $k^R$ 显式、共享的 Key 位置向量：
+  - 位置部分：
 
   $$
-  k^R = \text{RoPE}(x_t W_{KR})
+  q_{rope} = \text{RoPE}(x_t W_{DQ} W_{QR}) \quad (H \times d_r)
   $$
 
-  - $W_{KR}$：RoPE Key 投影矩阵，形状 $d \times d_r$  
-  - 所有 Head 共享同一个 $k^R$
-
-
-- Query 拆为内容与位置两部分：
+- 生成并缓存 KV
 
   $$
-  c_Q = x_t W_{DQ}
+  c_{KV_t} = x_t W_{DKV}
   $$
 
   $$
-  q^C = c_Q W_{UQ} \quad (\text{按 Head 切分})
+  k_{rope_t} = \text{RoPE}(x_t W_{KR})
+  $$
+
+
+- Attention 分数计算
+
+  - 内容分数：
+
+  $$
+  S_{content} = q_{absorb} \cdot C_{KV\_cache}^T
+  $$
+
+  - 位置分数：
+
+  $$
+  S_{rope} = q_{rope} \cdot K_{rope\_cache}^T
+  $$
+
+  - 总分数：
+
+  $$
+  Scores = \frac{S_{content} + S_{rope}}{\sqrt{d_{head}}} + \text{Mask}
   $$
 
   $$
-  q^R = \text{RoPE}(c_Q W_{QR}) \quad (\text{按 Head 切分})
+  Probs = \text{Softmax}(Scores)
   $$
 
----
 
-##### Prefill Phase
-
-输入整个序列 $X \in \mathbb{R}^{B \times L \times d}$，并行计算注意力。
-
-- 生成 Q, K, V
-
-  - **共享 Latent：**
+- Value 聚合（在压缩空间）
 
   $$
-  C_{KV} = X W_{DKV} \quad (L \times d_c)
+  u_t = \sum_{i=1}^T Probs_i \cdot C_{KV_i}
   $$
 
-  - **Key：**
+  形状：$(H, d_c)$。
 
-    - 内容部分（上投影）：
-  $$
-  K^C = C_{KV} W_{UK} \quad (L \times H \times d_h)
-  $$
 
-    - 位置部分：
-  $$
-  K^R = \text{RoPE}(X W_{KR}) \quad (L \times 1 \times d_r)
-  $$
-
-    - 拼接：
-  $$
-  K_{full} = \text{Concat}(K^C, K^R)
-  $$
-
-  - **Value：**
+- 输出投影
 
   $$
-  V_{full} = C_{KV} W_{UV} \quad (L \times H \times d_h)
+  y_t = \text{Flatten}(u_t) \cdot W_{O_{absorb}}
   $$
 
-  - **Query：**
-
-    - 同理构造 $Q^C, Q^R$ 并拼接成 $Q_{full}$。
-
----
-
-- Attention 计算（FlashAttention）
-
-  $$
-  O = \text{Softmax}\left(\frac{Q_{full} K_{full}^T}{\sqrt{d_{head}}}\right) V_{full}
-  $$
-
-    - 利用分解性质：
-
-    $$
-    QK^T = q^C (k^C)^T + q^R (k^R)^T
-    $$
-
----
-
-- KV Cache 写入
-
-  仅缓存压缩表示：
-
-  - Cache 1：$C_{KV}$，形状 $L \times d_c$  
-  - Cache 2：$K^R$，形状 $L \times d_r$
-
-  总显存：$L \times (d_c + d_r)$，与 Head 数 $H$ 无关。
-
----
-
-##### Decode 阶段（Token Generation）
-
-利用矩阵吸收实现 MQA 级推理效率。
-
-- 矩阵吸收（Pre-computation）
-
-  - **吸收到 Query 的矩阵：**
-
-    $$
-    W_{Q\_Abs}^{(s)} = W_{UQ}^{(s)} (W_{UK}^{(s)})^T
-    $$
-
-    对应恒等变换：
-
-    $$
-    q^C (k^C)^T
-    = (c_Q W_{UQ})(c_{KV} W_{UK})^T
-    = c_Q (W_{UQ} W_{UK}^T) c_{KV}^T
-    $$
-
-  - **吸收到输出的矩阵：**
-
-    $$
-    W_{O\_Abs} = W_{UV} \cdot W_O
-    $$
-
----
-
-- 单步 Decode（Step $t$）
-
-  - 生成 Query
-
-    - 内容部分（已吸收）：
-
-    $$
-    q_{absorb} = x_t W_{DQ} W_{Q\_Abs} \quad (H \times d_c)
-    $$
-
-    - 位置部分：
-
-    $$
-    q_{rope} = \text{RoPE}(x_t W_{DQ} W_{QR}) \quad (H \times d_r)
-    $$
-
----
-
-  - 生成并缓存 KV
-
-    $$
-    c_{KV_t} = x_t W_{DKV}
-    $$
-
-    $$
-    k_{rope_t} = \text{RoPE}(x_t W_{KR})
-    $$
-
-    加入 Cache。
-
----
-
-  - Attention 分数计算
-
-    - 内容分数：
-
-    $$
-    S_{content} = q_{absorb} \cdot C_{KV\_cache}^T
-    $$
-
-    - 位置分数：
-
-    $$
-    S_{rope} = q_{rope} \cdot K_{rope\_cache}^T
-    $$
-
-    - 总分数：
-
-    $$
-    Scores = \frac{S_{content} + S_{rope}}{\sqrt{d_{head}}} + \text{Mask}
-    $$
-
-    $$
-    Probs = \text{Softmax}(Scores)
-    $$
-
----
-
-  - Value 聚合（在压缩空间）
-
-    $$
-    u_t = \sum_{i=1}^T Probs_i \cdot C_{KV_i}
-    $$
-
-    形状：$(H, d_c)$。
-
----
-
-  - 输出投影
-
-    $$
-    y_t = \text{Flatten}(u_t) \cdot W_{O\_Abs}
-    $$
-
-    映射回 $d_{model}$ 维。
+  映射回 $d_{model}$ 维。
 ---
 
 ## Normalization
@@ -606,7 +463,8 @@ K 矩阵仅需共享的 $W_{kr}$；head 间的差异完全由各自的 $W_{qr}^{
 
   - Switch Transformer：Top-1 gating，每个 token 只去 1 个专家。
   - GShard / GLaM：Top-2 gating，每个 token 走 2 个专家，结果加权。
-    ![](img/MOE1.png)
+  
+![](img/MOE1.png)
 
 #### Why we need MoE?
 
@@ -622,23 +480,46 @@ MoE(x) &= \sum_{e \in TopK(x)} g_e(x) \cdot Expert_e(x)
 $$
 
 #### MoE 优势
-
-- 参数效率极高：Dense 70B ≈ MoE 600B（激活 40B）
+- 将参数数量与参数激活量解耦
+  - 参数效率极高：Dense 70B ≈ MoE 600B（激活 40B）
 - 推理成本可控：
   - 每 token 只算 K 个 expert
   - 理论 FLOPs 接近中型 Dense 模型
 - 每个专家可以学到不同的知识领域，模型的整体能力提升
 
 #### MoE 挑战
+原本很规整的 dense 计算，变成了：
 
-- Routing 决策复杂，可能引入不稳定性
+- 动态路由
+
+- 不规则 token 分布
+
+- 跨设备数据交换
+
+- 很多小而不均匀的专家 batch
+
+- 额外的 gather/scatter / permutation / combine
+```
+hidden states
+  → router logits
+  → top-k select
+  → token 按 expert 分桶 / 排序 / 重排
+  → 跨卡发给对应 expert（all-to-all）
+  → 每个 expert 做 MLP
+  → 结果再跨卡收回（all-to-all）
+  → 恢复原 token 顺序
+  → combine / weighted sum
+```
+##### 训练挑战
+- 路由不均衡，部分专家过载，其他专家不能学到知识
   - 如果使用辅助损失（auxiliary loss） 来鼓励负载均衡，**辅助损失过大会损害模型性能。**
 - Token-Dropping，每个 expert 在一次 forward 中能处理的 token 数是有限的：
   $$capacity=capacity_factor \times \frac{tokens}{experts}$$
   太多 token 同时路由到同一个 expert 时，就会发生丢 token。
   > [!IMPORTANT] 
   > **路由不均 + 容量有限**共同造成了 token-dropping 现象
-- 训练时负载不均衡，部分专家过载，其他专家不能学到知识
+- 稀疏激活带来的优化困难
+  - 每个 GPU 的负载不同容易形成很多小矩阵乘，很难保持高 occupancy 和高 cache 命中
 - 通信开销大，需要两次 all2all 通信
   ```shell
   tokens
@@ -651,6 +532,63 @@ $$
 
     ![](img/overlap.png)
 
+##### 推理挑战
+- routing 导致的动态不规则 workload
+  - 负载倾斜：有些 GPU 上热门专家非常忙，其他 GPU 空闲。
+  - 小批量 GEMM：很多 expert 只拿到很少 token，导致 MLP GEMM 变成瘦高矩阵或超小 batch，Tensor Core 利用率差。
+  - 动态 shape：每一步每层每个 expert 的 token 数都变，难以做静态最优调度，也不利于 CUDA Graph 这类静态捕获。
+
+- token permutation / unpermutation 开销大
+  - 很多非连续访存，是 memory-bound
+- 专家热点与真实流量分布不一致
+
+**推理优化**
+- 并行策略：
+  - DP：数据并行，不同副本处理不同请求
+  - TP：张量并行，同一个大矩阵切开
+  - EP：专家并行，不同 expert 放在不同 GPU
+- Grouped GEMM + permutation kernel：
+  - 将多个 expert MLP 小矩阵乘合并成一个大矩阵乘，提升 Tensor Core 利用率
+  - 用 专门的 permutation kernel 降低重排开销
+  - 尽量把 permutation 和 grouped GEMM 更紧地接起来
+- all-to-all & compute overlap:
+  - dispatch/combine 主要是数据搬运，expert MLP 是算数密集，两者资源侧重点不同，所以理论上可以流水并发
+  - TBO(two-batch-overlap)：把一个大 ForwardBatch 拆成两个可以交错执行的子 batch，然后在单层 forward 内部，按预定义阶段显式穿插执行。
+    - decode/verify：两个batch对半分 sequence，交错执行
+    - prefill/extend：按 extend token 总量均衡切分
+    - 在定义好的 operation 上交错执行
+      ```
+      Stage 0 = attn prepare
+      Stage 1 = attn core + gate/select_experts
+      Stage 2 = dispatch_a + shared_expert
+      Stage 3 = dispatch_b + experts + combine_a
+      Stage 4 = combine_b
+      Stage 5 = output
+      ```
+    ![](img/TBO.png)
+  
+
+- EPLB(在线负载均衡)：
+  - 服务时 expert rebalance：
+    - 统计最近若干 step 各 expert 的 token 数
+    - 调整 expert 到 EP rank 的映射
+    - 把热门专家复制到更多 rank 上
+    - 让 routing 更容易命中本地或较空闲的 rank
+  - SGLang 做法
+    - 重要对象：
+    - `EPLBManager`：负责周期触发、算新布局、切 chunk，并在 chunk 之间 yield。
+    - `ExpertLocationMetadata`：维护逻辑布局表，描述每个 physical slot 当前代表哪个 logical expert。
+    - `ExpertLocationUpdater`：负责把真实 expert 权重切片复制到对应 GPU 槽位。
+    - 基于 expert 热度统计做周期性重平衡：统计的是每个 expert 被多少 token 命中
+    - 分层 placement：会优先把某个 rank 的 logical expert 映射最近的 replica：同 GPU 优先，其次同节点，最后随机补齐，再把物理 expert 权重分发到 GPU。
+      - --eplb-rebalance-layers-per-chunk，由全模型一次迁移变成每次只迁一部分 layer
+    - 重平衡是在model_runner.forward() 后调用on_forward_pass_end() 推进 Generator 入口，然后再进入 rebalance()、update_expert_location() 等流程
+      - 新布局先整体算出来
+      - 先 yield，等下一个 forward 结束，再执行这一个 chunk 的 update_expert_location()
+      - 常规情况下：先把真实权重搬到目标 physical slot，再把逻辑映射切过去
+        - 权重复制：updater 会找到需要复制的 logical_expert_id 当前实际在哪些源槽位/源 rank 上有权重。然后把对应参数切片复制到本地目标槽位
+- 使用 CUDA Graph，基于预设的 cuda-graph-max-bs 来捕获图
+  
 ## LLAMA2 模型结构
 
 - 相较于 Transformer，llama2 使用了 pre-norm 结构

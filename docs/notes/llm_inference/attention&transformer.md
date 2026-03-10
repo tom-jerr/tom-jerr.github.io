@@ -84,11 +84,11 @@ $$
 
 这就是每一步做的 softmax + cross entropy。
 
-- $$
+$$
   p_\theta(x_t \mid x_{<t}) = \text{Softmax}(f_\theta(x_{<t}))
-  $$
+$$
 
-  - 其中 $f_\theta$ 是由多层注意力 + MLP 组成的函数。
+- 其中 $f_\theta$ 是由多层注意力 + MLP 组成的函数。
 - 注意力是核函数加权平均：
 
   - 单头注意力：

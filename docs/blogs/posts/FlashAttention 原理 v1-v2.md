@@ -66,24 +66,34 @@ $$
 \begin{aligned}
 d_i' &= \sum_{j=1}^{i} e^{x_j - m_i} \\
 &= \left( \sum_{j=1}^{i-1} e^{x_j - m_i} \right) + e^{x_i - m_i} \\
-&= \left( \sum_{j=1}^{i-1} e^{x_j - m\_{i-1}} \right) e^{m_{i-1} - m_i} + e^{x_i - m_i} \\
-&= d\_{i-1}' e^{m_{i-1} - m_i} + e^{x_i - m_i}
+&= \left( \sum_{j=1}^{i-1} e^{x_j - m_{i-1}} \right) e^{m_{i-1} - m_i} + e^{x_i - m_i} \\
+&= d_{i-1}' e^{m_{i-1} - m_i} + e^{x_i - m_i}
 \end{aligned}
 $$
 
-![](img/online_softmax.png)
+- 我们可以只在一次循环中计算出 $m_i$ 和 $d_i$，而不需要先计算出完整的 $m$ 和 $d$。
+
+  ![](img/online_softmax.png)
 
 ## Flash Attention
 
 当键向量 **K** 被划分为两个块（blocks），并且值向量 **V** 也被划分为两个块时，我们可以分别对每个块计算注意力（attention），然后在最后对输出进行**重新缩放（rescaling）**，这样就能得到与完整计算相同的正确结果。
 
-在示意图中，为了简化说明，我们**省略了 softmax 中减去每行最大值（row-wise max**的步骤。
+在示意图中，为了简化说明，我们**省略了 softmax 中减去每行最大值（row-wise max）** 的步骤。
 
 ![](img/flash_attn_v1.png)
 
 ### SRAM 分块示例
 
-传统`Attention` 7 次进行 HBM 到 SRAM 的交换，我们希望分块的计算可以在 SRAM 一次算完
+传统`Attention` 8 次进行 HBM 到 SRAM 的交换，大量时间花在了显存访问上：
+- Read Q, Read K: HBM->SRAM
+- Write S($Q@K^T$): SRAM->HBM
+- Read S: HBM->SRAM
+- Write P(softmax(S)): SRAM->HBM
+- Read P, Read V: HBM->SRAM
+- Write O: SRAM->HBM
+
+我们希望分块的计算可以在 SRAM 一次算完，减少 HBM 的读写次数，不要在计算中途写入或者读取整个大矩阵 S 和 P
 
 ![](img/hbm2sram.jpg)
 
@@ -94,7 +104,7 @@ $$
 - 我们可以发现，其实我们只需要 $o_i$，而不是 $a_i$
 - 所有我们接下来可以找 $o_i$ 的递推公式，只用一个循环实现部分的更新(max，d，o)
 
-![](img/self_attentionv2.png)
+  ![](img/self_attentionv2.png)
 
 ### Flash Attention
 
@@ -105,7 +115,7 @@ $$
 $$
 
 $$
-= \\left( \\sum\_{j=1}^{i-1} \\frac{e^{x_j - m_i}}{d'\_i} V[j,:] \\right) + \\frac{e^{x_i - m_i}}{d'\_i} V[i,:]
+= \left( \sum_{j=1}^{i-1} \frac{e^{x_j - m_i}}{d'_i} V[j,:] \right) + \frac{e^{x_i - m_i}}{d'_i} V[i,:]
 $$
 
 $$
@@ -126,15 +136,16 @@ $$
 
 ### Tiling Flash Attention
 
-- 外层循环遍历 K 和 V 的 ”列块“（**一次 I/O 读**）
-- 内存循环遍历 Q 的 "行块"（**一次 I/O 读**）
+- 外层循环遍历 K 和 V 的列块（**一次 I/O 读**）
+  - 这里 Flash Attention 2 会更改，因为每次 Q 计算下一次 KV 的时候，Q 的 L2 Cache 会被刷掉，影响效率
+- 内存循环遍历 Q 的行块（**一次 I/O 读**）
   - 计算 $Q \cdot K^T$产生了一个 $B_r \times B_c$ 的小矩阵 $S_{ij}$。**它从不被写入 HBM**
-  - 针对刚刚得到的 $S_{ij}$ 块，计算**这个块的**“局部”Softmax 统计量：
+  - 针对刚刚得到的 $S_{ij}$ 块，计算**这个块的**局部Softmax 统计量：
     - $\tilde{m}_{ij}$：$S_{ij}$ 这一块的**行最大值** (rowmax)。
     - $\tilde{P}_{ij}$：$S_{ij}$ 减去块最大值后的 $\exp$ 结果，即 $e^{S_{ij} - \tilde{m}_{ij}}$。
     - $\tilde{\ell}_{ij}$：$\tilde{P}_{ij}$ 的**行和** (rowsum)，即 $\sum e^{S_{ij} - \tilde{m}_{ij}}$。
   - 更新 $m_i^{new}$ 和 $l_i^{new}$
-  - 更新输出 $O_i$ （**一次 I/O 写**）：$O_i \leftarrow \text{diag}(\ell_i^{new})^{-1} \left( \text{diag}(e^{m_i - m_i^{new}}) O_i + e^{\tilde{m}_{ij} - m_i^{new}} \tilde{P}_{ij} V_j \right)$
+  - 更新输出 $O_i$ （**一次 I/O 写**）：$O_i \leftarrow \text{diag}(\ell_i^{new})^{-1} \left( \text{diag}(l_i)e^{m_i - m_i^{new}} O_i + e^{\tilde{m}_{ij} - m_i^{new}} \tilde{P}_{ij} V_j \right)$
     - $e^{m_i - m_i^{new}} O_i$：用缩放因子**修正**“历史”输出 $O_i$。
     - $e^{\tilde{m}_{ij} - m_i^{new}} \tilde{P}_{ij} V_j$：计算当前块的（未归一化的）输出，并用缩放因子修正它。
     - 两者相加，得到（未归一化的）新输出。
@@ -147,16 +158,18 @@ $$
 
 - 我们只会读取 $(Q, K)$ 一次，我们实际上是分块计算，分块存储输出矩阵 $O$
 - 我们从来不会获取完整的 $S$
-- 我们也不会获取完整的 $a (softmax(S))$
+- 我们也不会获取完整的 $ softmax(S)$
 
 ## Flash Attention V2
 
 `Flash Attention 2` 比 `Flash Attention 1` 加速 `2x`, 计算效率达到GEMM性能的 `50~73%`，v2 相比于 v1 的优化主要有下面几点：
 
-- **Parallelsim**：置换内外循环位置，同时减少非矩阵的计算量
+- **Parallelsim**：置换内外循环位置，同时增加 seq 维度的并行，不只是不同 batch/head 可以并行，不同 sequence tile 也可以并行
 - **Work Partitioning Between Warps**： 优化 thread blocks 内部 warp 级别的工作模式，尽量减少 warp 间的通讯和读取 shared memory 的次数
 - **Optimize non-matmul**：优化 Attention 部分thread blocks的并行化计算，新增 seq_len 维度的并行，使 SM 的利用率尽量打满。这其实也是内外循环置换这个总体思想配套的改进措施
 - **Causal Masking**：Flash Attention 是块计算的，可以直接跳过 causal mask 的块
+
+![alt text](flashattentionv2.png)
 
 ### Parallelism
 
@@ -169,8 +182,9 @@ FlashAttention 在 batch 和 heads 两个维度上进行了并行化：
 - `Flash Attention 2`  将 `Q` 当作外循环，`KV` 当作内循环， 将 `O[i]` 的在一个 `Q[i]` 周期算完，可以减少 SRAM -> HBM 的次数
 - **由于改进了算法使得 warps 之间不再需要相互通信去处理**，所以外循环可以放在不同的 thread block 上
 - 从`O`的缓存`write/read`次数从`2 x B_q x B_kv -> 2 x B_q`次
+  
 
-![](img/flash_v2_sram.jpg)
+  ![](img/flash_v2_sram.jpg)
 
 ### Work Partitioning Between Warps
 
@@ -184,14 +198,54 @@ FlashAttention 在 batch 和 heads 两个维度上进行了并行化：
 ![](img/flash_v2_warp.jpg)
 
 ### Optimize non-matmul
+在 GPU 上，尤其 Tensor Core 机器上：
 
-`Flash Attnetion v1`  每次都要做 `Scaled` ($O \times L_i^{-1}$)，都是额外的非乘法计算；
+- matmul 的吞吐非常高
 
-![](img/flash_v1.jpg)
+- 但 exp/max/sum/rescale/mask/update 这些操作吞吐远低于 matmul
 
-1. 在计算局部 attention 时，先不考虑 softmax 的分母 $\sum e^{x_i}$，即
-   $\ell^{(i+1)} = e^{m^{(i)}-m^{(i+1)}} \ell^{(i)} + \text{rowsum}( e^{S^{(i+1)}-m^{(i+1)}} )$，例如计算 $\mathbf{O}^{(1)}$ 时去除了
-   $\text{diag}\left(\ell^{(1)}\right)^{-1}$
+如果 kernel 里非 matmul 部分太多，就会出现：
+
+> 理论 FLOPs 很大，但 Tensor Core 实际占比不高，整体效率拉不上去
+
+FA1 虽然已经减少了 HBM 访存，但 online softmax 的更新里还有不少额外标量/逐元素操作。例如，随着新块到来：
+$$
+m_{\text{new}} = \max\left(m_{\text{old}},\, m_{\text{block}}\right)
+$$
+
+$$
+l_{\text{new}} =
+e^{\,m_{\text{old}} - m_{\text{new}}} \, l_{\text{old}}
++
+\sum e^{\,s_{\text{block}} - m_{\text{new}}}
+$$
+
+$$
+O_{\text{new}} =
+\frac{
+e^{\,m_{\text{old}} - m_{\text{new}}} \, l_{\text{old}}
+}{
+l_{\text{new}}
+} O_{\text{old}}
++
+\frac{
+e^{\,s_{\text{block}} - m_{\text{new}}}
+}{
+l_{\text{new}}
+} V_{\text{block}}
+$$
+- 旧的输出 O_old 需要按比例 rescale
+
+- 每一步都涉及除法、乘法、逐元素更新
+
+- 这些都不是高吞吐 matmul
+
+FA2 的一个关键技巧就是：
+
+> 不在每一步都维护“已经除以 $\ell$ 的规范化输出，而是维护未归一化的累计输出 $\tilde{O}$，
+
+
+1. 在计算局部 attention 时，先不考虑 softmax 的分母 $\sum e^{x_i}$，即   $\ell^{(i+1)} = e^{m^{(i)}-m^{(i+1)}} \ell^{(i)} + \text{rowsum}( e^{S^{(i+1)}-m^{(i+1)}} )$，例如计算 $\mathbf{O}^{(1)}$ 时去除了   $\text{diag}\left(\ell^{(1)}\right)^{-1}$
 
    **FlashAttention:**
 
@@ -234,13 +288,19 @@ FlashAttention 在 batch 和 heads 两个维度上进行了并行化：
 
 ![](img/causal_mask.jpg)
 
-### Summary
+## Flash Attention V3
+
+
+
+## Flash Decoding
+
+
 
 Flash-Decoding 分 3 个步骤进行：
 
 1. 首先，我们将键/值拆分成更小的块。
-1. 我们使用 FlashAttention 并行计算每个分割后的查询注意力值。此外，我们还为每行和每个分割写入一个额外的标量：注意力值的对数和指数。
-1. 最后，我们通过对所有分割进行归约来计算实际输出，使用对数求和指数来缩放每个分割的贡献。
+2. 我们使用 FlashAttention 并行计算每个分割后的查询注意力值。此外，我们还为每行和每个分割写入一个额外的标量：注意力值的对数和指数。
+3. 最后，我们通过对所有分割进行归约来计算实际输出，使用对数求和指数来缩放每个分割的贡献。
 
 这一切之所以可行，是因为注意力/softmax 可以迭代计算。在 Flash-Decoding 中，它被用于两个层面：在 splits 内（类似于 FlashAttention），以及跨 splits 进行最终的 reduce。
 
