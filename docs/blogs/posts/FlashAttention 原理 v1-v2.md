@@ -184,8 +184,6 @@ FlashAttention 在 batch 和 heads 两个维度上进行了并行化：
 - 从`O`的缓存`write/read`次数从`2 x B_q x B_kv -> 2 x B_q`次
   
 
-  ![](img/flash_v2_sram.jpg)
-
 ### Work Partitioning Between Warps
 
 在每个 thread block 内部，我们也需要决定如何在不同的 warp 之间分配工作。我们通常在每个 thread block 中使用 4 或 8 个 warp。
@@ -279,7 +277,56 @@ FA2 的一个关键技巧就是：
    \mathbf{O} = \text{diag}\left(\ell^{(2)}\right)^{-1} \tilde{\mathbf{O}}^{(2)}
    $$
 
-   ![](img/flash_v2.jpg)
+### 详细流程
+对于固定的 $i, j$，先和 FA1 一样计算：
+
+$$
+  S_{ij} = Q_i K_j^T
+$$
+
+$$
+  \widetilde m_{ij} = \operatorname{rowmax}(S_{ij})
+$$
+
+$$
+  \widetilde P_{ij} = \exp(S_{ij} - \widetilde m_{ij})
+$$
+
+$$
+  \widetilde \ell_{ij} = \operatorname{rowsum}(\widetilde P_{ij})
+$$
+
+然后更新 running max：
+
+$$
+  m_i^{\mathrm{new}} = \max(m_i, \widetilde m_{ij})
+$$
+
+更新分母：
+
+$$
+  \ell_i^{\mathrm{new}}=
+ e^{m_i - m_i^{\mathrm{new}}} \ell_i
+  +
+  e^{\widetilde m_{ij} - m_i^{\mathrm{new}}} \widetilde \ell_{ij}
+$$
+
+FA2 的关键是输出不直接写成归一化形式，而是写成：
+
+$$
+  \widetilde O_i^{\mathrm{new}} =
+  e^{m_i - m_i^{\mathrm{new}}} \widetilde O_i
+  +
+  e^{\widetilde m_{ij} - m_i^{\mathrm{new}}} \widetilde P_{ij} V_j
+$$
+
+最后如果要真正得到规范化输出，再做：
+
+$$
+  O_i^{\mathrm{new}} =
+  \operatorname{diag}(\ell_i^{\mathrm{new}})^{-1}
+  \widetilde O_i^{\mathrm{new}}
+$$
 
 ### 忽略 mask block 的 Attention 计算
 
@@ -303,7 +350,66 @@ Flash-Decoding 分 3 个步骤进行：
 3. 最后，我们通过对所有分割进行归约来计算实际输出，使用对数求和指数来缩放每个分割的贡献。
 
 这一切之所以可行，是因为注意力/softmax 可以迭代计算。在 Flash-Decoding 中，它被用于两个层面：在 splits 内（类似于 FlashAttention），以及跨 splits 进行最终的 reduce。
+### 第一层：split 内部的 FlashAttention reduce
 
-实际上，步骤 (1) 不涉及任何 GPU 操作，因为键/值块是完整键/值张量的视图。然后，我们需要两个独立的内核分别执行步骤 (2) 和 (3)。
+对于某个 split，仍然按 FlashAttention 的方式在 tile 级别递推。
+
+对于当前 tile $t$，有局部最大值 $m_t$、局部分母 $l_t$、局部输出 $o_t$。  
+跨 tile 时维护全局状态：
+
+$$
+m_{\text{new}} = \max(m_{\text{old}}, m_t)
+$$
+
+$$
+l_{\text{new}} =
+e^{m_{\text{old}} - m_{\text{new}}} l_{\text{old}}
++
+e^{m_t - m_{\text{new}}} l_t
+$$
+
+$$
+o_{\text{new}} =
+\frac{
+e^{m_{\text{old}} - m_{\text{new}}} l_{\text{old}} o_{\text{old}}
++
+e^{m_t - m_{\text{new}}} l_t o_t
+}{
+l_{\text{new}}
+}
+$$
+
+最后得到这个 split 的：
+
+- 局部输出 $o^{(m)}$
+- 局部 logsumexp
+
+$$
+\ell^{(m)} = m^{(m)} + \log l^{(m)}
+$$
+
+---
+
+### 第二层：split 之间的 combine reduce
+
+再把所有 split 的 $(o^{(m)}, \ell^{(m)})$ 做同样风格的归并。
+
+先定义：
+
+$$
+m^\star = \max_m \ell^{(m)}
+$$
+
+则总的 logsumexp 为：
+
+$$
+L = m^\star + \log \sum_m e^{\ell^{(m)} - m^\star}
+$$
+
+最终输出为：
+
+$$
+O = \sum_m e^{\ell^{(m)} - L} \, o^{(m)}
+$$
 
 ![](img/parallelization_kv.gif)
