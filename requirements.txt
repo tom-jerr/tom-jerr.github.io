@@ -8,5 +8,5 @@ mkdocs-rss-plugin
 mkdocs-document-dates>=3.4.9
 mkdocs-statistics-plugin
 dashscope
-mkdocs-ai-summary
+# mkdocs-ai-summary
 #rich # for mkdocs-toc-plugin

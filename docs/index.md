@@ -15,11 +15,13 @@ icon: material/home
 <span style="font-size:50px;">
 Welcome to enjoy MlSys magic! 🎉
 </span>
-<!-- </h1>
-<div style="text-align: center; font-size: 26px; color: #888;">
+</h1>
+
+<!-- <div style="text-align: center; font-size: 26px; color: #888;">
   Great things come from hard work and perseverance (From <img src="/img/la.png" alt="Lakers Logo" style="height: 1.5em; vertical-align: middle; margin-left: 6px;" /> Kobe Bryant)
-</div>
-<h3 style="text-align: center;"> -->
+</div> -->
+
+<h3 style="text-align: center;">
 
 Looking for a llm inference acceleration internship 😍
 

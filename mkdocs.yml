@@ -102,13 +102,13 @@ plugins:
 
   - statistics:
       words_per_minute: 200
-  - ai-summary:
-      api: "tongyi"
-      model: "qwen-turbo"
-      ignore_code: true
-      cache: true
-      cache_dir: "./"
-      prompt: "Please help me summarize the following content into an abstract within 800 words: "
+  # - ai-summary:
+  #     api: "tongyi"
+  #     model: "qwen-turbo"
+  #     ignore_code: true
+  #     cache: true
+  #     cache_dir: "./"
+  #     prompt: "Please help me summarize the following content into an abstract within 800 words: "
 
 markdown_extensions:
   - abbr
@@ -183,7 +183,7 @@ extra_css:
   - css/flink.css
   - css/tasklist.css
   - css/footer-stats.css
-  - css/ai-summary.css
+  # - css/ai-summary.css
 
 extra:
   social:

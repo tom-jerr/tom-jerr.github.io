@@ -26,7 +26,7 @@ jobs:
           path: .cache
           restore-keys: |
             mkdocs-material-
-      - run: pip install -r requirements.txt 
+      - run: pip install -r requirements.txt
       # - name: Install modified mkdocs-statistics-plugin
       #   run: |
       #     git clone https://github.com/tom-jerr/mkdocs-statistics-plugin
@@ -45,10 +45,11 @@ jobs:
           DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
         run: mkdocs build --verbose
       # 使用 AI 摘要部署
-      - name: 使用 AI 摘要部署
-        env:
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+      # - name: 使用 AI 摘要部署
+      #   env:
+      #     DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      #     DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+      - name: gh-deploy
         run: mkdocs gh-deploy --force
       # 自动提交 AI 缓存文件
       # - name: 自动提交 AI 缓存
