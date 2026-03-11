@@ -64,7 +64,23 @@ $$
 相对位置编码是根据单词之间的相对位置关系来计算位置编码。这种编码方式更加灵活，**能够捕捉到不同单词之间的相对位置信息**，有助于模型更好地理解序列中单词之间的关系。但是也有缺点，计算效率低下，同时大部分相对编码都没有落地可行性。
 
 ---
+### ALiBi: Attention with Linear Biases
+不给 token embedding 加位置向量，也不旋转 Q/K，而是在 attention score 上按距离直接减去一个线性惩罚。形式通常写成：
 
+$$
+  \mathrm{score}_{ij}=
+  \frac{Q_i K_j^\top}{\sqrt{d}}-
+  m_h \cdot (i-j),
+  \qquad (j \le i)
+$$
+其中：
+
+- $m_h$ 是第 $h$ 个 head 的 slope
+- 距离越远，惩罚越大
+- 不同 head 有不同 slope，有的更看近处，有的更看远处
+
+ALiBi 原论文报告它能在较短训练长度下外推到更长输入，并且几乎不增加参数和运行成本
+很多现代 LLM 实践里，效果通常仍不如 RoPE 家族稳定全面
 ### Rotary Position Embedding (RoPE)
 
 将位置编码与词向量通过旋转矩阵相乘，使得词向量不仅包含词汇的语义信息，还融入了位置信息
@@ -131,6 +147,76 @@ $$
 :warning: 由于$(R_m$)具有稀疏性，不建议使用 matmul 进行实现，建议使用下面的方式实现：其中$(\odot$)是逐位对应相乘，即 Numpy、Tensorflow 等计算框架中的 ∗ 运算
 
 ![](img/rope1.png)
+
+#### 问题
+- **位置维度和内容维度强耦合**：对于一些架构，特别是 MLA 这类压缩 attention 表达的结构，可能不希望所有维度都带旋转位置信息
+- **对上下文扩展很敏感**：所以后来有很多 “RoPE scaling / interpolation / NTK-aware scaling / YaRN / LongRoPE”等变体
+
+---
+### Partial RoPE
+只对 Q/K 的一部分维度施加 RoPE，剩下维度保持不旋转。
+
+假设 `head_dim` 是 $d$，只对前 $d_r$ 维做旋转，后面 $d - d_r$ 维不动：
+
+$$
+  q =
+  \begin{bmatrix}
+  q^{(\mathrm{rope})} \\
+  q^{(\mathrm{plain})}
+  \end{bmatrix}
+$$
+
+$$
+  k =
+  \begin{bmatrix}
+  k^{(\mathrm{rope})} \\
+  k^{(\mathrm{plain})}
+  \end{bmatrix}
+$$
+
+然后：
+
+$$
+  q' =
+  \begin{bmatrix}
+  R_m\, q^{(\mathrm{rope})} \\
+  q^{(\mathrm{plain})}
+  \end{bmatrix}
+$$
+
+$$
+  k' =
+  \begin{bmatrix}
+  R_n\, k^{(\mathrm{rope})} \\
+  k^{(\mathrm{plain})}
+  \end{bmatrix}
+$$
+
+最后 score 变成：
+
+$$
+  \mathrm{score}_{mn}=
+  \frac{
+  \left\langle R_m q^{(\mathrm{rope})},\, R_n k^{(\mathrm{rope})} \right\rangle
+  +
+  \left\langle q^{(\mathrm{plain})},\, k^{(\mathrm{plain})} \right\rangle
+  }{\sqrt{d}}
+$$
+#### 目的
+- 不是所有维度都需要位置敏感：有些维度更适合表达语义内容，不一定适合被相位旋转。
+
+- 降低长上下文时的高频扭曲：RoPE 的高频维度在超长外推时更容易出问题。只让部分维度承担旋转，可以减少这种影响。
+
+- 适配 MLA / latent attention 一类结构：在 MLA 里，Q/K/V 有更强的低秩压缩和结构约束。把所有维度都塞进 RoPE，**可能会损伤压缩后的表达效率**。近年的 MHA2MLA 工作就把 partial RoPE 作为关键设计之一，用来仅保留对 attention 分数更重要的旋转维度
+---
+### RoPE Scaling
+训练只见过 $L_{\text{train}}$，推理要跑更长 $L_{\text{test}}$，那就不要让位置 m 直接照原公式进旋转，而是做一个缩放：
+$$
+ m' = m / s
+$$
+
+或者某种非线性映射，再代入旋转角度。
+直觉上是把更长序列压缩映射回训练时更熟悉的角度范围，减轻超长时的相位失真。
 
 ---
 
@@ -344,7 +430,7 @@ $$
 K 矩阵仅需共享的 $W_{kr}$；head 间的差异完全由各自的 $W_{qr}^{(s)}$ 在 Q 侧体现。
 
 ---
-### 完整推理过程
+#### 完整推理过程
 
 - 生成 Query
 
@@ -414,6 +500,13 @@ K 矩阵仅需共享的 $W_{kr}$；head 间的差异完全由各自的 $W_{qr}^{
   映射回 $d_{model}$ 维。
 ---
 
+### Linear Attention
+所以 linear attention 的核心目标就是：
+> 避免显式构造 $N \times N$ 的 attention matrix，把复杂度从二次降到线性。
+
+
+
+---
 ## Normalization
 
 - LayerNorm: 对某个样本的所有特征维度进行归一化
