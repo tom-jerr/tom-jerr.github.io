@@ -94,7 +94,7 @@ $$
   - 单头注意力：
 
   $$
-  ext{Attn}(Q,K,V) = \text{Softmax}\!\left(\frac{QK^\top}{\sqrt{d}}\right)V
+  \text{Attn}(Q,K,V) = \text{Softmax}\!\left(\frac{QK^\top}{\sqrt{d}}\right)V
   $$
 
   - 等价于：

@@ -15,7 +15,7 @@ Prefill 是 compute-bound 阶段，decode 是 memory-bound 阶段；为了追求
 
 ![](static/KL0fbh7rnoPMChxMvu1cgWFBnHf.png)
 
-Prefill 阶段适合使用模型并行策略减小单张 GPU 上的计算量。而 decode 阶段是内存密集型适合使用数据和流水线并行。如果预填充和解码同时配置在一个计算设备上，并行策略不能单独配置。
+**Prefill 阶段适合使用 TP 策略减小单张 GPU 上的计算量。而 decode 阶段是内存密集型适合使用 DP + PP**。如果预填充和解码同时配置在一个计算设备上，并行策略不能单独配置。
 
 所以现在很多推理服务商选择进行 PD 分离，prefill 集群与 decode 集群分别执行这两个推理阶段的任务，中间的 KV Cache 以及必要的元数据通过 RDMA 高速网络传输
 

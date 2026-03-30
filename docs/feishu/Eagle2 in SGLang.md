@@ -390,9 +390,10 @@ next_draft_input = EagleDraftInput(
 
 ReRank draft tokens
 
-- 合并所有步的分数
+- 合并所有步的分数，树的每个分支的分数 = 这个分支上所有 token 的分数之积
 - 选择分数最高的 (num_draft_tokens - 1) 个
-- 排序，如果相同选择浅层节点保证树结构的正确性
+- 排序，没有管树的正确性
+  - 后续 build tree mask 的时候会把不合法的 token（父节点被丢弃了）过滤掉
 
 **Build Tree Mask**
 
@@ -431,11 +432,9 @@ EagleVerifyInput(
 ```
 
 **Target Verify**
-verify input 的 num_steps 应该 + 1，因为 verified_id 需要加在最前面
+- 分配 KV Cache，然后构建 forward batch 给 Target Model 使用
 
-分配 KV Cache，然后构建 forward batch 给 Target Model 使用
-
-Target verify 是用 target model（大模型）对 draft model 生成的 draft token tree 进行并行 forward：
+- Target verify 是用 target model（大模型）对 draft model 生成的 draft token tree 进行并行 forward：
 
 输入: 所有 draft tokens（树形结构展平后）
 输出: 每个 draft token 位置的 logits（next_token_logits）

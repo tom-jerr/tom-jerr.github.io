@@ -360,7 +360,8 @@ $$S_{mem} = N \times [BK \times (BM + BN)] \times \text{sizeof(dtype)}$$
 我们需要权衡两种并行模式：
 
 - 线程级并行 (TLP - Thread Level Parallelism)
-  - 定义： GPU 通过快速上下文切换 (Context Switching) 在不同的 Warps 之间轮转执行，以掩盖延迟。- 度量指标：占用率 (Occupancy)。即活跃 Warp 数量与 SM 物理最大支持 Warp 数量的比值。
+  - 定义： GPU 通过快速上下文切换 (Context Switching) 在不同的 Warps 之间轮转执行，以掩盖延迟。
+  - 度量指标：占用率 (Occupancy)。即活跃 Warp 数量与 SM 物理最大支持 Warp 数量的比值。
   - 资源限制：Shared Memory 是限制 Occupancy 的关键瓶颈。
 - 指令级并行 (ILP - Instruction Level Parallelism)
   - 定义：单个线程内部，利用流水线技术，让计算指令和访存指令同时在飞行中 (In-flight)。
@@ -375,7 +376,15 @@ $$S_{mem} = N \times [BK \times (BM + BN)] \times \text{sizeof(dtype)}$$
   - **流水线气泡 (Pipeline Stalls)**： 一旦流水线断流，GPU 的海量计算单元将瞬间空转，性能急剧下降。
 
 ### wmma 指令优化
-
+WMMA GEMM 的多 stage 异步预取 prologue。
+- 256 个线程先线性编号成 8 个 warp，其中 warp_id 决定后面负责的输出子块位置。随后所有线程分工把当前 block 需要的 A[128x8] 和 B[8x128] tile 从 global memory 异步拷到 shared memory
+  - A 的映射是每行两个线程分别搬前 4 和后 4 个 float
+  - B 的映射是每个 warp 负责一整行、warp 内每个线程搬连续 4 个 float。
+  - 每次 cp.async 拷 16B，既匹配 4 个 float，又利于对齐和吞吐。
+  - COMMIT_GROUP 用来提交这一 stage 的异步拷贝请求
+  - WAIT_GROUP 保证即将消费的 stage 已经落到 shared memory，
+  - 最后再通过 __syncthreads() 确保整个 block 都能安全读取 shared tile。
+  - 之后主循环就能一边做 WMMA 计算，一边继续预取下一 stage，实现访存和计算重叠。
 #### Tensor Core
 
 通过 WMMA API，开发者可将 D = A × B + C 当作 warp 操作，其中的 A、B、C、D 都是更大矩阵的 tile。通过 WMMA API，warp 的所有线程可以合作完成在这些 tile 上的矩阵乘加操作
@@ -436,21 +445,27 @@ CUDA 默认按照 blockIdx.x 增加的方向调度，填满一行后再换下一
 
 **不加 Swizzle：**
 
-一行有 64 个 Block（BX=64）。GPU 一次能“吃”掉第一行全行 (64 个) + 第二行前 18 个。当第一批 Block 跑完，SM 释放，开始跑后续 Block 时，如果按照光栅顺序，它会继续往右跑或者换行。如果不控制顺序，SM 可能会随机地从 DRAM 拉取非常分散的 B 矩阵 Tile，导致带宽瓶颈。
+主要复用的是 A 的同一行块，而不是 B。因为 bx 变了，就意味着它们在不断切换 B[:, 0], B[:, 1], ..., B[:, 63]。如果这些 CTA 在时间上比较接近执行，那么很短时间里就会把很多不同的 B tile 依次拉进 L2。L2 容量有限时，较早装进去的 $B_{tile}[0]$ 很可能在后面访问 $B_{tile}[1...63]$ 的过程中被挤掉
 
-> 在处理中间那 127 个 Block 的过程中，加载了大量新的 B 矩阵数据。由于 L2 Cache 容量有限，$B_{tile}[0]$ 很可能早就被后续的 $B_{tile}[1 \dots 127]$ 挤出去了（Evicted）。这就导致了 B 矩阵的 Cache Thrashing（颠簸），每次换行都要重新从 DRAM 读取 B，极大地浪费了带宽
+```
+grid = (num_tiles_n, num_tiles_m)
+bx = blockIdx.x
+by = blockIdx.y
+(0,0) (1,0) (2,0) ... (63,0)
+```
+
+> 在普通 tile 编号下，更可能同时活跃 的 CTA 集合会覆盖更分散的 bx，因此 B 的工作集更大，更容易发生 L2 抖动
 
 **加上 Swizzle：**
-GPU 硬件调度器通常优先调度 x，然后 y，最后 z（或者说在 z 固定的情况下跑完 x, y）。现在的 gridDim.x = 16。
+GPU 硬件调度器通常优先调度 x，然后 y，最后 z（或者说在 z 固定的情况下跑完 x, y）。我们通过逻辑映射，让 blockIdx 绕个弯：
+- 原本序号 $0 \dots 15$ 的 CTA 被映射到 $(0,0) \dots (3,3)$ 这个 $4 \times 4$ 的闭环区域。
+- B 消耗：虽然有 16 个 CTA 在跑，但它们只访问 $B[:, 0], B[:, 1], B[:, 2], B[:, 3]$ 这 4 个 Tile。
 
-GPU 执行的 Block 大概率是：
-
-- Strip 0 的 Row 0 (16 个)
-- Strip 0 的 Row 1 (16 个)
-- Strip 0 的 Row 2 (16 个)
-- Strip 0 的 Row 3 (16 个)
-- Strip 0 的 Row 4 (16 个)
-- Strip 0 的 Row 5 (2 个)
+```
+bx = blockIdx.z * gridDim.x + blockIdx.x
+by = blockIdx.y
+```
+- 原来宽而分散的一整行，变成若干更窄的列块集合于是，在一段时间内，活跃 CTA 更集中地访问：B[:, 0..15]，而不是 B[:, 0..63]，这就把 B 的瞬时工作集缩小了
 
 这 82 个正在运行的 Block，绝大多数都集中在 B 矩阵的前 16 个 Tile 上。它们共享 B 矩阵的读请求，L2 Cache 命中率极高，DRAM 带宽压力骤降。
 

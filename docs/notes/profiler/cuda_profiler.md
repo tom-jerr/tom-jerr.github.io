@@ -1,0 +1,2 @@
+cudaEvent 事件记录测的是主机端到主机端的往返时间，不仅包含内核的 GPU 执行时间，还包含 1）每次 kernel launch 的调度开销，每次调用都需要把参数打包，进入驱动层、排队执行，代价大概几十微秒。 2）每次 cudaStreamSynchronize(stream) 的同步开销，这会让主机等到 GPU 完全空闲才返回，又是一笔开销。3）事件本身的开销。cudaEventRecord 在它所在的流上会插入一个标记，记录时还会做一次小的同步。
+nsys 报告的只是真正的 GPU 活动时间

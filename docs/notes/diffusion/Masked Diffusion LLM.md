@@ -35,9 +35,9 @@ LLaDA 通过定义前向过程（Forward Process）和反向过程（Reverse Pro
 LLaDA 的预训练旨在让模型学会从不同程度的掩码中恢复文本。
 - 模型架构：
   - **双向注意力**：与 GPT 系列（自回归模型）不同，LLaDA 使用的 Transformer 不使用因果掩码（Causal Mask）。这意味着在预测时，模型可以看到**上下文中的所有内容（包括“未来”的 Token，如果它们没被掩盖的话）**。
-  - **MHA not GQA**：为了适应架构，LLaDA 做了一些微调。例如，它使用标准的**多头注意力（MHA）**而不是分组查询注意力（GQA），因为它不使用 KV Cache。为了保持参数量与 LLaMA3 8B 一致，它相应减少了前馈神经网络（FFN）的维度。
+  - **MHA not GQA**：为了适应架构，LLaDA 做了一些微调。例如，它使用标准的**多头注意力（MHA）** 而不是分组查询注意力（GQA），因为它不使用 KV Cache。为了保持参数量与 LLaMA3 8B 一致，它相应减少了前馈神经网络（FFN）的维度。
   > [!NOTE]
-  > Why MHA not GQA?
+  > **Why MHA not GQA?**
   > 因为 LLaDA 与 KV Cache 不兼容。GQA 的主要目的是为了减少 KV Cache 的显存占用，既然用不了 KV Cache，GQA 的优势也就没了，不如直接用参数更多的 MHA 来换取性能
   - **预训练流程**：训练时，对每个序列随机采样一个时间步 $t \in [0, 1]$，然后按概率 $t$ 独立掩盖 Token。
     - 输入是一段完整的文本（如图中上方彩色方块）。

@@ -835,8 +835,7 @@ with self.forward_stream_ctx:
 vocab mask 在 CPU 上分配和处理，这里是在 pinned memory 上分配的，我们通过异步拷贝拷贝到 GPU 上；所以这个依赖由 GPU 的 stream 保证顺序
 
 ### 与上一版 overlap 差异
-
-- 将 update_vocab_mask 移动到 GPU 进行计算(**Sample 中进行**)，`vocab_mask` 也在 GPU 直接进行分配，不再进行传输
+- mask 仍然需要在 CPU 上计算，因为 grammar 的状态机在 CPU 上；但我们通过异步拷贝的方式将 mask 从 CPU 拷贝到 GPU 上，保证 GPU 侧的流水线不会被打断
 - 现在的 GPU 额外负责向 FutureMap 存储(after sample)以及获取(before compute) `next_token_ids`
   - FutureMap 也是完全存储在 GPU 上
 - 对 GPU 调度由原来 CPU 进行 launch，变成直接将操作提交到 cuda stream，由 stream 自己来调度

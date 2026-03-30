@@ -78,7 +78,7 @@ for p from 0 to K_tile-1:
 
 - 进行 QK 点积计算我们需要**复用一段 Key 向量的元素**做多次运算 **(tile d 方式)**
   $$
-  score\_{i,j}​= Q_i​·K_j​=\\sum\_{d=1}^{head_size} Q\_{i,d}​×K\_{j,d}​
+  score_{i,j}​= Q_i​·K_j​=\sum_{d=1}^{head\_size} Q_{i,d}​×K_{j,d}​
   $$
 - 如果每个线程单独拉取 Key 向量的话
   - 内存访问地址不连续（stride 大）
@@ -89,7 +89,7 @@ for p from 0 to K_tile-1:
 **对于 Value 向量**
 
 $$
-output_i = \\sum\_{j=1}^{num_tokens} softmax(score\_{i,j}) × V_j​
+output_i = \sum_{j=1}^{num\_tokens} softmax(score_{i,j}) × V_j​
 $$
 
 - 每个线程负责生成一个 query 的输出向量一部分，不需要进行 tile K 方式加载，所以每个线程自己加载自己的 Value 向量即可。
