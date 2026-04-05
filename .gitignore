@@ -7,3 +7,4 @@ TaskNotes/
 docs/assets
 _ai_summary*.json
 .python
+.venv

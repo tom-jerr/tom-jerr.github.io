@@ -1,3 +1,15 @@
+---
+
+title: Speculative Decoding
+created: 2026-04-5
+update:
+comments: true
+katex: true
+tags:
+
+- LLMInference
+
+---
 # Speculative Decoding
 
 
@@ -140,8 +152,11 @@ $$
 1. verify 完成后，SGLang 会真正把接受的 token 写入 req.output_ids，更新 grammar、kv_committed_len、seq_lens
      - 释放未接受分支占掉的 KV 槽；topk>1 时还会做 cache compaction，把保留下来的 accepted path 挪到连续位置。
 2. verify 得到的 prefict 构造 forward batch，draft 模型沿着这次真正接受的 token 序列做一次 extend，重新得到下一轮要用的 topk_p/topk_index/hidden_states。
+
 3. 构造下一次的 EagleDraftInput，主要是把这轮 verify 接受的 token(最后一个被验证成功的 token) 以及得到的 topk_p/topk_index/hidden_states。这一步非常关键，它让 draft 始终跟 target 已确认的前缀同步。
 
+> [!IMPORTANT]
+> 这里是因为 EAGLE 本身的性质决定的，它需要 target model 的 feature 和 sample 后的 token 作为 draft model 的输入来预测 draft token，所以每次 draft->verify->sampling 之后，我们都需要再次推进 draft，即用 target model 刚刚得到的所有 token 的 hidden_state 以及采样得到的 bonus token 来恢复 KV Cache 以供下一轮 draft 使用。
 ## 工程细节 SGLang
 ### Mamba Cache Problem
 - 普通 Transformer 在 speculative verify 后，只需要把接受的 token 写回 target KV cache 就够了。
@@ -158,8 +173,8 @@ $$
     - 一次把 mamba_steps_to_track scatter 到 mamba_track_indices，让 prefix-cache 的 snapshot 落在正确的 tracking 点上。
 
 **Important** 
-- Mamba cache 不是单纯 token->KV 的映射，而是“序列状态快照”。
-- speculative verify 会先算出一串候选，再只接受其中一部分；真正该缓存的 Mamba state，不一定是 verify 最后一步，而是“accepted 路径里跨过 track interval 的那一步”。
+- Mamba cache 不是单纯 token->KV 的映射，而是序列状态快照。
+- speculative verify 会先算出一串候选，再只接受其中一部分；真正该缓存的 Mamba state，不一定是 verify 最后一步，而是 accepted 路径里跨过 track interval 的那一步。
 - verify 路径和 extend 路径用的 tracking 语义不一样，所以这里只保留 mamba_track_indices，并显式把 mamba_track_mask、mamba_track_seqlens 置空；否则会把 extend 阶段遗留的 metadata 误带进 verify
 
 

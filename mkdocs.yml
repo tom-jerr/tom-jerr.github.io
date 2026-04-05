@@ -336,6 +336,11 @@ nav:
           - "find": notes/linux tools/4-find.md
   - PaperReading:
       - index: paperreadings/index.md
+      - LLM:
+          - Speculative Decoding:
+              - EAGLE: paperreadings/llm/eagle.md
+              - EAGLE2: paperreadings/llm/eagle2.md
+              - EAGLE3: paperreadings/llm/eagle3.md
       - Database Systems:
           - Do not use MMAP in DBMS: paperreadings/db/storage/NoMMAP.md
       - Vector Search:
@@ -343,10 +348,10 @@ nav:
           - MIRAGE-ANNS: paperreadings/vector search/MIRAGE-ANNS.md
           - LSM-VEC: paperreadings/vector search/LSM-VEC.md
           - PANNS: paperreadings/vector search/PANNS.md
-      - Active SLAM:
-          - PL-VINS: paperreadings/activeslam/PL-VINS.md
-          - 3D Active Metric-Semantic SLAM: paperreadings/activeslam/3D Active Metric-Semantic SLAM.md
-          - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
+      # - Active SLAM:
+      #     - PL-VINS: paperreadings/activeslam/PL-VINS.md
+      #     - 3D Active Metric-Semantic SLAM: paperreadings/activeslam/3D Active Metric-Semantic SLAM.md
+      #     - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
   - Blogs:
       - index: blogs/index.md
       # - Diffusion Model:
@@ -363,16 +368,20 @@ nav:
           - 从代码看 SGLang 的 KV Cache: notes/sglang/从代码看 SGLang 的 KV Cache.md
           # - 🚧 DP Attention: notes/sglang/DP Attention.md
           # - 🚧 SGLang 中的 Speculative Decoding: notes/sglang/SGlang 中的 Speculative Decoding.md
-      - LLM Basic Concepts:
+      - LLM Inference Basic:
           - Attention & Transformers: notes/llm_inference/attention&transformer.md
           - Transformer-Based LLM Architecture: notes/llm_inference/transformerbasedllm.md
-          - Introduction for LLM Inference: notes/llm_inference/Introduction.md
+          # - Introduction for LLM Inference: notes/llm_inference/Introduction.md
+          - Model Forward 瓶颈以及优化方法: notes/llm_inference/inferenceperf.md
           - Parallelizatoin Concepts: notes/llm_inference/parallelization.md
           - Parallelization in LLM Inference: notes/llm_inference/LLMparallelization.md
-      - LLM Serving:
-          - PageAttention: blogs/posts/PageAttention.md
+          # - PageAttention: blogs/posts/PageAttention.md
           - FlashAttention: blogs/posts/FlashAttention 原理 v1-v2.md
           - 大模型推理服务中的 Batching: notes/sglang/大模型推理服务中的 Batching.md
+      - LLM Optimization:
+          - Quantization in LLM Inference: notes/llm_inference/quant.md
+          - Speculative Decoding: notes/llm_inference/speculativedecoding.md
+          - 🚧 Long Context Optimization: notes/llm_inference/longcontext.md
       - CUDA:
           - 从 GEMM 实践 CUDA 优化: notes/cuda/从GEMM实践CUDA优化.md
           # - GPU 内存系统演进: notes/cuda/GPU 内存系统演进：最大化带宽利用与延迟隐藏的技术路径.md
