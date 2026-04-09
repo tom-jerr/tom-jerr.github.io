@@ -15,19 +15,19 @@ cover: /img/transformer.png
 
 ### 最大似然估计
 
-1. 假设数据服从某个条件分布族
-2. $$
+假设数据服从某个条件分布族
+$$
    X \sim p(x \mid \theta)
-   $$
-3. 给定观测样本 $x_1,\dots,x_n$
-4. 构造联合条件分布：
-5. $$
+$$
+给定观测样本 $x_1,\dots,x_n$
+构造联合条件分布：
+ $$
    p(x_1,\dots,x_n \mid \theta)
-   $$
-6. 把它当作关于 $\theta$ 的函数并最大化：
-7. $$
+$$
+把它当作关于 $\theta$ 的函数并最大化：
+$$
    \hat{\theta} = \arg\max_\theta p(x_1,\dots,x_n \mid \theta)
-   $$
+$$
 
 所以：
 
