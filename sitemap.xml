@@ -617,35 +617,51 @@
          <lastmod>2026-04-09</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/paperreadings/llm/A%20Survey%20on%20Efficient%20Inference%20for%20Large%20%20Language%20Models/</loc>
-         <lastmod>2026-04-09</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/paperreadings/llm/Orca/</loc>
-         <lastmod>2026-04-09</lastmod>
-    </url>
-    <url>
          <loc>https://tom-jerr.github.io/paperreadings/llm/Prepacking/</loc>
          <lastmod>2026-04-09</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/paperreadings/llm/distserve/</loc>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/serving/Chunked%20Prefill/</loc>
          <lastmod>2026-04-09</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/paperreadings/llm/eagle/</loc>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/serving/Orca/</loc>
          <lastmod>2026-04-09</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/paperreadings/llm/eagle2/</loc>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/serving/PageAttention/</loc>
          <lastmod>2026-04-09</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/paperreadings/llm/eagle3/</loc>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/serving/SGLang/</loc>
          <lastmod>2026-04-09</lastmod>
     </url>
     <url>
-         <loc>https://tom-jerr.github.io/paperreadings/vector%20search/Acceleratin%20Graph%20Indexing%20for%20ANNs%20on%20Modern%20CPUs/</loc>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/serving/distserve/</loc>
+         <lastmod>2026-04-09</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/speculative%20decoding/SD%20in%20Llama/</loc>
+         <lastmod>2026-04-09</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/speculative%20decoding/eagle/</loc>
+         <lastmod>2026-04-09</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/speculative%20decoding/eagle2/</loc>
+         <lastmod>2026-04-09</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/speculative%20decoding/eagle3/</loc>
+         <lastmod>2026-04-09</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/speculative%20decoding/survey%20on%20parallel%20text%20gen/</loc>
+         <lastmod>2026-04-09</lastmod>
+    </url>
+    <url>
+         <loc>https://tom-jerr.github.io/paperreadings/llm/%E4%B8%80%E8%87%B4%E6%80%A7/batch-invariant%20kernel/</loc>
          <lastmod>2026-04-09</lastmod>
     </url>
     <url>
@@ -666,10 +682,6 @@
     </url>
     <url>
          <loc>https://tom-jerr.github.io/paperreadings/vector%20search/PDX/</loc>
-         <lastmod>2026-04-09</lastmod>
-    </url>
-    <url>
-         <loc>https://tom-jerr.github.io/paperreadings/vector%20search/idea/vector_search/</loc>
          <lastmod>2026-04-09</lastmod>
     </url>
     <url>
