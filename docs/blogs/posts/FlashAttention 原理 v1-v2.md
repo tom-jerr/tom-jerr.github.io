@@ -345,37 +345,42 @@ $$
 
 ## Flash Attention V3
 使用 Hopper 架构的硬件特性（如 TMA 和 Warp-specialization）来实现更高效的并行化和重叠计算，进一步提升性能。
+- **TMA (Tensor Memory Accelerator) 与异步性**： Hopper 引入了专用的 TMA 硬件单元，用于在全局内存 (GMEM) 和共享内存 (SMEM) 之间执行异步内存拷贝 。FA3 利用这一点，在不阻塞计算线程的情况下，后台加载注意力块的数据。异步 
+- **Tensor Cores (WGMMA 指令)**： 与上一代不同，Hopper 的 Tensor Cores 可以通过 WGMMA (Warpgroup Matrix-Multiply-Accumulate) 指令直接从共享内存中异步读取输入 。这使得矩阵乘法可以和内存操作或其他计算完全解耦。
+- **Warp 专用化 (Warp-specialization) 与动态寄存器分配**： FA3 采用 Warp 专用化机制，将同一个线程块 (CTA) 内的 Warp 划分为专门的 Producer（负责发出 TMA 数据移动指令）和 Consumer（负责执行数学计算）。结合 Hopper 的 setmaxnreg 指令，FA3 可以将不怎么需要寄存器的 Producer Warp 的寄存器释放，动态分配给极其需要寄存器的 Consumer Warp，从而提升计算效率 。
+- **FP8 低精度硬件加速**： Hopper 拥有专门针对 FP8 的 Tensor Cores，其吞吐量是 FP16/BF16 的两倍 。FA3 为此设计了块量化 (block quantization) 和非相干处理 (incoherent processing) 技术，以降低 FP8 在处理大语言模型离群值 (outliers)时的数值误差
 
-### TMA and Warp-specialization
-- 通过将底层执行域在物理 Warp 级别进行彻底拆分，由专用的 Producer Warps 专门负责调度毫无计算逻辑的单纯内存搬运（TMA 硬件在背后默默执行，彻底隐藏并消灭了传统的 Long Scoreboard 停顿）
-- 同时由另一批独立的 Consumer Warps 纯粹利用 Tensor Cores 进行并发矩阵乘运算。
- Inter-warpgroup overlapping with pingpong scheduling (曲速组间的乒乓调度重叠)
-- 默认情况（什么都不做）： GPU 的硬件调度器本身就很聪明。如果某个 Warp 在等内存数据，调度器会自动切换到另一个准备好的 Warp。这能提供一定的免费重叠。
-- 手动优化（乒乓调度）： 仅仅依赖硬件是不够的。开发者手动将任务分配给两个 Warp 组（Warpgroup 1 和 Warpgroup 2），并使用同步屏障（bar.sync） 强制它们按特定的节奏交替工作。
-  - 第一拍： Warpgroup 1 使用张量核心疯狂计算 GEMM；此时，Warpgroup 2 使用常规核心计算上一轮的 Softmax。
-  - 第二拍： Warpgroup 1 算完了 GEMM，开始用常规核心算 Softmax；此时，Warpgroup 2 接管张量核心，开始算它的 GEMM。
-#### 同步方式(mbarrier)
-- 利用 NamedBarrier（底层对应 PTX 指令 mbarrier） 允许开发者在 Shared Memory 中定义一个轻量级的、针对特定线程子集的硬件同步屏障。它完全打破了 __syncthreads() 的全局限制。
-  - 实际上是异步事务限制
-  - Arrive（到达）： 线程干完自己的活，告诉 Barrier “我这部分完事了”，然后不阻塞，可以继续去干别的无需同步的活。
-  - Wait（等待）： 线程真正需要依赖别人数据的时候，才调用 Wait 阻塞自己，直到所有被期望的线程都 Arrive。
-- 初始状态： WG0 负责算当前块的矩阵乘（GEMM），WG1 负责算上一个块的 Softmax 和数据转换。
-  第一拍（交接）：
-  - WG1 算完了 Softmax，调用 warp_scheduler_barrier_arrive()，告诉屏障：“我的资源（比如 Shared Memory 或寄存器里的某块空间）释放了”。
-  - WG0 在准备开启下一轮软流水之前，调用 warp_scheduler_barrier_sync()，它会在这里阻塞，直到确认 WG1 已经把资源腾出来了。
-  第二拍（角色互换）：
-  - WG0 冲破屏障后，立刻接管原本属于 WG1 的资源，开始它的下一轮任务。
-  - 此时，通过精密的循环展开和 ID 取模计算，WG0 和 WG1 的角色会在逻辑上互换。
-### Intra-warpgroup overlapping of GEMM and Softmax
-核心思路： 哪怕是在同一个 Warp 组内部，我们也不等当前的 GEMM 完全算完再算 Softmax。我们可以采用软件流水线Software Pipelining 的技术，让同一个 Warp 组在执行当前循环的 GEMM 指令的间隙，穿插执行上一个循环的 Softmax 指令。
-- Hopper 架构的矩阵乘指令（wgmma.mma_async）是完全异步的。 当你用 C++ 触发 flash::gemm 时，GPU 只是把这个巨大的矩阵乘任务扔给了后端的 Tensor Cores，然后马上执行下一条指令，绝对不等待计算结果
-- SIMT 利用 CUDA Core 计算上一轮的 softmax
-- 用到刚才异步发射的 wgmma 的结果来进行下一步时，调用 warpgroup_wait<0>() 等待 wgmma 完成
-代价（Tradeoff）—— 寄存器压力（Register Pressure）：
-- 这是这种技术最大的难点。GPU 线程的计算必须依赖寄存器（Registers）（最快但容量极小的存储器）。
-- 如果要在同一个 Warp 组内同时推进 GEMM 和 Softmax，你就必须同时把 GEMM 的累加结果（Accumulators）和 Softmax 的输入/输出数据都保存在寄存器里。
-- 如果寄存器不够用，数据就会“溢出（Spill）”到慢速内存中，导致性能暴跌。
+### Hopper 支持
+- TMA (Tensor Memory Accelerator，张量内存加速器)： 这是 Hopper 引入的一个专用硬件单元，负责在全局内存 (GMEM/HBM) 和片上共享内存 (SMEM) 之间执行异步数据拷贝 。它的存在意味着，数据搬运不再需要占用执行数学计算的 CUDA 核心的周期。
+- WGMMA (Warpgroup Matrix-Multiply-Accumulate)： 这是触发异步 Tensor Cores 的核心指令。它作用于整个 Warpgroup（包含 4 个连续的 Warp，即 128 个线程），指示硬件在后台执行大规模矩阵乘法 。值得注意的是，在 FP8 低精度模式下，WGMMA 对输入数据的内存布局有极其严格的要求（例如要求特定的 k-major 连续性布局） 。
+- setmaxnreg (动态寄存器分配)： 这条指令允许在运行时动态重新分配不同 Warpgroup 之间的寄存器数量 。这对于打破传统的寄存器限制至关重要。
 
+### Why can we overlap GEMM and Softmax?
+在标准的注意力计算中，内部循环存在严格的顺序依赖：
+1. 第一个 GEMM 计算注意力分数：$S = QK^\top$ 
+2. 对 $S$ 进行局部 Softmax 处理得到 $P$ 
+3. 第二个 GEMM 计算输出：$O = PV$ 
+
+由于 Softmax 必须等待第一个 GEMM 的结果，而第二个 GEMM 必须等待 Softmax 的结果，这通常会导致串行执行
+
+FA3 能够打破这种依赖并实现重叠，其根本原因在于硬件分离与跨阶段流水线设计。硬件单元独立与吞吐量差异在 GPU 内部，矩阵乘法和 Softmax 分别由不同的物理单元执行：
+   - GEMM 由专门的 Tensor Cores 执行 。
+   - Softmax 包含大量的非矩阵操作（如浮点乘加和指数运算 exp），这些操作由独立的多功能单元 (Multi-Function Unit) 执行 。
+   - 在 H100 上，FP16 的矩阵乘法吞吐量可达 989 TFLOPS，而特殊函数（如指数运算）的吞吐量仅有 3.9 TFLOPS 。因此，指数运算的耗时极长。
+   - 理想的调度方式是：在 Tensor Cores 执行当前矩阵乘法的同时，让多功能单元去处理其他数据的指数运算，从而榨干所有硬件资源 。
+### 跨 Warpgroup 的 Pingpong 调度
+为了让 Softmax 的漫长计算隐藏在 GEMM 之下，FA3 使用了 "Pingpong 调度" 。
+
+- 通过同步屏障指令(mbarrier)，FA3 强制控制不同 Warpgroup（计算组）的执行节奏。
+- 当 Warpgroup 1 在执行其 Softmax 指数运算时，Warpgroup 2 恰好在利用 Tensor Cores 执行其 GEMM 任务 。
+- 随后两者角色互换。这种交替掩盖了极其耗时的非矩阵操作 。
+
+### Warpgroup 内部的两阶段流水线 (2-stage Pipelining)
+除了在不同组之间交替，FA3 还在单个 Warpgroup 的内部循环中引入了流水线，打破了严格的顺序依赖 。
+
+- 在 FA3 中，当硬件正在对当前数据块 $S_cur$计算 Softmax 时，它不需要闲置等待。
+- 因为 WGMMA 是异步的，FA3 会直接向 Tensor Cores 发出计算下一轮数据块 $S_{next} = QK_{next}^\top$ 的指令 。
+- 这意味着，在同一个时刻，当前迭代的第二个 WGMMA 操作与下一个迭代的 Softmax 操作在物理硬件上是完全重叠运行的 。
 
 ## Flash Decoding
 

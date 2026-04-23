@@ -7,6 +7,237 @@ tags:
 description: 本文将从为什么需要 PD 分离开始讲起，通过几篇论文来讲述现在 PD 分离演进的路线，以 SGLang 中 PD 分离的实现作为 example 进行解析；由于笔者之前做过分布式相关的项目，将其中的状态机与 Raft 浅浅做了以下对比。
 cover: /img/pddisagg.png
 ---
+```shell
+  完整请求过程
+
+  1. Router 选择一对 prefill/decode worker，把同一个请求同时发给 P 和 D。
+      - 它会注入 bootstrap_host/bootstrap_port/bootstrap_room，见 sgl-model-gateway/src/routers/http/
+        pd_router.rs:212。
+      - bootstrap_room 是随机 63-bit room id，见 sgl-model-gateway/src/routers/http/pd_types.rs:59。
+      - 两个 HTTP 请求并发发送，见 sgl-model-gateway/src/routers/http/pd_router.rs:553。
+  2. Prefill 收到请求后，不会马上跑 prefill forward，而是进 PrefillBootstrapQueue。
+      - 创建 KVSender，状态变成 Bootstrapping，见 python/sglang/srt/disaggregation/prefill.py:227 和 python/sglang/
+        srt/disaggregation/common/conn.py:425。
+      - 如果 DP load balance 不是 follow_bootstrap_room，prefill 还会把该 room 对应的 DP rank 注册到 bootstrap
+        server，见 python/sglang/srt/disaggregation/common/conn.py:452。
+  3. Decode 收到请求后，创建 KVReceiver，解析 prefill rank 地址，发送 decode 端 KVArgs 注册消息。
+      - 创建 receiver 在 python/sglang/srt/disaggregation/decode.py:446。
+      - 初始化 receiver、拉 rank 映射在 python/sglang/srt/disaggregation/common/conn.py:517。
+      - 发送 decode buffer 指针和 session id 在 python/sglang/srt/disaggregation/mooncake/conn.py:1751。
+  4. Decode 预分配目标 KV cache。
+      - decode 会为原始 prompt 长度分配 req_to_token 和 KV pool slot，见 python/sglang/srt/disaggregation/
+        decode.py:882。
+      - 然后把目标 page indices、metadata buffer index、state indices 通过 ZMQ 发给 prefill，见 python/sglang/srt/
+        disaggregation/decode.py:793 和 python/sglang/srt/disaggregation/mooncake/conn.py:1820。
+  5. Prefill bootstrap thread 收到 decode 的目标 indices 后，把 request 状态从 Bootstrapping 推进到
+     WaitingForInput。
+      - 收到 metadata 后写入 transfer_infos[room]，凑齐 required dst info 后更新状态，见 python/sglang/srt/
+        disaggregation/mooncake/conn.py:1410。
+      - prefill scheduler 轮询 sender，看到 WaitingForInput 后给请求分配 metadata buffer index，并把请求放入
+        waiting queue，见 python/sglang/srt/disaggregation/prefill.py:327。
+  6. Prefill 跑 forward。
+      - prefill 模式里会把 max_new_tokens 改成 1，用来生成第一个 token 和 metadata，见 python/sglang/srt/
+        disaggregation/prefill.py:264。
+      - forward 完成后把第一个 token、logprob、hidden state、bootstrap_room 等写进 metadata buffer，见 python/
+        sglang/srt/disaggregation/prefill.py:750 和 python/sglang/srt/disaggregation/utils.py:250。
+  7. Prefill 发送 KV cache。
+      - send_kv_chunk() 把 prefill 本地 token indices 转成 page indices，然后调用 req.disagg_kv_sender.send()，见
+        python/sglang/srt/disaggregation/prefill.py:822。
+      - Mooncake sender 把 chunk 放进 transfer queue，见 python/sglang/srt/disaggregation/mooncake/conn.py:1648。
+      - transfer worker 取出 chunk，根据 decode 注册过来的远端 ptr 和 dst indices，调用 batch_transfer_sync_write
+        做 RDMA write，见 python/sglang/srt/disaggregation/mooncake/conn.py:1146 和 python/sglang/srt/distributed/
+        device_communicators/mooncake_transfer_engine.py:223。
+  8. 最后一个 chunk 会额外传 metadata/aux 和 state。
+      - KV 正文写入 decode KV pool。
+        conn.py:963。
+  9. Prefill 通过 ZMQ 给 decode 发完成状态。
+      - sync_status_to_decode_endpoint() 发 room/status/prefill_rank，见 python/sglang/srt/disaggregation/mooncake/
+        conn.py:1134。
+      - decode 的 start_decode_thread() 收到 success 后，等所有预期 prefill rank 都返回，再把 room 标成 Success，见
+        python/sglang/srt/disaggregation/mooncake/conn.py:1425。
+
+  NIXL 对比
+
+ 1. 初始化：两边各自创建 agent 并注册本地内存
+
+  Prefill 和 Decode 都会创建自己的 nixl_agent：
+
+  - python/sglang/srt/disaggregation/nixl/conn.py:188：读取 SGLANG_DISAGGREGATION_NIXL_BACKEND
+  - python/sglang/srt/disaggregation/nixl/conn.py:193：self.agent = nixl_agent(str(uuid.uuid4()), agent_config)
+  - python/sglang/srt/disaggregation/nixl/conn.py:203：调用 register_buffer_to_engine()
+
+  注册内容：
+
+  - KV cache：注册成 VRAM，带 gpu_id，见 python/sglang/srt/disaggregation/nixl/conn.py:303
+  - aux metadata buffer：注册成 DRAM，见 python/sglang/srt/disaggregation/nixl/conn.py:313
+  - state/extra pool：如果有，也注册成 VRAM，见 python/sglang/srt/disaggregation/nixl/conn.py:323
+
+  这里的注册只是告诉本地 NIXL agent：这些地址范围是合法可参与 transfer 的内存。Prefill 注册自己的源 KV/aux/state，
+  Decode 注册自己的目标 KV/aux/state。
+
+  2. Decode 一次性把自己的 agent 信息和目标基地址发给 Prefill
+
+  NIXL 没有 Mooncake session_id，所以 Decode 侧需要把两类东西发给 Prefill：
+
+  - agent.name
+  - agent.get_agent_metadata()
+  - Decode 侧 KV/aux/state 的 base pointer
+  - Decode 的 gpu_id、TP 信息、item length 等
+
+  这发生在 NixlKVReceiver._register_kv_args()，见 python/sglang/srt/disaggregation/nixl/conn.py:1198。
+
+  它通过 ZMQ 发一条特殊消息：
+
+  room = "None"
+  agent_name
+  agent_metadata
+  dst_kv_ptrs
+  dst_aux_ptrs
+  dst_state_data_ptrs
+  gpu_id
+  decode_tp_size
+  decode_tp_rank
+  dst_kv_item_len
+  ...
+
+  对应字段结构是 KVArgsRegisterInfo，见 python/sglang/srt/disaggregation/nixl/conn.py:71。
+
+  Prefill 侧 bootstrap thread 收到 room == "None" 后，不是启动某个请求，而是注册远端 peer：
+
+  - python/sglang/srt/disaggregation/nixl/conn.py:1004：判断 room == "None"
+  - python/sglang/srt/disaggregation/nixl/conn.py:1006：解析成 KVArgsRegisterInfo
+  - python/sglang/srt/disaggregation/nixl/conn.py:339：_add_remote_peer()
+  - python/sglang/srt/disaggregation/nixl/conn.py:345：self.agent.add_remote_agent(decode_kv_args.agent_metadata)
+
+  这一步很重要：Prefill 的 NIXL agent 通过 Decode 的 agent_metadata 学会了怎么访问 Decode agent。 同时 SGLang 把
+  Decode 的目标 base pointers 存到：
+
+  self.decode_kv_args_table[agent_name] = decode_kv_args
+
+  后续每个请求就不再重复发 base pointer 和 agent metadata，只发“这个请求写到哪些 page index”。
+
+  3. 每个请求：Decode 发目标 index，Prefill 等 prefill 完成后主动 WRITE
+
+  每个请求开始时，Decode 已经预分配了目标 KV page 和 aux slot。然后 NixlKVReceiver.send_metadata() 把请求级信息发给
+  Prefill，见 python/sglang/srt/disaggregation/nixl/conn.py:1111。
+
+  这次发的是：
+
+  room
+  decode local ip
+  decode rank port
+  decode agent.name
+  dst_kv_indices
+  dst_aux_index
+  required_dst_info_num
+  dst_state_indices
+
+  注意：这里没有 agent_metadata，也没有 base pointer。因为这些已经在前面 room == "None" 的注册消息里发过了。
+
+  Prefill bootstrap thread 收到后，把它存成 TransferInfo：
+
+  - python/sglang/srt/disaggregation/nixl/conn.py:1011
+  - python/sglang/srt/disaggregation/nixl/conn.py:1014
+
+  等同一个 room 所需的 decode 目标信息都到齐后，状态变成 WaitingForInput：
+
+  - python/sglang/srt/disaggregation/nixl/conn.py:1021
+  - python/sglang/srt/disaggregation/nixl/conn.py:1023
+
+  然后 Prefill 正常跑模型。KV 生成完之后，NixlKVSender.send() 会按 chunk 调 add_transfer_request()，见 python/
+  sglang/srt/disaggregation/nixl/conn.py:1042 和 python/sglang/srt/disaggregation/nixl/conn.py:862。
+
+  Prefill 侧真正发数据时会做这些事：
+
+  1. 从本地 prefill KV base pointer + prefill_kv_indices 算源地址。
+  2. 从之前保存的 decode KV base pointer + dst_kv_indices 算目标地址。
+  3. 构造 NIXL transfer descriptors。
+  4. 调 initialize_xfer("WRITE", src_descs, dst_descs, peer_name, notif)。
+  5. 调 agent.transfer(xfer_handle) 提交传输。
+
+  核心代码在 python/sglang/srt/disaggregation/nixl/conn.py:440：
+
+  src_descs = self.agent.get_xfer_descs(src_reqs, "VRAM")
+  dst_descs = self.agent.get_xfer_descs(dst_reqs, "VRAM")
+  xfer_handle = self.agent.initialize_xfer(
+      "WRITE",
+      src_descs,
+      dst_descs,
+      peer_name,
+      notif.encode("ascii"),
+  )
+  state = self.agent.transfer(xfer_handle)
+
+  如果 prefill/decode TP size 不同，会走 slice 版本，核心也是 get_xfer_descs() + initialize_xfer("WRITE") +
+  transfer()，见 python/sglang/srt/disaggregation/nixl/conn.py:597。
+
+  最后一个 chunk 还会额外传：
+
+  - state/extra pool：如果需要，见 python/sglang/srt/disaggregation/nixl/conn.py:921
+  - aux metadata：一定传，见 python/sglang/srt/disaggregation/nixl/conn.py:938
+
+  4. Decode 怎么知道传完了？靠 NIXL notification
+
+  Mooncake 路径里会有显式状态同步；NIXL 这里主要靠 NIXL notification。
+
+  Prefill 初始化 transfer 时传了 notif 字符串，比如：
+
+  {room}_kv_{chunk_id}_{is_last}_{pp_rank}
+  {room}_aux
+  {room}_state_{pp_rank}
+
+  见 python/sglang/srt/disaggregation/nixl/conn.py:886。
+
+  Decode 侧 NixlKVReceiver.poll() 会不断调用：
+
+  self.kv_mgr.update_transfer_status()
+
+  见 python/sglang/srt/disaggregation/nixl/conn.py:1181。
+
+  而 update_transfer_status() 里面通过 NIXL agent 拉取 notification：
+
+  notif_map = self.agent.get_new_notifs()
+
+  见 python/sglang/srt/disaggregation/nixl/conn.py:951。
+
+  收到 notification 后，Decode 按 room 记录：
+
+  - 哪些 KV chunk 到了
+  - 每个 PP rank 最后一个 chunk 是哪个
+  - aux 是否到了
+  - state 是否到了
+
+  见 python/sglang/srt/disaggregation/nixl/conn.py:961。
+
+  TransferStatus.is_done() 的条件是：
+
+  - 已知道需要几个 PP rank
+  - aux 已收到
+  - 如果需要 state，所有 PP rank 的 state 已收到
+  - 每个 PP rank 的所有 KV chunk 都收到
+
+  这个结构在 python/sglang/srt/disaggregation/nixl/conn.py:119。
+
+  所以 NIXL 的后续流程可以压缩成一句：
+
+  Decode 先把自己的 NIXL agent metadata 和目标 buffer base pointers 一次性注册给 Prefill；每个请求只发目标 page
+  indices；Prefill 完成 prefill 后，用自己的 NIXL agent 对 Decode agent 发起 RDMA WRITE；Decode 通过 NIXL
+  notification 判断 KV/aux/state 是否全部到齐，然后请求进入 decode。
+
+  和 Mooncake 对比：
+
+  | 项              | Mooncake                             | NIXL                                       |
+  | --------------- | ------------------------------------ | ------------------------------------------ |
+  | peer 标识       | session_id = hostname:rpc_port       | agent.name                                 |
+  | peer 建立       | Mooncake engine session/handshake    | agent_metadata + add_remote_agent()        |
+  | 一次性注册消息  | 发送 decode session id + ptrs        | 发送 decode agent metadata + ptrs          |
+  | 数据传输        | Mooncake batch_transfer_sync_write   | NIXL initialize_xfer("WRITE") + transfer() |
+  | 完成通知        | SGLang/Mooncake 状态同步             | NIXL notification get_new_notifs()         |
+  | 每请求 metadata | room + dst indices + aux/state index | room + dst indices + aux/state index       |
+
+  最关键的点是：NIXL 的 remote access 能力不来自 session_id，而来自 Decode agent 暴露的 opaque agent_metadata。
+  Prefill 收到它并 add_remote_agent() 之后，才可以用 Decode 的 agent.name 作为 peer_name 发起 WRITE。
+```
 # PD Disaggregation in SGLang
 
 ## Why PD Disaggregation?
