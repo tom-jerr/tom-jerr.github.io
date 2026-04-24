@@ -185,6 +185,19 @@ extra_css:
   # - css/ai-summary.css
 
 extra:
+  giscus:
+    repo: tom-jerr/tom-jerr.github.io
+    repo_id: R_kgDONZrjcA
+    category: General
+    # Replace this with the real General category ID from https://giscus.app
+    category_id: REPLACE_WITH_GENERAL_CATEGORY_ID
+    mapping: pathname
+    strict: 0
+    reactions_enabled: 1
+    emit_metadata: 1
+    input_position: top
+    theme: preferred_color_scheme
+    lang: en
   social:
     - icon: /fontawesome/brands/github
       link: https://github.com/tom-jerr/
@@ -345,6 +358,7 @@ nav:
               - EAGLE: paperreadings/llm/speculative decoding/eagle.md
               - EAGLE2: paperreadings/llm/speculative decoding/eagle2.md
               - EAGLE3: paperreadings/llm/speculative decoding/eagle3.md
+              - DFLASH: paperreadings/llm/speculative decoding/DFLASH.md
       - Database Systems:
           - Do not use MMAP in DBMS: paperreadings/db/storage/NoMMAP.md
       - Vector Search:
@@ -358,10 +372,13 @@ nav:
       #     - Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure: paperreadings/activeslam/Exploration with Global Consistency  Using Real-Time Re-integration and Active Loop Closure.md
   - Blogs:
       - index: blogs/index.md
+      - Models:
+          - DeepSeek v4: paperreadings/llm/models/deepseekv4.md
       # - Diffusion Model:
       # - DiT Generate Model in SGLang: notes/diffusion/DiT Video Generate.md
       # - Masked Diffusion Model: notes/diffusion/Masked Diffusion LLM.md
       - SGLang 专题:
+          - HiCache: sglang/hicahce.md
           - PD Disaggregation in SGLang: sglang/PD Disaggregation in SGLang.md
           - EAGLE2 in SGLang: sglang/Eagle2 in SGLang.md
           - 一条 Request 在 SGLang 的前世今生: sglang/一条 Request 在 SGLang 的前世今生.md

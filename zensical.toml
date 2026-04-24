@@ -1,0 +1,437 @@
+[project]
+site_name = "Want to be a MlSys wizard"
+site_author = "tom-jerr"
+site_url = "https://tom-jerr.github.io"
+site_description = "Experience the journey of a database wizard, from the basics to advanced topics."
+repo_url = "https://github.com/tom-jerr/tom-jerr.github.io/"
+repo_name = "tom-jerr's Site"
+edit_uri = "edit/main/docs/"
+copyright = "Copyright &copy; 2025 - Present <a href=\"https://github.com/tom-jerr/\" target=\"_blank\" rel=\"noopener\">tom-jerr</a>"
+docs_dir = "docs"
+site_dir = "site"
+extra_css = [
+  "css/custom.css",
+  "https://gcore.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css",
+  "https://gcore.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css",
+  "css/card.css",
+  "css/flink.css",
+  "css/tasklist.css",
+  "css/footer-stats.css",
+]
+extra_javascript = [
+  "https://polyfill.io/v3/polyfill.min.js?features=es6",
+  "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js",
+  "https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js",
+  "js/mathjax.js",
+  "https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js",
+  "https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js",
+]
+nav = [
+  { "Home" = "index.md" },
+  { "Notes" = [
+    { "index" = "notes/index.md" },
+    { "Python" = [
+      { "Python \u4e2d\u7684\u88c5\u9970\u5668" = "notes/python/Python \u4e2d\u7684\u88c5\u9970\u5668.md" },
+      { "Python \u4e2d\u7684\u5e76\u884c" = "notes/python/Python \u4e2d\u7684\u5e76\u884c.md" },
+      { "Asyncio \u57fa\u7840" = "notes/python/Asyncio.md" },
+    ] },
+    { "tiny-llm" = [
+      { "Group Query Attention" = "notes/tiny-llm/Group Query Attention.md" },
+      { "RMSNorm & MLP" = "notes/tiny-llm/RMSNorm & MLP.md" },
+      { "Batch Inference & KV Cache" = "notes/tiny-llm/Batching Inference & KV Cache.md" },
+    ] },
+    { "Active SLAM" = [
+      { "VINS \u57fa\u7840" = "paperreadings/activeslam/vins\u57fa\u7840.md" },
+      { "Active SLAM \u6982\u8ff0" = "paperreadings/activeslam/active slam.md" },
+    ] },
+    { "nebula" = [
+      { "Vistor Pattern in nebula" = "projects/nebula-vsearch/understanding/1.visitor pattern.md" },
+      { "Memory Management in nebula" = "projects/nebula-vsearch/understanding/2.memory management.md" },
+      { "Concurrent LRU Cache in nebula" = "projects/nebula-vsearch/understanding/3.concurrent lru cache.md" },
+      { "Folly Future Promise framework in nebula" = "projects/nebula-vsearch/understanding/4.folly future promise.md" },
+      { "nGQL Life in Nebula" = "projects/nebula-vsearch/understanding/5.nGQL life.md" },
+      { "Raft Wal in Nebula" = "projects/nebula-vsearch/understanding/6.raft-wal.md" },
+      { "How to Modify nGQL" = "projects/nebula-vsearch/understanding/7.how to modify sql.md" },
+      { "A Life of KV Pairs" = "projects/nebula-vsearch/understandings/8.a kv life.md" },
+    ] },
+    { "CS61C" = [
+      { "1 C Intro" = "notes/CS61C/lecture2-Intro to C.md" },
+      { "4 C Memory Endianness" = "notes/CS61C/lecture4_C Memory Endianness.md" },
+      { "10 Combinational Logic" = "notes/CS61C/lecture10_Combinational Logic.md" },
+      { "11 FSMs" = "notes/CS61C/lecture11_FSMs.md" },
+      { "14 Datapath" = "notes/CS61C/lecture14_Datapath.md" },
+      { "15 Data-Level Parallelism" = "notes/CS61C/lecture15_Data-LevelParallelism.md" },
+      { "16 Thread-Level Parallelism" = "notes/CS61C/lecture16_Thread-LevelParallelism.md" },
+      { "17 Process-Level Parallelism" = "notes/CS61C/lecture17_Process_LevelParallelism.md" },
+      { "18 Caches" = "notes/CS61C/lecture18_Caches.md" },
+      { "21 Virtual Memory" = "notes/CS61C/lecture21_Virtual_Memory.md" },
+    ] },
+    { "CSAPP" = [
+      { "5-\u4f18\u5316\u7a0b\u5e8f\u6027\u80fd" = "notes/CSAPP/5-\u4f18\u5316\u7a0b\u5e8f\u6027\u80fd.md" },
+      { "6-\u5b58\u50a8\u5668\u5c42\u6b21\u7ed3\u6784" = "notes/CSAPP/6-\u5b58\u50a8\u5668\u5c42\u6b21\u7ed3\u6784.md" },
+      { "7-\u94fe\u63a5" = "notes/CSAPP/7-\u94fe\u63a5.md" },
+      { "8-\u5f02\u5e38\u63a7\u5236\u6d41" = "notes/CSAPP/8-\u5f02\u5e38\u63a7\u5236\u6d41.md" },
+      { "\u7a0b\u5e8f\u7684\u7ed3\u6784\u548c\u6267\u884c" = "notes/CSAPP/\u7a0b\u5e8f\u7684\u7ed3\u6784\u548c\u6267\u884c.md" },
+      { "\u5728\u7cfb\u7edf\u4e0a\u8fd0\u884c\u7a0b\u5e8f" = "notes/CSAPP/\u5728\u7cfb\u7edf\u4e0a\u8fd0\u884c\u7a0b\u5e8f.md" },
+    ] },
+    { "6.s081" = [
+      { "1 OS\u7684\u9694\u79bb\u6027" = "notes/6.s081/1-OS\u7684\u9694\u79bb\u6027.md" },
+      { "2 \u865a\u62df\u5185\u5b58\u5b9e\u73b0" = "notes/6.s081/2-\u865a\u62df\u5185\u5b58\u5b9e\u73b0.md" },
+      { "3 \u7cfb\u7edf\u8c03\u7528\u548c\u9677\u5165" = "notes/6.s081/3-\u7cfb\u7edf\u8c03\u7528\u548c\u9677\u5165.md" },
+      { "4 \u7f3a\u9875\u4e2d\u65ad" = "notes/6.s081/4-\u7f3a\u9875\u4e2d\u65ad.md" },
+      { "5 \u786c\u4ef6\u4e2d\u65ad" = "notes/6.s081/5-\u786c\u4ef6\u4e2d\u65ad.md" },
+      { "6 \u591a\u6838\u548c\u9501" = "notes/6.s081/6-\u591a\u6838\u548c\u9501.md" },
+      { "7 \u8fdb\u7a0b\u5207\u6362" = "notes/6.s081/7-\u8fdb\u7a0b\u5207\u6362.md" },
+      { "8 \u7761\u7720\u548c\u5524\u9192" = "notes/6.s081/8-\u7761\u7720\u548c\u5524\u9192.md" },
+    ] },
+    { "C++ Primer" = [
+      { "2_\u53d8\u91cf\u548c\u57fa\u672c\u7c7b\u578b" = "notes/c++primer/2_\u53d8\u91cf\u548c\u57fa\u672c\u7c7b\u578b.md" },
+      { "3_\u5b57\u7b26\u4e32\u5411\u91cf\u6570\u7ec4" = "notes/c++primer/3_\u5b57\u7b26\u4e32\u5411\u91cf\u6570\u7ec4.md" },
+      { "4_\u8868\u8fbe\u5f0f" = "notes/c++primer/4_\u8868\u8fbe\u5f0f.md" },
+      { "5_\u8bed\u53e5" = "notes/c++primer/5_\u8bed\u53e5.md" },
+      { "6_\u51fd\u6570" = "notes/c++primer/6_\u51fd\u6570.md" },
+      { "7_\u7c7b" = "notes/c++primer/7_\u7c7b.md" },
+      { "8_IO\u5e93" = "notes/c++primer/8_IO\u5e93.md" },
+      { "9_\u987a\u5e8f\u5bb9\u5668" = "notes/c++primer/9_\u987a\u5e8f\u5bb9\u5668.md" },
+      { "10_\u6cdb\u578b\u7b97\u6cd5" = "notes/c++primer/10_\u6cdb\u578b\u7b97\u6cd5.md" },
+      { "11_\u5173\u8054\u5bb9\u5668" = "notes/c++primer/11_\u5173\u8054\u5bb9\u5668.md" },
+      { "12_\u52a8\u6001\u5185\u5b58" = "notes/c++primer/12_\u52a8\u6001\u5185\u5b58.md" },
+      { "13_\u62f7\u8d1d\u63a7\u5236" = "notes/c++primer/13_\u62f7\u8d1d\u63a7\u5236.md" },
+      { "14_\u91cd\u8f7d\u8fd0\u7b97\u548c\u7c7b\u578b\u8f6c\u6362" = "notes/c++primer/14_\u91cd\u8f7d\u8fd0\u7b97\u548c\u7c7b\u578b\u8f6c\u6362.md" },
+      { "15_\u9762\u5411\u5bf9\u8c61\u7a0b\u5e8f\u8bbe\u8ba1" = "notes/c++primer/15_\u9762\u5411\u5bf9\u8c61\u7a0b\u5e8f\u8bbe\u8ba1.md" },
+      { "\u5e76\u53d1\u4e0e\u591a\u7ebf\u7a0b\u7f16\u7a0b" = "notes/c++primer/\u5e76\u53d1\u4e0e\u591a\u7ebf\u7a0b\u7f16\u7a0b.md" },
+      { "Makefile\u5b66\u4e60" = "notes/c++primer/Makefile\u5b66\u4e60.md" },
+    ] },
+    { "C++ \u65b0\u7279\u6027" = [
+      { "1-Container" = "notes/C++/1-Container.md" },
+      { "2-Algorithm" = "notes/C++/2-Algorithm.md" },
+      { "3-Iterator" = "notes/C++/3-Iterator.md" },
+      { "4-FileSystem" = "notes/C++/4-FileSystem.md" },
+      { "5-View" = "notes/C++/5-View.md" },
+      { "6-Span" = "notes/C++/6-Span.md" },
+    ] },
+    { "C++ Concurrency in Action" = [
+      { "1-Thread" = "notes/C++Concurrency/1-thread.md" },
+      { "2-Memory Model in C++" = "notes/C++Concurrency/2-Memory Model.md" },
+    ] },
+    { "CMU15445" = [
+      { "3-Database Storage" = "notes/CMU15445/3-Database Storage.md" },
+      { "4-Database_Storage_II" = "notes/CMU15445/4-Database_Storage_II.md" },
+      { "5-Buffer Pool" = "notes/CMU15445/5-Buffer Pool.md" },
+      { "6-Hash Table" = "notes/CMU15445/6-Hash Table.md" },
+      { "7-B+Tree" = "notes/CMU15445/7-B+Tree.md" },
+      { "8-Index Concurrency" = "notes/CMU15445/8-Index Concurrency.md" },
+      { "9-Sort&Aggregation" = "notes/CMU15445/9-Sort&Aggregation.md" },
+      { "10-Join Algorithm" = "notes/CMU15445/10-Join Algorithm.md" },
+      { "11-Query_Execution" = "notes/CMU15445/11-Query_Execution.md" },
+      { "12-Query_Plan&Optimization" = "notes/CMU15445/12-Query_Plan&Optimization.md" },
+      { "13-Concurrency_Control_Theory" = "notes/CMU15445/13-Concurrency_Control_Theory.md" },
+      { "14-Two_Phase_Lock" = "notes/CMU15445/14-Two_Phase_Lock.md" },
+      { "15-Timestamp_Ordering_Concurrency" = "notes/CMU15445/15-Timestamp_Ordering_Concurrency.md" },
+      { "16-Mult-Version_Concurrency" = "notes/CMU15445/16-Mult-Version_Concurrency.md" },
+      { "17-Database_Logging" = "notes/CMU15445/17-Database_Logging.md" },
+      { "18-Database_Recovery" = "notes/CMU15445/18-Database_Recovery.md" },
+      { "19-Introducd_to_distributed_database" = "notes/CMU15445/19-Introducd_to_distributed_database.md" },
+    ] },
+    { "6.824" = [
+      { "MapReduce \u8bba\u6587\u9605\u8bfb" = "notes/6.824/MapReduce.md" },
+    ] },
+    { "Linux Tools" = [
+      { "grep" = "notes/linux tools/1-grep.md" },
+      { "sed" = "notes/linux tools/2-sed.md" },
+      { "awk" = "notes/linux tools/3-awk.md" },
+      { "find" = "notes/linux tools/4-find.md" },
+    ] },
+  ] },
+  { "PaperReading" = [
+    { "index" = "paperreadings/index.md" },
+    { "LLM" = [
+      { "LLM Serving" = [
+        { "Orca" = "paperreadings/llm/serving/Orca.md" },
+        { "PageAttention" = "paperreadings/llm/serving/PageAttention.md" },
+        { "Chunked Prefill" = "paperreadings/llm/serving/Chunked Prefill.md" },
+        { "DistServe" = "paperreadings/llm/serving/distserve.md" },
+      ] },
+      { "Speculative Decoding" = [
+        { "EAGLE" = "paperreadings/llm/speculative decoding/eagle.md" },
+        { "EAGLE2" = "paperreadings/llm/speculative decoding/eagle2.md" },
+        { "EAGLE3" = "paperreadings/llm/speculative decoding/eagle3.md" },
+        { "DFLASH" = "paperreadings/llm/speculative decoding/DFLASH.md" },
+      ] },
+    ] },
+    { "Database Systems" = [
+      { "Do not use MMAP in DBMS" = "paperreadings/db/storage/NoMMAP.md" },
+    ] },
+    { "Vector Search" = [
+      { "IQAN" = "paperreadings/vector search/IQAN.md" },
+      { "MIRAGE-ANNS" = "paperreadings/vector search/MIRAGE-ANNS.md" },
+      { "LSM-VEC" = "paperreadings/vector search/LSM-VEC.md" },
+      { "PANNS" = "paperreadings/vector search/PANNS.md" },
+    ] },
+  ] },
+  { "Blogs" = [
+    { "index" = "blogs/index.md" },
+    { "Models" = [
+      { "DeepSeek v4" = "paperreadings/llm/models/deepseekv4.md" },
+    ] },
+    { "SGLang \u4e13\u9898" = [
+      { "HiCache" = "sglang/hicahce.md" },
+      { "PD Disaggregation in SGLang" = "sglang/PD Disaggregation in SGLang.md" },
+      { "EAGLE2 in SGLang" = "sglang/Eagle2 in SGLang.md" },
+      { "\u4e00\u6761 Request \u5728 SGLang \u7684\u524d\u4e16\u4eca\u751f" = "sglang/\u4e00\u6761 Request \u5728 SGLang \u7684\u524d\u4e16\u4eca\u751f.md" },
+      { "SGLang Schedular \u6280\u672f\u53d8\u8fc1" = "sglang/SGLang Scheduler \u6280\u672f\u53d8\u8fc1.md" },
+      { "RadixAttention \u4f60\u9700\u8981\u77e5\u9053\u7684\u7ec6\u8282" = "sglang/RadixAttention \u4f60\u9700\u8981\u77e5\u9053\u7684\u5168\u90e8\u7ec6\u8282.md" },
+      { "SGLang \u4e2d\u7684 TP + PP \u6d41\u7a0b\u6d45\u6790(\u4ee5 Qwen2 \u4e3a\u4f8b)" = "sgalng/SGLang \u4e2d\u7684 TP + PP.md" },
+      { "\u4ece\u4ee3\u7801\u770b SGLang \u7684 KV Cache" = "sglang/\u4ece\u4ee3\u7801\u770b SGLang \u7684 KV Cache.md" },
+    ] },
+    { "LLM Inference Basic" = [
+      { "Attention & Transformers" = "llm_inference/attention&transformer.md" },
+      { "Transformer-Based LLM Architecture" = "llm_inference/transformerbasedllm.md" },
+      { "Model Forward \u74f6\u9888\u4ee5\u53ca\u4f18\u5316\u65b9\u6cd5" = "llm_inference/inferenceperf.md" },
+      { "Parallelizatoin Concepts" = "llm_inference/parallelization.md" },
+      { "Parallelization in LLM Inference" = "llm_inference/LLMparallelization.md" },
+      { "FlashAttention" = "blogs/posts/FlashAttention \u539f\u7406 v1-v2.md" },
+      { "\u5927\u6a21\u578b\u63a8\u7406\u670d\u52a1\u4e2d\u7684 Batching" = "sglang/\u5927\u6a21\u578b\u63a8\u7406\u670d\u52a1\u4e2d\u7684 Batching.md" },
+    ] },
+    { "LLM Optimization" = [
+      { "Quantization in LLM Inference" = "llm_inference/quant.md" },
+      { "Speculative Decoding" = "llm_inference/speculativedecoding.md" },
+      { "\U0001f6a7 Long Context Optimization" = "llm_inference/longcontext.md" },
+    ] },
+    { "CUDA" = [
+      { "\u4ece GEMM \u5b9e\u8df5 CUDA \u4f18\u5316" = "cuda/\u4eceGEMM\u5b9e\u8df5CUDA\u4f18\u5316.md" },
+      { "CUDA Optimization for LLM Inference" = "cuda/cudaopt.md" },
+      { "Vector Add Optimization Example" = "cuda/Vector Add Optimization Example.md" },
+    ] },
+    { "Nebula" = [
+      { "\u4e0a\u7bc7\uff1a\u521d\u8bc6 Nebula Graph \u2014\u2014 \u5411\u91cf\u7c7b\u578b\u652f\u6301" = "blogs/posts/\u4e0a\u7bc7\uff1a\u521d\u8bc6 Nebula Graph \u2014\u2014 \u5411\u91cf\u7c7b\u578b\u652f\u6301.md" },
+      { "\u4e2d\u7bc7\uff1aVector \u7c7b\u578b\u7684 DDL & DML \u9002\u914d" = "blogs/posts/\u4e2d\u7bc7\uff1aVector \u7c7b\u578b\u7684 DDL&DML \u9002\u914d.md" },
+      { "\u4e0b\u7bc7\uff1a\u5411\u91cf\u7d22\u5f15\u4e0e\u76f8\u4f3c\u5ea6\u641c\u7d22 \u2014\u2014 Nebula Graph \u7684 ANN \u5b9e\u73b0\u4e4b\u8def" = "blogs/posts/\u4e0b\u7bc7\uff1a\u5411\u91cf\u7d22\u5f15\u4e0e\u76f8\u4f3c\u5ea6\u641c\u7d22 \u2014\u2014 Nebula Graph \u7684 ANN \u5b9e\u73b0\u4e4b\u8def.md" },
+    ] },
+    { "Others" = [
+      { "C++ \u5f02\u6b65\u65b9\u6848\u6f14\u8fdb" = "blogs/posts/C++\u5f02\u6b65\u65b9\u6848.md" },
+      { "Bustub \u901a\u5173\u6307\u5317" = "blogs/posts/bustub\u901a\u5173\u6307\u5317.md" },
+      { "\u5e76\u53d1\u7ec4\u4ef6\u5b9e\u73b0\u6d45\u6790" = "blogs/posts/Implement of Concurrent.md" },
+    ] },
+  ] },
+  { "Summaries" = [
+    { "index" = "summary/index.md" },
+    { "\u7814\u4e00\u4e0a\u603b\u7ed3" = "summary/\u7814\u7a76\u751f\u603b\u7ed3/\u7814\u4e00\u4e0a\u603b\u7ed3.md" },
+    { "\u7814\u4e00\u4e0b\u603b\u7ed3" = "summary/\u7814\u7a76\u751f\u603b\u7ed3/\u7814\u4e00\u4e0b\u603b\u7ed3.md" },
+    { "\u7814\u4e8c\u4e0a\u603b\u7ed3" = "summary/\u7814\u7a76\u751f\u603b\u7ed3/\u7814\u4e8c\u4e0a\u603b\u7ed3.md" },
+  ] },
+  { "Tags" = "tags/index.md" },
+  { "Links" = "links/index.md" },
+  { "About" = "about/index.md" },
+]
+
+[project.theme]
+variant = "classic"
+language = "en"
+custom_dir = "overrides"
+favicon = "img/rocket.png"
+font.text = "JetBrains Mono"
+features = [
+  "content.code.annotate",
+  "content.code.copy",
+  "content.code.select",
+  "content.footnote.tooltips",
+  "content.tabs.link",
+  "header.autohide",
+  "navigation.tracking",
+  "navigation.tabs",
+  "navigation.top",
+  "navigation.path",
+  "navigation.indexes",
+  "search.highlight",
+  "search.share",
+  "search.suggest",
+  "toc.follow",
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "white"
+accent = "indigo"
+toggle.icon = "material/brightness-7"
+toggle.name = "light mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "black"
+accent = "teal"
+toggle.icon = "material/brightness-4"
+toggle.name = "dark mode"
+
+[project.theme.icon]
+logo = "material/coffee"
+repo = "fontawesome/brands/git-alt"
+edit = "material/pencil"
+
+[project.theme.icon.tag]
+default = "lucide/hash"
+cpp = "lucide/code-xml"
+cuda = "lucide/cpu"
+database = "lucide/database"
+distributed = "lucide/network"
+llm = "lucide/bot"
+llm_inference = "lucide/cpu"
+minilsm = "lucide/hard-drive"
+os = "lucide/monitor"
+paper = "lucide/file-text"
+rust = "fontawesome/brands/rust"
+summary = "lucide/file-text"
+system_arch = "lucide/cpu"
+vector_search = "lucide/search"
+vins = "lucide/map"
+
+[project.extra]
+
+[project.extra.giscus]
+repo = "tom-jerr/tom-jerr.github.io"
+repo_id = "R_kgDONZrjcA"
+category = "General"
+category_id = "REPLACE_WITH_GENERAL_CATEGORY_ID"
+mapping = "pathname"
+strict = 0
+reactions_enabled = 1
+emit_metadata = 1
+input_position = "top"
+theme = "preferred_color_scheme"
+lang = "en"
+
+[project.extra.tags]
+"C++" = "cpp"
+CUDA = "cuda"
+Database = "database"
+DB = "database"
+"Distributed System" = "distributed"
+LLM = "llm"
+LLMInference = "llm_inference"
+MiniLSM = "minilsm"
+"Operator System" = "os"
+"Paper Notes" = "paper"
+rust = "rust"
+summary = "summary"
+"System Arch" = "system_arch"
+"Vector Search" = "vector_search"
+VINS = "vins"
+
+[[project.extra.social]]
+icon = "/fontawesome/brands/github"
+link = "https://github.com/tom-jerr/"
+name = "GitHub"
+
+[[project.extra.social]]
+icon = "/fontawesome/brands/qq"
+link = "/img/qq.png"
+name = "QQ"
+
+[[project.extra.social]]
+icon = "/fontawesome/brands/weixin"
+link = "/img/wechat.png"
+name = "\u5fae\u4fe1"
+
+[[project.extra.social]]
+icon = "/fontawesome/brands/x-twitter"
+link = "https://x.com/tom_jerry_jack"
+name = "X"
+
+[[project.extra.social]]
+icon = "/fontawesome/brands/zhihu"
+link = "https://www.zhihu.com/people/chen-wen-de-jian-ke"
+name = "Zhihu"
+
+[[project.extra.social]]
+icon = "fontawesome/solid/paper-plane"
+link = "mailto:2584074296@qq.com"
+name = "send email to me!"
+
+[project.extra.analytics]
+provider = "google"
+property = "G-NKJWZM1JHX"
+
+[project.extra.analytics.feedback]
+title = "Support Me!"
+
+[[project.extra.analytics.feedback.ratings]]
+icon = "fontawesome/regular/hand-back-fist"
+name = "Support Me!"
+data = 1
+note = """
+<center> \u96be\u9053\u8bf4\u2026\u2026\u4f60\u613f\u610f\u7ed9\u6211\u4e70\u4e00\u74f6\u5feb\u4e50\u6c34\u5417\uff01?? </center>
+<center> How about...buy me a coffee\uff1f?? </center>
+<img src="/img/wechat.png" width=200px>
+"""
+
+[project.markdown_extensions.abbr]
+[project.markdown_extensions.admonition]
+[project.markdown_extensions.attr_list]
+[project.markdown_extensions.footnotes]
+[project.markdown_extensions.meta]
+[project.markdown_extensions.md_in_html]
+[project.markdown_extensions.nl2br]
+
+[project.markdown_extensions.pymdownx.arithmatex]
+generic = true
+
+[project.markdown_extensions.pymdownx.caret]
+[project.markdown_extensions.pymdownx.critic]
+[project.markdown_extensions.pymdownx.details]
+
+[project.markdown_extensions.pymdownx.emoji]
+emoji_index = "zensical.extensions.emoji.twemoji"
+emoji_generator = "zensical.extensions.emoji.to_svg"
+
+[project.markdown_extensions.pymdownx.emoji.options]
+custom_icons = ["overrides/.icons"]
+
+[project.markdown_extensions.pymdownx.highlight]
+anchor_linenums = true
+auto_title = true
+linenums = true
+linenums_style = "pymdownx-inline"
+line_spans = "__span"
+pygments_lang_class = true
+
+[project.markdown_extensions.pymdownx.inlinehilite]
+[project.markdown_extensions.pymdownx.keys]
+[project.markdown_extensions.pymdownx.mark]
+[project.markdown_extensions.pymdownx.magiclink]
+[project.markdown_extensions.pymdownx.saneheaders]
+[project.markdown_extensions.pymdownx.snippets]
+[project.markdown_extensions.pymdownx.smartsymbols]
+
+[project.markdown_extensions.pymdownx.superfences]
+custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]
+
+[project.markdown_extensions.pymdownx.tasklist]
+custom_checkbox = true
+
+[project.markdown_extensions.pymdownx.tabbed]
+alternate_style = true
+
+[project.markdown_extensions.pymdownx.tilde]
+[project.markdown_extensions.sane_lists]
+[project.markdown_extensions.tables]
+
+[project.markdown_extensions.toc]
+permalink = true
+toc_depth = 4
+
+# Zensical's `zensical.toml` story for MkDocs plugin migration is still evolving.
+# The following mkdocs plugins from `mkdocs.yml` were intentionally left out here
+# because the official TOML module syntax isn't documented on the setup pages yet:
+# - blogging
+# - callouts
+# - glightbox
+# - minify
+# - mkdocs-video
+# - rss
+# - search
+# - document-dates
+# - statistics

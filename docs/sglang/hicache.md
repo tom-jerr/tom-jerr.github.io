@@ -68,6 +68,7 @@ HiCache 在同一个 TreeNode 上增加分层状态：
     本地已经没有可用数据，通常节点会被删除；L3 是否存在要实时查询 storage。
 ```
 这就是分层 radix cache 的本质：tree 结构仍然按 token prefix 组织，但每个节点标记 KV 数据在哪一层。
+
 ---
 
 ### HiCacheController
