@@ -185,6 +185,12 @@ extra_css:
   # - css/ai-summary.css
 
 extra:
+  twikoo:
+    # Tencent Cloudbase: envId can be the cloud environment ID.
+    # Self-hosted: envId can be your deployed Twikoo service URL, e.g. https://twikoo.example.com
+    env_id: REPLACE_WITH_TWIKOO_ENV_ID_OR_URL
+    # region is optional and mainly used with Tencent Cloudbase deployments.
+    # region: ap-shanghai
   giscus:
     repo: tom-jerr/tom-jerr.github.io
     repo_id: R_kgDONZrjcA

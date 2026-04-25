@@ -1,6 +1,20 @@
 {% if page.meta.comments is not defined or page.meta.comments != false %}
+{% set twikoo = config.extra.twikoo %}
 {% set giscus = config.extra.giscus %}
-{% if giscus and giscus.repo and giscus.repo_id and giscus.category and giscus.category_id and not giscus.category_id.startswith("REPLACE_WITH_") %}
+{% if twikoo and twikoo.env_id and not twikoo.env_id.startswith("REPLACE_WITH_") %}
+<div id="twikoo-comments"></div>
+<script src="https://cdn.jsdelivr.net/npm/twikoo@1.6.42/dist/twikoo.all.min.js"></script>
+<script>
+    twikoo.init({
+        envId: "{{ twikoo.env_id }}",
+        el: "#twikoo-comments",
+        {% if twikoo.region %}
+        region: "{{ twikoo.region }}",
+        {% endif %}
+        path: "{{ page.url | default('') }}"
+    })
+</script>
+{% elif giscus and giscus.repo and giscus.repo_id and giscus.category and giscus.category_id and not giscus.category_id.startswith("REPLACE_WITH_") %}
 <script
     src="https://giscus.app/client.js"
     data-repo="{{ giscus.repo }}"
@@ -59,6 +73,6 @@
     })
 </script>
 {% else %}
-<!-- Giscus is disabled until extra.giscus.category_id is updated with a real GitHub Discussions category ID. -->
+<!-- Comments are disabled until extra.twikoo.env_id or extra.giscus.category_id is configured. -->
 {% endif %}
 {% endif %}
