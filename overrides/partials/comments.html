@@ -1,52 +1,39 @@
 {% if page.meta.comments is not defined or page.meta.comments != false %}
-{% set twikoo = config.extra.twikoo %}
-{% set giscus = config.extra.giscus %}
-{% if twikoo and twikoo.env_id and not twikoo.env_id.startswith("REPLACE_WITH_") %}
-<div id="twikoo-comments"></div>
-<script src="https://cdn.jsdelivr.net/npm/twikoo@1.6.42/dist/twikoo.all.min.js"></script>
-<script>
-    twikoo.init({
-        envId: "{{ twikoo.env_id }}",
-        el: "#twikoo-comments",
-        {% if twikoo.region %}
-        region: "{{ twikoo.region }}",
-        {% endif %}
-        path: "{{ page.url | default('') }}"
-    })
-</script>
-{% elif giscus and giscus.repo and giscus.repo_id and giscus.category and giscus.category_id and not giscus.category_id.startswith("REPLACE_WITH_") %}
+{% set utterances = config.extra.utterances %}
+{% if utterances and utterances.repo and utterances.issue_term %}
 <script
-    src="https://giscus.app/client.js"
-    data-repo="{{ giscus.repo }}"
-    data-repo-id="{{ giscus.repo_id }}"
-    data-category="{{ giscus.category }}"
-    data-category-id="{{ giscus.category_id }}"
-    data-mapping="{{ giscus.mapping | default('pathname') }}"
-    data-strict="{{ giscus.strict | default('0') }}"
-    data-reactions-enabled="{{ giscus.reactions_enabled | default('1') }}"
-    data-emit-metadata="{{ giscus.emit_metadata | default('1') }}"
-    data-input-position="{{ giscus.input_position | default('top') }}"
-    data-theme="{{ giscus.theme | default('preferred_color_scheme') }}"
-    data-lang="{{ giscus.lang | default('en') }}"
-    data-loading="lazy"
+    src="https://utteranc.es/client.js"
+    repo="{{ utterances.repo }}"
+    issue-term="{{ utterances.issue_term | default('pathname') }}"
+    {% if utterances.label %}
+    label="{{ utterances.label }}"
+    {% endif %}
+    theme="{{ utterances.theme | default('preferred-color-scheme') }}"
     crossorigin="anonymous"
     async>
 </script>
 <script>
-    var giscus = document.querySelector("script[src*=giscus]")
+    var utterances = document.querySelector("script[src*=utteranc]")
 
-    // Set palette on initial load
-    var palette = __md_get("__palette")
-    if (giscus && palette && typeof palette.color === "object") {
-        var theme = palette.color.scheme === "slate"
-            ? "transparent_dark"
-            : "light"
+    function getUtterancesTheme() {
+        if (typeof __md_get !== "function") {
+            return "{{ utterances.theme | default('preferred-color-scheme') }}"
+        }
 
-        // Instruct Giscus to set theme
-        giscus.setAttribute("data-theme", theme)
+        var palette = __md_get("__palette")
+        if (palette && typeof palette.color === "object") {
+            return palette.color.scheme === "slate"
+                ? "{{ utterances.dark_theme | default('github-dark') }}"
+                : "{{ utterances.light_theme | default('github-light') }}"
+        }
+
+        return "{{ utterances.theme | default('preferred-color-scheme') }}"
     }
 
-    // Register event handlers after documented loaded
+    if (utterances) {
+        utterances.setAttribute("theme", getUtterancesTheme())
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
         var ref = document.querySelector("[data-md-component=palette]")
         if (!ref) {
@@ -54,25 +41,17 @@
         }
 
         ref.addEventListener("change", function () {
-            var palette = __md_get("__palette")
-            if (palette && typeof palette.color === "object") {
-                var theme = palette.color.scheme === "slate"
-                    ? "transparent_dark"
-                    : "light"
-
-                // Instruct Giscus to change theme
-                var frame = document.querySelector(".giscus-frame")
-                if (frame && frame.contentWindow) {
-                    frame.contentWindow.postMessage(
-                        {giscus: {setConfig: {theme}}},
-                        "https://giscus.app"
-                    )
-                }
+            var frame = document.querySelector(".utterances-frame")
+            if (frame && frame.contentWindow) {
+                frame.contentWindow.postMessage(
+                    {type: "set-theme", theme: getUtterancesTheme()},
+                    "https://utteranc.es"
+                )
             }
         })
     })
 </script>
 {% else %}
-<!-- Comments are disabled until extra.twikoo.env_id or extra.giscus.category_id is configured. -->
+<!-- Comments are disabled until extra.utterances.repo and extra.utterances.issue_term are configured. -->
 {% endif %}
 {% endif %}

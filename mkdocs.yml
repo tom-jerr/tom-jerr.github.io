@@ -185,25 +185,13 @@ extra_css:
   # - css/ai-summary.css
 
 extra:
-  twikoo:
-    # Tencent Cloudbase: envId can be the cloud environment ID.
-    # Self-hosted: envId can be your deployed Twikoo service URL, e.g. https://twikoo.example.com
-    env_id: REPLACE_WITH_TWIKOO_ENV_ID_OR_URL
-    # region is optional and mainly used with Tencent Cloudbase deployments.
-    # region: ap-shanghai
-  giscus:
-    repo: tom-jerr/tom-jerr.github.io
-    repo_id: R_kgDONZrjcA
-    category: General
-    # Replace this with the real General category ID from https://giscus.app
-    category_id: REPLACE_WITH_GENERAL_CATEGORY_ID
-    mapping: pathname
-    strict: 0
-    reactions_enabled: 1
-    emit_metadata: 1
-    input_position: top
-    theme: preferred_color_scheme
-    lang: en
+  utterances:
+    repo: tom-jerr/blog-comments
+    issue_term: pathname
+    label: comments
+    theme: preferred-color-scheme
+    light_theme: github-light
+    dark_theme: github-dark
   social:
     - icon: /fontawesome/brands/github
       link: https://github.com/tom-jerr/
@@ -384,7 +372,7 @@ nav:
       # - DiT Generate Model in SGLang: notes/diffusion/DiT Video Generate.md
       # - Masked Diffusion Model: notes/diffusion/Masked Diffusion LLM.md
       - SGLang 专题:
-          - HiCache: sglang/hicahce.md
+          - HiCache: sglang/hicache.md
           - PD Disaggregation in SGLang: sglang/PD Disaggregation in SGLang.md
           - EAGLE2 in SGLang: sglang/Eagle2 in SGLang.md
           - 一条 Request 在 SGLang 的前世今生: sglang/一条 Request 在 SGLang 的前世今生.md

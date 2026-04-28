@@ -289,25 +289,13 @@ vins = "lucide/map"
 
 [project.extra]
 
-[project.extra.twikoo]
-# Tencent Cloudbase: env_id can be the cloud environment ID.
-# Self-hosted: env_id can be your deployed Twikoo service URL, e.g. https://twikoo.example.com
-env_id = "REPLACE_WITH_TWIKOO_ENV_ID_OR_URL"
-# region is optional and mainly used with Tencent Cloudbase deployments.
-# region = "ap-shanghai"
-
-[project.extra.giscus]
-repo = "tom-jerr/tom-jerr.github.io"
-repo_id = "R_kgDONZrjcA"
-category = "General"
-category_id = "REPLACE_WITH_GENERAL_CATEGORY_ID"
-mapping = "pathname"
-strict = 0
-reactions_enabled = 1
-emit_metadata = 1
-input_position = "top"
-theme = "preferred_color_scheme"
-lang = "en"
+[project.extra.utterances]
+repo = "tom-jerr/blog-comments"
+issue_term = "pathname"
+label = "comments"
+theme = "preferred-color-scheme"
+light_theme = "github-light"
+dark_theme = "github-dark"
 
 [project.extra.tags]
 "C++" = "cpp"

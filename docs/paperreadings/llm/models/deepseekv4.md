@@ -213,7 +213,7 @@ SGL_DEVICE void c4_write(T* kv_score_buf, const T* kv_score_src,
 ```
 #### 压缩计算 
 核心流程分两步：
-- Step 1: 加载 8 个位置的 KV 和 Score，每个 token \(t\) 通过 wkv_gate 生成：
+- Step 1: 加载 8 个位置的 KV 和 Score，每个 token $t$ 通过 wkv_gate 生成：
 $$
 \begin{aligned}
 \mathbf{kv}^{\text{overlap}}_t &= \text{wkv\_gate}(x_t)[0:H] \\
@@ -222,26 +222,7 @@ s^{\text{overlap}}_t &= \text{wkv\_gate}(x_t)[2H:3H] \\
 s^{\text{current}}_t &= \text{wkv\_gate}(x_t)[3H:4H]
 \end{aligned}
 $$
-其中 \(H = \text{head\_dim}\)。
-  ```cpp
-  for (int32_t i = 0; i < 8; ++i) {
-      const bool is_overlap = i < 4;           // 前4个位置用 overlap，后4个用 current
-      const InFloat* src;
-      if (i < window_len) {
-          // 从 ring buffer 加载
-          const int32_t k = (seq_len + i) % 8; // 环状索引
-          src = kv_score_buf + k * element_size;
-      } else {
-          // 窗口不满时，从 kv_score_src 加载 (ragged tail，作为负索引补位)
-          const int32_t k = i - 7;             // k ∈ [-7, 0]
-          src = kv_score_src + k * element_size;
-      }
-      // overlap位置读 [kv_overlap | score_overlap]，非overlap读 [kv | score]
-      src += (is_overlap ? 0 : overlap_stride);  // 跳过 kv_overlap 取 kv
-      kv[i]   = gmem.load(src);                  // KV 部分
-      score[i] = gmem.load(src + score_offset);   // Score 部分
-  }
-  ```
+其中 $H = \text{head\_dim}$。
     - 边界条件：当 seq_len == 4（第一个 block），overlap 位置用 kv=0, score=-1e9，确保它们不影响 softmax。
 - Step 2: Safe Online Softmax + 加权求和
   $$
@@ -283,106 +264,88 @@ kv_score_buffer[index, 128, head_dim * 2]
 ```
 #### 写入 ring buffer
 - C128 kernel 使用 16 个 warp 协作（因为 128/L=32），只有最后一个 warp 负责写入，其他 warp 等待。
-```cpp
-// 每个token写入 ring buffer 的 (seq_len+127)%128 位置
-// 注意：只有最后一个 warp 执行写入
-if (warp_id == kNumWarps - 1) {
-    c128_write(kv_buf, kv_src, head_dim, (seq_len + 127) % 128, lane_id);
-}
-```
-
-#### 压缩计算
-
-- Phase 1: 每个 warp 独立处理 8 个位置
-
-```cpp
-// 第 w 个 warp 负责位置 [w*8, w*8+7]:
-const int32_t warp_offset = warp_id * kElementsPerWarp;  // 每个warp处理8个位置
-for (int32_t i = 0; i < kElementsPerWarp; ++i) {  // i=0..7
-    const int32_t j = i + warp_offset;             // 全局位置索引
-    if (j < window_len) {
-        src = kv_score_buf + j * element_size;     // 从ring buffer加载
-    } else {
-        src = kv_score_src + (j - 127) * element_size;  // ragged tail
-    }
-    kv[i] = gmem.load(src);
-    score[i] = gmem.load(src + score_offset);
-}
-// 局部 softmax（warp内）
-for (int32_t i = 0; i < kTileElements; ++i) {  // 遍历 head_dim 元素
-    for (int32_t j = 0; j < 8; ++j) {
-        score_fp32[j] = score[j][i] + bias[j][i];  // + ape
-    }
-    float max_value = max(score_fp32[0..7]);
-    float sum_product = 0, sum_exp = 0;
-    for (int32_t j = 0; j < 8; ++j) {
-        float exp_score = expf(score_fp32[j] - max_value);
-        sum_product += kv[j][i] * exp_score;
-        sum_exp     += exp_score;
-    }
-    // 存储到 shared memory
-    tmp_val_max[i] = max_value;
-    tmp_exp_sum[i] = sum_exp;
-    tmp_product[i] = sum_product;
-}
-s_local_val_max(warp_id, lane_id) = tmp_val_max;
-s_local_exp_sum(warp_id, lane_id) = tmp_exp_sum;
-s_local_product(warp_id, lane_id) = tmp_product;
-__syncthreads();
-```
-- Phase 2: 跨 warp 全局归约
-
-```cpp
-//16 个 warp 各自有局部的 (val_max, exp_sum, product)，现在需要做全局 safe softmax 归约：
-for (uint32_t i = 0; i < kIteration; ++i) {
-    // 读取第 local_warp_id 个 warp 的局部结果
-    float local_val_max = s_local_val_max(local_warp_id, local_lane_id, local_tile_id);
-    float local_exp_sum = s_local_exp_sum(local_warp_id, local_lane_id, local_tile_id);
-    float local_product = s_local_product(local_warp_id, local_lane_id, local_tile_id);
-    
-    // 跨16个warp做 safe softmax 归约
-    float global_val_max = warp::reduce_max<16>(local_val_max);
-    float rescale       = expf(local_val_max - global_val_max);
-    float global_exp    = warp::reduce_sum<16>(local_exp_sum * rescale);
-    float final_scale   = rescale / global_exp;
-    float global_prod   = warp::reduce_sum<16>(local_product * final_scale);
-    
-    kv_out[local_elem_id] = (OutFloat)global_prod;
-}
-```
-3.4 C128 数学公式
-对于 window_size = 128，head_dim 的每个元素 \(d\):
-特征提取（每个 token）:
+- 对于 window_size = 128，head_dim 的每个元素 $d$:
 $$
 \begin{aligned}
 \mathbf{kv}_t &= \text{wkv\_gate}(x_t)[0:H] \\
 s_t &= \text{wkv\_gate}(x_t)[H:2H]
 \end{aligned}
 $$
-压缩输出（每 128 个 token 触发一次）:
-$$
-\tilde{kv}[d] = \frac{\sum_{j=0}^{127} \exp(s_{t-127+j}[d] + \mathbf{ape}_j[d]) \cdot \mathbf{kv}_{t-127+j}[d]}{\sum_{j=0}^{127} \exp(s_{t-127+j}[d] + \mathbf{ape}_j[d])}
-$$
-与 C4 的本质区别:
+#### 压缩计算
+
+- Phase 1: 每个 warp 独立处理 8 个位置
+（每 128 个 token 触发一次）:
+    $$
+    \tilde{kv}[d] = \frac{\sum_{j=0}^{127} \exp(s_{t-127+j}[d] + \mathbf{ape}_j[d]) \cdot \mathbf{kv}_{t-127+j}[d]}{\sum_{j=0}^{127} \exp(s_{t-127+j}[d] + \mathbf{ape}_j[d])}
+    $$
+    ```cpp
+    // 第 w 个 warp 负责位置 [w*8, w*8+7]:
+    const int32_t warp_offset = warp_id * kElementsPerWarp;  // 每个warp处理8个位置
+    for (int32_t i = 0; i < kElementsPerWarp; ++i) {  // i=0..7
+        const int32_t j = i + warp_offset;             // 全局位置索引
+        if (j < window_len) {
+            src = kv_score_buf + j * element_size;     // 从ring buffer加载
+        } else {
+            src = kv_score_src + (j - 127) * element_size;  // ragged tail
+        }
+        kv[i] = gmem.load(src);
+        score[i] = gmem.load(src + score_offset);
+    }
+    // 局部 softmax（warp内）
+    for (int32_t i = 0; i < kTileElements; ++i) {  // 遍历 head_dim 元素
+        for (int32_t j = 0; j < 8; ++j) {
+            score_fp32[j] = score[j][i] + bias[j][i];  // + ape
+        }
+        float max_value = max(score_fp32[0..7]);
+        float sum_product = 0, sum_exp = 0;
+        for (int32_t j = 0; j < 8; ++j) {
+            float exp_score = expf(score_fp32[j] - max_value);
+            sum_product += kv[j][i] * exp_score;
+            sum_exp     += exp_score;
+        }
+        // 存储到 shared memory
+        tmp_val_max[i] = max_value;
+        tmp_exp_sum[i] = sum_exp;
+        tmp_product[i] = sum_product;
+    }
+    s_local_val_max(warp_id, lane_id) = tmp_val_max;
+    s_local_exp_sum(warp_id, lane_id) = tmp_exp_sum;
+    s_local_product(warp_id, lane_id) = tmp_product;
+    __syncthreads();
+    ```
+- Phase 2: 跨 warp 全局归约
+
+    ```cpp
+    //16 个 warp 各自有局部的 (val_max, exp_sum, product)，现在需要做全局 safe softmax 归约：
+    for (uint32_t i = 0; i < kIteration; ++i) {
+        // 读取第 local_warp_id 个 warp 的局部结果
+        float local_val_max = s_local_val_max(local_warp_id, local_lane_id, local_tile_id);
+        float local_exp_sum = s_local_exp_sum(local_warp_id, local_lane_id, local_tile_id);
+        float local_product = s_local_product(local_warp_id, local_lane_id, local_tile_id);
+        
+        // 跨16个warp做 safe softmax 归约
+        float global_val_max = warp::reduce_max<16>(local_val_max);
+        float rescale       = expf(local_val_max - global_val_max);
+        float global_exp    = warp::reduce_sum<16>(local_exp_sum * rescale);
+        float final_scale   = rescale / global_exp;
+        float global_prod   = warp::reduce_sum<16>(local_product * final_scale);
+        
+        kv_out[local_elem_id] = (OutFloat)global_prod;
+    }
+    ```
+
 - C4 有两种 kv/score 类型（overlap vs current），C128 只有一种
-- C128 window=128 >> 32个线程/warp，所以需要 16 warp 协作 + shared memory 跨 warp 归约
-- C4 window=8 ≤ 32，单个 warp 内即可完成，不需要 shared memory 归约
+
 ---
 ### 为什么这样设计 KV 压缩？
 #### 线性注意力的压缩 (Linear Attention Compression)
 传统的 cross-attention 压缩需要 Q（而 Q 需要到当前 token 才知道）。DeepSeek V4 的压缩使用 score-based linear attention：
-常规 attention:  \(\text{output} = \text{softmax}(QK^T) \cdot V\)
-压缩用 score attention: \(\tilde{kv} = \text{softmax}(s + \text{ape}) \cdot \mathbf{kv}\)
-其中 \(s\) 是 wkv_gate 直接从 \(x_t\) 投影出来的标量 score，不依赖 Q。这意味着：
+- **常规 attention:**  $\text{output} = \text{softmax}(QK^T) \cdot V$
+- **压缩用 score attention:** $\tilde{kv} = \text{softmax}(s + \text{ape}) \cdot \mathbf{kv}$
+其中 $s$ 是 wkv_gate 直接从 $x_t$ 投影出来的标量 score，不依赖 Q。这意味着：
 - 压缩可以在 token 到达时立即完成（不需要等 Q）
 - 压缩后的结果是一个固定大小的吸引子状态（attractor state），可以被后续任何 Q 查询
-- wkv_gate 学习预测每个 token 在压缩窗口中的"重要性"
-#### C4 的 overlap 设计
-普通压缩:  [block 0: t0-t3] [block 1: t4-t7] ...   ← 边界信息断裂
-overlap  :  [block 0: t0-t7] ← 压缩block0时看到t4-t7
-            [block 1: t4-t11] ← 压缩block1时看到t0-t3(t4-t7的overlap)
-c4.cuh:259-261,267-269 中 seq_len % 4 == 0 的触发条件保证了每 4 个 token 形成一个 block，且相邻 block 共享 overlap token。
-为什么需要两种 kv/score：kv_overlap 和 kv_current 使用不同的线性投影参数。kv_overlap 侧重表达"这个 token 在下一 block 中应该留下的信息"，kv_current 侧重表达"这个 token 在本 block 内的信息"。两种 score 也同理。
+- wkv_gate 学习预测每个 token 在压缩窗口中重要性
 
 #### C4 有 Indexer 而 C128 没有
 
@@ -390,15 +353,153 @@ c4.cuh:259-261,267-269 中 seq_len % 4 == 0 的触发条件保证了每 4 个 to
 if self.compress_ratio == 4:   # 只有C4层创建indexer
     self.indexer = C4Indexer(...)
 ```
-原因：
+**原因：**
 - C4 层在浅层（网络前半部分），信息分辨率高，适合做精细的稀疏 attention token 检索
 - C128 层在深层（网络后半部分），每个压缩 token 已经包含了 128 个原始 token 的信息，不需要额外的稀疏检索
 - Indexer 使用 MQA attention 从压缩 KV cache 中选择 top-k 个最相关的 token，这个操作的开销与压缩率成正比
-4.4 Ring buffer 而非动态分配
-c4.cuh:265 和 c128.cuh:291:
-const int32_t k = (seq_len + PAGE_SIZE-1) % PAGE_SIZE;  // 环状索引
-原因：
+
+#### 静态分配 Ring buffer 
 - 每 token decode 时只需 O(1) 写入（覆盖旧数据），不需要 O(N) 扩展
 - 固定大小的 ring buffer 可以预分配在 GPU 显存中，由 CUDA graph 固定
 - 写/读位置只需 (seq_len + N - 1) % N 即可计算，无分支
 
+## Shadow Radix Cache
+
+![](../img/dsv4_swaradixcache.png)
+
+### Data Structure
+- full_lock_ref >= swa_lock_ref —— 有 SWA lock 必有 full lock
+- 叶子节点不能是 tombstone —— 如果叶子成了 tombstone，会自动被级联删除
+- full_lru_list：控制完整 KV 的驱逐顺序，所有节点都在其中
+- swa_lru_list：控制 仅 SWA 的驱逐顺序，tombstone 节点不在其中
+
+```python
+class TreeNode:
+    children: defaultdict    # 子节点
+    key: RadixKey            # token 序列
+    value: Tensor            # KV cache 的 full 索引 (物理地址)
+    swa_tombstone: bool      # SWA 是否已释放 (墓碑标记)
+    full_lock_ref: int       # Full cache 锁定计数
+    swa_lock_ref: int        # SWA cache 锁定计数
+    swa_uuid: int            # SWA lock 的边界标识
+    # 双链 LRU
+    prev/next                # Full LRU 链表
+    swa_prev/swa_next        # SWA LRU 链表
+```
+
+### Tombstone 机制
+#### Eviction
+Tombstone 使 SWA 和 Full 的驱逐可以解耦：
+
+- 当 SWA pool 满时，从 swa_lru_list 驱逐：
+  - 内部节点 → free SWA 索引 → 标记 swa_tombstone=True → 从 swa_lru_list 移除（保留 full KV 索引和 radix 结构）
+  - 叶子节点 → free 全部索引 → 同时从 full_lru_list 和 swa_lru_list 移除 → 删除节点
+
+- 当 full pool 满时，从 full_lru_list 驱逐叶子节点：
+  - 释放 full 和 SWA 索引
+  - 删除叶子，然后迭代删除已经成为叶子的 tombstone 父节点
+
+- C4/C128 Cache pool 的释放是**隐式的** 
+  - 当 full token 被释放后，压缩后的位置 不会被重新分配新数据，而是通过 ring buffer / 时间戳自然淘汰。
+  - 因为 C4/C128 的 page_size 是 full 的 1/4 或 1/128，数量远少于 full，且每次有新 token 进来时 compressor 会覆盖旧的压缩位置。
+#### Match Prefix
+前缀匹配中的 tombstone 处理 
+- 遍历 radix tree 时遇到 tombstone 节点：
+  - 如果从 tombstone 到当前节点的匹配 token 数 >= sliding_window_size
+    → 可以安全使用（SWA 范围内有足够上下文）
+  - 否则 → 回退到上一个安全点
+  
+**场景：滑动窗口 = 4, page_size = 1，radix tree 中已有链**：
+```shell
+root
+  → A: tokens=[0,1], value=[v0,v1], tombstone=True   ← SWA 已释放!
+       → B: tokens=[2,3], value=[v2,v3], tombstone=False
+            → C: tokens=[4,5], value=[v4,v5], tombstone=False
+```
+
+新请求来匹配 tokens [0,1,2,3,4,5]。
+结果：返回 6 个 token 的 KV 索引，安全点 = C。
+- 从 tombstone A 之后到 C，累积了 4 个 non-tombstone token（B 的 v2,v3 + C 的 v4,v5），恰好等于 SWA 窗口大小。
+- 这意味着 SWA cache 中有完整的窗口上下文可用。
+
+
+**场景：如果请求只匹配到 B（tokens [0,1,2,3]）**：
+
+- 只有 2 个有效 SWA token，不够形成完整窗口，整个匹配结果作废，请求需要重新计算。
+
+---
+
+#### Insert
+  
+场景：radix tree 中有一个 node Q：
+```shell
+Q: tokens=[0,1,2,3], value=[old_v0,old_v1,old_v2,old_v3], tombstone=True
+```
+新请求要 insert key=[0,1,2,3, 4,5,6,7], value=[new_v0..new_v7], 窗口=4。
+遍历到 Q 时：total_prefix_length = 0, prefix_len = 4。
+
+**Branch 1：swa_evicted_seqlen = 0 → 全部 SWA 都可恢复**
+条件: swa_evicted_seqlen (0) <= total_prefix_length (0)  ✅
+含义: 这个请求的 SWA 在 Q 的范围内没有被驱逐过，可以直接全部恢复。
+结果：
+```shell
+  → Q: [0,1,2,3], tombstone=False  ← 复活了!
+       → new: [4,5,6,7], tombstone=False   ← 新 token
+```
+---
+**Branch 2：swa_evicted_seqlen = 2 → 部分 SWA 被驱逐**
+条件: swa_evicted_seqlen (2) > total_prefix_length (0)   ❌ Branch1
+      swa_evicted_seqlen (2) < total_prefix_length + prefix_len (4)  ✅ Branch2
+含义: Q 的前 2 个 token 的 SWA 已被驱逐，后 2 个还在。
+结果：
+```shell
+  → Q_new:  [0,1], tombstone=True        ← SWA 仍然死着
+       → child: [2,3], tombstone=False    ← SWA 已复活
+            → new:  [4,5,6,7], tombstone=False
+```
+---
+**Branch 3：swa_evicted_seqlen = 8 → 全部 SWA 都被驱逐**
+条件: swa_evicted_seqlen (8) >= total_prefix_length + prefix_len (4)  ✅
+含义: 整个 Q + 新 token 的 SWA 全没了，什么都不用恢复。
+操作: free([new_v0..new_v3])    ← 直接全部释放
+      继续处理剩余 key
+
+
+### Forward Pass Process
+```shell
+1. SWARadixCache.match_prefix(tokens)  → 匹配到缓存节点，获得 full KV indices
+2. SWATokenToKVPoolAllocator.alloc_*()  → 分配新 token 的 full + swa indices
+3. Attention forward:
+   ├── store_cache(): SWA K → swa_kv_pool[swa_loc]
+   └── Compressor:
+       ├── 从 CompressStatePool 读取 ring-buffered kv_score
+       ├── 压缩后写入 c4_kv_pool / c128_kv_pool
+       └── C4 indexer 写入 c4_indexer_kv_pool
+       └── 读取 c4_indexer_kv_pool 打分后选 top-k 索引写入 c4_sparse_page_indices
+4. FlashMLA forward:
+   ├── swa_k_cache: 从 swa_kv_pool 读取，通过 swa_page_indices 索引
+   ├── extra_k_cache: 从 c4/c128_kv_pool 读取，通过 c4_sparse_page_indices / c128_page_indices
+   └── 三路 attention 融合输出
+```
+
+## MegaMoE
+
+**适合的场景**
+
+| 条件                        | 原因                                                   |
+| --------------------------- | ------------------------------------------------------ |
+| decode 阶段 (batch size 小) | token 数少，符合 <=1024 限制，kernel launch 开销占比大 |
+| DeepSeek-V4 / V3 系列       | 这些模型的 FP4 MoE 权重格式天然适配                    |
+| 单卡或小规模 EP             | 不需要复杂的 expert-parallel 通信                      |
+| FP8 推理                    | MegaMoE 深度依赖 FP8/FP4 量化路径                      |
+| prefill 的 chunk 较小       | 同样满足 token 数限制                                  |
+
+**不适合的场景**
+
+| 条件                          | 原因                                             |
+| ----------------------------- | ------------------------------------------------ |
+| 大批量 prefill (token > 1024) | 超过 `NUM_MAX_TOKENS_PER_RANK` 上限，自动回退    |
+| hash-routed 模型              | 路由方式不同，需要额外适配 (`FIX_HASH_MEGA_MOE`) |
+| 投机解码 (NextN/MTP)          | 被显式排除 (`self.is_nextn → False`)             |
+| 需要跨节点 EP                 | MegaMoE 不走 DeepEP 通信，不适合大规模分布式     |
+| BF16 权重模型                 | 依赖 FP4 权重和 UE8M0 scale 格式                 |
