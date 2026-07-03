@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="300" viewBox="0 0 960 300" role="img" aria-labelledby="title desc">
+  <title id="title">DSpark overview</title>
+  <desc id="desc">DSpark speculative decoding backend overview</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      .label{font:600 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#0f172a}
+      .small{font:500 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#475569}
+      .box{rx:8;fill:#f8fafc;stroke:#cbd5e1;stroke-width:1.5}
+      .blue{fill:#eff6ff;stroke:#2563eb}
+      .green{fill:#ecfdf5;stroke:#059669}
+      .amber{fill:#fffbeb;stroke:#d97706}
+      .violet{fill:#f5f3ff;stroke:#7c3aed}
+      .line{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="960" height="300" fill="#ffffff"/>
+  <text x="32" y="38" class="label">DSpark: draft better, verify smarter</text>
+
+  <rect x="42" y="84" width="145" height="92" class="box blue"/>
+  <text x="72" y="118" class="label">Prompt</text>
+  <text x="74" y="146" class="small">ABC</text>
+
+  <path d="M187 130 H245" class="line"/>
+  <rect x="250" y="84" width="150" height="92" class="box violet"/>
+  <text x="278" y="112" class="label">Target model</text>
+  <text x="284" y="140" class="small">prefill gives anchor</text>
+  <text x="318" y="164" class="small">D</text>
+
+  <path d="M400 130 H455" class="line"/>
+  <rect x="460" y="58" width="205" height="144" class="box amber"/>
+  <text x="502" y="88" class="label">DSpark drafter</text>
+  <rect x="482" y="106" width="74" height="54" rx="6" fill="#ffffff" stroke="#d97706"/>
+  <text x="501" y="137" class="small">DFlash</text>
+  <path d="M556 133 H591" class="line"/>
+  <rect x="590" y="106" width="54" height="54" rx="6" fill="#ffffff" stroke="#d97706"/>
+  <text x="602" y="130" class="small">Serial</text>
+  <text x="604" y="148" class="small">head</text>
+  <text x="506" y="184" class="small">tokens EFGH + c1..c4</text>
+
+  <path d="M665 130 H715" class="line"/>
+  <rect x="720" y="84" width="170" height="92" class="box green"/>
+  <text x="750" y="112" class="label">Scheduler</text>
+  <text x="742" y="140" class="small">keeps high-confidence</text>
+  <text x="776" y="164" class="small">prefix EFG</text>
+
+  <path d="M805 176 C805 238 325 238 325 182" class="line"/>
+  <text x="455" y="248" class="small">selected prefix is verified by target model</text>
+</svg>

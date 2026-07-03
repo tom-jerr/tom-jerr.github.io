@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      text{font-family:Arial,Helvetica,sans-serif;fill:#0f172a}
+      .title{font-size:27px;font-weight:700}
+      .sub{font-size:15px;fill:#475569}
+      .box{fill:#f8fafc;stroke:#94a3b8;stroke-width:1.5;rx:8}
+      .target{fill:#fff7ed;stroke:#ea580c;stroke-width:2;rx:8}
+      .pass{fill:#f0fdf4;stroke:#16a34a;stroke-width:2;rx:8}
+      .line{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .label{font-size:15px;font-weight:700}
+      .small{font-size:12.5px;fill:#475569}
+    </style>
+  </defs>
+  <rect width="1100" height="650" fill="#ffffff"/>
+  <text x="44" y="54" class="title">Roadmap: Kunlun Compiler Backend for vLLM</text>
+  <text x="44" y="82" class="sub">Move from eager-preserved CustomOps to a first-class backend compiler with safe fallbacks.</text>
+
+  <rect x="70" y="130" width="240" height="100" class="box"/>
+  <text x="104" y="164" class="label">Platform Config</text>
+  <text x="104" y="190" class="small">get_compile_backend</text>
+  <text x="104" y="210" class="small">pass_key / pass_manager</text>
+
+  <rect x="430" y="130" width="240" height="100" class="target"/>
+  <text x="470" y="164" class="label">KunlunCompiler</text>
+  <text x="470" y="190" class="small">CompilerInterface</text>
+  <text x="470" y="210" class="small">compile / load / hash</text>
+
+  <rect x="790" y="130" width="240" height="100" class="box"/>
+  <text x="824" y="164" class="label">XPU Graph Runtime</text>
+  <text x="824" y="190" class="small">graph capture</text>
+  <text x="824" y="210" class="small">compiled callable</text>
+
+  <rect x="70" y="310" width="240" height="112" class="pass"/>
+  <text x="104" y="344" class="label">FX Passes</text>
+  <text x="104" y="370" class="small">norm/quant fusion</text>
+  <text x="104" y="390" class="small">layout normalization</text>
+  <text x="104" y="410" class="small">unsupported op marking</text>
+
+  <rect x="430" y="310" width="240" height="112" class="pass"/>
+  <text x="470" y="344" class="label">vLLM IR Providers</text>
+  <text x="470" y="370" class="small">register_impl('kunlun')</text>
+  <text x="470" y="390" class="small">supports_args</text>
+  <text x="470" y="410" class="small">priority selection</text>
+
+  <rect x="790" y="310" width="240" height="112" class="target"/>
+  <text x="824" y="344" class="label">Cache and Replay</text>
+  <text x="824" y="370" class="small">compile_range key</text>
+  <text x="824" y="390" class="small">artifact handle</text>
+  <text x="824" y="410" class="small">static graph wrapper</text>
+
+  <rect x="250" y="510" width="600" height="64" fill="#f1f5f9" stroke="#cbd5e1" rx="8"/>
+  <text x="292" y="548" class="label">Start with fusion-only correctness, then enable XPU graph compilation per op and per shape bucket.</text>
+
+  <path class="line" d="M310 180 H430"/>
+  <path class="line" d="M670 180 H790"/>
+  <path class="line" d="M550 230 V310"/>
+  <path class="line" d="M310 366 H430"/>
+  <path class="line" d="M670 366 H790"/>
+  <path class="line" d="M910 422 C910 488 550 488 550 510"/>
+</svg>

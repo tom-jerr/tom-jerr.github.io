@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="500" viewBox="0 0 1100 500">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      text{font-family:Arial,Helvetica,sans-serif;fill:#0f172a}
+      .title{font-size:28px;font-weight:700}
+      .sub{font-size:15px;fill:#475569}
+      .box{fill:#f8fafc;stroke:#94a3b8;stroke-width:1.5;rx:8}
+      .accent{fill:#eef6ff;stroke:#2563eb;stroke-width:2;rx:8}
+      .runtime{fill:#fff7ed;stroke:#f97316;stroke-width:2;rx:8}
+      .line{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .label{font-size:16px;font-weight:700}
+      .small{font-size:13px;fill:#475569}
+    </style>
+  </defs>
+  <rect width="1100" height="500" fill="#ffffff"/>
+  <text x="44" y="52" class="title">vLLM Graph Compilation: Serving-aware Compiler Pipeline</text>
+  <text x="44" y="78" class="sub">Dynamo capture, vLLM graph policy, backend compiler, cache, and graph replay cooperate for LLM serving.</text>
+
+  <rect x="54" y="140" width="170" height="86" class="box"/>
+  <text x="82" y="174" class="label">Model Forward</text>
+  <text x="82" y="198" class="small">layers, CustomOp</text>
+  <text x="82" y="216" class="small">vllm_ir ops</text>
+
+  <rect x="282" y="140" width="170" height="86" class="accent"/>
+  <text x="315" y="174" class="label">TorchDynamo</text>
+  <text x="320" y="198" class="small">FX graph</text>
+  <text x="320" y="216" class="small">guards</text>
+
+  <rect x="510" y="120" width="190" height="126" class="accent"/>
+  <text x="552" y="154" class="label">VllmBackend</text>
+  <text x="540" y="178" class="small">split by ops</text>
+  <text x="540" y="196" class="small">custom pass manager</text>
+  <text x="540" y="214" class="small">shape ranges</text>
+  <text x="540" y="232" class="small">compiler manager</text>
+
+  <rect x="758" y="140" width="170" height="86" class="box"/>
+  <text x="792" y="174" class="label">Compiler</text>
+  <text x="789" y="198" class="small">Inductor or</text>
+  <text x="789" y="216" class="small">custom backend</text>
+
+  <rect x="758" y="314" width="170" height="86" class="runtime"/>
+  <text x="794" y="348" class="label">Graph Replay</text>
+  <text x="790" y="372" class="small">CUDA Graph</text>
+  <text x="790" y="390" class="small">or platform graph</text>
+
+  <rect x="510" y="314" width="190" height="86" class="runtime"/>
+  <text x="558" y="348" class="label">Caches</text>
+  <text x="540" y="372" class="small">compile cache</text>
+  <text x="540" y="390" class="small">kernel/runtime cache</text>
+
+  <path class="line" d="M224 183 H282"/>
+  <path class="line" d="M452 183 H510"/>
+  <path class="line" d="M700 183 H758"/>
+  <path class="line" d="M843 226 V314"/>
+  <path class="line" d="M758 357 H700"/>
+  <path class="line" d="M605 314 V246"/>
+
+  <rect x="70" y="310" width="310" height="112" fill="#f1f5f9" stroke="#cbd5e1" rx="8"/>
+  <text x="98" y="342" class="label">Three questions vLLM answers</text>
+  <text x="98" y="370" class="small">1. Which graph regions are stable enough?</text>
+  <text x="98" y="392" class="small">2. Which shapes deserve specialized code?</text>
+  <text x="98" y="414" class="small">3. Which runtime regions can be replayed?</text>
+</svg>

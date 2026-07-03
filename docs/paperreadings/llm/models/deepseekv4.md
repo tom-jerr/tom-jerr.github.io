@@ -482,6 +482,129 @@ Q: tokens=[0,1,2,3], value=[old_v0,old_v1,old_v2,old_v3], tombstone=True
    └── 三路 attention 融合输出
 ```
 
+## Context Parallelism
+2. 当前代码怎么处理 C4/C128 压缩
+关键代码在 deepseek_v4.py:285-300：
+kv_score = linear_bf16_fp32(x, self.wkv_gate.weight)
+if nsa_use_prefill_cp(forward_batch):
+    kv_score = cp_all_gather_rerange_output(
+        kv_score,
+        get_attention_tp_size(),
+        forward_batch,
+        torch.cuda.current_stream(),
+    )
+return self.compress_fused(kv_score, forward_batch)
+流程是：
+每个 rank 先计算自己 token 的 kv_score
+        ↓
+cp_all_gather_rerange_output()
+        ↓
+每个 rank 都拿到完整顺序的 kv_score:
+[t0, t1, t2, t3, t4, t5, ...]
+        ↓
+本地执行 compressor
+        ↓
+本地写 c4_kv_pool / c128_kv_pool
+所以 C4 的 overlap/chunk 依赖在 compressor 里看到的是完整序列，不是 rank-local 的 round-robin 子序列。
+---
+3. C4 的“前面 chunk 数据”怎么定位
+C4/C128 的写位置由 create_paged_compressor_data() 生成，核心逻辑在 compressor.py:210-286：
+loc = req_to_token[req_pool_indices, positions]
+swa_loc = token_to_kv_pool.translate_loc_from_full_to_swa(loc)
+swa_pages = swa_loc // swa_page_size
+state_loc = swa_pages * ring_size + swa_loc % ring_size
+write_loc = state_loc // compress_ratio
+含义：
+full KV loc
+  → full_to_swa_index_mapping
+  → swa_loc
+  → state_loc in CompressStatePool ring buffer
+  → compressed write_loc
+C4 是 overlap compress：
+is_overlap = compress_ratio == 4
+decode 时还会取：
+write_overlap_loc = get_raw_loc(write_positions - compress_ratio)
+也就是说 C4 不只是看当前 4-token chunk，还可能需要前一个 C4 chunk 的 overlap 状态。
+CP 下这个问题靠前面的 kv_score allgather 解决：compressor 看到的是完整连续序列，所以它可以正确生成 write_loc 和 extra_data。
+---
+4. SWA cache 怎么处理
+SWA 的关键在 MQALayer._forward_prepare()，deepseek_v4.py:784-803：
+if self.nsa_enable_prefill_cp and nsa_use_prefill_cp(forward_batch):
+    kv = cp_all_gather_rerange_output(
+        kv.contiguous(),
+        self.cp_size,
+        forward_batch,
+        torch.cuda.current_stream(),
+    )
+if self.overlap_store_cache:
+    attn_backend.store_cache(
+        layer_id=self.layer_id,
+        swa_k=kv,
+        forward_batch=forward_batch,
+    )
+流程：
+每个 rank 先算自己 token 的 kv
+        ↓
+allgather + rerange
+        ↓
+每个 rank 得到完整顺序 kv:
+[t0, t1, t2, ...]
+        ↓
+store_cache 写入本地 swa_kv_pool
+store_cache() 里再做：
+raw_loc = forward_batch.out_cache_loc
+swa_loc = translate_loc_from_full_to_swa(raw_loc)
+swa_kv_pool.set_key_buffer(layer_id, swa_loc, swa_k)
+所以 SWA cache 的写入是：
+完整 kv tensor + 全局 out_cache_loc
+  → 翻译到 swa_loc
+  → 每个 rank 本地写完整 SWA cache
+这避免了后续 FlashMLA attention 需要跨 rank 读 SWA KV。
+---
+5. KV cache 到底是不是跨 rank 共享？
+不是物理共享。
+更准确地说：
+每个 CP rank / GPU 都有自己的 KV cache pool
+但 allocator / req_to_token / out_cache_loc 是对称的
+所以逻辑 KV index 在各 rank 上一致
+因此：
+- rank0 的 logical loc 1234 和 rank1 的 logical loc 1234 表示各自本地 KV pool 的同一个逻辑位置。
+- CP 通过 allgather 让每个 rank 都把完整 KV 写到自己的本地 pool。
+- 后续 attention 只读本 rank 本地 KV cache，不做 remote KV read。
+这是当前实现的核心取舍：
+多做 allgather + 重复写本地 KV
+换取后续 attention/compressor/cache 逻辑仍然保持本地、简单、对称
+---
+6. Shadow prefix / SWARadixCache 这边怎么配合
+SWARadixCache 本身不感知 CP。
+它仍然管理全局 token 序列：
+tokens: [t0,t1,t2,t3,t4,...]
+value:  [full_loc0, full_loc1, full_loc2,...]
+CP 发生在模型 forward 内部：
+hidden_states 被切分
+attention metadata 被切分
+KV 写入前又 allgather 回完整顺序
+Radix cache 的 insert/match 仍然面对完整前缀：
+match_prefix → 返回全局 prefix_indices
+insert       → 插入完整 token_ids + full kv indices
+所以 shadow prefix cache 不需要维护 per-rank prefix。
+
+### 代价
+代价 1：KV / kv_score allgather
+C4 和 SWA 都需要完整连续序列，因此每层都可能有：
+local kv / kv_score
+  → allgather
+  → rerange
+长 prefill 下通信量不小。
+代价 2：每个 rank 重复写完整 KV cache
+每个 rank 都写一份完整的 SWA/C4/C128 cache。这减少了 remote read 复杂度，但增加了显存和写带宽。
+代价 3：chunked prefill 风险
+代码里有 debug assert 提醒：
+extend_seq_lens != seq_lens
+→ chunked-prefill continuation
+→ CP round-robin may have domain mismatch
+因为后续 chunk 的 token-to-rank 分布、已有 KV cache 的顺序、compress state ring 的连续性都更复杂。
+
 ## MegaMoE
 
 **适合的场景**

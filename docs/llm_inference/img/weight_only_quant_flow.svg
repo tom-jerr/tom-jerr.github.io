@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="640" viewBox="0 0 1180 640" role="img" aria-labelledby="title desc">
+  <title id="title">Weight-only quantization and fused dequant GEMM flow</title>
+  <desc id="desc">Offline group-wise quantization stores packed low-bit weights plus scales, while runtime fused kernels dequantize inside GEMM tiles.</desc>
+  <defs>
+    <style>
+      .bg { fill: #fbfbfc; }
+      .panel { fill: #ffffff; stroke: #d6d9e2; stroke-width: 1.4; }
+      .stage { fill: #f2f5f9; stroke: #c9d1df; stroke-width: 1.2; }
+      .offline { fill: #e8f4ff; stroke: #8ab7e6; }
+      .runtime { fill: #eef8ee; stroke: #9ccf9e; }
+      .kernel { fill: #fff3e8; stroke: #e0a15d; }
+      .data { fill: #f4ecff; stroke: #b48ce8; }
+      .title { font: 700 28px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #171923; }
+      .label { font: 700 17px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1b1f2a; }
+      .small { font: 500 13px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #566071; }
+      .mono { font: 600 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #303746; }
+      .bit { font: 700 13px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #ffffff; }
+      .arrow { stroke: #566071; stroke-width: 2.2; fill: none; marker-end: url(#arrow); }
+      .dashed { stroke-dasharray: 7 6; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#566071" />
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1180" height="640" rx="18" />
+  <text class="title" x="48" y="54">Weight-only quantization: offline packing, runtime fused dequant</text>
+  <text class="small" x="48" y="82">The model stores low-bit weights; activations stay FP16/BF16 for W4A16, and high-performance kernels dequantize weights inside GEMM tiles.</text>
+
+  <g transform="translate(48,118)">
+    <rect class="panel" x="0" y="0" width="1084" height="196" rx="14" />
+    <text class="label" x="24" y="34">Offline compression</text>
+    <text class="small" x="24" y="58">done once by RTN / GPTQ / AWQ / llm-compressor</text>
+
+    <g transform="translate(30,86)">
+      <rect class="offline" x="0" y="0" width="170" height="78" rx="12" />
+      <text class="label" x="26" y="30">FP16/BF16 W</text>
+      <text class="small" x="24" y="54">dense checkpoint</text>
+
+      <path class="arrow" d="M184,39 L244,39" />
+
+      <rect class="stage" x="258" y="0" width="188" height="78" rx="12" />
+      <text class="label" x="286" y="28">split groups</text>
+      <text class="mono" x="285" y="54">group_size = 128</text>
+
+      <path class="arrow" d="M460,39 L520,39" />
+
+      <rect class="stage" x="534" y="0" width="210" height="78" rx="12" />
+      <text class="label" x="562" y="28">compute qparams</text>
+      <text class="mono" x="562" y="54">scale, zero_point</text>
+
+      <path class="arrow" d="M758,39 L818,39" />
+
+      <rect class="data" x="832" y="0" width="210" height="78" rx="12" />
+      <text class="label" x="858" y="28">packed INT4 Wq</text>
+      <text class="mono" x="858" y="54">+ scales + zeros</text>
+    </g>
+  </g>
+
+  <g transform="translate(48,354)">
+    <rect class="panel" x="0" y="0" width="1084" height="216" rx="14" />
+    <text class="label" x="24" y="34">Runtime inference</text>
+    <text class="small" x="24" y="58">fused dequant keeps INT4 unpack and scale application inside the GEMM main loop</text>
+
+    <g transform="translate(30,86)">
+      <rect class="runtime" x="0" y="0" width="176" height="84" rx="12" />
+      <text class="label" x="30" y="30">activation X</text>
+      <text class="mono" x="30" y="56">FP16 / BF16</text>
+
+      <path class="arrow" d="M190,42 L245,42" />
+
+      <rect class="data" x="260" y="-28" width="182" height="52" rx="10" />
+      <text class="label" x="284" y="5">packed Wq</text>
+      <rect class="data" x="260" y="36" width="182" height="52" rx="10" />
+      <text class="label" x="284" y="69">scale / zp</text>
+
+      <path class="arrow" d="M456,42 L516,42" />
+
+      <rect class="kernel" x="530" y="-18" width="252" height="120" rx="14" />
+      <text class="label" x="565" y="16">fused dequant GEMM</text>
+      <text class="mono" x="560" y="45">w = (wq - zp) * scale</text>
+      <text class="mono" x="560" y="72">acc += x_tile @ w_tile</text>
+      <text class="small" x="560" y="98">no full FP16 weight materialization</text>
+
+      <path class="arrow" d="M796,42 L858,42" />
+
+      <rect class="runtime" x="872" y="0" width="170" height="84" rx="12" />
+      <text class="label" x="910" y="30">output Y</text>
+      <text class="mono" x="900" y="56">FP16/BF16</text>
+    </g>
+  </g>
+
+  <g transform="translate(80,585)">
+    <text class="mono" x="0" y="0">Storage win: W4A16 keeps weight payload near 25% of FP16, plus group metadata. Speed win requires fused kernel + packed layout.</text>
+  </g>
+</svg>

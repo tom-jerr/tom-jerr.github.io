@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      text{font-family:Arial,Helvetica,sans-serif;fill:#0f172a}
+      .title{font-size:27px;font-weight:700}
+      .sub{font-size:15px;fill:#475569}
+      .band{fill:#f8fafc;stroke:#cbd5e1;stroke-width:1.5;rx:8}
+      .key{fill:#ecfeff;stroke:#0891b2;stroke-width:2;rx:8}
+      .run{fill:#fff7ed;stroke:#ea580c;stroke-width:2;rx:8}
+      .line{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .label{font-size:16px;font-weight:700}
+      .small{font-size:13px;fill:#475569}
+    </style>
+  </defs>
+  <rect width="1100" height="520" fill="#ffffff"/>
+  <text x="44" y="54" class="title">CompilationConfig Control Plane</text>
+  <text x="44" y="82" class="sub">The same FX graph policy is controlled by a small set of serving-oriented knobs.</text>
+
+  <rect x="58" y="130" width="260" height="268" class="band"/>
+  <text x="86" y="162" class="label">Top-level compile</text>
+  <text x="86" y="194" class="small">mode = VLLM_COMPILE</text>
+  <text x="86" y="216" class="small">backend = inductor/eager/custom</text>
+  <text x="86" y="238" class="small">custom_ops</text>
+  <text x="86" y="260" class="small">ir_enable_torch_wrap</text>
+  <text x="86" y="282" class="small">debug_dump_path</text>
+  <text x="86" y="304" class="small">cache_dir</text>
+
+  <rect x="420" y="130" width="260" height="268" class="key"/>
+  <text x="448" y="162" class="label">Piecewise compile</text>
+  <text x="448" y="194" class="small">splitting_ops</text>
+  <text x="448" y="216" class="small">compile_sizes</text>
+  <text x="448" y="238" class="small">compile_ranges_endpoints</text>
+  <text x="448" y="260" class="small">use_inductor_graph_partition</text>
+  <text x="448" y="282" class="small">pass_config</text>
+  <text x="448" y="304" class="small">inductor_compile_config</text>
+
+  <rect x="782" y="130" width="260" height="268" class="run"/>
+  <text x="810" y="162" class="label">Runtime replay</text>
+  <text x="810" y="194" class="small">cudagraph_mode</text>
+  <text x="810" y="216" class="small">cudagraph_capture_sizes</text>
+  <text x="810" y="238" class="small">max_cudagraph_capture_size</text>
+  <text x="810" y="260" class="small">warmup count</text>
+  <text x="810" y="282" class="small">copy input policy</text>
+  <text x="810" y="304" class="small">platform graph wrapper</text>
+
+  <path class="line" d="M318 264 H420"/>
+  <path class="line" d="M680 264 H782"/>
+
+  <rect x="196" y="430" width="708" height="54" fill="#f1f5f9" stroke="#cbd5e1" rx="8"/>
+  <text x="232" y="463" class="label">Policy result: fewer graph versions, stable compiled callables, and predictable replay buckets.</text>
+</svg>

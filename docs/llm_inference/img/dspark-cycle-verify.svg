@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="250" viewBox="0 0 880 250" role="img" aria-labelledby="title desc">
+  <title id="title">DSpark cycle verify</title>
+  <desc id="desc">Target model verifies selected draft tokens and produces the next anchor</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      .label{font:600 16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#0f172a}
+      .small{font:500 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#475569}
+      .token{font:700 20px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;fill:#0f172a}
+      .box{rx:8;fill:#f8fafc;stroke:#cbd5e1;stroke-width:1.5}
+      .blue{fill:#eff6ff;stroke:#2563eb}
+      .green{fill:#ecfdf5;stroke:#059669}
+      .red{fill:#fef2f2;stroke:#dc2626}
+      .violet{fill:#f5f3ff;stroke:#7c3aed}
+      .line{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="880" height="250" fill="#ffffff"/>
+  <text x="32" y="38" class="label">Step 5: target verification</text>
+  <rect x="46" y="86" width="170" height="86" class="box blue"/>
+  <text x="84" y="116" class="label">Verify input</text>
+  <text x="78" y="148" class="token">D  E  F  G</text>
+  <path d="M216 129 H300" class="line"/>
+  <rect x="310" y="70" width="190" height="118" class="box violet"/>
+  <text x="352" y="108" class="label">Target model</text>
+  <text x="352" y="138" class="small">one verify pass</text>
+  <text x="344" y="162" class="small">accept / reject tokens</text>
+  <path d="M500 129 H590" class="line"/>
+  <rect x="600" y="72" width="104" height="64" class="box green"/>
+  <text x="627" y="99" class="label">Accept</text>
+  <text x="626" y="124" class="token">D E F</text>
+  <rect x="600" y="154" width="104" height="50" class="box red"/>
+  <text x="624" y="185" class="label">Reject G</text>
+  <path d="M704 129 H790" class="line"/>
+  <text x="748" y="110" class="small">sample</text>
+  <rect x="796" y="94" width="56" height="70" class="box blue"/>
+  <text x="812" y="122" class="label">Next</text>
+  <text x="811" y="150" class="token">G*</text>
+</svg>

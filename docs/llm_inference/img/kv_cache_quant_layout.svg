@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="620" viewBox="0 0 1180 620" role="img" aria-labelledby="title desc">
+  <title id="title">KV cache quantization layout and attention scale fusion</title>
+  <desc id="desc">KV cache quantization stores low precision K and V values with per-token-head or per-block scales, then fuses scales into QK and PV attention computations.</desc>
+  <defs>
+    <style>
+      .bg { fill: #fbfbfc; }
+      .panel { fill: #ffffff; stroke: #d7dae4; stroke-width: 1.4; }
+      .cache { fill: #eaf3ff; stroke: #8ab6e8; stroke-width: 1.4; }
+      .scale { fill: #fff0dd; stroke: #de9b4f; stroke-width: 1.4; }
+      .kernel { fill: #edf8ef; stroke: #90c995; stroke-width: 1.4; }
+      .warn { fill: #f4ecff; stroke: #b08be5; stroke-width: 1.4; }
+      .title { font: 700 28px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #171923; }
+      .label { font: 700 17px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1b1f2a; }
+      .small { font: 500 13px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #566071; }
+      .mono { font: 600 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #303746; }
+      .arrow { stroke: #566071; stroke-width: 2.2; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#566071" />
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1180" height="620" rx="18" />
+  <text class="title" x="48" y="54">KV cache quantization: low-bit cache + fused attention scales</text>
+  <text class="small" x="48" y="82">Memory drops with FP8/INT8/FP4 KV, but accuracy depends on scale granularity and whether dequant is fused into attention.</text>
+
+  <g transform="translate(48,118)">
+    <rect class="panel" x="0" y="0" width="1084" height="178" rx="14" />
+    <text class="label" x="24" y="34">Paged KV cache block</text>
+    <text class="small" x="24" y="58">logical shape: [num_blocks, 2(K/V), block_size, kv_heads, head_dim]</text>
+
+    <g transform="translate(34,88)">
+      <rect class="cache" x="0" y="0" width="220" height="58" rx="10" />
+      <text class="label" x="70" y="25">Kq data</text>
+      <text class="mono" x="62" y="45">FP8 / INT8 / FP4</text>
+
+      <rect class="scale" x="235" y="0" width="140" height="58" rx="10" />
+      <text class="label" x="270" y="25">K scale</text>
+      <text class="mono" x="270" y="45">head/token</text>
+
+      <rect class="cache" x="430" y="0" width="220" height="58" rx="10" />
+      <text class="label" x="500" y="25">Vq data</text>
+      <text class="mono" x="492" y="45">FP8 / INT8 / FP4</text>
+
+      <rect class="scale" x="665" y="0" width="140" height="58" rx="10" />
+      <text class="label" x="700" y="25">V scale</text>
+      <text class="mono" x="700" y="45">head/token</text>
+
+      <rect class="warn" x="850" y="0" width="170" height="58" rx="10" />
+      <text class="label" x="890" y="25">metadata</text>
+      <text class="mono" x="888" y="45">layout matters</text>
+    </g>
+  </g>
+
+  <g transform="translate(48,338)">
+    <rect class="panel" x="0" y="0" width="1084" height="210" rx="14" />
+    <text class="label" x="24" y="34">Attention read path</text>
+    <text class="small" x="24" y="58">The fast path does not dequantize KV into a full BF16 cache; scales are applied inside QK and PV tiles.</text>
+
+    <g transform="translate(34,88)">
+      <rect class="kernel" x="0" y="0" width="188" height="86" rx="12" />
+      <text class="label" x="55" y="29">Q tile</text>
+      <text class="mono" x="50" y="55">FP16/BF16</text>
+
+      <path class="arrow" d="M202,43 L260,43" />
+
+      <rect class="cache" x="274" y="-10" width="190" height="48" rx="10" />
+      <text class="label" x="320" y="20">read Kq</text>
+      <rect class="scale" x="274" y="50" width="190" height="48" rx="10" />
+      <text class="label" x="315" y="80">read k_scale</text>
+
+      <path class="arrow" d="M478,43 L535,43" />
+
+      <rect class="kernel" x="550" y="-16" width="232" height="118" rx="14" />
+      <text class="label" x="586" y="18">QK + softmax</text>
+      <text class="mono" x="580" y="46">S = Q @ Kq</text>
+      <text class="mono" x="580" y="70">S *= softmax_scale</text>
+      <text class="mono" x="580" y="94">S *= k_scale</text>
+
+      <path class="arrow" d="M796,43 L854,43" />
+
+      <rect class="kernel" x="868" y="-16" width="170" height="118" rx="14" />
+      <text class="label" x="916" y="18">PV</text>
+      <text class="mono" x="895" y="46">O += P @ Vq</text>
+      <text class="mono" x="895" y="70">O *= v_scale</text>
+      <text class="small" x="895" y="94">fused dequant</text>
+    </g>
+  </g>
+
+  <g transform="translate(72,576)">
+    <text class="mono" x="0" y="0">vLLM Triton can inline per-token-head scales in the KV block tail; SGLang FP4 keeps packed KV data and dynamic scale buffers.</text>
+  </g>
+</svg>

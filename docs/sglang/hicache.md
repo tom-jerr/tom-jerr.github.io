@@ -1,36 +1,291 @@
 # Hicache In SGlang
+
+## 目录
+
+- [Overview](#overview)
+    - [核心特点](#core-features)
+    - [读写流程](#read-write-flow)
+- [Mempool Opt](#mempool-opt)
+- [HiSparse](#hisparse)
+- [Component Details](#component-details)
+    - [HiRadixTree](#hiradixtree)
+    - [HiCacheController](#hicachecontroller)
+    - [Global KVManager 与 Storage Backend](#global-kvmanager-storage-backend)
+
 ## Overview
+
+<div class="article-split article-split--image-right" markdown="1">
+<div markdown="1">
+
 HiCache 即多级 KVCache，架构如下：
 
 - HiRadixTree：单机 GPU-CPU 双层前缀缓存树
 - Storage Backend：可插拔存储后端，集成 3FS、Mooncake、NIXL 等
-  - 统一接口封装 batch_get / batch_set / batch exists
-  - 零拷贝数据传输
+    - 统一接口封装 `batch_get` / `batch_set` / `batch_exists`
+    - 零拷贝数据传输
 - Global KVManager：提供分布式文件系统（FS）的元数据统一管理服务，具备高效的元数据组织、查询与协调能力，为全局 KVCache 提供一致性管理（KVCache 全局索引）
 - 3FS/Mooncake Global Storage：存算分离架构，结合 RDMA 网络优化与 NVMe SSD，提供 TiB/s 级别的聚合读取带宽
 
-### 流程
+</div>
+<figure markdown="1">
+
+![](img/hicache_overview.png)
+
+<figcaption>HiCache 多级 KVCache 架构与 L1/L2/L3 数据流。</figcaption>
+</figure>
+</div>
+
+### 核心特点 {#core-features}
+
+1. **预取与等待并行**：请求入队时即触发 `prefetch_from_storage`，等待调度期间后台线程已经把 Storage 中命中的 KV 数据异步加载到 Host 内存，利用排队等待的空闲时间。
+    - 请求入队时，scheduler 会先通过 `match_prefix()` 找到 L2 挂载点，再把 L2 未覆盖的 suffix 交给 prefetch 线程。
+    - 请求真正被选入 batch 时，`init_load_back()` / `load_back()` 才会把 host 上命中的 KV 分配回 GPU slot，并提交 H2D DMA。
+    - Scheduler 调度到请求时，会根据调度策略终止 prefetch 或跳过本轮调度：
+        - `best_effort`：调度到请求时，如果请求仍在 prefetch，则终止 prefetch 并进入推理。
+        - `timeout`：如果 prefetch 耗时超过阈值则终止，否则跳过该请求本轮调度。（推荐）
+        - `wait_complete`：等待 prefetch 完成全部 KVCache 后才进入推理调度，否则跳过。
+2. **加载与计算 Overlap**：请求被调度执行时，Host -> GPU 的 KV 加载通过独立 CUDA Stream 逐层进行。模型前向计算可在第 i 层 KV 就绪后立即开始，无需等待全部层加载完成，实现计算与传输的流水线重叠。
+    - 计数器注册与绑定：HiCacheController 初始化阶段构建 `LayerDoneCounter`，记录当前 forward 物理执行到了哪一层。该计数器会分发给多 GPU 并行下的 `tp_worker.py`，保证多卡状态同步。
+    - 独立的辅助 CUDA 流异步拷贝：内存池 KV 数据的拷贝动作会切分并在独立 `alt_stream` 上触发。
+    - 计算阻断与同步保障：`LayerDoneCounter` 内嵌 `wait(layer_index)` 接口。主计算流即将计算第 `l + 1` 层时，会在 CPU 侧或通过 CUDA Event 调用 `wait(l + 1)`；如果辅助流中该层拷贝已经完成，则直接进入计算，否则计算流会短暂同步阻塞直到数据就绪。
+
+### 读写流程 {#read-write-flow}
+
 HiCache 的读路径可以理解成两段独立轮询、可以重叠执行的异步流水线：
 
 1. **L3 -> L2**：Scheduler 先通过 `match_prefix()` 找到 L2 挂载点，再把 L2 未覆盖的 suffix 交给 prefetch 线程。prefetch 线程先做 hash 计算和 storage existence check，确认命中足够多后，再由 IO 线程把 storage 中的 KV 直接读入预分配的 host memory。
 2. **L2 -> L1**：请求真正被选入 batch 时，`init_load_back()` / `load_back()` 才会把 host 上命中的 KV 分配回 GPU slot，并提交 H2D DMA。
 
 两段流水线的轮询点不同，但都是 scheduler 每次迭代时进行轮询：
+
 - `check_prefetch_progress()` 负责把 L3 prefetch 完成的数据插入 radix tree
 - `loading_check()` 负责检查 H2D DMA 是否完成并释放保护引用。
 
 **Load back**
+
 - H2D load 和 prefill forward 是 layer-wise 重叠的：第 0 层 KV 搬完后 forward 就可以开始算第 0 层，同时 load stream 继续搬后面的层。
 
 **Backup**
+
 - Prefill 结束后，新产生的 KV 留在 GPU；如果策略要求 write back / backup，则再按 L1 -> L2 -> L3 的方向异步写回。
 
 > [!NOTE]
 > 这里的 L3 预取和 L2 load back 都需要匹配时超过一个阈值，如果没有超过不会进行这个过程
-> 
+>
 > L3 prefetch 预分配一大段的 host kv slot，实际上可能 IO 线程只填充了一部分，剩余的会放入 host_mem_release_queue 里面。
 
-![](img/hicache_overview.png)
+## Mempool Opt
+
+<div class="article-split article-split--image-left" markdown="1">
+<figure markdown="1">
+
+![](img/mempool_host.png)
+
+<figcaption>Host mempool 的 page-first / layer-wise 传输布局。</figcaption>
+</figure>
+<div markdown="1">
+
+HiCache 采用了解耦的内存布局策略：
+
+- L1 GPU 端：保持“Layer-First”布局，确保与现有的计算算子完全兼容。
+- L2 & L3 端：统一采用全新的“Page-First”排布。在 Page-First 模式下，对于一个固定的物理页面（例如 64 个 Token 对应的 Key 和 Value），它在所有模型层（例如 80 层）上的 KV 数据被紧凑、连续地打包存储在 CPU Pinned 内存或远端网络内存中。
+
+主机内存池的内存布局：
+
+- `page_first`：把同一个 token/page 的所有 layer 连起来，方便 L3 I/O。
+- `page_first_direct`：再进一步按 page_num, layer_num, page_size 组织，让 CPU -> GPU 的 direct transfer 可以按「某 page 的某 layer」聚合。
+- `page_head`：是后面异构 TP 要用的布局，它把 head 维度提到 page 里面，方便按 head 切分。
+
+CPU 和 GPU 之间 KV 缓存传输的 I/O 后端：
+
+- `direct`：更接近普通 indexing/copy，适合 `page_first_direct`。
+- `kernel`：走 SGLang 自己的 GPU-assisted I/O kernel，适合 `page_first`、`page_head` 这些需要 layout transform 的路径。
+
+> [!IMPORTANT]
+> prefix cache 的命中模型决定了 "layer" 不是独立可命中的单位，唯一一个 per-layer 切分有意义的维度是 head（不是 layer）。
+> L3 的 key 粒度跟着"命中的最小有意义单位"走，而 prefix cache 的最小有意义单位是一页 token 的全部层 KV，只要少一层就得整页重算。
+
+</div>
+</div>
+
+## HiSparse
+
+> HiSparse 在代码里对应 `--enable-hisparse`，全称是 hierarchical sparse attention。它和 HiCache 都在做 GPU/Host 分层，但目标不同：HiCache 是 prefix KV cache 的分层复用；HiSparse 是稀疏注意力场景下的 per-request KV 分层，把完整历史 KV 主要放在 Host，只把当前 decode 需要的 top-k KV token/page swap 到 GPU device buffer。
+
+### 定位与约束
+
+HiSparse 当前主要服务于 DSA（DeepSeek Sparse Attention，例如 DeepSeek V3.2、GLM-5）以及 DeepSeek V4。启动参数在 `server_args.py` 中：
+
+```shell
+--enable-hisparse
+--hisparse-config '{"top_k": 2048, "device_buffer_size": 4096, "host_to_device_ratio": 2}'
+```
+
+`hisparse_config` 的核心字段：
+
+| 字段 | 默认值 | 含义 |
+| --- | --- | --- |
+| `top_k` | `2048` | 每次 decode 稀疏注意力真正读取的历史 KV token/page 数 |
+| `device_buffer_size` | `2 * top_k` | 每个 request 在 GPU 上保留的热 KV buffer 大小，必须大于等于 `top_k` |
+| `host_to_device_ratio` | `2` | logical KV 空间相对 hisparse device buffer 的放大倍数；越大表示更多 KV 放到 Host，GPU 热区越小 |
+| `algorithm` / `backend` | `None` | 通用 sparse framework 的算法和 backend adaptor |
+| `page_size` / `min_sparse_prompt_len` | `None` | 通用 sparse framework 的页粒度和启用阈值 |
+
+代码里有几个硬约束：
+
+- `validate_hisparse()` 要求模型是 DSA 或 DeepSeek V4。
+- DSA 路径上，KV dtype 和 backend 绑定：`bfloat16 -> flashmla_sparse`，`fp8_e4m3 -> flashmla_kv`。
+- **HiSparse 当前要求 `--disable-radix-cache`**。这是 `arg_groups/hisparse_hook.py` 里的显式 assert。
+- **HiSparse 当前不能和 HiCache 同时开启**。原因是 HiCache 要 `--enable-hierarchical-cache`，而 `server_args._handle_cache_compatibility()` 禁止 `enable_hierarchical_cache && disable_radix_cache`；HiSparse 又要求 `disable_radix_cache`。所以从参数校验层就互斥。
+
+### 核心原理
+
+普通 decode 注意力会从 GPU KV cache 中读完整历史；HiSparse 则把历史 KV 拆成两层：
+
+- **Host full history**：request 的历史 KV 备份在 Host pool 中，作为完整可恢复的长期存储。
+- **GPU hot buffer**：每个 request 在 GPU 上只有一个较小的 `device_buffer`，保存最近 token、刚生成 token，以及当前 layer top-k 需要访问的 KV。
+
+一次 decode 的关键路径是：
+
+1. DSA indexer 根据当前 query 算出 top-k 历史 token/page 位置。
+2. `HiSparseCoordinator.swap_in_selected_pages()` 根据 top-k 位置检查 GPU hot buffer。
+3. 命中则直接返回 device loc；miss 则从 `req_to_host_pool` 找到 Host KV loc，通过 JIT kernel `load_cache_to_device_buffer_*()` 把该 layer 的 KV 搬入 device buffer。
+4. 稀疏 attention kernel 使用返回的 `top_k_device_locs` 做 FlashMLA sparse / FlashMLA KV 计算。
+5. decode 产生的新 KV 先写到 device buffer；满足压缩/页对齐条件后异步 backup 回 Host，保证后续还能被 swap-in。
+
+这里的“hierarchical”不是 prefix 层级，而是同一个 request 内的 KV 生命周期层级：Host 保存完整历史，GPU 保存当前稀疏注意力需要的热子集。
+
+### 组件组成
+
+**1. 参数与校验层**
+
+- `server_args.py`：注册 `--enable-hisparse` 和 `--hisparse-config`。
+- `arg_groups/hisparse_hook.py`：选择 DSA backend，并校验模型类型、KV dtype/backend、`--disable-radix-cache`。
+- `mem_cache/sparsity/factory.py`：解析 `SparseConfig`，默认 `top_k=2048`、`device_buffer_size=4096`、`host_to_device_ratio=2`。
+
+**2. 稀疏算法与 backend adaptor**
+
+`mem_cache/sparsity/core/sparse_coordinator.py` 定义了一个通用框架：
+
+- `RequestTrackers`：记录每个 request 是否已经构造稀疏表示、prompt 长度、最后构造到哪个 page。
+- `SparseCoordinator`：提供 `on_request_begin()`、`attention_begin()`、`attention_end()`、`forward_begin()`、`forward_end()` 生命周期钩子。
+- `BaseSparseAlgorithm`：抽象出 representation construction、representation update、`retrieve_topk()`。
+- `BackendAdaptor`：把算法返回的 logical selected indices 转成具体 attention backend 的 metadata。
+
+不过 DSA HiSparse 的当前实现更直接：`DeepSeekDSAAlgorithm.retrieve_topk()` 基本把 top-k 选择委托给 DSA 原生 indexer；真正的 Host/GPU 分层管理由 `managers/hisparse_coordinator.py` 的 `HiSparseCoordinator` 负责。
+
+**3. KV pool 与 allocator**
+
+HiSparse 有两套地址空间：
+
+- logical/full KV indices：对 scheduler、req_to_token、普通 KV 语义可见，表示完整序列逻辑位置。
+- hisparse device indices：真实落在 GPU hot buffer 中的物理位置。
+
+`HiSparseTokenToKVPoolAllocator` 同时维护：
+
+- `logical_attn_allocator`：给完整逻辑 KV 空间分配索引。
+- `hisparse_attn_allocator`：给 GPU hot buffer 分配索引。
+- `full_to_hisparse_device_index_mapping`：把 logical loc 映射到 hisparse device loc。
+
+对 DSA 模型，device pool 是 `HiSparseDSATokenToKVPool`。它继承 `DSATokenToKVPool`，但在 `set_mla_kv_buffer()` / `get_mla_kv_buffer()` 前会把 logical loc 翻译成 hisparse device loc。
+
+DeepSeek V4 还有专门路径：`DeepSeekV4HiSparseTokenToKVPoolAllocator` 包装 SWA/full allocator，同时管理 C4 压缩 KV pool；这里 `compress_ratio=4`，即多个 full token 对应一个压缩 C4 KV token。
+
+**4. Host pool**
+
+HiSparse 的 Host 侧不是 HiCache 的 radix tree host backup，而是 request-local 的完整历史 KV 存储：
+
+- DSA 路径使用 `MLATokenToKVPoolHost`。
+- DeepSeek V4 使用 `DeepSeekV4PagedHostPool`。
+- `HiSparseCoordinator.req_to_host_pool` 记录每个 request 每个历史 token/page 在 Host pool 中的位置。
+- `req_to_host_pool_allocated_len` 记录每个 request 已经分配/备份到 Host 的长度。
+
+**5. HiSparseCoordinator**
+
+`HiSparseCoordinator` 是运行时核心，主要状态包括：
+
+| 状态 | 作用 |
+| --- | --- |
+| `req_to_device_buffer` | 每个 request 的 GPU hot buffer slot |
+| `req_device_buffer_size` | 每个 request 当前已分配的 hot buffer 长度 |
+| `req_to_host_pool` | 每个 request 的 Host KV loc 表 |
+| `req_device_buffer_tokens` | 每层、每 request、每 buffer slot 当前缓存的是哪个 token |
+| `req_device_buffer_token_locs` | 每层、每 request、每 buffer slot 对应的 device loc |
+| `lru_slots` | 每层每 request 的 hot buffer LRU 状态 |
+| `top_k_device_locs_buffer` | CUDA graph safe 的 top-k device loc 输出缓冲 |
+| `write_staging_stream` / `decode_backup_stream` | prefill 后 staging 和 decode 后 backup 的异步 copy stream |
+
+### 工作流程
+
+#### 1. 初始化
+
+启动时：
+
+1. `validate_hisparse()` 校验模型、dtype/backend、`disable_radix_cache`。
+2. `ModelRunner.init_memory_pool()` 根据 `enable_hisparse` 选择 `HiSparseDSATokenToKVPool` 和 `HiSparseTokenToKVPoolAllocator`。
+3. `ModelRunner.initialize()` 创建 `HiSparseCoordinator`，并把它挂到 `model_runner.hisparse_coordinator`。
+4. Scheduler 初始化后复用 model runner 中的 coordinator，并调用 `set_decode_producer_stream()`，让 backup stream 可以等待 decode producer stream。
+
+#### 2. Prefill / Extend 阶段
+
+普通非 PD 路径中，prefill 仍然会算完整 prompt 的 KV，但 KV 写入的是 hisparse device pool：
+
+1. `alloc_extend()` 同时分配 logical indices 和 hisparse device indices。
+2. `full_to_hisparse_device_index_mapping[logical_indices] = hisparse_indices` 建立映射。
+3. prefill 结束后，`BatchResultProcessor` 调用 `hisparse_coordinator.admit_request_into_staging(req)`。
+4. staging 从 `req_to_token_pool` 取出 request 的 full KV logical indices，翻译成 hisparse device indices。
+5. Host pool 为该 request 分配对应长度的 host slots。
+6. `write_staging_stream` 异步调用 `backup_from_device_all_layer()`，把 prefill KV 从 GPU hot/device pool 备份到 Host。
+7. Scheduler 不把 last prefill batch 直接 merge 到 running batch，而是调用 `collect_ready_reqs()` 轮询 staging 完成；完成后 `alloc_device_buffer(req)` 给该 request 准备 decode hot buffer，再构建 decode batch。
+
+#### 3. Decode 阶段
+
+decode 每步会做两件事：先把新 token 的 buffer/mapping 接好，再在 attention 层按 top-k swap-in。
+
+1. `ScheduleBatch.prepare_for_decode()` 会调用 `hisparse_coordinator.map_last_loc_to_buffer()`。
+2. `map_last_loc_to_buffer()` 先通过 `_eager_backup_previous_token()` 把上一个新产生的压缩 token 备份到 Host。
+3. 对普通 DSA 路径，如果序列还短，会增长 request 的 device buffer；如果超过 `device_buffer_size`，最新 token 走 reserved slot。
+4. DSA attention backend 调用 indexer 得到 `topk_indices`。
+5. `dsa_backend.py` 在 decode 时调用 `hisparse_coordinator.swap_in_selected_pages(req_pool_indices, seq_lens, topk_indices, layer_id)`。
+6. `swap_in_selected_pages()` 调用 JIT kernel `load_cache_to_device_buffer_mla()` 或 `load_cache_to_device_buffer_dsv4_mla()`：
+    - 如果 top-k token 已在 hot buffer，直接返回对应 device loc。
+    - 如果不在，按 `req_to_host_pool` 找 Host loc，把当前 layer KV 拷到 LRU 选出的 device buffer slot。
+    - 更新 `device_buffer_tokens`、`device_buffer_token_locs` 和 LRU。
+7. FlashMLA sparse / KV backend 使用返回的 `top_k_device_locs` 做实际 attention。
+
+#### 4. PD Decode direct-to-host 路径
+
+PD decode 下还有一个直接写 Host 的路径：
+
+- `disaggregation/decode.py` 中，HiSparse 会断言 `prefix_len == 0`，即不走 decode 侧 L1 radix cache。
+- `_pre_alloc()` 使用 `alloc_logical_only()`，只分配 logical indices，不分配 hisparse device indices。
+- prefill 节点通过 RDMA/传输后端把 KV 直接写入 decode 节点的 HiSparse Host pool。
+- decode 侧调用 `admit_request_direct(req)`，只为 request 分配小的 GPU hot buffer；短序列会 `_preload_to_device_buffer()`，长序列则把 hot buffer 标记为空，后续每层按 top-k 从 Host swap-in。
+
+### 与 RadixCache / HiCache 的关系
+
+| 机制 | 解决的问题 | 共享粒度 | GPU 上保留什么 | Host/Storage 上保留什么 |
+| --- | --- | --- | --- | --- |
+| RadixCache | 跨请求 prefix KV 复用 | token/page prefix | 命中的 prefix KV | 默认没有 Host/L3 |
+| HiCache | RadixCache 的 L1/L2/L3 分层 | 从 root 开始连续 prefix | L1 命中的 prefix KV | L2 host backup + L3 storage page |
+| HiSparse | 单请求长上下文稀疏注意力的 KV 分层 | request 内 top-k token/page | 每个 request 的 hot device buffer | 该 request 的完整历史 KV |
+
+几个关键区别：
+
+- RadixCache / HiCache 是 **prefix cache**：重点是多个请求之间复用相同前缀。
+- HiSparse 是 **retrievable sparse attention cache**：重点是单个长请求 decode 时只取 top-k 历史 KV。
+- HiCache 的 Host/L3 数据必须满足连续 prefix invariant；HiSparse 的 Host 数据是 request-local full history，不要求跨请求 prefix tree。
+- HiCache 的 load back 是把 L2/L3 命中的 prefix 恢复成 GPU KV；HiSparse 的 swap-in 是每层按当前 query 的 top-k 动态恢复部分 KV。
+
+### 能否同时开启
+
+当前代码结论：
+
+- **HiSparse + RadixCache：不能同时开启。** `validate_hisparse()` 显式要求 `server_args.disable_radix_cache`。
+- **HiSparse + HiCache：不能同时开启。** HiCache 要 `--enable-hierarchical-cache`，但 `server_args._handle_cache_compatibility()` 禁止 `enable_hierarchical_cache && disable_radix_cache`；而 HiSparse 又要求 `disable_radix_cache`。
+- **HiSparse + PD decode radix cache：不能正常共用。** PD decode 的 HiSparse 路径里写了 `assert prefix_len == 0`，并注释说明 HiSparse incompatible with decode-side L1 radix cache。
+
+因此在当前 SGLang 代码里，HiSparse 和 HiCache 是两条互斥的长上下文 KV 优化路线：HiCache 适合 prefix 复用和分层 KV 存储；HiSparse 适合 DSA/DeepSeek V4 这类稀疏注意力模型，把 decode 的历史 KV 访问变成 top-k retrieval + Host->GPU swap-in。
 
 ## Component Details
 
@@ -317,39 +572,60 @@ HiCache 同时维护两组可驱逐叶子集合：
 每次 insert、split、evict、load back 后，都要更新这两组集合，否则后续驱逐候选就会不准确。
 
 ##### State Transition
+
+<div class="article-split article-split--image-right" markdown="1">
+<div markdown="1">
+
 核心设计原则有三个：
 
 1. **Backup invariant**：父节点不备份，子节点不能备份；L2 上的节点必须形成从 root 开始的连续 prefix。
 2. **Tombstone 保留**：有 L2 备份的驱逐节点保留在树中，后续 `load_back()` 可以恢复；只有 `evict_host()` 才会最终删除。
 3. **叶子驱逐 + 父级级联**：永远从叶子开始驱逐，驱逐后父节点可能变成新的叶子，再加入候选堆。
 
+</div>
+<figure markdown="1">
+
 ![](img/hicahe_state.png)
+
+<figcaption>HiCache TreeNode 在 GPU / Host / Storage 之间的状态迁移。</figcaption>
+</figure>
+</div>
 
 ---
 
 ### HiCacheController
 
+<div class="article-split article-split--image-right" markdown="1">
+<div markdown="1">
+
 初始化路径：Scheduler -> HiRadixCache -> HostKVCache -> HiCacheController
+
 - 每个 rank 都有一个 HiCacheController 实例，负责管理本地 HiRadixTree 和与 storage backend 的交互。
 - memory device pool 管理 GPU 池，memory host pool 管理 host 池
 - 多个队列存放不同请求，scheduler 每次调度都会 check 这些队列状态并清除完成的请求：
-  - write_queue：L1->L2 写请求
-  - ack_write_queue：L1->L2 写完成 ack
-  - load_queue：L2->L1 读请求
-  - ack_load_queue：L2->L1 读完成 ack
-  - prefetch_queue：L3 预取请求
-  - prefetch_revoke_queue：L3 预取撤销请求
-  - host_mem_release_queue：host 内存释放请求
-  - backup_queue：L2->L3 写请求
-  - ack_backup_queue：L2->L3 写完成 ack
+    - write_queue：L1->L2 写请求
+    - ack_write_queue：L1->L2 写完成 ack
+    - load_queue：L2->L1 读请求
+    - ack_load_queue：L2->L1 读完成 ack
+    - prefetch_queue：L3 预取请求
+    - prefetch_revoke_queue：L3 预取撤销请求
+    - host_mem_release_queue：host 内存释放请求
+    - backup_queue：L2->L3 写请求
+    - ack_backup_queue：L2->L3 写完成 ack
 - 后台线程和多流：
-  - copy stream：专门用于 GPU<->host 的异步 copy，配合 CUDA event 实现非阻塞的 load/write 操作
-    > 每一层记录一个 CUDA event，实现 layer-wise的 load/prefill 重叠
-  - prefetch_thread：负责 L3 prefetch 的元数据查询和命中判断
-  - prefetch_io_aux_thread：负责 L3->L2 的实际数据搬运
-  - backup_thread：负责 L2->L3 的写入操作
+    - copy stream：专门用于 GPU<->host 的异步 copy，配合 CUDA event 实现非阻塞的 load/write 操作；每一层记录一个 CUDA event，实现 layer-wise 的 load/prefill 重叠。
+    - prefetch_thread：负责 L3 prefetch 的元数据查询和命中判断
+    - prefetch_io_aux_thread：负责 L3->L2 的实际数据搬运
+    - backup_thread：负责 L2->L3 的写入操作
+
+</div>
+<figure markdown="1">
 
 ![](img/hicache_controller.png)
+
+<figcaption>HiCacheController 负责队列、后台线程和 GPU/Host/Storage 传输编排。</figcaption>
+</figure>
+</div>
 
 ---
 
@@ -654,7 +930,10 @@ def loading_check(self):
 当 CUDA event 表示 load 已完成后，Scheduler 会从 `ack_load_queue` 中取回对应节点，并释放前面为了保护锚点而增加的 `lock_ref`。
 
 
-### Global KVManager 与 Storage Backend
+### Global KVManager 与 Storage Backend {#global-kvmanager-storage-backend}
+
+<div class="article-split article-split--image-right" markdown="1">
+<div markdown="1">
 
 HiCacheController 不直接关心底层是 Mooncake、NIXL、EIC、SiMM、HF3FS、AIBrix 还是本地 File。它把 L3 I/O 抽象成三类接口：
 
@@ -664,7 +943,14 @@ HiCacheController 不直接关心底层是 Mooncake、NIXL、EIC、SiMM、HF3FS�
 
 `_v1` 接口表示 backend 可以直接接收 host memory indices 或指针，优先走零拷贝路径；非 `_v1` 接口则走通用 copy 路径。
 
+</div>
+<figure markdown="1">
+
 ![](img/storage_backend.png)
+
+<figcaption>Storage Backend 统一封装 exists / get / set，按能力分发到零拷贝或通用拷贝路径。</figcaption>
+</figure>
+</div>
 
 
 #### Zero-copy 与 Generic Copy 分发
@@ -852,6 +1138,3 @@ if hit_page_num < len(batch_hashes):
 ```
 
 因为 HiCache 的 page hash 是链式 hash：每个 page 的 hash 都依赖前一个 page 的 hash。一旦中间 miss，后续 page 就不再满足连续 prefix 复用语义，也不应该继续查询。这和 L2 backup invariant 保持一致：**可复用 KV 必须是从 root 开始的连续 prefix**。
-
-
-
