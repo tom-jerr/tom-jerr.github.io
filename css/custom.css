@@ -246,3 +246,56 @@ img:hover {
     min-width: 0rem;
     text-align: center; /* 可选：表头文字居中 */
 }
+
+/* Article image/text split blocks */
+.md-typeset .article-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.9fr);
+  gap: 1rem 1.25rem;
+  align-items: start;
+  margin: 1.1rem 0 1.35rem;
+}
+
+.md-typeset .article-split--image-left {
+  grid-template-columns: minmax(16rem, 0.9fr) minmax(0, 1fr);
+}
+
+.md-typeset .article-split > div,
+.md-typeset .article-split > figure {
+  min-width: 0;
+}
+
+.md-typeset .article-split figure {
+  margin: 0;
+}
+
+.md-typeset .article-split figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.md-typeset .article-split figcaption {
+  margin-top: 0.35rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.68rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.md-typeset .article-split > div > :first-child,
+.md-typeset .article-split > figure > :first-child {
+  margin-top: 0;
+}
+
+.md-typeset .article-split > div > :last-child,
+.md-typeset .article-split > figure > :last-child {
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 76.1875em) {
+  .md-typeset .article-split,
+  .md-typeset .article-split--image-left {
+    grid-template-columns: 1fr;
+  }
+}

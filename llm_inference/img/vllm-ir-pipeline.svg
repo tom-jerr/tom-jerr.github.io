@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      text{font-family:Arial,Helvetica,sans-serif;fill:#0f172a}
+      .title{font-size:27px;font-weight:700}
+      .sub{font-size:15px;fill:#475569}
+      .box{fill:#f8fafc;stroke:#94a3b8;stroke-width:1.5;rx:8}
+      .ir{fill:#f0fdf4;stroke:#16a34a;stroke-width:2;rx:8}
+      .lower{fill:#fff7ed;stroke:#ea580c;stroke-width:2;rx:8}
+      .line{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .label{font-size:15px;font-weight:700}
+      .small{font-size:12.5px;fill:#475569}
+    </style>
+  </defs>
+  <rect width="1100" height="620" fill="#ffffff"/>
+  <text x="44" y="54" class="title">vLLM IR Pipeline Inside Each Piece</text>
+  <text x="44" y="82" class="sub">High-level vllm_ir ops stay visible until fusion and backend implementation selection are complete.</text>
+
+  <rect x="70" y="140" width="180" height="86" class="box"/>
+  <text x="98" y="172" class="label">Dynamo Trace</text>
+  <text x="98" y="196" class="small">FX graph with</text>
+  <text x="98" y="214" class="small">vllm_ir.* ops</text>
+
+  <rect x="310" y="140" width="180" height="86" class="ir"/>
+  <text x="333" y="172" class="label">Pre-grad Pass</text>
+  <text x="333" y="196" class="small">maybe_inplace</text>
+  <text x="333" y="214" class="small">track donation</text>
+
+  <rect x="550" y="140" width="180" height="86" class="box"/>
+  <text x="583" y="172" class="label">AOTAutograd</text>
+  <text x="583" y="196" class="small">functional graph</text>
+  <text x="583" y="214" class="small">stable semantics</text>
+
+  <rect x="790" y="140" width="180" height="86" class="ir"/>
+  <text x="817" y="172" class="label">IR Fusion</text>
+  <text x="817" y="196" class="small">norm+quant</text>
+  <text x="817" y="214" class="small">attn+quant</text>
+
+  <rect x="190" y="350" width="190" height="96" class="lower"/>
+  <text x="228" y="382" class="label">IR Lowering</text>
+  <text x="220" y="406" class="small">provider priority</text>
+  <text x="220" y="424" class="small">native, vllm_c, platform</text>
+
+  <rect x="455" y="350" width="190" height="96" class="lower"/>
+  <text x="494" y="382" class="label">Clone Cleanup</text>
+  <text x="488" y="406" class="small">remove safe clones</text>
+  <text x="488" y="424" class="small">enable zero-copy</text>
+
+  <rect x="720" y="350" width="190" height="96" class="box"/>
+  <text x="765" y="382" class="label">Backend Compile</text>
+  <text x="760" y="406" class="small">Inductor or</text>
+  <text x="760" y="424" class="small">custom compiler</text>
+
+  <path class="line" d="M250 183 H310"/>
+  <path class="line" d="M490 183 H550"/>
+  <path class="line" d="M730 183 H790"/>
+  <path class="line" d="M880 226 C880 288 285 286 285 350"/>
+  <path class="line" d="M380 398 H455"/>
+  <path class="line" d="M645 398 H720"/>
+
+  <rect x="136" y="510" width="828" height="54" fill="#f1f5f9" stroke="#cbd5e1" rx="8"/>
+  <text x="176" y="543" class="label">Key idea: pass logic matches vLLM semantics first, then lowers to platform implementations.</text>
+</svg>

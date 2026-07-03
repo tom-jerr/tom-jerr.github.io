@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560" viewBox="0 0 1100 560">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      text{font-family:Arial,Helvetica,sans-serif;fill:#0f172a}
+      .title{font-size:27px;font-weight:700}
+      .sub{font-size:15px;fill:#475569}
+      .shared{fill:#eef2ff;stroke:#4f46e5;stroke-width:2;rx:8}
+      .cuda{fill:#ecfeff;stroke:#0891b2;stroke-width:2;rx:8}
+      .ascend{fill:#f0fdf4;stroke:#16a34a;stroke-width:2;rx:8}
+      .kunlun{fill:#fff7ed;stroke:#ea580c;stroke-width:2;rx:8}
+      .line{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .label{font-size:15px;font-weight:700}
+      .small{font-size:12.5px;fill:#475569}
+    </style>
+  </defs>
+  <rect width="1100" height="560" fill="#ffffff"/>
+  <text x="44" y="54" class="title">Backend Differences After VllmBackend</text>
+  <text x="44" y="82" class="sub">The upper pipeline is shared. The backend compiler and graph replay implementation are platform-specific.</text>
+
+  <rect x="352" y="120" width="396" height="74" class="shared"/>
+  <text x="436" y="151" class="label">Shared vLLM Compile Frontend</text>
+  <text x="414" y="174" class="small">torch.compile -> Dynamo FX -> VllmBackend -> PiecewiseBackend</text>
+
+  <rect x="84" y="280" width="260" height="154" class="cuda"/>
+  <text x="118" y="316" class="label">CUDA Mainline</text>
+  <text x="118" y="346" class="small">backend = inductor</text>
+  <text x="118" y="368" class="small">compile_fx</text>
+  <text x="118" y="390" class="small">Triton / CUDA / cuBLAS</text>
+  <text x="118" y="412" class="small">CUDA Graph replay</text>
+
+  <rect x="420" y="280" width="260" height="154" class="ascend"/>
+  <text x="454" y="316" class="label">Ascend Plugin</text>
+  <text x="454" y="346" class="small">custom CompilerInterface</text>
+  <text x="454" y="368" class="small">npugraph_ex or torchair</text>
+  <text x="454" y="390" class="small">ACLGraph / static kernel</text>
+  <text x="454" y="412" class="small">fusion-only fallback</text>
+
+  <rect x="756" y="280" width="260" height="154" class="kunlun"/>
+  <text x="790" y="316" class="label">Kunlun Current</text>
+  <text x="790" y="346" class="small">backend = eager</text>
+  <text x="790" y="368" class="small">custom_ops = all</text>
+  <text x="790" y="390" class="small">attention split op</text>
+  <text x="790" y="412" class="small">XPU custom kernels</text>
+
+  <path class="line" d="M550 194 C550 240 214 240 214 280"/>
+  <path class="line" d="M550 194 V280"/>
+  <path class="line" d="M550 194 C550 240 886 240 886 280"/>
+</svg>

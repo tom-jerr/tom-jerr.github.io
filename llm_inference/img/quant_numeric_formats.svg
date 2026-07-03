@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="720" viewBox="0 0 1180 720" role="img" aria-labelledby="title desc">
+  <title id="title">LLM numeric formats and quantization metadata</title>
+  <desc id="desc">A comparison of common floating point and integer formats used in LLM inference quantization.</desc>
+  <defs>
+    <style>
+      .bg { fill: #fafafa; }
+      .panel { fill: #ffffff; stroke: #d5d7df; stroke-width: 1.4; }
+      .title { font: 700 28px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #171923; }
+      .subtitle { font: 500 15px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #555e70; }
+      .label { font: 700 18px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #1b1f2a; }
+      .small { font: 500 13px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #566071; }
+      .bit { font: 700 14px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #ffffff; }
+      .note { font: 600 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; fill: #303746; }
+      .sign { fill: #343a40; }
+      .exp { fill: #2f7de1; }
+      .mant { fill: #1f9d7a; }
+      .int { fill: #9b5de5; }
+      .scale { fill: #f08c2e; }
+      .range { fill: #eef3f9; stroke: #c9d3e2; }
+      .arrow { stroke: #596579; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#596579" />
+    </marker>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1180" height="720" rx="18" />
+  <text class="title" x="48" y="54">Numeric formats used in LLM quantization</text>
+  <text class="subtitle" x="48" y="82">Bit layout decides dynamic range; scale granularity decides how much effective precision survives real model distributions.</text>
+
+  <g transform="translate(48,118)">
+    <rect class="panel" x="0" y="0" width="705" height="548" rx="14" />
+    <text class="label" x="26" y="38">Floating point layout</text>
+    <text class="small" x="26" y="62">sign + exponent + mantissa; lower mantissa means larger rounding step after scaling.</text>
+
+    <g transform="translate(26,94)">
+      <text class="label" x="0" y="22">FP32</text>
+      <rect class="sign" x="112" y="0" width="28" height="34" rx="5" />
+      <rect class="exp" x="144" y="0" width="168" height="34" rx="5" />
+      <rect class="mant" x="316" y="0" width="316" height="34" rx="5" />
+      <text class="bit" x="121" y="22">S</text>
+      <text class="bit" x="207" y="22">E8</text>
+      <text class="bit" x="446" y="22">M23</text>
+      <text class="small" x="112" y="58">wide range, high precision, expensive memory bandwidth</text>
+    </g>
+
+    <g transform="translate(26,174)">
+      <text class="label" x="0" y="22">BF16</text>
+      <rect class="sign" x="112" y="0" width="28" height="34" rx="5" />
+      <rect class="exp" x="144" y="0" width="168" height="34" rx="5" />
+      <rect class="mant" x="316" y="0" width="104" height="34" rx="5" />
+      <text class="bit" x="121" y="22">S</text>
+      <text class="bit" x="207" y="22">E8</text>
+      <text class="bit" x="349" y="22">M7</text>
+      <text class="small" x="112" y="58">FP32-like range, coarser mantissa; common LLM serving baseline</text>
+    </g>
+
+    <g transform="translate(26,254)">
+      <text class="label" x="0" y="22">FP16</text>
+      <rect class="sign" x="112" y="0" width="28" height="34" rx="5" />
+      <rect class="exp" x="144" y="0" width="112" height="34" rx="5" />
+      <rect class="mant" x="260" y="0" width="144" height="34" rx="5" />
+      <text class="bit" x="121" y="22">S</text>
+      <text class="bit" x="183" y="22">E5</text>
+      <text class="bit" x="310" y="22">M10</text>
+      <text class="small" x="112" y="58">more mantissa than BF16, smaller range; max finite 65504</text>
+    </g>
+
+    <g transform="translate(26,334)">
+      <text class="label" x="0" y="22">FP8</text>
+      <rect class="sign" x="112" y="0" width="28" height="34" rx="5" />
+      <rect class="exp" x="144" y="0" width="84" height="34" rx="5" />
+      <rect class="mant" x="232" y="0" width="68" height="34" rx="5" />
+      <text class="bit" x="121" y="22">S</text>
+      <text class="bit" x="172" y="22">E4</text>
+      <text class="bit" x="250" y="22">M3</text>
+      <rect class="sign" x="352" y="0" width="28" height="34" rx="5" />
+      <rect class="exp" x="384" y="0" width="104" height="34" rx="5" />
+      <rect class="mant" x="492" y="0" width="48" height="34" rx="5" />
+      <text class="bit" x="361" y="22">S</text>
+      <text class="bit" x="420" y="22">E5</text>
+      <text class="bit" x="504" y="22">M2</text>
+      <text class="small" x="112" y="58">E4M3: precision-biased; E5M2: range-biased; both need scales</text>
+    </g>
+
+    <g transform="translate(26,414)">
+      <text class="label" x="0" y="22">FP4</text>
+      <rect class="sign" x="112" y="0" width="28" height="34" rx="5" />
+      <rect class="exp" x="144" y="0" width="54" height="34" rx="5" />
+      <rect class="mant" x="202" y="0" width="34" height="34" rx="5" />
+      <text class="bit" x="121" y="22">S</text>
+      <text class="bit" x="157" y="22">E2</text>
+      <text class="bit" x="211" y="22">M1</text>
+      <rect class="scale" x="288" y="0" width="170" height="34" rx="5" />
+      <text class="bit" x="316" y="22">block scale</text>
+      <text class="small" x="112" y="58">E2M1 is tiny by itself; MXFP4/NVFP4 rely on per-block scales</text>
+    </g>
+  </g>
+
+  <g transform="translate(785,118)">
+    <rect class="panel" x="0" y="0" width="347" height="548" rx="14" />
+    <text class="label" x="24" y="38">Integer quantization</text>
+    <text class="small" x="24" y="62">data bits are uniform; scale maps them back to real values.</text>
+
+    <g transform="translate(24,100)">
+      <rect class="int" x="0" y="0" width="240" height="48" rx="8" />
+      <text class="bit" x="74" y="30">INT8 data</text>
+      <rect class="scale" x="0" y="64" width="110" height="38" rx="7" />
+      <rect class="scale" x="130" y="64" width="110" height="38" rx="7" />
+      <text class="bit" x="24" y="88">scale</text>
+      <text class="bit" x="154" y="88">zero</text>
+      <path class="arrow" d="M120,52 L120,64" />
+      <text class="note" x="0" y="132">x_hat = (q - zp) * scale</text>
+    </g>
+
+    <g transform="translate(24,270)">
+      <rect class="int" x="0" y="0" width="104" height="44" rx="8" />
+      <rect class="int" x="112" y="0" width="104" height="44" rx="8" />
+      <text class="bit" x="26" y="28">INT4</text>
+      <text class="bit" x="138" y="28">INT4</text>
+      <rect class="scale" x="0" y="60" width="216" height="38" rx="7" />
+      <text class="bit" x="55" y="84">group scale / zp</text>
+      <text class="small" x="0" y="128">two 4-bit weights packed into one byte</text>
+      <text class="small" x="0" y="150">group size often 128 for W4A16</text>
+    </g>
+
+    <g transform="translate(24,460)">
+      <rect class="range" x="0" y="0" width="292" height="56" rx="10" />
+      <text class="note" x="18" y="23">lower bits need finer granularity</text>
+      <text class="small" x="18" y="44">per-tensor -> per-channel -> per-group -> per-token-head</text>
+    </g>
+  </g>
+
+  <g transform="translate(74,680)">
+    <rect class="sign" x="0" y="-14" width="16" height="16" rx="3" />
+    <text class="small" x="24" y="0">sign</text>
+    <rect class="exp" x="84" y="-14" width="16" height="16" rx="3" />
+    <text class="small" x="108" y="0">exponent</text>
+    <rect class="mant" x="208" y="-14" width="16" height="16" rx="3" />
+    <text class="small" x="232" y="0">mantissa</text>
+    <rect class="int" x="332" y="-14" width="16" height="16" rx="3" />
+    <text class="small" x="356" y="0">integer payload</text>
+    <rect class="scale" x="500" y="-14" width="16" height="16" rx="3" />
+    <text class="small" x="524" y="0">scale metadata</text>
+  </g>
+</svg>
