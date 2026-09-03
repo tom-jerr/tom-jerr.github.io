@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+<title id="title">HiCache host memory layout</title>
+<desc id="desc">GPU KV remains layer-first while host and storage use page-first layout for contiguous page transfer.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1200" height="650" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">MEMORY LAYOUT</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">GPU 保持 Layer-first，Host 改为 Page-first</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">计算布局不动；搬运布局按 Page 连续</text>
+<rect x="64" y="158" width="420" height="290" rx="18" fill="#FDE9E7" stroke="#E45756" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<rect x="90" y="184" width="184" height="36" rx="18" fill="#FDE9E7" stroke="#FDE9E7" stroke-width="0" opacity="1.0"/>
+<text x="182" y="209" fill="#E45756" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="middle">L1 · GPU</text>
+<text x="90" y="253" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="27" font-weight="750" text-anchor="start">Layer-first</text>
+<text x="92" y="317" fill="#E45756" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="750" text-anchor="start">L0</text>
+<rect x="146" y="286" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#E45756" stroke-width="1" opacity="1.0"/>
+<text x="185" y="311" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">A</text>
+<rect x="238" y="286" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#E45756" stroke-width="1" opacity="1.0"/>
+<text x="277" y="311" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">B</text>
+<rect x="330" y="286" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#E45756" stroke-width="1" opacity="1.0"/>
+<text x="369" y="311" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">C</text>
+<text x="92" y="371" fill="#E45756" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="750" text-anchor="start">L1</text>
+<rect x="146" y="340" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#E45756" stroke-width="1" opacity="1.0"/>
+<text x="185" y="365" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">A</text>
+<rect x="238" y="340" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#E45756" stroke-width="1" opacity="1.0"/>
+<text x="277" y="365" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">B</text>
+<rect x="330" y="340" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#E45756" stroke-width="1" opacity="1.0"/>
+<text x="369" y="365" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">C</text>
+<text x="92" y="425" fill="#E45756" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="750" text-anchor="start">L2</text>
+<rect x="146" y="394" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#E45756" stroke-width="1" opacity="1.0"/>
+<text x="185" y="419" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">A</text>
+<rect x="238" y="394" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#E45756" stroke-width="1" opacity="1.0"/>
+<text x="277" y="419" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">B</text>
+<rect x="330" y="394" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#E45756" stroke-width="1" opacity="1.0"/>
+<text x="369" y="419" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">C</text>
+<rect x="716" y="158" width="420" height="290" rx="18" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<rect x="742" y="184" width="204" height="36" rx="18" fill="#E8F0FF" stroke="#E8F0FF" stroke-width="0" opacity="1.0"/>
+<text x="844" y="209" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="middle">L2 · Host</text>
+<text x="742" y="253" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="27" font-weight="750" text-anchor="start">Page-first</text>
+<text x="744" y="317" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="750" text-anchor="start">A</text>
+<rect x="798" y="286" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="1" opacity="1.0"/>
+<text x="837" y="311" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">L0</text>
+<rect x="890" y="286" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="1" opacity="1.0"/>
+<text x="929" y="311" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">L1</text>
+<rect x="982" y="286" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="1" opacity="1.0"/>
+<text x="1021" y="311" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">L2</text>
+<text x="744" y="371" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="750" text-anchor="start">B</text>
+<rect x="798" y="340" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="1" opacity="1.0"/>
+<text x="837" y="365" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">L0</text>
+<rect x="890" y="340" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="1" opacity="1.0"/>
+<text x="929" y="365" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">L1</text>
+<rect x="982" y="340" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="1" opacity="1.0"/>
+<text x="1021" y="365" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">L2</text>
+<text x="744" y="425" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="750" text-anchor="start">C</text>
+<rect x="798" y="394" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="1" opacity="1.0"/>
+<text x="837" y="419" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">L0</text>
+<rect x="890" y="394" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="1" opacity="1.0"/>
+<text x="929" y="419" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">L1</text>
+<rect x="982" y="394" width="78" height="38" rx="8" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="1" opacity="1.0"/>
+<text x="1021" y="419" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">L2</text>
+<line x1="514" y1="303" x2="686" y2="303" stroke="#7656D8" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<rect x="523" y="326" width="154" height="36" rx="18" fill="#EEE9FF" stroke="#EEE9FF" stroke-width="0" opacity="1.0"/>
+<text x="600" y="351" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="middle">IO kernel</text>
+<rect x="64" y="506" width="250" height="80" rx="16" fill="#FDE9E7" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="189" y="555" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="22" font-weight="750" text-anchor="middle">L1 · GPU</text>
+<rect x="475" y="506" width="250" height="80" rx="16" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="600" y="555" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="22" font-weight="750" text-anchor="middle">L2 · Host</text>
+<rect x="886" y="506" width="250" height="80" rx="16" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0"/>
+<text x="1011" y="555" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="22" font-weight="750" text-anchor="middle">L3 · Storage</text>
+<line x1="314" y1="546" x2="475" y2="546" stroke="#7656D8" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<text x="394" y="529" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="650" text-anchor="middle">layout transform</text>
+<line x1="725" y1="546" x2="886" y2="546" stroke="#138A7E" stroke-width="4" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<text x="805" y="529" fill="#138A7E" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="650" text-anchor="middle">zero-copy page</text>
+</svg>

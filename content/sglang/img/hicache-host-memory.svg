@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+<title id="title">NUMA-aware pinned hugepage initialization</title>
+<desc id="desc">Bind the worker and memory to the GPU-local NUMA node, allocate huge pages, prefault them, and register the pool once.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1200" height="720" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">HOST MEMORY</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">Pinned + HugeTLB + Prefault + NUMA</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">四件事各自解决不同问题，顺序也重要</text>
+<rect x="64" y="178" width="184" height="112" rx="18" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<circle cx="96" cy="209" r="18" fill="#7656D8" stroke="#FFFFFF" stroke-width="3"/>
+<text x="96" y="216" fill="#FFFFFF" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="750" text-anchor="middle">1</text>
+<text x="124" y="214" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">定位 GPU</text>
+<text x="124" y="246" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="450" text-anchor="start">NUMA node</text>
+<rect x="286" y="178" width="184" height="112" rx="18" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<circle cx="318" cy="209" r="18" fill="#7656D8" stroke="#FFFFFF" stroke-width="3"/>
+<text x="318" y="216" fill="#FFFFFF" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="750" text-anchor="middle">2</text>
+<text x="346" y="214" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">绑定</text>
+<text x="346" y="246" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="450" text-anchor="start">CPU + memory</text>
+<rect x="508" y="178" width="184" height="112" rx="18" fill="#FFF2D6" stroke="#C47B10" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<circle cx="540" cy="209" r="18" fill="#C47B10" stroke="#FFFFFF" stroke-width="3"/>
+<text x="540" y="216" fill="#FFFFFF" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="750" text-anchor="middle">3</text>
+<text x="568" y="214" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">分配</text>
+<text x="568" y="246" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="450" text-anchor="start">HugeTLB</text>
+<rect x="730" y="178" width="184" height="112" rx="18" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<circle cx="762" cy="209" r="18" fill="#2F6FE4" stroke="#FFFFFF" stroke-width="3"/>
+<text x="762" y="216" fill="#FFFFFF" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="750" text-anchor="middle">4</text>
+<text x="790" y="214" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">预触页</text>
+<text x="790" y="246" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="450" text-anchor="start">first-touch</text>
+<rect x="952" y="178" width="184" height="112" rx="18" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<circle cx="984" cy="209" r="18" fill="#138A7E" stroke="#FFFFFF" stroke-width="3"/>
+<text x="984" y="216" fill="#FFFFFF" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="750" text-anchor="middle">5</text>
+<text x="1012" y="214" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">注册一次</text>
+<text x="1012" y="246" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="450" text-anchor="start">Pinned / MR</text>
+<line x1="248" y1="234" x2="286" y2="234" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="470" y1="234" x2="508" y2="234" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="692" y1="234" x2="730" y2="234" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="914" y1="234" x2="952" y2="234" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="64" y="370" width="248" height="150" rx="18" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="86" y="408" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="23" font-weight="750" text-anchor="start">Pinned</text>
+<text x="86" y="452" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="19" font-weight="650" text-anchor="start">真正异步 DMA</text>
+<text x="86" y="486" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">避免临时 staging</text>
+<rect x="338" y="370" width="248" height="150" rx="18" fill="#FFF2D6" stroke="#C47B10" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="360" y="408" fill="#C47B10" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="23" font-weight="750" text-anchor="start">HugeTLB</text>
+<text x="360" y="452" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="19" font-weight="650" text-anchor="start">更少 TLB / 映射</text>
+<text x="360" y="486" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">2 MiB ≠ 自动 Pinned</text>
+<rect x="612" y="370" width="248" height="150" rx="18" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="634" y="408" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="23" font-weight="750" text-anchor="start">Prefault</text>
+<text x="634" y="452" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="19" font-weight="650" text-anchor="start">启动期支付缺页</text>
+<text x="634" y="486" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">压低首轮抖动</text>
+<rect x="886" y="370" width="250" height="150" rx="18" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="908" y="408" fill="#138A7E" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="23" font-weight="750" text-anchor="start">NUMA</text>
+<text x="908" y="452" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="19" font-weight="650" text-anchor="start">本地内存路径</text>
+<text x="908" y="486" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">少一次跨 Socket</text>
+<rect x="64" y="580" width="1072" height="70" rx="16" fill="#FFFFFF" stroke="#CAD3E1" stroke-width="2" opacity="1.0" stroke-dasharray="8 7"/>
+<text x="600" y="610" fill="#C47B10" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="19" font-weight="700" text-anchor="middle">HugeTLB 是稀缺、不可换出的资源</text>
+<text x="600" y="636" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="middle">先预留容量，再按 NUMA 节点验证实际落点</text>
+</svg>

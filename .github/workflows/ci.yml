@@ -1,65 +1,62 @@
-name: ci
+name: Deploy Quartz site to GitHub Pages
+
 on:
   push:
     branches:
       - master
+  workflow_dispatch:
+
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Configure Git Credentials
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-      - uses: actions/setup-python@v4
+
+      - uses: actions/setup-node@v6
         with:
-          python-version: 3.x
-      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
-      - uses: actions/cache@v3
+          node-version: 24
+          cache: npm
+
+      - name: Cache Quartz plugins
+        uses: actions/cache@v5
         with:
-          key: mkdocs-material-${{ env.cache_id }}
-          path: .cache
+          path: .quartz/plugins
+          key: ${{ runner.os }}-plugins-${{ hashFiles('quartz.lock.json', 'quartz.config.yaml', 'plugins/**') }}
           restore-keys: |
-            mkdocs-material-
-      - run: pip install -r requirements.txt
-      # - name: Install modified mkdocs-statistics-plugin
-      #   run: |
-      #     git clone https://github.com/tom-jerr/mkdocs-statistics-plugin
-      #     pip install ./mkdocs-statistics-plugin
-      #     rm -rf mkdocs-statistics-plugin
-      # - name: Install modified mkdocs-document-dates
-      #   run: |
-      #     git clone https://github.com/jaywhj/mkdocs-document-dates.git
-      #     pip install ./mkdocs-document-dates --no-build-isolation
-      #     rm -rf mkdocs-document-dates
-      - run: pip cache purge
-      # 先进行一次严格构建，提前暴露错误
-      - name: Build (strict)
-        env:
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
-        run: mkdocs build --verbose
-      # 使用 AI 摘要部署
-      # - name: 使用 AI 摘要部署
-      #   env:
-      #     DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-      #     DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
-      - name: gh-deploy
-        run: mkdocs gh-deploy --force
-      # 自动提交 AI 缓存文件
-      # - name: 自动提交 AI 缓存
-      #   run: |
-      #     if [ -d ".ai_cache" ] && [ "$(ls -A .ai_cache 2>/dev/null)" ]; then
-      #       git config --local user.email "action@github.com"
-      #       git config --local user.name "GitHub Action"
-      #       git add .ai_cache/
-      #       if ! git diff --cached --quiet; then
-      #         git commit -m "  自动更新 AI 摘要缓存 [skip ci]"
-      #         git push
-      #       fi
-      #     fi
+            ${{ runner.os }}-plugins-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Quartz plugins
+        run: npx quartz plugin install --from-config
+
+      - name: Build Quartz
+        run: npx quartz build
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

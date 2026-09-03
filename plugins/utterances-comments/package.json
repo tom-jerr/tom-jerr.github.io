@@ -1,0 +1,64 @@
+{
+  "name": "@tom-jerr/quartz-utterances-comments",
+  "version": "1.0.0",
+  "description": "Utterances comments component for the tom-jerr Quartz site",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "preact": "^10.0.0"
+  },
+  "dependencies": {
+    "@quartz-community/types": "^0.3.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.2",
+    "preact": "^10.28.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10.9.2"
+  },
+  "quartz": {
+    "name": "utterances-comments",
+    "displayName": "Utterances Comments",
+    "category": "component",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultEnabled": true,
+    "defaultOptions": {
+      "repo": "tom-jerr/blog-comments",
+      "issueTerm": "pathname",
+      "label": "comments",
+      "lightTheme": "github-light",
+      "darkTheme": "github-dark"
+    },
+    "components": {
+      "UtterancesComments": {
+        "displayName": "Utterances Comments",
+        "defaultPosition": "afterBody",
+        "defaultPriority": 10
+      }
+    }
+  }
+}

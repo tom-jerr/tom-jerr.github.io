@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "plugins": {
+    "utterances-comments": {
+      "source": "./plugins/utterances-comments",
+      "resolved": "E:\\blog\\plugins\\utterances-comments",
+      "commit": "local",
+      "installedAt": "2026-09-03T06:16:06.044Z"
+    }
+  }
+}

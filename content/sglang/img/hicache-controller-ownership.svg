@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+<title id="title">HiCache ownership boundaries</title>
+<desc id="desc">The scheduler owns tree state, bounded queues carry operations, and workers own preparation and transfer submission.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1200" height="700" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">OWNERSHIP</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">后台线程搬数据，Scheduler 提交状态</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">把并发边界放在 Operation / Ack 上</text>
+<rect x="64" y="160" width="310" height="460" rx="18" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<rect x="90" y="184" width="136" height="36" rx="18" fill="#EEE9FF" stroke="#EEE9FF" stroke-width="0" opacity="1.0"/>
+<text x="158" y="209" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Scheduler</text>
+<text x="90" y="260" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="600" text-anchor="start"><tspan x="90" dy="0">匹配 Prefix</tspan><tspan x="90" dy="58">预留 Slot</tspan><tspan x="90" dy="58">锁定 Node</tspan><tspan x="90" dy="58">轮询 Ack</tspan><tspan x="90" dy="58">Commit / Free</tspan></text>
+<text x="90" y="575" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="700" text-anchor="start">唯一树状态写者</text>
+<rect x="446" y="160" width="286" height="460" rx="18" fill="#EEF2F7" stroke="#CAD3E1" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<rect x="472" y="184" width="124" height="36" rx="18" fill="#EEF2F7" stroke="#EEF2F7" stroke-width="0" opacity="1.0"/>
+<text x="534" y="209" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="middle">边界</text>
+<rect x="472" y="250" width="234" height="48" rx="12" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="589" y="281" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="middle">H2D Queue</text>
+<rect x="472" y="322" width="234" height="48" rx="12" fill="#FFFFFF" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="589" y="353" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="middle">D2H Queue</text>
+<rect x="472" y="394" width="234" height="48" rx="12" fill="#FFFFFF" stroke="#138A7E" stroke-width="2" opacity="1.0"/>
+<text x="589" y="425" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="middle">L3 Queue</text>
+<rect x="472" y="488" width="234" height="48" rx="12" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="589" y="519" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="middle">Ack Queue</text>
+<text x="589" y="575" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="middle">有界 · 可批量 · 可优先级</text>
+<rect x="804" y="160" width="332" height="460" rx="18" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<rect x="830" y="184" width="146" height="36" rx="18" fill="#E8F0FF" stroke="#E8F0FF" stroke-width="0" opacity="1.0"/>
+<text x="903" y="209" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="middle">CPU Workers</text>
+<rect x="830" y="250" width="280" height="64" rx="12" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="848" y="277" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="700" text-anchor="start">索引整理</text>
+<text x="848" y="300" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="15" font-weight="500" text-anchor="start">cat / sort / clone</text>
+<rect x="830" y="335" width="280" height="64" rx="12" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="848" y="362" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="700" text-anchor="start">批量提交</text>
+<text x="848" y="385" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="15" font-weight="500" text-anchor="start">CUDA stream / I/O</text>
+<rect x="830" y="420" width="280" height="64" rx="12" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="848" y="447" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="700" text-anchor="start">完成通知</text>
+<text x="848" y="470" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="15" font-weight="500" text-anchor="start">event → ack</text>
+<text x="970" y="575" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="700" text-anchor="middle">不直接改 Radix Tree</text>
+<line x1="374" y1="298" x2="446" y2="274" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="732" y1="274" x2="804" y2="282" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="804" y1="512" x2="732" y2="512" stroke="#637083" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-muted)"/>
+<line x1="446" y1="512" x2="374" y2="512" stroke="#637083" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-muted)"/>
+</svg>

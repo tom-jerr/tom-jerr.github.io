@@ -1,0 +1,383 @@
+@use "./variables.scss" as *;
+
+// Visual details migrated from the former MkDocs Material theme.
+:root {
+  --base-border-radius: 0.5rem;
+}
+
+body {
+  line-height: 1.75;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+}
+
+code:not(pre code) {
+  font-size: 0.95em;
+}
+
+article img {
+  border-radius: 10px;
+  transition:
+    box-shadow 0.3s ease-in-out,
+    border-radius 0.3s ease-in-out;
+}
+
+article img:hover {
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+}
+
+:root[saved-theme="dark"] article img:hover {
+  box-shadow: 0 4px 12px rgb(255 255 255 / 15%);
+}
+
+article table {
+  margin-inline: auto;
+}
+
+article th {
+  text-align: center;
+}
+
+.academy-avatar {
+  float: right;
+  width: 7.5rem;
+  margin: 0.5rem 0 1rem 2rem;
+  border-radius: 1rem;
+}
+
+.academy-logo {
+  float: right;
+  height: 6rem;
+  margin: 0 0 1rem 2rem;
+  border-radius: 0.5rem;
+}
+
+// Keep the file tree usable when Recent Notes is also present in the fixed-height sidebar.
+@media all and (min-width: 801px) {
+  .sidebar.left > .explorer {
+    flex: 1 1 52%;
+    min-height: 12rem;
+  }
+
+  .sidebar.left > .recent-notes {
+    flex: 0 1 42%;
+    min-height: 8rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}
+
+.home-profile {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 2rem;
+  align-items: center;
+  margin: 1.5rem 0 2.5rem;
+}
+
+.home-avatar {
+  width: 9rem;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid var(--lightgray);
+  border-radius: 1.5rem;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 10%);
+}
+
+.home-intro h1 {
+  margin: 0.1rem 0 0.4rem;
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+}
+
+.home-kicker,
+.home-role {
+  color: var(--darkgray);
+}
+
+.home-kicker {
+  margin: 0;
+  font-weight: 600;
+  color: var(--tertiary);
+}
+
+.home-role {
+  margin: 0 0 1rem;
+  font-weight: 600;
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1.25rem;
+}
+
+.home-actions a {
+  padding: 0.35rem 0.75rem;
+  color: var(--dark);
+  background: var(--lightgray);
+  border: 1px solid var(--gray);
+  border-radius: 999px;
+}
+
+.home-actions a:hover {
+  color: var(--tertiary);
+  border-color: var(--tertiary);
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0 2rem;
+}
+
+.project-card {
+  display: block;
+  overflow: hidden;
+  color: var(--dark);
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  border-radius: 0.85rem;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 6%);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.project-card:hover {
+  color: var(--tertiary);
+  border-color: var(--tertiary);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 12%);
+}
+
+.project-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.project-caption {
+  padding: 0.9rem 1rem 1.1rem;
+}
+
+.project-caption .project-title {
+  display: block;
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  color: var(--dark);
+}
+
+.project-caption p,
+.project-caption small {
+  margin: 0;
+  color: var(--darkgray);
+  font-size: 0.85rem;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+.project-caption small {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.7rem;
+}
+
+.home-contact {
+  padding: 0.75rem 1rem;
+  margin: 1.5rem 0;
+  border: 1px solid var(--lightgray);
+  border-radius: 0.75rem;
+}
+
+.home-contact p {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.home-contact svg {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex: 0 0 1.2rem;
+  align-self: center;
+}
+
+.home-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.3rem;
+  margin-top: 1rem;
+}
+
+.home-social a {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.project-card > .external-icon,
+.home-contact .external-icon {
+  display: none;
+}
+
+.project-card:focus-visible,
+.home-contact a:focus-visible {
+  outline: 2px solid var(--tertiary);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card {
+    transition: none;
+  }
+
+  .project-card:hover {
+    transform: none;
+  }
+}
+
+.page-header:has(.article-title) + article > .markdown-preview-view > h1:first-child {
+  display: none;
+}
+
+.reference ol {
+  counter-reset: reference-item;
+}
+
+.reference li {
+  padding-left: 0.7em;
+  counter-increment: reference-item;
+  overflow-wrap: anywhere;
+}
+
+.reference li::marker {
+  content: "[" counter(reference-item) "]";
+  font-size: 0.8em;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin-bottom: 1rem;
+  overflow-wrap: anywhere;
+  background: var(--light);
+  border: 1px solid var(--gray);
+  border-radius: 0.25rem;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 12%);
+}
+
+.card-header {
+  padding: 0.7rem 1.5rem 0.25rem;
+  font-size: 1.5em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.card-body {
+  flex: 1 1 auto;
+  padding: 0.5rem 1rem 1rem;
+}
+
+.flink-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 0.5rem;
+}
+
+.flink-list-item {
+  min-height: 90px;
+  border-radius: 8px;
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.flink-list-item:hover {
+  transform: translateY(-2px);
+  background: var(--highlight);
+}
+
+.flink-item-icon {
+  float: left;
+  width: 60px;
+  height: 60px;
+  margin: 15px 10px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.flink-item-name {
+  padding-top: 19px;
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.flink-item-desc {
+  padding-top: 0.4rem;
+  font-size: 0.93em;
+}
+
+@media all and ($mobile) {
+  .sidebar.left > .recent-notes {
+    display: none;
+  }
+
+  .page-title {
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    white-space: nowrap;
+  }
+
+  .home-profile {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .home-avatar {
+    width: 7.5rem;
+    margin: 0 auto;
+  }
+
+  .home-actions {
+    justify-content: center;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flink-list {
+    grid-template-columns: 1fr;
+  }
+}

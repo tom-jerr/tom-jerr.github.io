@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="690" viewBox="0 0 1200 690" role="img" aria-labelledby="title desc">
+<title id="title">HiCache storage backend interface</title>
+<desc id="desc">Longest-prefix metadata queries are separate from zero-copy and generic data paths between the host pool and storage backends.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1200" height="690" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">STORAGE</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">统一接口，两条数据路径</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">控制面查最长前缀；数据面负责 get / set</text>
+<rect x="64" y="170" width="1072" height="92" rx="18" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="92" y="207" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="750" text-anchor="start">控制面</text>
+<text x="232" y="207" fill="#172033" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="21" font-weight="700" text-anchor="start">batch_exists(keys)</text>
+<text x="232" y="238" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">遇到首个 miss 即停止</text>
+<rect x="940" y="198" width="164" height="36" rx="18" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="0" opacity="1.0"/>
+<text x="1022" y="223" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="middle">Longest Prefix</text>
+<rect x="64" y="324" width="300" height="250" rx="18" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="92" y="367" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="24" font-weight="750" text-anchor="start">L2 Host Pool</text>
+<text x="92" y="405" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="500" text-anchor="start">预分配 Pinned Buffer</text>
+<text x="92" y="467" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="start"><tspan x="92" dy="0">host_indices</tspan><tspan x="92" dy="34">buffer pointer</tspan></text>
+<rect x="452" y="324" width="286" height="108" rx="18" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="595" y="364" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="22" font-weight="750" text-anchor="middle">Zero-copy</text>
+<text x="595" y="399" fill="#138A7E" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="17" font-weight="650" text-anchor="middle">batch_get/set_v1</text>
+<rect x="452" y="466" width="286" height="108" rx="18" fill="#EEF2F7" stroke="#637083" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="595" y="506" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="22" font-weight="750" text-anchor="middle">Generic</text>
+<text x="595" y="541" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="17" font-weight="650" text-anchor="middle">tensor / block copy</text>
+<rect x="826" y="324" width="310" height="250" rx="18" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="854" y="367" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="24" font-weight="750" text-anchor="start">L3 Backends</text>
+<text x="854" y="418" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="start"><tspan x="854" dy="0">Mooncake · NIXL</tspan><tspan x="854" dy="40">HF3FS · SiMM</tspan><tspan x="854" dy="40">AIBrix · File</tspan></text>
+<line x1="364" y1="378" x2="452" y2="378" stroke="#138A7E" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<line x1="738" y1="378" x2="826" y2="378" stroke="#138A7E" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<path d="M 364 520 L 452 520" fill="none" stroke="#637083" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-muted)"/>
+<path d="M 738 520 L 826 520" fill="none" stroke="#637083" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-muted)"/>
+<text x="600" y="637" fill="#138A7E" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="700" text-anchor="middle">v1：Backend 直接读写 L2 地址</text>
+</svg>

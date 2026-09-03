@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400" role="img" aria-labelledby="title desc">
+<title id="title">BusTub：数据库内核</title>
+<desc id="desc">查询执行使用 B+ 树与表存储，经缓冲池和磁盘层访问页面。事务管理以 MVCC/OCC 和 Undo Log 协调执行与数据可见性，虚线表示协调接口。依据个人主页项目经历及 BusTub 通关指北，而非宣称独立开发整个上游数据库。</desc>
+<defs><marker id="arrow" viewBox="0 0 8 8" refX="8" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#172033"/></marker></defs>
+<rect width="800" height="400" fill="#F8FAFD"/>
+<rect x="24" y="24" width="752" height="352" rx="10" fill="#FFFFFF" stroke="#CAD3E1" stroke-width="2"/>
+<path d="M255,150 L255,184" fill="none" stroke="#172033" stroke-width="2.4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M255,252 L255,286" fill="none" stroke="#172033" stroke-width="2.4" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M528,116 L462,116" fill="none" stroke="#172033" stroke-width="2.4" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<path d="M528,218 L462,218" fill="none" stroke="#172033" stroke-width="2.4" stroke-linejoin="round" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<rect x="48" y="82" width="414" height="68" rx="10" fill="#E8F0FF" stroke="#CAD3E1" stroke-width="2"/>
+<rect x="48" y="184" width="414" height="68" rx="10" fill="#E2F5F1" stroke="#CAD3E1" stroke-width="2"/>
+<rect x="48" y="286" width="704" height="68" rx="10" fill="#E2F5F1" stroke="#CAD3E1" stroke-width="2"/>
+<rect x="528" y="82" width="224" height="170" rx="10" fill="#F8FAFD" stroke="#CAD3E1" stroke-width="2"/>
+<text x="42" y="58" text-anchor="start" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="25" font-weight="650" fill="#172033">BusTub</text>
+<text x="255.0" y="112.0" text-anchor="middle" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="28" font-weight="550" fill="#172033">查询执行</text>
+<text x="255.0" y="141.0" text-anchor="middle" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="450" fill="#637083">Volcano · Hash Join</text>
+<text x="255.0" y="227.0" text-anchor="middle" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="28" font-weight="550" fill="#172033">B+ 树 · 表存储</text>
+<text x="400.0" y="316.0" text-anchor="middle" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="28" font-weight="550" fill="#172033">缓冲池 · 磁盘调度</text>
+<text x="400.0" y="345.0" text-anchor="middle" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="450" fill="#637083">LRU-K · Disk Scheduler</text>
+<text x="640.0" y="176.0" text-anchor="middle" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="28" font-weight="550" fill="#172033"></text>
+<text x="640" y="123" text-anchor="middle" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="28" font-weight="550" fill="#172033">事务管理</text>
+<text x="640" y="174" text-anchor="middle" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="24" font-weight="550" fill="#172033">MVCC / OCC</text>
+<text x="640" y="221" text-anchor="middle" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="24" font-weight="550" fill="#172033">Undo Log</text>
+</svg>
