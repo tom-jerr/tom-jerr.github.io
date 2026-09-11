@@ -102,7 +102,8 @@ try {
   await command("Page.enable")
   await command("Network.enable")
   await command("Network.setBlockedURLs", {
-    urls: ["*googletagmanager*", "*google-analytics*", "*clustrmaps*"],
+    // Keep UI acceptance independent of analytics and the remote comments client.
+    urls: ["*googletagmanager*", "*google-analytics*", "*clustrmaps*", "*utteranc.es*"],
   })
   await command("Emulation.setDeviceMetricsOverride", {
     width: 1440,
@@ -138,7 +139,7 @@ try {
     true,
   )
   const recent = await evaluate(
-    `Array.from(document.querySelectorAll('.recent-notes .recent-li .desc h3 a'), a=>a.getAttribute('href'))`,
+    `Array.from(document.querySelectorAll('.recent-notes .article-card .desc h3 a'), a=>a.getAttribute('href'))`,
   )
   assert.equal(recent.length, 8)
   assert.ok(
@@ -148,6 +149,124 @@ try {
     JSON.stringify(recent),
   )
   await screenshot("desktop-home")
+  await waitFor(
+    `document.querySelectorAll('.folder-glyph').length >= 5 && document.querySelectorAll('.graph-node').length > 0`,
+  )
+  assert.equal(
+    await evaluate(
+      `new Set(Array.from(document.querySelectorAll('.explorer-ul > li > .folder-container'), el => el.style.getPropertyValue('--folder-color'))).size`,
+    ),
+    5,
+  )
+  assert.ok(
+    await evaluate(`document.querySelector('.sidebar .taxonomy').textContent.includes('Project')`),
+  )
+  await evaluate(
+    `document.querySelector('.graph-node').dispatchEvent(new PointerEvent('pointerenter'))`,
+  )
+  assert.ok(
+    await evaluate(
+      `!document.querySelector('.graph-tooltip').hidden && document.querySelector('.graph-tooltip strong').textContent.length > 0`,
+    ),
+  )
+  await evaluate(`document.querySelector('.graph-expand').click()`)
+  await waitFor(
+    `document.querySelector('.graph-dialog').open && document.querySelectorAll('.graph-dialog [data-cluster]').length > 1`,
+  )
+  assert.ok(
+    await evaluate(
+      `Array.from(document.querySelectorAll('.graph-dialog .graph-node')).every(n => n.dataset.folder === n.dataset.slug.slice(0,n.dataset.slug.lastIndexOf('/')) || n.dataset.folder === '其他')`,
+    ),
+  )
+  await screenshot("desktop-graph")
+  const initialViewBox = await evaluate(
+    `document.querySelector('.graph-dialog svg').getAttribute('viewBox')`,
+  )
+  await evaluate(`document.querySelector('.graph-controls button').click()`)
+  assert.notEqual(
+    await evaluate(`document.querySelector('.graph-dialog svg').getAttribute('viewBox')`),
+    initialViewBox,
+  )
+  await command("Input.dispatchKeyEvent", {
+    type: "keyDown",
+    key: "Escape",
+    code: "Escape",
+    windowsVirtualKeyCode: 27,
+  })
+  await command("Input.dispatchKeyEvent", {
+    type: "keyUp",
+    key: "Escape",
+    code: "Escape",
+    windowsVirtualKeyCode: 27,
+  })
+  await waitFor(`!document.querySelector('.graph-dialog').open`)
+  const graphTarget = await evaluate(
+    `(() => { const n = document.querySelector('.cluster-graph[data-global="false"] .graph-node'); const r = n.querySelector('circle').getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2,slug:n.dataset.slug,title:n.getAttribute('aria-label')} })()`,
+  )
+  await command("Input.dispatchMouseEvent", {
+    type: "mouseMoved",
+    x: graphTarget.x,
+    y: graphTarget.y,
+  })
+  await waitFor(
+    `document.querySelector('.graph-tooltip strong')?.textContent === ${JSON.stringify(graphTarget.title)} && !document.querySelector('.graph-tooltip').hidden`,
+  )
+  await screenshot("desktop-graph-hover")
+  await command("Input.dispatchMouseEvent", {
+    type: "mousePressed",
+    x: graphTarget.x,
+    y: graphTarget.y,
+    button: "left",
+    clickCount: 1,
+  })
+  await command("Input.dispatchMouseEvent", {
+    type: "mouseReleased",
+    x: graphTarget.x,
+    y: graphTarget.y,
+    button: "left",
+    clickCount: 1,
+  })
+  await waitFor(`document.body.dataset.slug === ${JSON.stringify(graphTarget.slug)}`)
+  await waitFor(`document.querySelector('.current-node')`)
+  await evaluate(
+    `document.querySelector('.folder-container[data-folderpath="cuda/index"] a').click()`,
+  )
+  await waitFor(
+    `document.body.dataset.slug === 'cuda/index' && document.querySelector('.discovery-listing .article-card')`,
+  )
+  assert.ok(
+    await evaluate(
+      `document.querySelectorAll('.discovery-listing .article-description').length > 3`,
+    ),
+  )
+  await evaluate(
+    `Promise.all(Array.from(document.querySelectorAll('.discovery-listing .article-cover img'), img => {img.loading='eager'; return img.decode()}))`,
+  )
+  assert.ok(
+    await evaluate(`document.querySelectorAll('.discovery-listing .article-cover img').length > 3`),
+  )
+  await screenshot("desktop-folder-cards")
+  await evaluate(`document.querySelector('.taxonomy a[href$="tags/cuda"]').click()`)
+  await waitFor(
+    `document.body.dataset.slug === 'tags/cuda' && document.querySelector('.discovery-listing .article-card')`,
+  )
+  assert.ok(
+    await evaluate(
+      `Array.from(document.querySelectorAll('.discovery-listing .article-card')).every(card => Array.from(card.querySelectorAll('.tag-link')).some(a => a.textContent === '#cuda'))`,
+    ),
+  )
+  await evaluate(`document.querySelector('.taxonomy a[href$="categories/Project"]').click()`)
+  await waitFor(`document.body.dataset.slug === 'categories/Project'`)
+  assert.equal(
+    await evaluate(`document.querySelectorAll('.discovery-listing .article-card').length`),
+    4,
+  )
+  await screenshot("desktop-category")
+  await evaluate(`document.documentElement.setAttribute('saved-theme','dark')`)
+  await screenshot("desktop-category-dark")
+  await evaluate(`document.documentElement.setAttribute('saved-theme','light')`)
+  await command("Page.navigate", { url: base })
+  await waitFor(`document.querySelector('.home-contact') && (${roots}).length === 5`)
   assert.ok(
     await evaluate(
       `Array.from(document.querySelectorAll('.project-card img')).every(i=>Math.abs(i.clientWidth / i.clientHeight - 2) < .02)`,
@@ -184,6 +303,7 @@ try {
         "none",
       )
       await screenshot("mobile-navigation")
+      assert.ok(await evaluate(`document.querySelector('.sidebar > .taxonomy').checkVisibility()`))
       await evaluate(`document.querySelector('.mobile-explorer').click()`)
       await evaluate(
         `Promise.all(document.querySelector('.explorer').getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})))`,
@@ -202,6 +322,13 @@ try {
     `!document.querySelector('.home-contact') && document.querySelector('article')?.textContent.includes('Buffer')`,
   )
   assert.deepEqual(await evaluate(roots), expected)
+  await command("Page.navigate", { url: `${base}/sglang/` })
+  await waitFor(`document.querySelector('.discovery-listing .article-card')`)
+  await evaluate(
+    `Promise.all(Array.from(document.querySelectorAll('.discovery-listing .article-cover img'), img => {img.loading='eager'; return img.decode()}))`,
+  )
+  assert.ok(await evaluate(`document.documentElement.scrollWidth <= innerWidth + 1`))
+  await screenshot("mobile-article-cards")
   assert.equal(runtimeErrors.length, 0, JSON.stringify(runtimeErrors))
   console.log(
     JSON.stringify(

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1740" height="690" viewBox="0 0 1740 690" role="img" aria-labelledby="title desc">
+<title id="title">HiCache storage abstraction</title>
+<desc id="desc">The controller dispatches zero-copy and generic-copy paths to pluggable L3 backends.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1740" height="690" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">STORAGE ABSTRACTION</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">L3 placement 被统一接口隐藏，但数据路径并不相同</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">绿色是 backend 直接读写 L2 buffer；灰色是显式 tensor / block copy</text>
+<rect x="70" y="220" width="330" height="170" rx="12" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="235" y="286" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="middle"><tspan x="235" dy="0">HiCacheController</tspan><tspan x="235" dy="25">batch_exists</tspan><tspan x="235" dy="25">batch_get / batch_set</tspan></text>
+<rect x="535" y="160" width="330" height="150" rx="12" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="700" y="216" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="middle"><tspan x="700" dy="0">Zero-copy adapter</tspan><tspan x="700" dy="25">batch_get/set_v1</tspan><tspan x="700" dy="25">Host pointer / view</tspan></text>
+<rect x="535" y="395" width="330" height="150" rx="12" fill="#EEF2F7" stroke="#637083" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="700" y="451" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="middle"><tspan x="700" dy="0">Generic adapter</tspan><tspan x="700" dy="25">tensor / block</tspan><tspan x="700" dy="25">explicit copy</tspan></text>
+<rect x="1010" y="145" width="650" height="170" rx="12" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="1335" y="211" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="middle"><tspan x="1335" dy="0">Direct-buffer backends</tspan><tspan x="1335" dy="25">Mooncake · NIXL · SiMM · HF3FS</tspan><tspan x="1335" dy="25">backend 直接读写预分配 L2 地址</tspan></text>
+<rect x="1010" y="390" width="650" height="170" rx="12" fill="#EEF2F7" stroke="#637083" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="1335" y="456" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="middle"><tspan x="1335" dy="0">Generic / manager backends</tspan><tspan x="1335" dy="25">File · AIBrix</tspan><tspan x="1335" dy="25">本地文件或 Global KV Manager</tspan></text>
+<line x1="400" y1="275" x2="535" y2="235" stroke="#138A7E" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<line x1="400" y1="335" x2="535" y2="470" stroke="#637083" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-muted)"/>
+<line x1="865" y1="235" x2="1010" y2="235" stroke="#138A7E" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<line x1="865" y1="470" x2="1010" y2="470" stroke="#637083" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-muted)"/>
+<rect x="70" y="590" width="1590" height="62" rx="12" fill="#FFFFFF" stroke="#CAD3E1" stroke-width="1" opacity="1.0"/>
+<text x="865" y="628" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="middle">共同 contract：batch_exists 从 keys[0] 开始返回连续存在的 page 数；中间 miss 后立即截断</text>
+</svg>

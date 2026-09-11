@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2100" height="1310" viewBox="0 0 2100 1310" role="img" aria-labelledby="title desc">
+<title id="title">HiCache request lifecycle</title>
+<desc id="desc">End-to-end request path showing L3 query, hit, prefetch, L2 load, forward, L2 write and L3 write.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="2100" height="1310" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">END-TO-END PIPELINE</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">HiCache 嵌入 Scheduler 的请求主干</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">时间向右；每个彩色阶段标注发生线程与完成语义，箱宽不代表耗时</text>
+<text x="42" y="145" fill="#7656D8" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="18" font-weight="750" text-anchor="start">READ · request admission</text>
+<text x="42" y="209" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="start">Scheduler</text>
+<line x1="215" y1="217" x2="2040" y2="217" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<text x="42" y="379" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="start">L3 query</text>
+<line x1="215" y1="387" x2="2040" y2="387" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<text x="42" y="549" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="start">L3 I/O</text>
+<line x1="215" y1="557" x2="2040" y2="557" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<text x="42" y="719" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="start">H2D stream</text>
+<line x1="215" y1="727" x2="2040" y2="727" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<text x="42" y="889" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="start">GPU compute</text>
+<line x1="215" y1="897" x2="2040" y2="897" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<rect x="235" y="175" width="205" height="85" rx="12" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="337" y="198" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="337" dy="0">HTTP / tokenizer</tspan><tspan x="337" dy="25">handle_generate_request</tspan><tspan x="337" dy="25">_add_request_to_queue</tspan></text>
+<rect x="475" y="175" width="220" height="85" rx="12" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="585" y="211" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="585" dy="0">_prefetch_kvcache</tspan><tspan x="585" dy="25">match L1 + L2</tspan></text>
+<rect x="735" y="175" width="220" height="85" rx="12" fill="#EEF2F7" stroke="#637083" stroke-width="2" opacity="1.0"/>
+<text x="845" y="211" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="845" dy="0">waiting_queue.append</tspan><tspan x="845" dy="25">其他请求可继续运行</tspan></text>
+<rect x="735" y="345" width="220" height="85" rx="12" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0"/>
+<text x="845" y="381" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="845" dy="0">L3 QUERY</tspan><tspan x="845" dy="25">batch_exists</tspan></text>
+<rect x="995" y="345" width="220" height="85" rx="12" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0"/>
+<text x="1105" y="381" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="1105" dy="0">L3 HIT</tspan><tspan x="1105" dy="25">MIN #1 → hit_queue</tspan></text>
+<rect x="1255" y="515" width="220" height="85" rx="12" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0"/>
+<text x="1365" y="551" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="1365" dy="0">L3 PREFETCH</tspan><tspan x="1365" dy="25">GET → L2 slots</tspan></text>
+<rect x="1515" y="515" width="220" height="85" rx="12" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="1625" y="551" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="1625" dy="0">PREFETCH FINISH</tspan><tspan x="1625" dy="25">MIN #2 → publish L2</tspan></text>
+<rect x="1755" y="175" width="220" height="85" rx="12" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="1865" y="211" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="1865" dy="0">second match</tspan><tspan x="1865" dy="25">admission / alloc L1</tspan></text>
+<rect x="1755" y="685" width="220" height="85" rx="12" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="1865" y="721" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="1865" dy="0">L2 LOAD</tspan><tspan x="1865" dy="25">layer-wise H2D</tspan></text>
+<rect x="1755" y="855" width="220" height="85" rx="12" fill="#FDE9E7" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="1865" y="891" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="1865" dy="0">Forward</tspan><tspan x="1865" dy="25">只计算 true miss</tspan></text>
+<line x1="440" y1="217" x2="475" y2="217" stroke="#7656D8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<line x1="695" y1="217" x2="735" y2="217" stroke="#7656D8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<path d="M 695 240 L 715 240 L 715 387 L 735 387" fill="none" stroke="#138A7E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-store)"/>
+<line x1="955" y1="387" x2="995" y2="387" stroke="#138A7E" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<path d="M 1215 387 L 1235 387 L 1235 557 L 1255 557" fill="none" stroke="#138A7E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-store)"/>
+<line x1="1475" y1="557" x2="1515" y2="557" stroke="#138A7E" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<path d="M 1735 557 L 1745 557 L 1745 217 L 1755 217" fill="none" stroke="#7656D8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-control)"/>
+<line x1="1865" y1="260" x2="1865" y2="685" stroke="#2F6FE4" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-cpu)"/>
+<line x1="1865" y1="770" x2="1865" y2="855" stroke="#E45756" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-gpu)"/>
+<path d="M 955 217 L 1705 217" fill="none" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 7"/>
+<text x="1080" y="204" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="550" text-anchor="start">request remains in waiting queue</text>
+<text x="1260" y="655" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="550" text-anchor="start">drain ACK 后，L3 bytes 才发布为 L2 prefix</text>
+<text x="1755" y="650" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="650" text-anchor="start">PrefillAdder 通过预算后才启动</text>
+<text x="42" y="1015" fill="#7656D8" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="18" font-weight="750" text-anchor="start">WRITE · after Forward / cache insertion</text>
+<text x="42" y="1079" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="start">Scheduler + D2H</text>
+<line x1="215" y1="1087" x2="2040" y2="1087" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<text x="42" y="1209" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="650" text-anchor="start">backup thread</text>
+<line x1="215" y1="1217" x2="2040" y2="1217" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<rect x="300" y="1045" width="250" height="80" rx="12" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="425" y="1079" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="425" dy="0">cache_unfinished / finished</tspan><tspan x="425" dy="25">insert L1 Radix</tspan></text>
+<rect x="680" y="1045" width="250" height="80" rx="12" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="805" y="1079" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="805" dy="0">L2 WRITE</tspan><tspan x="805" dy="25">alloc Host + D2H</tspan></text>
+<rect x="1060" y="1045" width="250" height="80" rx="12" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="1185" y="1079" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="1185" dy="0">D2H ACK</tspan><tspan x="1185" dy="25">Host bytes 有效</tspan></text>
+<rect x="1440" y="1175" width="250" height="80" rx="12" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0"/>
+<text x="1565" y="1209" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="1565" dy="0">L3 WRITE</tspan><tspan x="1565" dy="25">batch_set(_v1)</tspan></text>
+<rect x="1810" y="1175" width="250" height="80" rx="12" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="1935" y="1209" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="middle"><tspan x="1935" dy="0">Storage ACK</tspan><tspan x="1935" dy="25">解除 Host 保护</tspan></text>
+<line x1="550" y1="1085" x2="680" y2="1085" stroke="#7656D8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<line x1="930" y1="1085" x2="1060" y2="1085" stroke="#2F6FE4" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-cpu)"/>
+<path d="M 1310 1085 L 1370 1085 L 1370 1215 L 1440 1215" fill="none" stroke="#138A7E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-store)"/>
+<line x1="1690" y1="1215" x2="1810" y2="1215" stroke="#138A7E" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-store)"/>
+<text x="680" y="1152" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="550" text-anchor="start">write-through：insert 后；write-back：L1 eviction 时</text>
+</svg>

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1900" height="1370" viewBox="0 0 1900 1370" role="img" aria-labelledby="title desc">
+<title id="title">HiCache L3 query and prefetch sequence</title>
+<desc id="desc">Detailed sequence from local match through two rank synchronizations and publication as L2 prefix.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1900" height="1370" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">L3 QUERY &amp; PREFETCH</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">L3 命中不是一个时刻，而是两次跨 Rank 收敛</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">时间向下；实线为调用/提交，虚线为完成或 ACK</text>
+<rect x="50" y="115" width="300" height="55" rx="12" fill="#EEF2F7" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="200" y="148" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="600" text-anchor="middle"><tspan x="200" dy="0">Scheduler</tspan></text>
+<line x1="200" y1="170" x2="200" y2="1305" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round" stroke-dasharray="8 7"/>
+<rect x="460" y="115" width="300" height="55" rx="12" fill="#EEF2F7" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="610" y="148" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="600" text-anchor="middle"><tspan x="610" dy="0">HiRadixCache</tspan></text>
+<line x1="610" y1="170" x2="610" y2="1305" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round" stroke-dasharray="8 7"/>
+<rect x="880" y="115" width="300" height="55" rx="12" fill="#EEF2F7" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="1030" y="148" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="600" text-anchor="middle"><tspan x="1030" dy="0">Query thread</tspan></text>
+<line x1="1030" y1="170" x2="1030" y2="1305" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round" stroke-dasharray="8 7"/>
+<rect x="1310" y="115" width="300" height="55" rx="12" fill="#EEF2F7" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="1460" y="148" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="600" text-anchor="middle"><tspan x="1460" dy="0">I/O + sync</tspan></text>
+<line x1="1460" y1="170" x2="1460" y2="1305" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round" stroke-dasharray="8 7"/>
+<rect x="1630" y="115" width="300" height="55" rx="12" fill="#EEF2F7" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="1780" y="148" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="600" text-anchor="middle"><tspan x="1780" dy="0">L3 backend</tspan></text>
+<line x1="1780" y1="170" x2="1780" y2="1305" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round" stroke-dasharray="8 7"/>
+<text x="32" y="229" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">01</text>
+<line x1="200" y1="243" x2="610" y2="243" stroke="#7656D8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<text x="405" y="213" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="405" dy="0">init_next_round_input</tspan><tspan x="405" dy="20">match L1 / L2</tspan></text>
+<text x="32" y="307" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">02</text>
+<line x1="610" y1="321" x2="200" y2="321" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="405" y="291" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="405" dy="0">device_indices + host_hit_length</tspan><tspan x="405" dy="20">last_host_node</tspan></text>
+<text x="32" y="385" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">03</text>
+<line x1="200" y1="399" x2="610" y2="399" stroke="#7656D8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<text x="405" y="369" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="405" dy="0">prefetch_from_storage</tspan><tspan x="405" dy="20">suffix page-align + enqueue</tspan></text>
+<text x="32" y="463" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">04</text>
+<line x1="610" y1="477" x2="1030" y2="477" stroke="#7656D8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<text x="820" y="447" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="820" dy="0">prefetch_queue</tspan><tspan x="820" dy="20">protect Host anchor</tspan></text>
+<text x="32" y="541" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">05</text>
+<line x1="1030" y1="555" x2="1780" y2="555" stroke="#138A7E" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<text x="1405" y="525" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="1405" dy="0">L3 QUERY · batch_exists</tspan><tspan x="1405" dy="20">hash chain</tspan></text>
+<text x="32" y="619" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">06</text>
+<line x1="1780" y1="633" x2="1030" y2="633" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="1405" y="603" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="1405" dy="0">local consecutive hit pages</tspan></text>
+<text x="32" y="697" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">07</text>
+<line x1="1030" y1="711" x2="1460" y2="711" stroke="#138A7E" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<text x="1245" y="681" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="1245" dy="0">MIN all-reduce #1</tspan><tspan x="1245" dy="20">global L3 hit length</tspan></text>
+<text x="32" y="775" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">08</text>
+<line x1="1460" y1="789" x2="200" y2="789" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="830" y="759" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="830" dy="0">prefetch_hit_queue</tspan></text>
+<text x="32" y="853" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">09</text>
+<rect x="68" y="821" width="264" height="62" rx="12" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="200" y="846" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="600" text-anchor="middle"><tspan x="200" dy="0">仅按 agreed hit 分配 L2</tspan><tspan x="200" dy="25">不足则 evict / shorten / revoke</tspan></text>
+<text x="32" y="931" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">10</text>
+<line x1="200" y1="945" x2="1460" y2="945" stroke="#138A7E" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<text x="830" y="915" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="830" dy="0">prefetch_buffer</tspan><tspan x="830" dy="20">Host slots + hashes</tspan></text>
+<text x="32" y="1009" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">11</text>
+<line x1="1460" y1="1023" x2="1780" y2="1023" stroke="#138A7E" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<text x="1620" y="993" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="1620" dy="0">L3 PREFETCH · batch_get</tspan><tspan x="1620" dy="20">write target Host slots</tspan></text>
+<text x="32" y="1087" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">12</text>
+<line x1="1780" y1="1101" x2="1460" y2="1101" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="1620" y="1071" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="1620" dy="0">completed_tokens</tspan></text>
+<text x="32" y="1165" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">13</text>
+<rect x="1328" y="1133" width="264" height="62" rx="12" fill="#FFFFFF" stroke="#138A7E" stroke-width="2" opacity="1.0"/>
+<text x="1460" y="1158" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="600" text-anchor="middle"><tspan x="1460" dy="0">MIN all-reduce #2</tspan><tspan x="1460" dy="25">agreed completed prefix</tspan></text>
+<text x="32" y="1243" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="14" font-weight="650" text-anchor="start">14</text>
+<line x1="1460" y1="1257" x2="200" y2="1257" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="830" y="1227" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="550" text-anchor="middle"><tspan x="830" dy="0">ack_prefetch_queue</tspan><tspan x="830" dy="20">completed_req / partial</tspan></text>
+<text x="82" y="1335" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="650" text-anchor="start">Scheduler 随后 _handle_prefetch_result()：把完成 bytes 发布为 L2 host-only nodes；请求再 match 一次。</text>
+</svg>

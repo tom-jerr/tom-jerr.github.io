@@ -206,7 +206,7 @@ plugins:
       priority: 50
 
   - source: "@quartz-community/recent-notes"
-    enabled: true
+    enabled: false
     options:
       title: 最近更新
       limit: 8
@@ -247,7 +247,7 @@ plugins:
       condition: not-index
 
   - source: "@quartz-community/graph"
-    enabled: true
+    enabled: false
     layout:
       position: right
       priority: 10

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="1573" viewBox="0 0 1520 1573" role="img" aria-labelledby="title desc">
+<title id="title">L3 预取：请求入队、后台 I/O、完成发布、重新匹配</title>
+<desc id="desc">时间向下；实线为调用或提交，虚线为完成通知；不是等比例耗时。</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1520" height="1573" fill="#F8FAFD"/>
+<text x="42" y="42" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="28" font-weight="700" text-anchor="start">L3 预取：请求入队、后台 I/O、完成发布、重新匹配</text>
+<text x="42" y="74" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">时间向下 ↓    实线：调用 / 提交    虚线：完成通知    同一泳道：本线程操作</text>
+<line x1="170.0" y1="148" x2="170.0" y2="1501" stroke="#CAD3E1" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="8 7"/>
+<rect x="35.0" y="102" width="270" height="48" rx="8" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5" opacity="1.0"/>
+<text x="170.0" y="132.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="170.0" dy="0">Scheduler</tspan></text>
+<line x1="563.3333333333333" y1="148" x2="563.3333333333333" y2="1501" stroke="#CAD3E1" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="8 7"/>
+<rect x="428.33333333333326" y="102" width="270" height="48" rx="8" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5" opacity="1.0"/>
+<text x="563.3333333333333" y="132.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="563.3333333333333" dy="0">HiRadix / Controller</tspan></text>
+<line x1="956.6666666666666" y1="148" x2="956.6666666666666" y2="1501" stroke="#CAD3E1" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="8 7"/>
+<rect x="821.6666666666666" y="102" width="270" height="48" rx="8" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5" opacity="1.0"/>
+<text x="956.6666666666666" y="132.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="956.6666666666666" dy="0">Query / Sync 线程</tspan></text>
+<line x1="1350.0" y1="148" x2="1350.0" y2="1501" stroke="#CAD3E1" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="8 7"/>
+<rect x="1215.0" y="102" width="270" height="48" rx="8" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5" opacity="1.0"/>
+<text x="1350.0" y="132.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="1350.0" dy="0">I/O 线程 / L3 Backend</tspan></text>
+<text x="42" y="207" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">01</text>
+<line x1="170.0" y1="228" x2="563.3333333333333" y2="228" stroke="#7656D8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<text x="366.66666666666663" y="191" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="366.66666666666663" dy="0">入队前 init_next_round_input()</tspan><tspan x="366.66666666666663" dy="22">match_prefix() 同时识别 L1 / L2</tspan></text>
+<text x="42" y="290" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">02</text>
+<line x1="563.3333333333333" y1="311" x2="170.0" y2="311" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="366.66666666666663" y="274" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="366.66666666666663" dy="0">GPU indices + host_hit_length</tspan><tspan x="366.66666666666663" dy="22">保留 last_host_node 挂载点</tspan></text>
+<text x="42" y="373" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">03</text>
+<line x1="170.0" y1="394" x2="563.3333333333333" y2="394" stroke="#7656D8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<text x="366.66666666666663" y="357" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="366.66666666666663" dy="0">_prefetch_kvcache()</tspan><tspan x="366.66666666666663" dy="22">仅提交允许匹配范围内的 suffix</tspan></text>
+<text x="42" y="456" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">04</text>
+<line x1="563.3333333333333" y1="477" x2="956.6666666666666" y2="477" stroke="#7656D8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<text x="760.0" y="440" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="760.0" dy="0">保护 Host 挂载点</tspan><tspan x="760.0" dy="22">prefetch_queue 入队</tspan></text>
+<text x="42" y="539" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">05</text>
+<line x1="956.6666666666666" y1="560" x2="1350.0" y2="560" stroke="#138A7E" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<text x="1153.3333333333333" y="523" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="1153.3333333333333" dy="0">hash chain → batch_exists()</tspan><tspan x="1153.3333333333333" dy="22">查询连续 page prefix</tspan></text>
+<text x="42" y="622" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">06</text>
+<line x1="1350.0" y1="643" x2="956.6666666666666" y2="643" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="1153.3333333333333" y="606" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="1153.3333333333333" dy="0">存在性查询结果</tspan><tspan x="1153.3333333333333" dy="22">各 Rank 取 MIN</tspan></text>
+<text x="42" y="705" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">07</text>
+<line x1="956.6666666666666" y1="726" x2="563.3333333333333" y2="726" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="760.0" y="689" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="760.0" dy="0">prefetch_hit_queue</tspan><tspan x="760.0" dy="22">返回 storage_hit_count</tspan></text>
+<text x="42" y="788" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">08</text>
+<rect x="426.33333333333326" y="757" width="274" height="62" rx="8" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="1.5" opacity="1.0"/>
+<text x="563.3333333333333" y="780.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="563.3333333333333" dy="0">Scheduler drain：分配 L2</tspan><tspan x="563.3333333333333" dy="24">不足则驱逐 / 缩短 / 撤销</tspan></text>
+<text x="42" y="871" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">09</text>
+<line x1="563.3333333333333" y1="892" x2="1350.0" y2="892" stroke="#138A7E" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-store)"/>
+<text x="956.6666666666666" y="855" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="956.6666666666666" dy="0">prefetch_buffer → batch_get</tspan><tspan x="956.6666666666666" dy="22">数据写入已分配的 Host slots</tspan></text>
+<text x="42" y="954" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">10</text>
+<rect x="33.0" y="923" width="274" height="62" rx="8" fill="#FFFFFF" stroke="#7656D8" stroke-width="1.5" opacity="1.0"/>
+<text x="170.0" y="946.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="170.0" dy="0">预取期间可调度其他请求</tspan><tspan x="170.0" dy="24">本请求尚未获准入批</tspan></text>
+<text x="42" y="1037" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">11</text>
+<line x1="1350.0" y1="1058" x2="956.6666666666666" y2="1058" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="1153.3333333333333" y="1021" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="1153.3333333333333" dy="0">PrefetchAck：连续完成长度</tspan><tspan x="1153.3333333333333" dy="22">最后发送 completed_req</tspan></text>
+<text x="42" y="1120" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">12</text>
+<line x1="956.6666666666666" y1="1141" x2="563.3333333333333" y2="1141" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="760.0" y="1104" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="760.0" dy="0">跨 Rank 对齐完成长度</tspan><tspan x="760.0" dy="22">ack_prefetch_queue</tspan></text>
+<text x="42" y="1203" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">13</text>
+<rect x="426.33333333333326" y="1172" width="274" height="62" rx="8" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="1.5" opacity="1.0"/>
+<text x="563.3333333333333" y="1195.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="563.3333333333333" dy="0">_handle_prefetch_result()</tspan><tspan x="563.3333333333333" dy="24">发布 Host 节点，处理重复页</tspan></text>
+<text x="42" y="1286" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">14</text>
+<line x1="170.0" y1="1307" x2="563.3333333333333" y2="1307" stroke="#7656D8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<text x="366.66666666666663" y="1270" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="366.66666666666663" dy="0">check_prefetch_progress()</tspan><tspan x="366.66666666666663" dy="22">已完成，或按策略终止并采纳部分</tspan></text>
+<text x="42" y="1369" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">15</text>
+<line x1="170.0" y1="1390" x2="563.3333333333333" y2="1390" stroke="#7656D8" stroke-width="2" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<text x="366.66666666666663" y="1353" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="366.66666666666663" dy="0">再次 init_next_round_input()</tspan><tspan x="366.66666666666663" dy="22">重新 match_prefix()</tspan></text>
+<text x="42" y="1452" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">16</text>
+<line x1="563.3333333333333" y1="1473" x2="170.0" y2="1473" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="366.66666666666663" y="1436" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="middle"><tspan x="366.66666666666663" dy="0">更新后的 L1 indices / L2 命中</tspan><tspan x="366.66666666666663" dy="22">交给 PrefillAdder 做入批判断</tspan></text>
+<text x="42" y="1548" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">完整完成可由 drain 直接发布；提前终止由 check_prefetch_progress 发布。此图按完整成功路径排列。</text>
+</svg>

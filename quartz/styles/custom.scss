@@ -66,15 +66,307 @@ article th {
 // Keep the file tree usable when Recent Notes is also present in the fixed-height sidebar.
 @media all and (min-width: 801px) {
   .sidebar.left > .explorer {
-    flex: 1 1 52%;
-    min-height: 12rem;
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: 35vh;
   }
 
   .sidebar.left > .recent-notes {
-    flex: 0 1 42%;
+    flex: 1 1 32%;
     min-height: 8rem;
     overflow-y: auto;
     scrollbar-width: thin;
+  }
+}
+
+// Folder identity is shared by the explorer and the graph.
+.folder-glyph {
+  width: 1.05rem;
+  height: 1.05rem;
+  flex-shrink: 0;
+  fill: var(--folder-color, var(--secondary));
+  opacity: 0.85;
+}
+.folder-container .folder-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.folder-container > .folder-icon {
+  color: var(--folder-color, var(--secondary));
+}
+.taxonomy {
+  min-width: 0;
+  font-size: 0.8rem;
+}
+.sidebar.left > .taxonomy {
+  flex: 0 1 auto;
+}
+.taxonomy details + details {
+  margin-top: 0.6rem;
+}
+.taxonomy summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--dark);
+}
+.taxonomy summary > span {
+  color: var(--darkgray);
+  font-size: 0.7rem;
+  font-weight: 400;
+}
+.taxonomy-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.5rem 0;
+}
+.sidebar .taxonomy-labels {
+  max-height: 5rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.taxonomy-chip,
+a.category-link {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: baseline;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 0.4rem;
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+  background: var(--highlight);
+}
+.taxonomy-chip small {
+  color: var(--darkgray);
+  font-weight: 400;
+}
+.taxonomy-all {
+  font-size: 0.75rem;
+}
+.article-cards.section-ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 0;
+}
+.article-card.section-li {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--lightgray);
+  border-radius: 0.85rem;
+  background: var(--light);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 5%);
+}
+.article-card:hover {
+  border-color: var(--tertiary);
+}
+.article-cover {
+  display: block;
+  background: var(--lightgray);
+}
+.article-cover[hidden] {
+  display: none;
+}
+.article-cover img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  object-fit: contain;
+  margin: 0;
+  border-radius: 0;
+}
+.article-card-body {
+  padding: 0.85rem 1rem;
+}
+.article-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+.article-card h3 a {
+  background: transparent;
+}
+.article-card .meta {
+  font-size: 0.75rem;
+  margin: 0.35rem 0;
+}
+.article-description {
+  margin: 0.5rem 0;
+  color: var(--darkgray);
+  font-size: 0.8rem;
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.article-card .tags {
+  margin: 0.6rem 0 0;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.article-card .tag-link {
+  font-size: 0.7rem;
+}
+.recent-notes h2,
+.folder-graph h2 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+}
+.recent-notes .article-cards {
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+}
+.recent-notes .article-card-body {
+  padding: 0.6rem;
+}
+.recent-notes .article-cover img {
+  max-height: 6rem;
+}
+.recent-notes .article-description {
+  -webkit-line-clamp: 2;
+  font-size: 0.75rem;
+}
+.recent-notes .article-card h3 {
+  font-size: 0.9rem;
+}
+.graph-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.graph-heading button,
+.graph-controls button {
+  background: var(--lightgray);
+  color: var(--dark);
+  border: 1px solid var(--gray);
+  border-radius: 0.35rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+}
+.graph-hint {
+  margin: 0.2rem 0 0.7rem;
+  color: var(--darkgray);
+  font-size: 0.7rem;
+}
+.cluster-graph {
+  position: relative;
+  border: 1px solid var(--lightgray);
+  border-radius: 0.6rem;
+}
+.cluster-graph > svg {
+  display: block;
+  width: 100%;
+  height: 260px;
+  touch-action: none;
+}
+.cluster-label {
+  fill: var(--darkgray);
+  pointer-events: none;
+}
+.graph-edges line {
+  stroke: var(--gray);
+  stroke-width: 0.7;
+  opacity: 0.35;
+}
+.graph-edges line.highlight {
+  stroke: var(--secondary);
+  stroke-width: 1.8;
+  opacity: 1;
+}
+.graph-node circle {
+  stroke: var(--light);
+  stroke-width: 1.5;
+}
+.graph-node:hover circle,
+.graph-node:focus circle,
+.graph-node .current-node {
+  stroke: var(--dark);
+  stroke-width: 2;
+}
+.graph-tooltip {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+  pointer-events: none;
+  padding: 0.6rem;
+  color: var(--dark);
+  background: var(--light);
+  border: 1px solid var(--gray);
+  border-radius: 0.4rem;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+  font-size: 0.8rem;
+  overflow-wrap: anywhere;
+}
+.graph-tooltip strong,
+.graph-tooltip small,
+.graph-tooltip span {
+  display: block;
+}
+.graph-tooltip small,
+.graph-tooltip span {
+  color: var(--darkgray);
+  font-size: 0.7rem;
+}
+.graph-dialog {
+  box-sizing: border-box;
+  width: min(1100px, 94vw);
+  max-width: 94vw;
+  max-height: 94dvh;
+  padding: 1.2rem;
+  border: 1px solid var(--gray);
+  border-radius: 1rem;
+  background: var(--light);
+  color: var(--dark);
+}
+.graph-dialog::backdrop {
+  background: rgb(0 0 0 / 55%);
+}
+.graph-dialog .cluster-graph > svg {
+  height: min(70dvh, 760px);
+}
+.graph-dialog .graph-tooltip {
+  bottom: 3rem;
+  max-width: 28rem;
+}
+.graph-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+@media (max-width: 1100px) {
+  .discovery-listing .article-cards {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 800px) {
+  .sidebar.left > .taxonomy {
+    display: none;
+  }
+  .sidebar.left:has(.explorer:not(.collapsed)) > .taxonomy {
+    display: block;
+    position: fixed;
+    top: 4rem;
+    left: 1rem;
+    right: 1rem;
+    z-index: 102;
+    background: var(--light);
+    padding-bottom: 0.5rem;
+  }
+  .sidebar.left:has(.explorer:not(.collapsed)) .explorer-content {
+    padding-top: calc(5rem + var(--mobile-taxonomy-height, 15rem));
+  }
+  .sidebar.left > .taxonomy .taxonomy-labels {
+    max-height: 4rem;
   }
 }
 

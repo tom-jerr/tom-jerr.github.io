@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1410" height="500" viewBox="0 0 1410 500" role="img" aria-labelledby="title desc">
+<title id="title">H2D 与 Prefill 按层重叠</title>
+<desc id="desc">每层先完成历史 prefix 的 H2D，随后该层 attention 才能读取；全量 ACK 只做生命周期回收。</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1410" height="500" fill="#F8FAFD"/>
+<text x="38" y="43" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="27" font-weight="700" text-anchor="start">H2D 按层搬运；Attention 在读取该层 KV 前等待 event</text>
+<text x="38" y="77" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">本图示意 4 层；箱宽不是测量耗时，重叠机会不等于一定隐藏全部传输</text>
+<text x="30" y="184" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="start">H2D stream</text>
+<text x="30" y="314" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="start">Compute stream</text>
+<text x="30" y="424" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="start">Scheduler</text>
+<path d="M 400 181 L 417 181 L 417 311 L 435 311" fill="none" stroke="#2F6FE4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-cpu)"/>
+<line x1="400" y1="181" x2="435" y2="181" stroke="#172033" stroke-width="1.6" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="605" y1="311" x2="640" y2="311" stroke="#172033" stroke-width="1.6" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="230" y="150" width="170" height="62" rx="8" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5" opacity="1.0"/>
+<text x="315.0" y="173.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="315.0" dy="0">Layer 0 H2D</tspan><tspan x="315.0" dy="24">全部待恢复 pages</tspan></text>
+<rect x="435" y="280" width="170" height="62" rx="8" fill="#FDE9E7" stroke="#E45756" stroke-width="1.5" opacity="1.0"/>
+<text x="520.0" y="303.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="520.0" dy="0">Layer 0 Forward</tspan><tspan x="520.0" dy="24">计算未缓存 suffix</tspan></text>
+<text x="431" y="249" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="500" text-anchor="start">wait event 0</text>
+<path d="M 605 181 L 622 181 L 622 311 L 640 311" fill="none" stroke="#2F6FE4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-cpu)"/>
+<line x1="605" y1="181" x2="640" y2="181" stroke="#172033" stroke-width="1.6" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="810" y1="311" x2="845" y2="311" stroke="#172033" stroke-width="1.6" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="435" y="150" width="170" height="62" rx="8" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5" opacity="1.0"/>
+<text x="520.0" y="173.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="520.0" dy="0">Layer 1 H2D</tspan><tspan x="520.0" dy="24">全部待恢复 pages</tspan></text>
+<rect x="640" y="280" width="170" height="62" rx="8" fill="#FDE9E7" stroke="#E45756" stroke-width="1.5" opacity="1.0"/>
+<text x="725.0" y="303.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="725.0" dy="0">Layer 1 Forward</tspan><tspan x="725.0" dy="24">计算未缓存 suffix</tspan></text>
+<text x="636" y="249" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="500" text-anchor="start">wait event 1</text>
+<path d="M 810 181 L 827 181 L 827 311 L 845 311" fill="none" stroke="#2F6FE4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-cpu)"/>
+<line x1="810" y1="181" x2="845" y2="181" stroke="#172033" stroke-width="1.6" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="1015" y1="311" x2="1050" y2="311" stroke="#172033" stroke-width="1.6" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="640" y="150" width="170" height="62" rx="8" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5" opacity="1.0"/>
+<text x="725.0" y="173.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="725.0" dy="0">Layer 2 H2D</tspan><tspan x="725.0" dy="24">全部待恢复 pages</tspan></text>
+<rect x="845" y="280" width="170" height="62" rx="8" fill="#FDE9E7" stroke="#E45756" stroke-width="1.5" opacity="1.0"/>
+<text x="930.0" y="303.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="930.0" dy="0">Layer 2 Forward</tspan><tspan x="930.0" dy="24">计算未缓存 suffix</tspan></text>
+<text x="841" y="249" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="500" text-anchor="start">wait event 2</text>
+<path d="M 1015 181 L 1032 181 L 1032 311 L 1050 311" fill="none" stroke="#2F6FE4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-cpu)"/>
+<rect x="845" y="150" width="170" height="62" rx="8" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5" opacity="1.0"/>
+<text x="930.0" y="173.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="930.0" dy="0">Layer 3 H2D</tspan><tspan x="930.0" dy="24">全部待恢复 pages</tspan></text>
+<rect x="1050" y="280" width="170" height="62" rx="8" fill="#FDE9E7" stroke="#E45756" stroke-width="1.5" opacity="1.0"/>
+<text x="1135.0" y="303.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="1135.0" dy="0">Layer 3 Forward</tspan><tspan x="1135.0" dy="24">计算未缓存 suffix</tspan></text>
+<text x="1046" y="249" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="500" text-anchor="start">wait event 3</text>
+<path d="M 1015 181 L 1270 181 L 1270 420 L 1150 420" fill="none" stroke="#637083" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<rect x="720" y="390" width="430" height="62" rx="8" fill="#FFFFFF" stroke="#7656D8" stroke-width="1.5" opacity="1.0"/>
+<text x="935.0" y="427.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="935.0" dy="0">loading_check：全量 H2D ACK 完成后释放搬运锁</tspan></text>
+<text x="230" y="435" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">与 Forward 的逐层读取等待分开</text>
+<line x1="210" y1="476" x2="1360" y2="476" stroke="#172033" stroke-width="1.5" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="1270" y="465" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">时间 →</text>
+</svg>

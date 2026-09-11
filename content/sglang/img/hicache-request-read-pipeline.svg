@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1690" height="655" viewBox="0 0 1690 655" role="img" aria-labelledby="title desc">
+<title id="title">从入队到 Prefill 的读 pipeline</title>
+<desc id="desc">时间向右；预取期间其他请求可运行；当前请求先发布 L2 再申请 H2D。</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1690" height="655" fill="#F8FAFD"/>
+<text x="38" y="43" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="27" font-weight="700" text-anchor="start">读 pipeline：先扩展可复用前缀，再启动本请求的 Prefill</text>
+<text x="38" y="76" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">顺序示意，不按耗时比例；成功且达到预取 / 回填阈值的 cache-mode 路径</text>
+<text x="30" y="183" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="start">Scheduler</text>
+<line x1="210" y1="217" x2="1640" y2="217" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<text x="30" y="283" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="start">L3 Query</text>
+<line x1="210" y1="317" x2="1640" y2="317" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<text x="30" y="383" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="start">L3 I/O → L2</text>
+<line x1="210" y1="417" x2="1640" y2="417" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<text x="30" y="483" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="start">H2D stream</text>
+<line x1="210" y1="517" x2="1640" y2="517" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<text x="30" y="583" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="600" text-anchor="start">GPU compute</text>
+<line x1="210" y1="617" x2="1640" y2="617" stroke="#CAD3E1" stroke-width="1" stroke-linecap="round"/>
+<path d="M 410 176 L 426 176 L 426 276 L 440 276" fill="none" stroke="#172033" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 615 276 L 636 276 L 636 176 L 650 176" fill="none" stroke="#172033" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 820 176 L 836 176 L 836 376 L 850 376" fill="none" stroke="#172033" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 1030 376 L 1046 376 L 1046 176 L 1060 176" fill="none" stroke="#172033" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 1230 176 L 1246 176 L 1246 176 L 1260 176" fill="none" stroke="#172033" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 1435 176 L 1446 176 L 1446 476 L 1460 476" fill="none" stroke="#172033" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M 1640 476 L 1516 476 L 1516 576 L 1530 576" fill="none" stroke="#172033" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="220" y="145" width="190" height="62" rx="8" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5" opacity="1.0"/>
+<text x="315.0" y="168.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="315.0" dy="0">本地 L1 / L2 match</tspan><tspan x="315.0" dy="24">提交 L3 suffix</tspan></text>
+<rect x="440" y="245" width="175" height="62" rx="8" fill="#E2F5F1" stroke="#138A7E" stroke-width="1.5" opacity="1.0"/>
+<text x="527.5" y="268.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="527.5" dy="0">hash + exists</tspan><tspan x="527.5" dy="24">跨 Rank MIN</tspan></text>
+<rect x="650" y="145" width="170" height="62" rx="8" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5" opacity="1.0"/>
+<text x="735.0" y="168.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="735.0" dy="0">drain hit 结果</tspan><tspan x="735.0" dy="24">按命中分配 L2</tspan></text>
+<rect x="850" y="345" width="180" height="62" rx="8" fill="#E2F5F1" stroke="#138A7E" stroke-width="1.5" opacity="1.0"/>
+<text x="940.0" y="368.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="940.0" dy="0">batch_get → Host</tspan><tspan x="940.0" dy="24">ACK / 跨 Rank MIN</tspan></text>
+<rect x="1060" y="145" width="170" height="62" rx="8" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5" opacity="1.0"/>
+<text x="1145.0" y="168.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="1145.0" dy="0">发布 L2 + 重匹配</tspan><tspan x="1145.0" dy="24">预算检查</tspan></text>
+<rect x="1260" y="145" width="175" height="62" rx="8" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5" opacity="1.0"/>
+<text x="1347.5" y="168.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="1347.5" dy="0">init_load_back</tspan><tspan x="1347.5" dy="24">申请 L1 / load_queue</tspan></text>
+<rect x="1460" y="445" width="180" height="62" rx="8" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5" opacity="1.0"/>
+<text x="1550.0" y="468.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="1550.0" dy="0">start_loading</tspan><tspan x="1550.0" dy="24">按层恢复 prefix</tspan></text>
+<rect x="1530" y="545" width="110" height="62" rx="8" fill="#FDE9E7" stroke="#E45756" stroke-width="1.5" opacity="1.0"/>
+<text x="1585.0" y="568.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="1585.0" dy="0">Prefill</tspan><tspan x="1585.0" dy="24">真 miss</tspan></text>
+<rect x="440" y="545" width="930" height="62" rx="8" fill="#FDE9E7" stroke="#E45756" stroke-width="1.5" opacity="1.0"/>
+<text x="905.0" y="582.0" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="550" text-anchor="middle"><tspan x="905.0" dy="0">已有请求继续 Prefill / Decode；不依赖本请求的 L3 prefetch 完成</tspan></text>
+<text x="1456" y="534" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">逐层 event →</text>
+<line x1="210" y1="632" x2="1640" y2="632" stroke="#172033" stroke-width="1.5" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="1540" y="620" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="500" text-anchor="start">时间 →</text>
+</svg>
