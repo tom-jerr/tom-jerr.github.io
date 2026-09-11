@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="512" viewBox="0 0 1120 512" role="img" aria-labelledby="title desc">
+<title id="title">DFlash 2 训练：同时改善候选覆盖与候选选择</title><desc id="desc">这是文章固定版本的 SpecForge 训练路径：DFlash token objective 加 strict top-K selector CE，不声称为作者 checkpoint 的完整配方。</desc>
+<style>text{font-family:Inter, Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif;fill:#172033}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#172033"/></marker></defs>
+<rect width="1120" height="512" fill="white"/>
+<text x="32" y="39" font-size="26" style="fill:#172033" text-anchor="start" font-weight="700">DFlash 2 训练：同时改善候选覆盖与候选选择</text>
+<text x="32" y="79" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">SpecForge 公开 recipe：target 冻结；继承 DFlash 的 anchor、context mask 与 block 构造。</text>
+<path d="M272,186 L299,186" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M544,186 L571,186" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M816,186 L843,186" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="32" y="130" width="240" height="112" rx="10" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="152.0" y="162" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">Masked blocks</text>
+<text x="152.0" y="192" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">anchor + MASK</text>
+<text x="152.0" y="217" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">严格可见 target context</text>
+<rect x="304" y="130" width="240" height="112" rx="10" fill="#E2F5F1" stroke="#138A7E" stroke-width="1.5"/>
+<text x="424.0" y="162" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">带卷积的 backbone</text>
+<text x="424.0" y="192" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">局部 hidden 混合</text>
+<text x="424.0" y="217" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">所有位置仍并行执行</text>
+<rect x="576" y="130" width="240" height="112" rx="10" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="696.0" y="162" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">冻结 LM head</text>
+<text x="696.0" y="192" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">得到全词表 unary U</text>
+<text x="696.0" y="217" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">提供各位置基础概率</text>
+<rect x="848" y="130" width="240" height="112" rx="10" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
+<text x="968.0" y="162" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">Strict top-K</text>
+<text x="968.0" y="192" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">按 unary 分数取候选</text>
+<text x="968.0" y="217" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">不补入漏召回的真值</text>
+<path d="M696,242 L696,280 L442,280 L442,319" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M968,242 L968,319" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="32" y="325" width="240" height="112" rx="10" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="152.0" y="357" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">真实前驱 token</text>
+<text x="152.0" y="387" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">teacher forcing</text>
+<text x="152.0" y="412" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">推理时换成已选前驱</text>
+<rect x="304" y="325" width="276" height="112" rx="10" fill="#E2F5F1" stroke="#138A7E" stroke-width="1.5"/>
+<text x="442.0" y="357" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">主 token objective</text>
+<text x="442.0" y="387" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">在全词表上监督</text>
+<text x="442.0" y="412" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">继续改善 backbone</text>
+<rect x="732" y="325" width="356" height="112" rx="10" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
+<text x="910.0" y="357" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">候选集上的 selector CE</text>
+<text x="910.0" y="387" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">真值在 top-K 中 → 计算损失</text>
+<text x="910.0" y="412" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">真值缺席 → 跳过该位置</text>
+<path d="M152,437 L152,457 L910,457 L910,441" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="32" y="494" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">两项可联合训练；selector_stop_gradient、warmup 与权重由配置决定，不是固定两阶段训练。</text>
+</svg>

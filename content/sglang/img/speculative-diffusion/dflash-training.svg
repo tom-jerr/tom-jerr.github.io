@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="520" viewBox="0 0 1120 520" role="img" aria-labelledby="title desc">
+<title id="title">DFlash 训练：用严格可见的 target context 预测整块</title><desc id="desc">冻结 target 提供上下文；随机 anchor 后全部 mask；位置加权 CE 更新 draft，anchor 自身不计入预测损失。</desc>
+<style>text{font-family:Inter, Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif;fill:#172033}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#172033"/></marker></defs>
+<rect width="1120" height="520" fill="white"/>
+<text x="32" y="39" font-size="26" style="fill:#172033" text-anchor="start" font-weight="700">DFlash 训练：用严格可见的 target context 预测整块</text>
+<path d="M272,142 L299,142" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M544,142 L571,142" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="32" y="86" width="240" height="112" rx="10" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="152.0" y="118" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">完整训练序列</text>
+<text x="152.0" y="148" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">prompt + response</text>
+<text x="152.0" y="173" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">真实 token 与 loss mask</text>
+<rect x="304" y="86" width="240" height="112" rx="10" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5"/>
+<text x="424.0" y="118" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">Target forward</text>
+<text x="424.0" y="148" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">参数冻结</text>
+<text x="424.0" y="173" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">提取多层 hidden</text>
+<rect x="576" y="86" width="240" height="112" rx="10" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5"/>
+<text x="696.0" y="118" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">每块可见 context</text>
+<text x="696.0" y="148" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">只保留位置 &lt; anchor</text>
+<text x="696.0" y="173" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">投影到各 draft 层 K/V</text>
+<rect x="848" y="86" width="240" height="112" rx="10" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="968.0" y="118" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">真实后续 token</text>
+<text x="968.0" y="148" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">标签 E F G H</text>
+<text x="968.0" y="173" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">来自训练序列</text>
+<path d="M152,198 L152,265" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M696,198 L696,265" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M968,198 L968,265" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M272,328 L299,328" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M544,328 L571,328" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M816,328 L843,328" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="32" y="272" width="240" height="112" rx="10" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="152.0" y="304" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">随机选择 anchor</text>
+<text x="152.0" y="334" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">例如选中 D</text>
+<text x="152.0" y="359" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">保留原序列 position ID</text>
+<rect x="304" y="272" width="240" height="112" rx="10" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="424.0" y="304" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">构造 masked block</text>
+<text x="424.0" y="334" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">D  M  M  M  M</text>
+<text x="424.0" y="359" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">M = MASK，块间隔离</text>
+<rect x="576" y="272" width="240" height="112" rx="10" fill="#E2F5F1" stroke="#138A7E" stroke-width="1.5"/>
+<text x="696.0" y="304" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">一次 draft forward</text>
+<text x="696.0" y="334" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">同块双向 attention</text>
+<text x="696.0" y="359" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">冻结 LM head → logits</text>
+<rect x="848" y="272" width="240" height="112" rx="10" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
+<text x="968.0" y="304" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">位置加权 CE</text>
+<text x="968.0" y="334" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">只监督后 4 个位置</text>
+<text x="968.0" y="359" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">前部出错的权重更高</text>
+<text x="32" y="436" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">反向更新 draft backbone 与条件投影；冻结 embedding / LM head 仍传递对 draft 的梯度。</text>
+<text x="32" y="472" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">论文默认 full attention；同一块可互看 MASK 表示，但不能偷看 anchor 及其后的 target hidden。</text>
+</svg>

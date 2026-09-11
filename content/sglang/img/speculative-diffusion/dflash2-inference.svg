@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="590" viewBox="0 0 1120 590" role="img" aria-labelledby="title desc">
+<title id="title">DFlash 2 推理：先并行打分，再走一条候选路径</title><desc id="desc">带卷积 backbone 一次生成 unary logits；邻接候选对并行评分；从 anchor 出发因果 walk，只有选出的一条链送入 target。</desc>
+<style>text{font-family:Inter, Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif;fill:#172033}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#172033"/></marker></defs>
+<rect width="1120" height="590" fill="white"/>
+<text x="32" y="39" font-size="26" style="fill:#172033" text-anchor="start" font-weight="700">DFlash 2 推理：先并行打分，再走一条候选路径</text>
+<path d="M272,179 L299,179" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M544,179 L571,179" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M816,179 L843,179" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="32" y="123" width="240" height="112" rx="10" fill="#E2F5F1" stroke="#138A7E" stroke-width="1.5"/>
+<text x="152.0" y="155" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">带卷积的 draft</text>
+<text x="152.0" y="185" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">一次 block forward</text>
+<text x="152.0" y="210" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">hidden 局部混合也并行</text>
+<rect x="304" y="123" width="240" height="112" rx="10" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="424.0" y="155" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">保留候选</text>
+<text x="424.0" y="185" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">每个位置 unary top-K</text>
+<text x="424.0" y="210" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">候选集合已经确定</text>
+<rect x="576" y="123" width="240" height="112" rx="10" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
+<text x="696.0" y="155" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">并行邻接评分</text>
+<text x="696.0" y="185" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">基础分数 + 前驱匹配</text>
+<text x="696.0" y="210" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">不再执行 backbone</text>
+<rect x="848" y="123" width="240" height="112" rx="10" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5"/>
+<text x="968.0" y="155" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">因果 walk → verify</text>
+<text x="968.0" y="185" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">按已选前驱选下一词</text>
+<text x="968.0" y="210" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">target 只验证一条链</text>
+<text x="32" y="286" font-size="20" style="fill:#172033" text-anchor="start" font-weight="650">候选示意</text>
+<text x="172" y="286" font-size="18" style="fill:#637083" text-anchor="start" font-weight="400">为便于阅读仅画 K=3、3 个位置；连线为已预计算的候选对，粗线为所选路径。</text>
+<path d="M416,343 L536,343" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M416,343 L536,403" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M416,343 L536,463" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M416,403 L536,343" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M416,403 L536,403" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M416,403 L536,463" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M416,463 L536,343" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M416,463 L536,403" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M416,463 L536,463" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M622,343 L742,343" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M622,343 L742,403" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M622,343 L742,463" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M622,403 L742,343" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M622,403 L742,403" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M622,403 L742,463" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M622,463 L742,343" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M622,463 L742,403" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M622,463 L742,463" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<rect x="82" y="383" width="60" height="40" rx="6" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="112.0" y="410" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">D</text>
+<path d="M142,403 L330,343" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M142,403 L330,403" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M142,403 L330,463" stroke="#CAD3E1" stroke-width="1" fill="none"/>
+<path d="M142,403 L330,403" stroke="#7656D8" stroke-width="3.5" fill="none" marker-end="url(#arrow)"/>
+<path d="M416,403 L536,343" stroke="#7656D8" stroke-width="3.5" fill="none" marker-end="url(#arrow)"/>
+<path d="M622,343 L742,403" stroke="#7656D8" stroke-width="3.5" fill="none" marker-end="url(#arrow)"/>
+<text x="373" y="315" font-size="18" style="fill:#172033" text-anchor="middle" font-weight="400">位置 1</text>
+<rect x="330" y="323" width="86" height="40" rx="6" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="373.0" y="350" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">E1</text>
+<rect x="330" y="383" width="86" height="40" rx="6" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
+<text x="373.0" y="410" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">E2</text>
+<rect x="330" y="443" width="86" height="40" rx="6" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="373.0" y="470" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">E3</text>
+<text x="579" y="315" font-size="18" style="fill:#172033" text-anchor="middle" font-weight="400">位置 2</text>
+<rect x="536" y="323" width="86" height="40" rx="6" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
+<text x="579.0" y="350" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">F1</text>
+<rect x="536" y="383" width="86" height="40" rx="6" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="579.0" y="410" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">F2</text>
+<rect x="536" y="443" width="86" height="40" rx="6" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="579.0" y="470" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">F3</text>
+<text x="785" y="315" font-size="18" style="fill:#172033" text-anchor="middle" font-weight="400">位置 3</text>
+<rect x="742" y="323" width="86" height="40" rx="6" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="785.0" y="350" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">G1</text>
+<rect x="742" y="383" width="86" height="40" rx="6" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
+<text x="785.0" y="410" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">G2</text>
+<rect x="742" y="443" width="86" height="40" rx="6" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="785.0" y="470" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">G3</text>
+<text x="871" y="362" font-size="20" style="fill:#172033" text-anchor="start" font-weight="650">所选链</text>
+<text x="871" y="399" font-size="21" style="fill:#172033" text-anchor="start" font-weight="400">E2 → F1 → G2</text>
+<text x="871" y="435" font-size="19" style="fill:#172033" text-anchor="start" font-weight="400">随链保存实际 q</text>
+<text x="32" y="525" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">这里是逐步 greedy / sampling walk，不是 Viterbi 全局最优路径，也不是 target 验证整张候选树。</text>
+<text x="32" y="561" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">候选外 proposal q = 0；随机拒绝后的残差采样仍可输出 top-K 以外的 target token。</text>
+</svg>

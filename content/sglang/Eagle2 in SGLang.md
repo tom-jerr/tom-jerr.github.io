@@ -282,6 +282,10 @@ target verify 输入：D E F G H
 
 “并行预测”也不等于 hidden states 之间毫无交互。原始 DFlash 在块内使用双向 attention，多个 MASK 的表示可以互相影响；缺少的是**实际已经选出的前序离散 token 条件**。计算第二个位置的分布时，模型还不知道第一个位置最后选了什么。
 
+![DFlash 论文 Figure 2：target 特征注入每层 draft KV，masked block 一次并行预测](img/speculative-diffusion/dflash-paper-fig2.png)
+
+图源：[DFlash 论文 v2，Figure 2，PDF 第 4 页](https://arxiv.org/pdf/2602.06036v2#page=4)，从原 PDF 裁出图区，保留原始标注。读图时沿两条路径看：上方的蓝色 target features 注入每一层，下方的 anchor 与 MASK 通过 draft backbone。下面的中文流程图进一步展开训练监督和验证后的状态提交。
+
 ### 4.2 KV injection 注入的是投影后的 target hidden，不是 target KV
 
 从若干 target 层提取特征，拼接、投影得到条件表示 $C$。对 draft 的第 $\ell$ 层，可以概括为：
@@ -305,6 +309,10 @@ $$
 每一层都重新访问这份条件，有利于增加 draft 深度时继续利用 target 信息。并行 block 降低了沿 token 轴反复执行 backbone 的需求，但多层 draft、context KV projection 和更长的 attention 仍然有成本。
 
 ### 4.3 SpecForge：随机 anchor、严格的上下文边界与位置加权 CE
+
+![DFlash 训练流程：冻结 target 提取严格可见上下文，随机 anchor 构造 masked block，以位置加权 CE 训练 draft](img/speculative-diffusion/dflash-training.svg)
+
+根据 [DFlash §4.2 与 Figure 4](https://arxiv.org/pdf/2602.06036v2#page=5)及 [SpecForge block 训练实现][sf-block]简化重绘。图中用一个 anchor 展示数据流，实际训练会同时采样多个 block；最容易漏掉的约束是 **context 的截止位置在 anchor 之前**。冻结 target 与共享词表接口，仍允许损失经过 LM head 回传到 draft。
 
 [`OnlineDFlashModel._forward_draft_blocks()`][sf-block] 负责把训练序列变成多个独立 draft block：
 
@@ -353,22 +361,19 @@ $\gamma_w$ 是位置权重的衰减尺度，这里特意与 proposal length 分�
 
 decode 期主流程为：
 
-```text
-bonus_tokens + prefix_lens
-  → 准备 [anchor, MASK, ...]、positions、临时 cache slots
-  → draft forward 一次
-  → 取 MASK 行的候选
-  → target 验证 [anchor, candidates...]
-  → accept 前缀 + correction/bonus
-  → 仅将已提交 verify 输入的 target hidden 投影写入 draft KV
-  → next_draft_input 携带新 bonus 与有效长度
-```
+![DFlash 推理流程：准备 masked block，一次 draft 与 target verify，按接受前缀提交 KV 并携带新 anchor 进入下一轮](img/speculative-diffusion/dflash-inference.svg)
+
+这张图把论文的一次 drafting 展开为 [SGLang worker][sg-dflash-worker] 中的一轮状态变化。示例接受 `E F`、拒绝 `G`，于是新输出为 `E F G*`；能写回 context 的却是已执行的输入 `D E F`。**新输出的 `G*` 还没有自己的 target hidden**，下一轮通过 `next_draft_input` 携带它及有效前缀长度，再准备 positions 与临时 cache slots。
 
 与 EAGLE 的差别在于，DFlash 不必用自生成状态再跑一条逐 token 的 draft extend 链。它在每轮验证后，把可信 target context 直接物化到每个 draft layer 的 KV 中。[`DFlashAttention.kv_proj_only()` 和 `project_target_hidden()`][sg-dflash-model]是理解这种更新的模型侧入口。
 
 当前 worker 支持共享预分配映射，也有 compact draft cache 的滑窗路径。两种布局改变 KV 的物理组织，却都必须满足：下轮可见的历史只对应 target 已确认的前缀，不能让 noisy block 留下的临时内容冒充可信 context。
 
 ## 5. DSpark：并行 backbone 加轻量序列头，再决定值得验证多长
+
+![DSpark 论文 Figure 1：并行 backbone、轻量序列头、置信度调度与 target 验证构成一轮解码](img/speculative-diffusion/dspark-paper-fig1.png)
+
+图源：[DSpark 论文 v1，Figure 1，PDF 第 5 页](https://arxiv.org/pdf/2607.05147v1#page=5)，直接裁取原图。右侧先生成 `E F G H`，调度器裁掉 `H`；左上角的 target 随后拒绝 `G` 并给出 `G*`。**调度裁剪和验证拒绝是两次不同的决定**，后面的推理图会把原图的环形阅读顺序展开为从左到右的执行顺序。
 
 ### 5.1 为什么并行预测会出现 suffix decay
 
@@ -419,12 +424,9 @@ SpecForge 的 `_build_dspark_labels_and_mask()` 使用 anchor 后的 `1 ... bloc
 
 [`OnlineDSparkModel`][sf-block] 复用 anchor 采样、noise embedding 和 context mask，然后构造：
 
-```text
-target_ids       = [E, F, G, H]
-prev_token_ids   = [D, E, F, G]   ← 训练时取真实前驱
-backbone_hidden  = [h1,h2,h3,h4]
-base_logits      → Markov/RNN correction → draft_logits
-```
+![DSpark 训练流程：并行 backbone 加 teacher-forced 序列头，联合训练 token CE、分布 L1 与 confidence BCE](img/speculative-diffusion/dspark-training.svg)
+
+根据 [DSpark §3.1–3.3](https://arxiv.org/pdf/2607.05147v1)及 [SpecForge objectives][sf-block]重绘。图中 `target_ids=[E,F,G,H]`，`prev_token_ids=[D,E,F,G]`；backbone 同时产出各位置 hidden 与基础 logits，序列头再得到修正后的 draft logits。三个损失框分别回答“词对不对”“分布接不接近”“接受率估得准不准”，STS 则另用留出数据校准。
 
 这里也是 teacher forcing。推理时 `prev_token_ids` 来自 draft 的实际选择，训练 CE 很低并不自动证明自由生成的块内一致性已经足够好。
 
@@ -494,6 +496,10 @@ $$
 这也解释了为何不能只抄一个 `argmax(expected_throughput)` 就宣称调度无损：还必须说明估计来自哪一轮、决策依赖哪些已知量、截断处怎样产生补充 token，以及采样分支怎样使用有效的 $q$。
 
 ### 5.6 SGLang：预算估计、当前块分配与 ragged verify 分开执行
+
+![DSpark 推理流程：并行 backbone 后执行轻量串行修正，调度验证前缀，再由 target 接受或纠错](img/speculative-diffusion/dspark-inference.svg)
+
+沿用论文 Figure 1 的 token 示例，按 [SGLang worker][sg-dspark-worker] 的职责划分简化重绘。图中的串行箭头只属于轻量 head；每个位置都保存实际修正后的 $q$。`H` 因预算没有送去验证，`G` 则送去后被拒绝，两者不能合并成同一个“拒绝长度”。
 
 [`DSparkWorkerV2._forward_decode()`][sg-dspark-worker] 将执行拆给 proposer、planner、verify executor：
 
@@ -572,6 +578,10 @@ $$
 
 selector 不能选择候选集合外的 token，因此还需要改善 late-position recall。DFlash 2 在 attention 和 MLP 子层周围加入 grouped dynamic depthwise convolution。
 
+![DFlash 2 官方 Figure 4：attention 和 MLP 前后的两 tap 动态卷积，在相邻 hidden 之间进行局部混合](img/speculative-diffusion/dflash2-official-fig4.svg)
+
+图源：[DFlash 2 官方技术博客，Figure 4](https://inco.ai/blog/dflash2/#figure-4)。截至本文核对日期，官方项目的 DFlash 2 资料指向这篇技术博客，未找到独立论文 PDF；这里提取其原始 SVG，并固定浅色配色以便独立显示。图中的 `×5 layers` 属于作者展示的模型实例。下半图连接的是各位置的 **hidden 表示**，不是等待前一个位置采样出的 token，因此能保持并行执行。
+
 以两 tap 为例，当前位置读取当前和前一个位置的 hidden：
 
 $$
@@ -592,16 +602,9 @@ SpecForge 没有要求选择一个新的 `training.strategy=dflash2`。当前 [D
 
 训练主线为：
 
-```text
-随机 anchor + masked blocks + target context
-  → 带 convolution 的 DFlash backbone
-  → frozen LM head 得到 unary logits
-  ├─ 全词表 token objective
-  └─ strict unary top-K
-       + teacher-forced 前驱 token
-       → selector scores
-       → 候选集上的 CE
-```
+![DFlash 2 的 SpecForge 训练流程：带卷积 backbone 产生 unary logits，分成全词表 objective 与 strict top-K selector CE 两路](img/speculative-diffusion/dflash2-training.svg)
+
+根据 [SpecForge 的公开训练实现][sf-block]重绘，这是该框架的 recipe，不能当成作者 checkpoint 的完整训练配方。图中两条监督路径各有职责：主 objective 改善候选覆盖，selector CE 改善候选已覆盖时的选择；**真值不在 top-K 中时，跳过的是该位置的 selector 损失，主 objective 仍然有效**。
 
 对真实目标 token $x_j^*$，selector 项可概括为：
 
@@ -627,6 +630,9 @@ SGLang 的 [`DFlash2DraftModel`][sg-dflash-model] 继承 `DFlashDraftModel`，�
 
 `compute_candidates()` 得到 top-K IDs 和 unary scores，`build_lattice()` 并行构造邻接分数，`sample_path()` 返回选出的 token，以及**沿实际路径使用的每一行条件概率 `q_rows`**。
 
+![DFlash 2 推理流程与候选 lattice：并行计算邻接候选分数，从 anchor 逐步选出一条链，再交给 target 验证](img/speculative-diffusion/dflash2-inference.svg)
+
+根据[官方博客 Figure 1 与 selector 说明](https://inco.ai/blog/dflash2/#figure-1)，对照 [`build_lattice()` / `sample_path()`][sg-dflash-model]重绘。为看清关系，下半图只画 3 个位置、每位 3 个候选，候选编号仅作示意；真实 `K` 由 checkpoint 配置决定。细线表示可以提前并行打分的候选对，粗线表示依据已选前驱逐步走出的路径。**target 收到的是粗线上的一条链，不是整张 lattice**；KV 提交仍沿用前面的 DFlash 流程。
 随机验证时，`_selector_sampling_accept()` 将这个稀疏候选分布按 `candidate_ids` scatter 到 target 词表坐标，再交给拒绝采样。候选外的 $q$ 为零，但 target 仍可通过残差分布输出这些 token，因此 top-K proposal 不会直接把最终 target 输出限制在 top-K 内。[worker 中的 proposal 与 acceptance 分支][sg-dflash-worker]将这两者明确分开。
 
 源码还在 `finally` 中把 scatter 的位置清零，因为缓冲区跨轮复用，下轮候选集合可能不同。**“本轮 q 只有 K 个非零位置”同时是数学契约和内存生命周期契约**：若旧位置没有清掉，验证计算的就不再是实际 proposal 分布。

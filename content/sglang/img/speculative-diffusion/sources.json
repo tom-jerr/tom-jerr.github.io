@@ -1,0 +1,38 @@
+[
+  {
+    "file": "dflash-paper-fig2.png",
+    "url": "https://arxiv.org/pdf/2602.06036v2",
+    "figure": "Figure 2",
+    "page": 4,
+    "crop_points": [
+      82,
+      64,
+      516,
+      267
+    ],
+    "source_sha256": "ffa514e6ce180eb1f7a39c49372f3b8170b99f8bc142d4a4daa0f087bf2ceb91",
+    "changes": "Crop from source PDF at 216 dpi; diagram content unchanged."
+  },
+  {
+    "file": "dspark-paper-fig1.png",
+    "url": "https://arxiv.org/pdf/2607.05147v1",
+    "figure": "Figure 1",
+    "page": 5,
+    "crop_points": [
+      92,
+      83,
+      503,
+      350
+    ],
+    "source_sha256": "522036b0cc16ad4678bd7c278dd0a0ab4da31170af7b97c2041067cc09a8289a",
+    "changes": "Crop from source PDF at 216 dpi; diagram content unchanged."
+  },
+  {
+    "file": "dflash2-official-fig4.svg",
+    "url": "https://inco.ai/blog/dflash2/#figure-4",
+    "figure": "Figure 4",
+    "source_sha256": "27fe169efb72321fdeb0b38409d98e4cfa47a5d3892806c43e76a11c13b3329b",
+    "changes": "Extracted inline SVG; resolved light-theme colors and standalone font. Original labels and geometry retained.",
+    "note": "Official technical blog, not an independently published DFlash 2 paper PDF."
+  }
+]

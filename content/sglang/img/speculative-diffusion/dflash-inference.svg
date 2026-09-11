@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="480" viewBox="0 0 1120 480" role="img" aria-labelledby="title desc">
+<title id="title">DFlash 推理：整块并行提出，target 一次验证</title><desc id="desc">例子中 target 已处理 ABC，anchor D 尚未 forward；draft 提出 EFGH；接受 EF，拒绝 G，产生新 anchor G*。</desc>
+<style>text{font-family:Inter, Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif;fill:#172033}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#172033"/></marker></defs>
+<rect width="1120" height="480" fill="white"/>
+<text x="32" y="39" font-size="26" style="fill:#172033" text-anchor="start" font-weight="700">DFlash 推理：整块并行提出，target 一次验证</text>
+<text x="32" y="85" font-size="20" style="fill:#172033" text-anchor="start" font-weight="650">轮初状态</text>
+<rect x="152" y="57" width="44" height="40" rx="6" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5"/>
+<text x="174.0" y="84" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">A</text>
+<rect x="206" y="57" width="44" height="40" rx="6" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5"/>
+<text x="228.0" y="84" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">B</text>
+<rect x="260" y="57" width="44" height="40" rx="6" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5"/>
+<text x="282.0" y="84" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">C</text>
+<text x="330" y="85" font-size="19" style="fill:#172033" text-anchor="start" font-weight="400">已有 target hidden / KV</text>
+<rect x="646" y="57" width="44" height="40" rx="6" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="668.0" y="84" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">D</text>
+<text x="709" y="85" font-size="19" style="fill:#172033" text-anchor="start" font-weight="400">anchor 已确定，尚未送入 target</text>
+<path d="M272,211 L299,211" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M544,211 L571,211" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M816,211 L843,211" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="32" y="150" width="240" height="122" rx="10" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="152.0" y="182" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">准备输入</text>
+<text x="152.0" y="212" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">D  M  M  M  M</text>
+<text x="152.0" y="237" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">历史 context KV 已就绪</text>
+<rect x="304" y="150" width="240" height="122" rx="10" fill="#E2F5F1" stroke="#138A7E" stroke-width="1.5"/>
+<text x="424.0" y="182" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">并行 draft</text>
+<text x="424.0" y="212" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">backbone + LM head</text>
+<text x="424.0" y="237" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">一次提出 E F G H</text>
+<rect x="576" y="150" width="240" height="122" rx="10" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5"/>
+<text x="696.0" y="182" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">并行 target verify</text>
+<text x="696.0" y="212" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">输入 D E F G H</text>
+<text x="696.0" y="237" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">按前缀逐位接受 / 拒绝</text>
+<rect x="848" y="150" width="240" height="122" rx="10" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
+<text x="968.0" y="182" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">提交与下一轮</text>
+<text x="968.0" y="212" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">保留已接受前缀</text>
+<text x="968.0" y="237" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">写入有效 context KV</text>
+<text x="32" y="330" font-size="20" style="fill:#172033" text-anchor="start" font-weight="650">验证示例</text>
+<rect x="152" y="301" width="44" height="40" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
+<text x="174.0" y="328" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">E</text>
+<rect x="206" y="301" width="44" height="40" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
+<text x="228.0" y="328" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">F</text>
+<rect x="260" y="301" width="44" height="40" rx="6" fill="#FDE9E7" stroke="#C05252" stroke-width="1.5"/>
+<text x="282.0" y="328" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">G</text>
+<rect x="314" y="301" width="44" height="40" rx="6" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="336.0" y="328" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">H</text>
+<text x="392" y="330" font-size="19" style="fill:#172033" text-anchor="start" font-weight="400">G 首次拒绝，H 不再接受</text>
+<path d="M652,322 L700,322" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="722" y="301" width="44" height="40" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
+<text x="744.0" y="328" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">E</text>
+<rect x="776" y="301" width="44" height="40" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
+<text x="798.0" y="328" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">F</text>
+<rect x="830" y="301" width="44" height="40" rx="6" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="852.0" y="328" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">G*</text>
+<text x="900" y="330" font-size="19" style="fill:#172033" text-anchor="start" font-weight="400">G* 为新 anchor</text>
+<text x="32" y="399" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">本轮只提交 D、E、F 对应的 target hidden；新采样的 G* 要到下轮才执行 forward。</text>
+<text x="32" y="435" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">若整块全接受，则由最后一个 verify 位置再给出 bonus；随机验证使用实际 proposal q。</text>
+</svg>
