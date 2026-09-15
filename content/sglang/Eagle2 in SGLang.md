@@ -1,7 +1,7 @@
 ---
 title: 从 EAGLE 到 DFlash 2：SGLang 与 SpecForge 的投机解码训练和推理
 created: 2026-01-12
-updated: 2026-09-11
+updated: 2026-09-13
 tags:
   - LLMInference
 description: 沿 EAGLE、EAGLE-2、EAGLE-3、DFlash、DSpark 和 DFlash 2 的演进，解释 draft 的训练目标、数据对齐、推理状态与验证预算，并对照 SpecForge 训练和 SGLang serving 源码串起完整流程。
@@ -495,44 +495,167 @@ $$
 
 这也解释了为何不能只抄一个 `argmax(expected_throughput)` 就宣称调度无损：还必须说明估计来自哪一轮、决策依赖哪些已知量、截断处怎样产生补充 token，以及采样分支怎样使用有效的 $q$。
 
-### 5.6 SGLang：预算估计、当前块分配与 ragged verify 分开执行
+### 5.6 SGLang：host 选预算 K，device 分配当前块，executor 执行验证
 
-![DSpark 推理流程：并行 backbone 后执行轻量串行修正，调度验证前缀，再由 target 接受或纠错](img/speculative-diffusion/dspark-inference.svg)
+**host 队列提供历史预测，用它算出本轮 top-k 的 K；当前候选中究竟选哪 K 个位置，则由 GPU 使用当前 confidence 决定。** 队列不保存下一轮要验证的 token ID，也不把历史 top-k 的请求分配原样搬到本轮。
 
-沿用论文 Figure 1 的 token 示例，按 [SGLang worker][sg-dspark-worker] 的职责划分简化重绘。图中的串行箭头只属于轻量 head；每个位置都保存实际修正后的 $q$。`H` 因预算没有送去验证，`G` 则送去后被拒绝，两者不能合并成同一个“拒绝长度”。
+以下核对的是本文固定的 SGLang `822e73ccddc0`。源码中的具体类名是 `DraftBlockProposer`、`DSparkVerifyPlanner`、`TargetVerifyExecutor`；下文简称 proposer、planner、executor。host 侧还有两个角色：`ConfidenceRelay` 负责把 confidence 搬到 CPU，`HostConfidenceBudgetPlanner` 负责从中选出预算。
 
-[`DSparkWorkerV2._forward_decode()`][sg-dspark-worker] 将执行拆给 proposer、planner、verify executor：
+一轮 decode 在 [`DSparkWorkerV2._forward_decode()`][sg-dspark-worker] 中的实际调用链如下，每跳标注输入与产出（省略 prefill、观测与 mamba 分支）：
 
-```text
-DraftProposer.propose
-  → 并行 backbone
-  → 序列 head + 采样，保存 corrected logits
-  → confidence
-
-VerifyPlanner
-  → resolve_verify_token_budget
-  → schedule_layout：每请求 verify_lens、ragged layout、graph tier
-
-TargetVerifyExecutor
-  → run_compact / run_non_compact
-  → grammar mask
-  → accept_and_finalize
-  → commit_hidden
+```python
+verify_window = alloc_verify_window(...)             # 各位置 position 与 cache 槽位
+proposal = self._proposer.propose(...)               # → draft_block_ids、draft_tokens、
+                                                     #   corrected_logits、draft_hidden、confidence
+if proposal.confidence is None:
+    confidence = planner.compute_confidence_tensor(...)      # confidence head + STS
+verify_token_budget = planner.resolve_verify_token_budget(...)  # overlap：取回预写的 K
+layout = planner.schedule_layout(confidence, budget)  # 当前 top-K → verify_lens → RaggedVerifyLayout
+verify_ids_2d = cat([draft_block_ids[:, :1], draft_tokens])    # anchor + 草稿
+if run_compact:
+    target_verify, hidden = executor.run_compact(layout, ...)   # ragged 行压紧 + graph bucket
+else:
+    target_verify = executor.run_non_compact(...)               # 完整 (bs, W) 链宽
+accept = executor.accept_and_finalize(...)            # → correct_len、bonus、cap_trim_lens、commit_lens
+on_publish(accept.new_seq_lens, confidence)           # → ConfidenceRelay 发布与 ring 写入
+executor.commit_hidden(...)                           # 有效前缀 target hidden → draft context KV
 ```
 
-这里有几处不同于抽象论文伪代码的工程选择。
+三个组件的协同不是"三个对象依次调用"那么简单：**proposer 产出候选与分布，planner 只消费 confidence 与预算决定"验证到哪"，executor 消费前两者的结果执行 target 与接受判定。** 候选 token 和 corrected q 完全绕开 planner——分配只取决于 confidence 分数，不取决于 token 字面值；而 executor 的接受判定必须拿回 proposer 的 q，两者通过 `DraftBlockResult` 交接。
 
-**总预算可以来自历史 confidence。** [`HostConfidenceBudgetPlanner`][sg-dspark-planner] 有滞后队列和 request generation 标记，`compute_verify_token_budget()` 的参数明确叫 `history_survival_probs`。它结合 SPS 或 additive cost table 搜索预算；请求槽位复用后，历史 generation 不匹配时不会直接继承旧请求的预测。
+![SGLang DSpark 一轮 decode：host 用滞后历史选 K，device 上 proposer / planner / executor 接力，发布进入下一轮滞后读取](img/speculative-diffusion/dspark-inference.svg)
 
-**当前块的具体分配由设备侧完成。** `_schedule_verify_lens()` 根据当前 confidence 做累计乘积和 top-k 分配，并同步各 TP rank 的 `verify_lens`。历史数据决定本轮愿意花多少资源，当前数据决定这些资源落到哪些请求。这两级不要混成“直接用当前候选做全局最优长度搜索”。[排序与 tie-breaking 实现][sg-dspark-schedule]独立于候选 token 的字面值。
+图中 host 预算路径与 device 当前块路径在 planner 的 `schedule_layout()` 汇合。箭头表达依赖，不表示实测耗时；overlap 模式下，预算已经在 forward prepare 阶段由 scheduler 调用 `prepare_verify_budget()` 写入 `draft_input.verify_token_budget`，worker 中的 `resolve_verify_token_budget()` 只是取回它。不能按函数在 `_forward_decode()` 中的位置，误认为 host 必须等本轮 proposer 完成才开始算预算。[worker][sg-dspark-worker]、[planner][sg-dspark-planner]
 
-**逻辑少验证必须转化为物理少执行。** `run_compact()` 使用 ragged layout 将不同长度请求的有效行压紧；`run_non_compact()` 则保留规则布局。只有逻辑 mask 变短、计算仍覆盖同样多的 padded rows，并不能自动节省 target 成本。
+之后各小节沿调用链展开：5.6.2–5.6.3 讲历史数据如何在 host 侧定出 K，5.6.4 讲当前数据如何在 device 侧定出归属，5.6.5–5.6.6 讲布局如何变成执行与提交。
 
-**CUDA Graph 带来离散成本。** 实际执行可能向上落到某个 capture tier，SPS 曲线就不是光滑函数。当前 planner 包含 tier 对齐与成本表处理；若成本表未初始化，源码会提示平坦曲线可能退化成 verify-all。[SPS 表][sg-dspark-sps]因此属于执行配置的一部分。
+#### 5.6.1 三个组件分别交付什么
 
-**验证结果包含截断语义。** executor 区分 `correct_len`、`commit_lens` 与 `cap_trim_lens`，并携带 layout cutoff 选取正确的 bonus。随机验证使用 Markov/RNN 修正后的 logits 恢复 $q$；混合 greedy/sampling batch 也有单独分支。不能把这些长度全部解释为“算法猜对几个 token”。[验证 executor][sg-dspark-verify]与[接受 kernel][sg-dspark-accept]共同定义这套接口。
+| 组件 | 输入与工作 | 交给下游的结果 |
+| --- | --- | --- |
+| Proposer | anchor、历史 context、masked block；一次并行 backbone，再执行轻量序列头与采样 | 候选 token、实际采样所用的 corrected logits、draft hidden，以及可选 confidence |
+| Planner | host 历史 confidence 与成本表选 K；device 当前 confidence 分配 K | 含 anchor 的 `verify_lens`、ragged offsets/layout、graph tier |
+| Executor | 候选、layout、target 模型、采样/grammar 配置 | target logits、接受前缀、bonus、新序列长度，以及待提交的有效 hidden/KV 状态 |
 
-这些机制解释了当前 serving 的实现方式，但不能把源码中的 lagged budget、top-k allocation 和 graph tier 等同于论文中某个简化调度器的完整数学证明。修改调度时，需重新检查决策的因果依赖和采样契约，不能仅依靠原论文的 lossless 结论。
+Proposer 将重计算留在并行 backbone，把块内的 `D → E → F → G → H` 依赖放在轻量 Markov/RNN head 上。folded 路径可把 head 修正与采样合并，但随机验证仍必须拿到生成这些候选时实际使用的 $q$。`DraftBlockResult.corrected_logits` 承担这个契约；不能用未修正的 backbone logits 替换它。具体字段也要区分：`draft_hidden_3d` 在 `DraftForwardResult` 中，`DraftProposal` 对外暴露的是 `draft_hidden`，不是同名字段。[proposer][sg-dspark-draft]
+
+如果 proposal 没有直接带回 confidence，worker 会调用 planner 的 `compute_confidence_tensor()` 补算。confidence head 可使用前驱 embedding，并通过 STS 校准；它估计接受概率，不是 target 已经验证出来的真假标签。
+
+#### 5.6.2 历史 confidence 如何到达 host：两个 ring，各有职责
+
+![Confidence relay 的发布、异步复制、两步滞后读取、generation 校验与预算搜索](img/speculative-diffusion/dspark-host-budget.svg)
+
+这里的“host 队列”实际需要拆成 **`ConfidenceRelay` 的 D2H ring** 和 **`HostConfidenceBudgetPlanner` 的可选 carry ring**。前者解决跨设备的数据可见性，后者补足配置要求的历史滞后。[relay 源码][sg-dspark-relay]
+
+1. **发布当前预测。** `_forward_decode()` 完成接受处理后调用 `on_publish(..., confidence=confidence)`。`FutureMap.publish()` 把 confidence scatter 到持久 device buffer，记录 `publish_ready`。发布的是本轮 proposer 的预测，不是本轮 acceptance 的经验均值。
+2. **提交 D2H。** 专用 `fwd_prepare_d2h_stream` 先 `wait_event(publish_ready)`，随后把 confidence buffer 非阻塞复制到 pinned host ring，并记录 `copy_done[slot]`；同一个 slot 还保存 request generation 快照。`publish_ready` 表示生产依赖就绪，`copy_done` 才表示 host 数据可读。
+3. **读取旧槽位，不等最新预测。** CUDA overlap 路径固定 `CONFIDENCE_RELAY_RING_LAG=2`、ring depth 为 3。`resolve()` 选 `(ring_pos - 2) % 3`，通过 `copy_done[slot].query()` 非阻塞检查；ring 尚未积累足够发布，或复制尚未完成，都返回 `None`，不会在这里 `synchronize()` 等待。
+4. **映射当前请求。** 从历史快照中按当前 `req_pool_indices_cpu` 取行，所以 batch 重排不要求沿用历史 batch 的行号。随后用 generation 判定这一行是不是同一代请求。
+5. **必要时再延迟。** host planner 配置 `lag_steps=max(env,1)`，该版本环境变量默认 2；`carry_steps=max(lag_steps-relay_lag_steps,0)`。默认 overlap 已由 relay 提供两步滞后，carry 长度为 0。若配置为 4，则 host 另外保留 2 个 carry 槽；每次读取旧 confidence/generation，再覆盖该槽并推进游标。[host planner][sg-dspark-planner]
+
+`compute_budget()` 内部依次执行 `_shift_to_lag()`（carry_steps>0 时读写 carry 槽，否则原样返回 relay 已滞后的数据）、`_two_steps_prior_survival()`（对滞后 confidence 逐请求 cumprod，并按 generation 过滤）与 `compute_verify_token_budget()`（下一小节）。函数名里的 `two_steps` 是历史命名，真正滞后几步由 `lag_steps` 配置决定。
+
+在连续发布、同一请求持续 decode 的简化时序中：
+
+```text
+publish c0 → ring_pos=1：还没有可读历史
+publish c1 → ring_pos=2：resolve 读 slot 0，即 c0（须 copy_done）
+publish c2 → ring_pos=3：resolve 读 slot 1，即 c1（须 copy_done）
+```
+
+这表示准备下一轮时保留两步的 relay 距离，**不是每条请求无条件拥有精确的“前两次 decode”记录**：slot 按发布序列推进，continuous batching 中请求可能暂停、退出或重新加入。generation 防止跨请求污染，并不证明同一代记录足够新鲜。
+
+若旧 slot 属于 generation 7，而当前请求已是 generation 8，`_two_steps_prior_survival()` 返回该行全 1 的 survival。carry 冷启动的 generation 为 0，也走同一回退。这是乐观预测，会倾向于给新请求探索空间；它既不是全 0，也不是同步拉取当前 confidence。另一方面，relay 返回 `None` 时预算本身是 `None`，planner 无法进行这次动态 top-k，走其完整/统一布局回退；不要把两种冷启动合并成一个分支。
+
+**这里没有对多轮 confidence 做滑动平均。** 避免当前 GPU→CPU 同步进入调度关键路径，是由 event/query 和预计算时序可以推导出的工程收益；把滞后解释为“为消除 TP 浮点噪声而跨步平滑”没有这段源码支持。源码对同一条 D2H 机制的注释写得很直接：“don't sync the schedule stream; gate a private stream on the publish event and copy into the static pinned buffer”——confidence ring 复用了同一个 `fwd_prepare_d2h_stream` 与 `publish_ready` event，读旧槽位时只用 `copy_done.query()` 非阻塞检查，读不到就放弃本轮动态调度。[relay 源码][sg-dspark-relay] 关闭 overlap 时，`compute_budget_sync()` 确实同步复制 confidence 到 CPU，但 `relay_lag_steps=0` 会使 host carry 补足配置的 lag，因此也不能直接断言它使用当前快照决定当前预算。
+
+#### 5.6.3 host 如何从历史预测算出 K
+
+令 $R$ 为当前请求数，默认每请求至少执行一个 anchor 行。用 $K$ 表示额外草稿预算，用 $M$ 表示 target 输入行数，避免把两者都写成 B：
+
+$$
+M=R+K,\qquad A^{\mathrm{hist}}_{r,j}=\prod_{i=1}^{j}c^{\mathrm{hist}}_{r,i}.
+$$
+
+`compute_verify_token_budget()` 将历史 survival 展平，过滤低于 `survival_eps` 的分数，降序排列为 $a_1\ge\cdots\ge a_n$，然后一次累计求和，评估所有前缀预算：
+
+$$
+\widehat N(K)=R+\sum_{i=1}^{K}a_i,\qquad
+K^*=\arg\max_{0\le K\le n}\widehat N(K)\operatorname{SPS}(R+K).
+$$
+
+若使用 additive cost table，则改成 $\widehat N(K)/\widehat T(R,R+K)$。因此 host 确实做了一次历史分数排序，但只输出最佳**数量** `budget=K*`，不会把这次排序的请求/位置索引交给 device。[预算搜索][sg-dspark-planner]
+
+下面是说明算法的假设数字，不是 benchmark。设两个请求各提出三个草稿，历史 survival 为 `[0.9,0.6,0.2]` 与 `[0.8,0.5,0.1]`，排序结果为 `[0.9,0.8,0.6,0.5,0.2,0.1]`。
+
+| K | target 行数 R+K | 预测输出 N | 假设 SPS | 预测 token/s |
+| --- | --- | --- | --- | --- |
+| 0 | 2 | 2.0 | 100 | 200 |
+| 1 | 3 | 2.9 | 95 | 275.5 |
+| 2 | 4 | 3.7 | 90 | 333 |
+| 3 | 5 | 4.3 | 85 | 365.5 |
+| 4 | 6 | 4.8 | 80 | **384** |
+| 5 | 7 | 5.0 | 65 | 325 |
+| 6 | 8 | 5.1 | 55 | 280.5 |
+
+host 因而选 $K=4$。它回答“愿意多验证四个草稿”，没有回答“当前两个请求各分几个”。
+
+#### 5.6.4 device 用当前 survival 分配 K，而不是复用历史赢家
+
+假设同一轮当前 survival 已变成请求 A 的 `[0.95,0.90,0.85]`、请求 B 的 `[0.70,0.30,0.10]`。GPU 的 global top-4 选中 A 的三个位置及 B 的第一个位置，于是：
+
+```text
+历史 top-4 的归属：A 两个、B 两个 → 只用于估算 K 的收益
+当前 top-4 的归属：A 三个、B 一个 → 真正决定本轮布局
+selected_extra = [3, 1]
+verify_lens    = [4, 2]   # 每请求 +1 个 anchor
+有效 target 行数 M = 6
+```
+
+默认 `min_verify_len=1` 时，源码相当于 `verify_lens=clamp(1+selected_extra,1,max_len)`。候选窗口、epsilon、上下界都会影响最终有效行数；一般应理解为预算上界，而不是任何配置下都严格等于 $R+K$。
+
+排序优先级是 **survival 降序 → 位置升序 → 请求索引升序**。Torch 参考路径通过多次 stable `argsort` 实现，CUDA 路径使用对应 Triton kernel。累计乘积单调不增，配合位置优先打破平分，才保证一个请求选到的是前缀；这不是依赖 `torch.topk` 默认稳定性的保证。“独立于 token 字面值”指不拿 token ID 当平分规则，并不意味着 confidence 与已采样前驱无关。[调度 kernel][sg-dspark-schedule]
+
+CUDA 路径的 `_schedule_topk_selected_extra_kernel` 不加载任何 token ID：它对展平后的 survival 与 (request, position) 索引做两两比较累计排名，排位条件就是 `gt | (eq & (pos_lt | (pos_eq & req_lt)))`——survival 更大者在前，相等时位置靠前者在前，再相等时请求索引小者在前；排名小于 budget 的位置经 `atomic_add` 计入各请求的入选数。所以“tie-breaking 与 token 字面值无关”在这个内核里是结构性的：它根本没有 token 输入。
+
+TP 的数值微差是另一层问题：相等分数的确定性规则不能消除不相等分数的跨 rank 偏差。因此 `_schedule_verify_lens()` 用 `SpecTpSyncSite.DSPARK_PLAN` 同步最终 `verify_lens`；`SpecTpSync.sync()` 的实现就是 `tp_group.broadcast(values, src=0)`，且默认 `SGLANG_SPEC_TP_SYNC=all` 开启——**`verify_lens` 确实从 rank 0 广播**。该快照的 `resolve_verify_token_budget()` 明确写着 **`No collective`**，注释给出的理由是预算只从已经广播的 draft token（经由 confidence）、复制的 generation 与静态 SPS 表导出。draft 采样在 `DSPARK_DRAFT_GREEDY / SAMPLE / MULTINOMIAL` 站点逐 token 广播过，是这条一致性链条的起点，所以预算不需要再广播一次。不能把这两件事混成“每轮 host budget 都从 TP0 广播”。graph tier 若由本地 budget 派生，也依赖这些输入一致，不能指望后面的 lens 同步修复所有上游 shape 分歧；关闭同步后，`SGLANG_DSPARK_DEBUG_CONFIDENCE_PREFIX_SCHEDULER=1` 的日志会直接暴露同一请求在不同 rank 上 `verify_len` 分歧，这正是广播存在的意义。DP attention 还有独立的 tier gather 路径。[planner][sg-dspark-planner]
+
+#### 5.6.5 ragged layout 把预算变成实际执行 shape
+
+设三个请求的 `verify_lens=[4,2,6]`，这里每个长度都**包含 anchor**。额外草稿预算为 $3+1+5=9$，有效 target 行数为 $M=12$；不能把 12 同时当成 top-k 的 K。
+
+Compact 路径将有效行按 offset `[0,4,6,12]` 压紧，并一并构造 position、cache location 与 attention metadata。若 CUDA Graph bucket 为 `[8,16,32]`，12 个有效行可能 replay 16 行的 graph。**多出的 4 行不属于请求的有效输出，但不能据此声称它们完全不执行计算**：dense MLP 等算子可能仍覆盖 bucket 行，实际节省要按所用 graph/kernel 衡量。non-compact 路径则把完整 `verify_ids_2d` 展平，保留配置的固定链宽 `verify_num_draft_tokens`，不是自动缩成当前最大 `verify_len`。[executor][sg-dspark-verify]
+
+capture 期的槽位分布本身也是不均匀的：[`build_capture_verify_lens()`][sg-ragged-verify] 把 total 按 `[base+1]*rem + [base]*(num_slots-rem)` 分配，例如 42 个 token、8 个请求槽位对应 `[6,6,5,5,5,5,5,5]`，而不是 8×6=48。因此任何要求“每个请求恰好一个等长 block”的模型组件都不能默认 ragged capture 槽位均匀——这类 `num_tokens == bs * block_size` 式假设必须由组件自己声明并检查，调度器不会替它保证；反过来，capture 布局是否可用也取决于各 attention backend 对 ragged 序列长度的支持声明。
+
+这也是成本表必须与模型、硬件、backend、graph tiers 和并行配置匹配的原因。同一 bucket 内继续裁剪，可能只减少有效 token 而不减少 replay 成本。该版本还提供可选 `_budget_aligned_to_graph_tier()`：将预算补到既定 tier 可容纳的额度，再让当前 top-k 填入更多真实草稿，默认不开启。这里的物理成本是离散的，但 host 的表查询/插值只是它的近似模型，不应把两者说成完全相同的精确阶梯函数。
+
+未初始化 SPS 表时，该版本的 compact planner 可直接缓存 verify-all 统一布局，绕过每轮动态调度。从数学上看，若 SPS 恒定、候选 survival 为正，增加 K 只增加预测收益，最大预算自然最优；若收益为零、被 epsilon 过滤或出现平分，不能额外声称 argmax 必定唯一落在最后一项。capture-derived SPS 可用于建立实测成本，但本节不把未经本地复测的启动耗时写成通用性能数据。[SPS 配置][sg-dspark-sps]
+
+#### 5.6.6 接受、预算截断和 KV 提交：必须保持一位偏移
+
+继续使用 anchor D、草稿 E F G H 的例子。若 `verify_len=4`，target 输入是 `[D,E,F,G]`：D 行的 logits 检验 E，E 行检验 F，F 行检验 G，最后 G 行供前缀全通过时产生 bonus H*。H 没有作为第四个草稿进入接受判定。
+
+若 E、F 接受而 G 拒绝，则输出 `[E,F,G*]`，下一轮 anchor 是 G*。此时 target 已有的有效输入行是 `[D,E,F]`，提交这三行的 KV/hidden；**G* 虽然已输出，却还没有经过 target forward，因此并没有 G* 的 KV 可以提交。** `commit_lens=correct_len+1=3` 中的这个 1，在输出计数中对应 bonus，在本轮 KV 行计数中对应旧 anchor D。
+
+`cap_trim_lens` 更不能简单定义成“被预算删掉的所有后缀”。[接受 kernel][sg-dspark-accept] 的直接定义是：
+
+```python
+ell = verify_lens - 1
+capped = minimum(raw_correct_len, ell)
+cap_trim_lens = raw_correct_len - capped
+correct_len = capped
+commit_lens = correct_len + 1
+```
+
+这是接受处理产生的长度经 layout cutoff 裁剪后的**差值**。例如 G 已经拒绝，`raw_correct_len=2`、`ell=3`，trim 为 0；即使 H 没验证，trim 也不会因此自动变成 1。若 raw 长度为 4、`ell=3`，trim 才是 1。compact 路径在规则缓冲区中恢复/填充 logits 后，raw 值还包含布局处理语义，不能将它当成对未执行位置的真实接受测量。
+
+因此至少要分开记录：预算允许的前缀长度、target 接受长度、cutoff 调整量，以及实际提交长度。worker 还返回 `block_accept_lens=commit_lens+cap_trim_lens`，这正说明它们服务于不同的下游口径，不能全部写成“猜对几个”。bonus 必须按 cutoff 后的正确位置选取，compact offset 也必须保持请求归属。
+
+执行顺序上，target forward 后应用 grammar mask，再做接受处理；带 live grammar 的 batch 不进入图内接受 epilogue，因为图内私有 buffer 不会自动收到外部 mask。folded draft 也不意味着可以 folded accept：该版本图内接受是 greedy，sampling batch 仍走 eager 接受，并由 corrected logits 恢复 $q$。接受结果的 `correct_len`、bonus、trim 在 finalization 前同步到 TP ranks，随后发布 confidence 并提交有效状态，组成下一轮的 anchor/context 输入。[worker][sg-dspark-worker]、[executor][sg-dspark-verify]
+
+这三个组件的协同最终形成两条跨轮依赖：**已接受 hidden/KV 与 bonus 供下一轮生成；当前 confidence 经 relay 供后续轮估计预算。** 当前块分配不会回写本轮已经选定的历史预算，但这是一种降低同步依赖的实现选择；改成当前数据选预算不必然产生循环，却会改变同步成本与截断决策的统计依赖，必须重新检查 sampling 的因果条件，不能直接沿用论文的 lossless 结论。
+
 
 ## 6. DFlash 2：把块内一致性拆成候选选择与局部表示建模
 
@@ -571,6 +694,12 @@ q_j(b\mid d_{j-1})
 $$
 
 **当前实现不是 Viterbi，也不是最大化整条路径分数之和的全局搜索。** SGLang 的 `sample_path()` 和 SpecForge 的 `greedy_path()` 从 anchor 出发，用当前已选前驱查下一行。这保留了清晰的条件 proposal 分布，也避免把未来位置的分数倒灌进当前 token 的决策。
+
+把 walk 逐步展开就是：**step 0 的前驱固定为 anchor**，对 $\mathcal C_1$ 的 $K$ 个候选算 $S_1(a,b)$ 取 argmax 得 $d_1$；step 1 把前驱换成刚选出的 $d_1$，再对 $\mathcal C_2$ 取 argmax 得 $d_2$；依此类推。虽然 $K\times K$ 的邻接分数全部预先算出，每步实际只读取“前驱 = 已选 token”的那一行，其余行留给未走到的分支。SGLang 的 `_follow_maps()` 用 `maps[:, edge].gather(-1, index)` 顺序推进，经 `torch.compile` 后仍是串行步进；CUDA 路径则整段交给 `selector_walk_triton`。greedy 与 sampling batch 共用同一张 captured graph——源码注释明确这是 “selected rather than branched” 的选择式分支，而不是在 graph 里做控制流。
+
+采样语义在 `sample_path()` 里也值得单独看。$T>0$ 的行用逆 CDF：`uniforms.ge(probs.cumsum(-1)).sum(-1).clamp_max(K-1)`，即按累计概率落在哪个区间选哪个候选；greedy 行直接 argmax，并且其 q 被替换为路径索引上的 one-hot（`torch.where(greedy_mask, one_hot(path_indices), q_rows)`）。所以随机验证拿到的 q 不是某个笼统的 softmax，而是**沿实际路径逐步使用的每一行条件概率**：step 0 是 anchor 行下的初始分布，之后各行按已选前驱 gather 出实际走过的那一行。
+
+`build_lattice()` 的形状细节也能对上公式：`unary_logits[:, :, None] + einsum("blpr,blcr->blpc", pred * hidden[:, :, None], keys)`，其中 `hidden` 是 `hidden_projection` 后的表示，`keys` 是后继 codebook 对当前候选的 gather，`pred` 在 step 0 用 anchor 行扩展成 $K$ 份、step $j>0$ 用上一位置的 `candidate_ids`。两张 codebook 在 TP 上是**逐 rank 复制**的，不像 LM head 那样切分——候选 ID 是全局 gather 的，任一 rank 都可能需要任意一行。[selector 实现][sg-dflash-model]
 
 与 DSpark 的全词表 logit correction 相比，DFlash 2 把额外序列决策收缩到候选集；但 top-K 本身仍需要从词表 logits 中选取，codebook 也仍按词表大小存储。**候选评分只处理 $K$ 个词，不等于整个 drafter 的参数和计算都与 $V$ 无关。**
 
@@ -620,6 +749,8 @@ $$
 2. **前驱使用真实训练 token。** 推理却使用刚选出的 token，因此 teacher-forced selector accuracy 和实际走完整条路径的 acceptance 必须分别看。
 3. **`selector_stop_gradient` 可配置，默认是 false。** 设为 true 时，只对 selector objective 输入的 hidden/unary logits 做 detach；主 DFlash loss 仍正常更新 backbone。warmup/ramp 也是可选配置，不能描述成必然先训 DFlash、再冻结它单独训 selector。
 
+模型初始化还有一条兼容性设计：[SpecForge 的 `CandidateSelector`][sf-dflash2-model] 对前驱 codebook 用正态初始化，后继 codebook 却零初始化，注释给出的理由是让 transition 以 no-op 起步——“a fresh DFlash2 selector is numerically identical to the unary DFlash proposal”；后继因子先学到非零值，另外两个双线性因子才收到信号。这与 6.3 里卷积的 identity/zero 初始化是同一策略：新组件启用时先不改变原 DFlash 的行为，避免随机初始化扰乱 backbone；也意味着在 DFlash1 权重上挂接新 selector 不改变初始行为，热启动微调因此是安全的。
+
 训练指标因此至少要拆成候选 coverage、候选已覆盖时的 conditional accuracy，以及真实 greedy walk 的 serving accepted length。把“正确答案已经在候选里时的选择准确率”当成端到端准确率，会系统性忽视 recall 的上限。[objective 与诊断实现][sf-block]已经分别统计这些量。
 
 当前 [Qwen3.8-27B 的示例配置][sf-dflash2-config]使用 `block_size=8`、`selector_top_k=16`、`selector_rank=256`、两 tap、group size 16，并声明了 sliding attention。这些值用于说明**配置如何驱动实现**，不应推广成 DFlash 2 必须使用的固定网络。
@@ -632,7 +763,7 @@ SGLang 的 [`DFlash2DraftModel`][sg-dflash-model] 继承 `DFlashDraftModel`，�
 
 ![DFlash 2 推理流程与候选 lattice：并行计算邻接候选分数，从 anchor 逐步选出一条链，再交给 target 验证](img/speculative-diffusion/dflash2-inference.svg)
 
-根据[官方博客 Figure 1 与 selector 说明](https://inco.ai/blog/dflash2/#figure-1)，对照 [`build_lattice()` / `sample_path()`][sg-dflash-model]重绘。为看清关系，下半图只画 3 个位置、每位 3 个候选，候选编号仅作示意；真实 `K` 由 checkpoint 配置决定。细线表示可以提前并行打分的候选对，粗线表示依据已选前驱逐步走出的路径。**target 收到的是粗线上的一条链，不是整张 lattice**；KV 提交仍沿用前面的 DFlash 流程。
+根据[官方博客 Figure 1 与 selector 说明](https://inco.ai/blog/dflash2/#figure-1)，对照 [`build_lattice()` / `sample_path()`][sg-dflash-model]重绘。为看清关系，下半图只画 3 个位置、每位 3 个候选，候选编号仅作示意；真实 `K` 由 checkpoint 配置决定。细线表示可以提前并行打分的候选对，粗线表示依据已选前驱逐步走出的路径。图右补充了 walk 的逐步语义：step 0 前驱固定为 anchor；greedy 行取 argmax 且 q 为 one-hot，$T>0$ 行沿逆 CDF 采样且 q 为该行实际概率。**target 收到的是粗线上的一条链，不是整张 lattice**；KV 提交仍沿用前面的 DFlash 流程。
 随机验证时，`_selector_sampling_accept()` 将这个稀疏候选分布按 `candidate_ids` scatter 到 target 词表坐标，再交给拒绝采样。候选外的 $q$ 为零，但 target 仍可通过残差分布输出这些 token，因此 top-K proposal 不会直接把最终 target 输出限制在 top-K 内。[worker 中的 proposal 与 acceptance 分支][sg-dflash-worker]将这两者明确分开。
 
 源码还在 `finally` 中把 scatter 的位置清零，因为缓冲区跨轮复用，下轮候选集合可能不同。**“本轮 q 只有 K 个非零位置”同时是数学契约和内存生命周期契约**：若旧位置没有清掉，验证计算的就不再是实际 proposal 分布。
@@ -1008,6 +1139,7 @@ SpecForge 负责把这些训练目标落实为数据契约、loss、梯度与 ch
 [sg-dspark-verify]: https://github.com/sgl-project/sglang/blob/822e73ccddc0297e9901042d4aab7fcccc11f1a6/python/sglang/srt/speculative/dspark_components/dspark_verify.py
 [sg-dspark-accept]: https://github.com/sgl-project/sglang/blob/822e73ccddc0297e9901042d4aab7fcccc11f1a6/python/sglang/kernels/ops/speculative/dspark/dspark_accept.py
 [sg-dspark-schedule]: https://github.com/sgl-project/sglang/blob/822e73ccddc0297e9901042d4aab7fcccc11f1a6/python/sglang/kernels/ops/speculative/dspark/dspark_schedule.py
+[sg-ragged-verify]: https://github.com/sgl-project/sglang/blob/822e73ccddc0297e9901042d4aab7fcccc11f1a6/python/sglang/srt/speculative/ragged_verify.py
 [sg-dspark-config]: https://github.com/sgl-project/sglang/blob/822e73ccddc0297e9901042d4aab7fcccc11f1a6/python/sglang/srt/speculative/dspark_components/dspark_config.py
 [sg-batch]: https://github.com/sgl-project/sglang/blob/822e73ccddc0297e9901042d4aab7fcccc11f1a6/python/sglang/srt/managers/schedule_batch.py
 [sg-result]: https://github.com/sgl-project/sglang/blob/822e73ccddc0297e9901042d4aab7fcccc11f1a6/python/sglang/srt/managers/scheduler_components/batch_result_processor.py
@@ -1025,3 +1157,5 @@ SpecForge 负责把这些训练目标落实为数据契约、loss、梯度与 ch
 [sf-runtime]: https://github.com/sgl-project/SpecForge/blob/3d64e7a61f5fcc7f7d78ba6164c881f831943947/specforge/runtime/ARCHITECTURE.md
 [sf-training]: https://github.com/sgl-project/SpecForge/blob/3d64e7a61f5fcc7f7d78ba6164c881f831943947/specforge/training/DESIGN.md
 [sf-inference]: https://github.com/sgl-project/SpecForge/blob/3d64e7a61f5fcc7f7d78ba6164c881f831943947/specforge/inference/DESIGN.md
+
+[sg-dspark-relay]: https://github.com/sgl-project/sglang/blob/822e73ccddc0297e9901042d4aab7fcccc11f1a6/python/sglang/srt/managers/overlap_utils.py

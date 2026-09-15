@@ -1,63 +1,68 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="520" viewBox="0 0 1120 520" role="img" aria-labelledby="title desc">
-<title id="title">DSpark 推理：重计算并行，串行只留给轻量头</title><desc id="desc">先并行得到各位置表示，轻量序列头按已选前驱生成候选与 confidence；调度器裁剪后缀，target 验证保留前缀。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="768" viewBox="0 0 1120 768" role="img" aria-labelledby="title desc">
+<title id="title">SGLang DSpark：一轮 decode 的三个组件与滞后预算</title><desc id="desc">host 在 forward prepare 用滞后两槽的历史 confidence 选出预算 K；当前 decode 中 proposer 提出候选，planner 分配 K 并定布局，executor 验证、接受并提交；发布的结果进入下一轮的滞后读取。</desc>
 <style>text{font-family:Inter, Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif;fill:#172033}</style>
 <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#172033"/></marker></defs>
-<rect width="1120" height="520" fill="white"/>
-<text x="32" y="39" font-size="26" style="fill:#172033" text-anchor="start" font-weight="700">DSpark 推理：重计算并行，串行只留给轻量头</text>
-<text x="32" y="80" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">沿用论文 Figure 1 的示例：已有 A B C，anchor 为 D；候选 E F G H。</text>
-<path d="M272,189 L299,189" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<path d="M544,189 L571,189" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<path d="M816,189 L843,189" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<rect x="32" y="128" width="240" height="122" rx="10" fill="#E2F5F1" stroke="#138A7E" stroke-width="1.5"/>
-<text x="152.0" y="160" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">并行 backbone</text>
-<text x="152.0" y="190" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">输入 D M M M</text>
-<text x="152.0" y="215" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">一次生成所有 h 与 U</text>
-<rect x="304" y="128" width="240" height="122" rx="10" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
-<text x="424.0" y="160" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">轻量串行头</text>
-<text x="424.0" y="190" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">D → E → F → G → H</text>
-<text x="424.0" y="215" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">保存修正 q 与 confidence</text>
-<rect x="576" y="128" width="240" height="122" rx="10" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
-<text x="696.0" y="160" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">决定验证长度</text>
-<text x="696.0" y="190" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">confidence + 成本曲线</text>
-<text x="696.0" y="215" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">每请求保留一个前缀</text>
-<rect x="848" y="128" width="240" height="122" rx="10" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5"/>
-<text x="968.0" y="160" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">Target verify</text>
-<text x="968.0" y="190" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">仅验证调度后的前缀</text>
-<text x="968.0" y="215" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">提交接受结果与新 anchor</text>
-<text x="32" y="313" font-size="20" style="fill:#172033" text-anchor="start" font-weight="650">调度示例</text>
-<rect x="152" y="285" width="44" height="40" rx="6" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
-<text x="174.0" y="312" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">E</text>
-<rect x="206" y="285" width="44" height="40" rx="6" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
-<text x="228.0" y="312" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">F</text>
-<rect x="260" y="285" width="44" height="40" rx="6" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
-<text x="282.0" y="312" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">G</text>
-<rect x="314" y="285" width="44" height="40" rx="6" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
-<text x="336.0" y="312" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">H</text>
-<path d="M376,306 L424,306" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<rect x="448" y="285" width="44" height="40" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
-<text x="470.0" y="312" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">E</text>
-<rect x="502" y="285" width="44" height="40" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
-<text x="524.0" y="312" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">F</text>
-<rect x="556" y="285" width="44" height="40" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
-<text x="578.0" y="312" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">G</text>
-<rect x="644" y="285" width="44" height="40" rx="6" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
-<text x="666.0" y="312" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">H</text>
-<text x="709" y="313" font-size="19" style="fill:#172033" text-anchor="start" font-weight="400">H 被调度裁掉，尚未接受 target 检验</text>
-<text x="32" y="380" font-size="20" style="fill:#172033" text-anchor="start" font-weight="650">验证示例</text>
-<rect x="152" y="352" width="44" height="40" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
-<text x="174.0" y="379" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">E</text>
-<rect x="206" y="352" width="44" height="40" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
-<text x="228.0" y="379" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">F</text>
-<rect x="260" y="352" width="44" height="40" rx="6" fill="#FDE9E7" stroke="#C05252" stroke-width="1.5"/>
-<text x="282.0" y="379" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">G</text>
-<path d="M322,373 L424,373" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
-<rect x="448" y="352" width="44" height="40" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
-<text x="470.0" y="379" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">E</text>
-<rect x="502" y="352" width="44" height="40" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
-<text x="524.0" y="379" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">F</text>
-<rect x="556" y="352" width="44" height="40" rx="6" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
-<text x="578.0" y="379" font-size="20" style="fill:#172033" text-anchor="middle" font-weight="600">G*</text>
-<text x="644" y="380" font-size="19" style="fill:#172033" text-anchor="start" font-weight="400">G 被 target 拒绝，G* 成为下一轮 anchor</text>
-<text x="32" y="449" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">SGLang 的总预算可来自历史 confidence；当前 confidence 再决定各请求的具体长度。</text>
-<text x="32" y="485" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">少验证要落实为有效行布局；随机验证使用修正后的 q，并检查截断决策的因果依赖。</text>
+<rect width="1120" height="768" fill="white"/>
+<text x="32" y="39" font-size="26" style="fill:#172033" text-anchor="start" font-weight="700">SGLang DSpark：一轮 decode 的三个组件与滞后预算</text>
+<text x="32" y="78" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">固定源码 822e73ccddc0 · 箭头表示数据依赖，框宽不代表耗时 · 默认 min_verify_len = 1</text>
+<text x="32" y="119" font-size="20" style="fill:#172033" text-anchor="start" font-weight="650">Host / forward prepare（overlap 下先于本轮 GPU 执行）</text>
+<path d="M272,193 L299,193" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M544,193 L571,193" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M816,193 L843,193" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="32" y="137" width="240" height="112" rx="10" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="152.0" y="169" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">滞后读取</text>
+<text x="152.0" y="199" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">slot = (ring_pos − 2) % 3</text>
+<text x="152.0" y="224" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">copy_done.query() 非阻塞</text>
+<text x="152" y="244" font-size="16" style="fill:#637083" text-anchor="middle" font-weight="400">ConfidenceRelay.resolve()</text>
+<rect x="304" y="137" width="240" height="112" rx="10" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="424.0" y="169" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">历史置信度预算</text>
+<text x="424.0" y="199" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">_shift_to_lag → cumprod</text>
+<text x="424.0" y="224" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">generation 失效 → 全 1</text>
+<text x="424" y="244" font-size="16" style="fill:#637083" text-anchor="middle" font-weight="400">compute_budget()</text>
+<rect x="576" y="137" width="240" height="112" rx="10" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="696.0" y="169" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">预算搜索</text>
+<text x="696.0" y="199" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">展平过滤排序 → 前缀和</text>
+<text x="696.0" y="224" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">argmax(τ̂ × SPS) → K</text>
+<text x="696" y="244" font-size="16" style="fill:#637083" text-anchor="middle" font-weight="400">compute_verify_token_budget()</text>
+<rect x="848" y="137" width="240" height="112" rx="10" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="968.0" y="169" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">预算预先写入</text>
+<text x="968.0" y="199" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">draft_input</text>
+<text x="968.0" y="224" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">verify_token_budget = K</text>
+<text x="968" y="244" font-size="16" style="fill:#637083" text-anchor="middle" font-weight="400">overlap 下由 scheduler 调用</text>
+<text x="32" y="330" font-size="20" style="fill:#172033" text-anchor="start" font-weight="650">Device / 当前 decode step（DSparkWorkerV2._forward_decode）</text>
+<path d="M968,249 L968,290 L434,290 L434,345" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="610" y="282" font-size="17" style="fill:#172033" text-anchor="start" font-weight="400">预先写入的 K；本轮无 host↔device 同步</text>
+<path d="M285,420 L302,420" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M560,420 L577,420" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M835,420 L852,420" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="32" y="345" width="253" height="150" rx="10" fill="#E2F5F1" stroke="#138A7E" stroke-width="1.5"/>
+<text x="158.5" y="377" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">Proposer</text>
+<text x="158.5" y="407" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">一次并行 backbone</text>
+<text x="158.5" y="432" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">序列头修正 → 采样</text>
+<text x="158" y="460" font-size="16" style="fill:#637083" text-anchor="middle" font-weight="400">propose()</text>
+<rect x="307" y="345" width="253" height="150" rx="10" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
+<text x="433.5" y="377" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">Planner</text>
+<text x="433.5" y="407" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">取回预算 → top-K 分配</text>
+<text x="433.5" y="432" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">verify_lens + TP 广播</text>
+<text x="433" y="462" font-size="15" style="fill:#637083" text-anchor="middle" font-weight="400">resolve_verify_token_budget()</text>
+<text x="433" y="478" font-size="15" style="fill:#637083" text-anchor="middle" font-weight="400">schedule_layout()</text>
+<rect x="582" y="345" width="253" height="150" rx="10" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="1.5"/>
+<text x="708.5" y="377" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">Executor · verify</text>
+<text x="708.5" y="407" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">ragged 行压紧 → bucket</text>
+<text x="708.5" y="432" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">grammar mask → eager</text>
+<text x="708" y="460" font-size="15" style="fill:#637083" text-anchor="middle" font-weight="400">run_compact / run_non_compact</text>
+<rect x="857" y="345" width="253" height="150" rx="10" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1.5"/>
+<text x="983.5" y="377" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">接受与提交</text>
+<text x="983.5" y="407" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">accept_and_finalize</text>
+<text x="983.5" y="432" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">commit_hidden → KV 注入</text>
+<text x="983.5" y="457" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">on_publish → relay</text>
+<path d="M158,495 L158,585 L983,585 L983,495" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="168" y="566" font-size="17" style="fill:#172033" text-anchor="start" font-weight="400">候选 token 与 corrected q → 接受判定，不参与分配</text>
+<path d="M1108,420 L1108,92 L152,92 L152,137" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<text x="520" y="100" font-size="17" style="fill:#172033" text-anchor="start" font-weight="400">on_publish(confidence) → D2H ring 写入；下一轮 prepare 滞后读取</text>
+<text x="32" y="615" font-size="21" style="fill:#172033" text-anchor="start" font-weight="650">示例：R = 2，host 从历史分数选出 K = 4</text>
+<text x="32" y="647" font-size="20" style="fill:#172033" text-anchor="start" font-weight="400">当前 survival 分配 [3,1] → verify_lens = [4,2]（各含 1 个 anchor）</text>
+<text x="32" y="679" font-size="20" style="fill:#172033" text-anchor="start" font-weight="400">target 有效行 M = R + K = 6；capture bucket 可能 replay 8 行</text>
+<text x="32" y="720" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">预算决定额度，当前块决定归属；两者在 schedule_layout() 汇合。发布的是本轮置信度，读回的是滞后两槽的历史。</text>
+<text x="32" y="752" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">TP：draft 采样与 verify_lens 分别经 DSPARK_DRAFT_* / DSPARK_PLAN 从 rank 0 广播；预算本身无 collective。</text>
 </svg>

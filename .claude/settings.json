@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/lzy/.claude/skills/tom-jerr-blog-writing/references/**)",
+      "PowerShell($dirs = @\\('e:\\\\blog\\\\draft','e:\\\\blog\\\\tmp','e:\\\\sglang','d:\\\\sglang','e:\\\\src\\\\sglang','e:\\\\code\\\\sglang','C:\\\\Users\\\\lzy\\\\sglang','e:\\\\blog\\\\.cache'\\); foreach \\($d in $dirs\\) { if \\(Test-Path $d\\) { Write-Host \"EXISTS: $d\"; Get-ChildItem $d -Directory -ErrorAction SilentlyContinue | Select-Object -First 10 Name } else { Write-Host \"missing: $d\" } })",
+      "Read(//e//**)",
+      "Read(//c/Users/lzy/Desktop/CV/tmp/sglang-tom/**)",
+      "Read(//c/Users/lzy/Desktop/CV/tmp/dspark-source/**)",
+      "PowerShell($base = \"https://raw.githubusercontent.com/sgl-project/sglang/822e73ccddc0297e9901042d4aab7fcccc11f1a6/python/sglang\"; $files = @{ \"spec_tp_sync.py\" = \"srt/speculative/spec_tp_sync.py\"; \"ragged_verify.py\" = \"srt/speculative/ragged_verify.py\"; \"dflash.py\" = \"srt/models/dflash.py\" }; foreach \\($k in $files.Keys\\) { try { Invoke-WebRequest -Uri \"$base/$\\($files[$k]\\)\" -OutFile \"C:\\\\Users\\\\lzy\\\\Desktop\\\\CV\\\\tmp\\\\dspark-source\\\\$k\" -ErrorAction Stop; Write-Host \"OK: $k\" } catch { Write-Host \"FAIL: $k : $\\($_.Exception.Message\\)\" } })"
+    ]
+  }
+}

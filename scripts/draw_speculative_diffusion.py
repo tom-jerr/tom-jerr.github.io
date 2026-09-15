@@ -143,27 +143,13 @@ def dspark_training():
 
 
 def dspark_inference():
-    f = Figure("DSpark 推理：重计算并行，串行只留给轻量头", "先并行得到各位置表示，轻量序列头按已选前驱生成候选与 confidence；调度器裁剪后缀，target 验证保留前缀。", 520)
-    f.note(80, "沿用论文 Figure 1 的示例：已有 A B C，anchor 为 D；候选 E F G H。")
-    f.chain(189)
-    f.box(32, 128, "并行 backbone", ["输入 D M M M", "一次生成所有 h 与 U"], "draft", h=122)
-    f.box(304, 128, "轻量串行头", ["D → E → F → G → H", "保存修正 q 与 confidence"], "seq", h=122)
-    f.box(576, 128, "决定验证长度", ["confidence + 成本曲线", "每请求保留一个前缀"], "anchor", h=122)
-    f.box(848, 128, "Target verify", ["仅验证调度后的前缀", "提交接受结果与新 anchor"], "target", h=122)
-    f.text(32, 313, "调度示例", 20, weight=650)
-    f.tokens(152, 285, ["E", "F", "G", "H"], ["seq"] * 4)
-    f.arrow((376, 306), (424, 306))
-    f.tokens(448, 285, ["E", "F", "G"], ["accept"] * 3)
-    f.tokens(644, 285, ["H"], ["neutral"])
-    f.text(709, 313, "H 被调度裁掉，尚未接受 target 检验", 19)
-    f.text(32, 380, "验证示例", 20, weight=650)
-    f.tokens(152, 352, ["E", "F", "G"], ["accept", "accept", "reject"])
-    f.arrow((322, 373), (424, 373))
-    f.tokens(448, 352, ["E", "F", "G*"], ["accept", "accept", "anchor"])
-    f.text(644, 380, "G 被 target 拒绝，G* 成为下一轮 anchor", 19)
-    f.note(449, "SGLang 的总预算可来自历史 confidence；当前 confidence 再决定各请求的具体长度。")
-    f.note(485, "少验证要落实为有效行布局；随机验证使用修正后的 q，并检查截断决策的因果依赖。")
-    return f
+    from draw_dspark_execution import inference
+    return inference(Figure)
+
+
+def dspark_host_budget():
+    from draw_dspark_execution import host_budget
+    return host_budget(Figure)
 
 
 def dflash2_training():
@@ -185,7 +171,7 @@ def dflash2_training():
 
 
 def dflash2_inference():
-    f = Figure("DFlash 2 推理：先并行打分，再走一条候选路径", "带卷积 backbone 一次生成 unary logits；邻接候选对并行评分；从 anchor 出发因果 walk，只有选出的一条链送入 target。", 590)
+    f = Figure("DFlash 2 推理：先并行打分，再走一条候选路径", "带卷积 backbone 一次生成 unary logits；邻接候选对并行评分；从 anchor 出发因果 walk，只有选出的一条链送入 target。", 630)
     f.chain(179)
     f.box(32, 123, "带卷积的 draft", ["一次 block forward", "hidden 局部混合也并行"], "draft")
     f.box(304, 123, "保留候选", ["每个位置 unary top-K", "候选集合已经确定"], "neutral")
@@ -213,8 +199,11 @@ def dflash2_inference():
     f.text(871, 362, "所选链", 20, weight=650)
     f.text(871, 399, "E2 → F1 → G2", 21)
     f.text(871, 435, "随链保存实际 q", 19)
-    f.note(525, "这里是逐步 greedy / sampling walk，不是 Viterbi 全局最优路径，也不是 target 验证整张候选树。")
-    f.note(561, "候选外 proposal q = 0；随机拒绝后的残差采样仍可输出 top-K 以外的 target token。")
+    f.text(871, 471, "step 0 前驱 = anchor", 17)
+    f.text(871, 497, "greedy：argmax，q=one-hot", 17)
+    f.text(871, 523, "T>0：逆 CDF 采样，q = 行概率", 17)
+    f.note(565, "这里是逐步 greedy / sampling walk，不是 Viterbi 全局最优路径，也不是 target 验证整张候选树。")
+    f.note(601, "候选外 proposal q = 0；随机拒绝后的残差采样仍可输出 top-K 以外的 target token。")
     return f
 
 
@@ -223,6 +212,7 @@ FIGURES = {
     "dflash-inference.svg": dflash_inference,
     "dspark-training.svg": dspark_training,
     "dspark-inference.svg": dspark_inference,
+    "dspark-host-budget.svg": dspark_host_budget,
     "dflash2-training.svg": dflash2_training,
     "dflash2-inference.svg": dflash2_inference,
 }

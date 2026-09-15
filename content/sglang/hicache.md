@@ -25,9 +25,77 @@ HiCache 看上去只是把 KV Cache 从 GPU 扩展到 CPU 和外部存储，但�
 
 本文基于 SGLang `02d9b3060ab4a691af283d48587bf2ab07787909` 源码快照分析，主体是普通 MHA/MLA 的 cache-mode `HiRadixCache`。主线之后再说明 Hybrid Controller、HiSparse、Host Memory 与后台线程的边界。源码仍在快速演进，文中的函数位置和默认值都属于这个固定快照。
 
-## 先看完整主干：这些事件到底发生在什么时候
+## 先看完整主干
 
 下面这张图把请求从进入 Scheduler 到读出历史 KV、执行 Forward，再到新 KV 写回 L2/L3 的生命周期放在同一条时间线上。它不是按耗时比例绘制，而是回答“谁先发生、在哪个线程发生、哪个完成点才能被下一阶段消费”。
+```
+HTTP request
+    │
+    ▼
+Scheduler.handle_generate_request()
+    │
+    ▼
+_add_request_to_queue()
+    │
+    ├── _prefetch_kvcache(req)
+    │      │
+    │      ├── init_next_round_input()
+    │      │      └── match L1 / L2 HiRadixTree
+    │      │
+    │      └── tree_cache.prefetch_from_storage()
+    │              │
+    │              ▼
+    │        CacheController.prefetch()
+    │              │
+    │              └──────────── L3 async query/read ────────────┐
+    │                                                            │
+    ▼                                                            │
+waiting_queue                                                    │
+    │                                                            │
+    │ Scheduler 每个 tick                                        │
+    ▼                                                            │
+get_next_batch_to_run()                                          │
+    │                                                            │
+    ├── tree_cache.check_hicache_events() ◄──── completion queues ┘
+    │
+    ▼
+get_new_batch_prefill()
+    │
+    ├── waiting req
+    │
+    ├── check_prefetch_progress(req.rid)
+    │         │
+    │         ├── unfinished → skip req
+    │         │
+    │         └── done / terminate
+    │                  │
+    │                  ▼
+    │          _handle_prefetch_result()
+    │                  │
+    │                  ▼
+    │          _insert_helper_host()
+    │                  │
+    │                  ▼
+    │        L3 KV 正式出现在 HiRadixTree L2
+    │
+    ▼
+init_next_round_input()/match_prefix()
+    │
+    ▼
+PrefillAdder KV budget admission
+    │
+    ▼
+L2 → L1 load_back()
+    │
+    ▼
+GPU forward
+    │
+    ├── cache_unfinished_req()
+    └── cache_finished_req()
+             │
+             ▼
+       新 KV 发布成共享 prefix
+```
 
 ![](img/hicache-merged-lifecycle.svg)
 
@@ -62,12 +130,41 @@ HiCache 的组件关系如下。图中用 containment 表示长期归属，用�
 Scheduler 不直接执行所有 I/O，但它决定 I/O 何时对请求可见：
 
 - 新请求入队前调用 `_prefetch_kvcache()`，建立本地 L1/L2 基线并提交 L3 query。
-- 每轮 `get_next_batch_to_run()` 前后调用 `tree_cache.check_hicache_events()`，消费 query、prefetch、load、write 和 backup 的完成通知。
 - `get_new_batch_prefill()` 遍历 waiting queue，调用 `check_prefetch_progress()` 决定继续等待、接受部分结果还是撤销。
-- `PrefillAdder` 完成 KV budget gate；只有 admission 成功的请求才允许申请 L1 slot 并发起 L2 load。
+  - `PrefillAdder` 完成 KV budget gate；只有 admission 成功的请求才允许申请 L1 slot 并发起 L2 load。
+- 每轮 `get_next_batch_to_run()` 调用 `tree_cache.check_hicache_events()`，先通过 all-reduce 同步 MIN ready event 数量，然后分布消费 query、prefetch、load、write 和 backup 的完成通知。
+    ```python
+    storage_queue_sizes = (
+      cache_controller.prefetch_hit_queue.qsize(),
+      cache_controller.ack_prefetch_queue.qsize(),
+      cache_controller.ack_backup_queue.qsize(),
+      cache_controller.host_mem_release_queue.qsize(),
+    )
+
+    ready_counts = torch.tensor(
+        [
+            write_finish_count,
+            load_finish_count,
+            *storage_queue_sizes,
+        ],
+        dtype=torch.int,
+    )
+
+    self._all_reduce(
+        ready_counts,
+        torch.distributed.ReduceOp.MIN,
+    )
+    ```
 - Forward 后由 `cache_unfinished_req()` 或 `cache_finished_req()` 把新 KV 注册为可共享 prefix。
 
 这种设计把“操作已提交”和“状态可以发布”分开：Worker 可以并行推进，但 Radix Tree 仍由 Scheduler 串行修改。
+| 函数                           | 粒度    | 作用                                   |
+| ------------------------------ | ------- | -------------------------------------- |
+| `check_hicache_events()`       | 全局    | poll 各种 async completion             |
+| `check_prefetch_progress(rid)` | request | 判断这个 req 的 L3 prefetch 能不能收口 |
+| `_handle_prefetch_result()`    | request | 把完成/部分完成数据 commit 到 tree     |
+| `_insert_helper_host()`        | tree    | 真正建立 L2 radix nodes                |
+
 
 ### HiRadixCache：一棵树同时描述 L1 与 L2
 
@@ -121,8 +218,6 @@ L1 与 L2 不是两棵独立的 Prefix Tree。一次 radix walk 已经确定 tok
 - `page_head` 把 head 维度提前，服务异构 TP 等需要按 head 切分的场景。
 
 L1 与 L2 之间因此不总是简单 `cudaMemcpyAsync`。`direct` backend 更接近 indexing/copy，`kernel` backend 则用 GPU-assisted I/O kernel 完成 layout transform。
-
-这里的最小复用单元由 Prefix Cache 语义决定：普通 MHA/MLA 的一个完整 page 要包含所有必需 layer 的 KV。单独搬回某一层可以用于 pipeline，但不能把“某层存在”当成整个 prefix page 命中。
 
 ### Storage Backend 与 Global KV Manager
 
@@ -300,7 +395,7 @@ L3→L2：读取并发布 host-only nodes
 
 省略第二次 match，Storage bytes 虽然已经在 Host，`PrefillAdder` 仍会按旧 prefix 长度做预算，甚至重复计算已经拉回的数据。
 
-### Prefetch stop policy：完成并不总是等于“全部完成”
+### Prefetch stop policy
 
 `--hicache-storage-prefetch-policy` 决定 Scheduler 再次看到请求时如何处理未完成 prefetch：
 
@@ -386,7 +481,7 @@ Forward 产生的新 KV 首先写入请求拥有的 L1 GPU slots。要让其他�
 - Prefill 完成进入 Decode 时，也会缓存已完成的 Prefill prefix。
 - 请求最终结束时，`cache_finished_req()` 插入 `effective_kv_committed_len()` 范围内的 token/KV，并释放重复部分、非对齐尾部与 request slot。
 
-因此“请求结束后才写缓存”并不准确。长 Prefill 会逐 chunk 建立共享 prefix；Decode 已提交的 KV 通常在请求完成时进入 finished cache。何时从 L1 继续写向 L2/L3，则由写策略决定。
+长 Prefill 会逐 chunk 建立共享 prefix；Decode 已提交的 KV 通常在请求完成时进入 finished cache。何时从 L1 继续写向 L2/L3，则由写策略决定。
 
 ### 三种写策略
 

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+<title id="title">H100 SXM 的计算与数据路径</title><desc id="desc">左侧为 HBM 和全 GPU 共享的 L2，右侧展开一个 SM 的四个子分区；普通 load 与 TMA 走不同的寄存器供给路径。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#52606d"/></marker></defs>
+<rect width="1200" height="700" fill="white"/>
+<text x="40" y="43" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="27" font-weight="700" fill="#263238">H100 SXM：沿数据路径理解硬件</text>
+<text x="40" y="74" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" font-weight="400" fill="#607080">逻辑示意；右侧只展开 132 个 SM 中的一个，箭头表示主要读取方向。</text>
+<rect x="35" y="112" width="340" height="482" rx="7" fill="#fafbfc" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="58" y="147" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="21" font-weight="700" fill="#263238">GPU 共享的存储层次</text>
+<rect x="65" y="179" width="280" height="96" rx="7" fill="#e9eefb" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="205" y="211" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="22" font-weight="700" fill="#263238">HBM3 · 80 GB</text>
+<text x="205" y="243" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" font-weight="400" fill="#263238">SXM 标称最高 3.35 TB/s</text>
+<polyline points="205,276 205,333" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="222" y="310" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">内存控制器</text>
+<rect x="65" y="335" width="280" height="111" rx="7" fill="#e1f3ef" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="205" y="369" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="23" font-weight="700" fill="#263238">L2 · 50 MB</text>
+<text x="205" y="400" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" font-weight="400" fill="#263238">分区缓存 / SM 间数据复用</text>
+<text x="205" y="426" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">实际路径还包含片上互连</text>
+<text x="58" y="495" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" font-weight="400" fill="#263238">global / local 是地址空间语义。</text>
+<text x="58" y="525" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" font-weight="400" fill="#263238">local 并不代表片上存储；</text>
+<text x="58" y="555" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" font-weight="400" fill="#263238">cache hit 也不代表没有端口成本。</text>
+<rect x="433" y="112" width="732" height="482" rx="7" fill="#fafbfc" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="458" y="147" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="21" font-weight="700" fill="#263238">一个 SM：4 个 SMSP + 共享的数据存储</text>
+<rect x="456" y="172" width="159" height="208" rx="7" fill="white" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="535.5" y="201" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" font-weight="700" fill="#263238">SMSP 0</text>
+<text x="535.5" y="238" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Warp Scheduler</text>
+<text x="535.5" y="270" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Register File</text>
+<text x="535.5" y="306" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">FP / INT / LSU</text>
+<text x="535.5" y="343" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Tensor Core 等</text>
+<polyline points="535.5,417 535.5,382" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="630" y="172" width="159" height="208" rx="7" fill="white" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="709.5" y="201" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" font-weight="700" fill="#263238">SMSP 1</text>
+<text x="709.5" y="238" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Warp Scheduler</text>
+<text x="709.5" y="270" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Register File</text>
+<text x="709.5" y="306" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">FP / INT / LSU</text>
+<text x="709.5" y="343" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Tensor Core 等</text>
+<polyline points="709.5,417 709.5,382" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="804" y="172" width="159" height="208" rx="7" fill="white" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="883.5" y="201" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" font-weight="700" fill="#263238">SMSP 2</text>
+<text x="883.5" y="238" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Warp Scheduler</text>
+<text x="883.5" y="270" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Register File</text>
+<text x="883.5" y="306" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">FP / INT / LSU</text>
+<text x="883.5" y="343" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Tensor Core 等</text>
+<polyline points="883.5,417 883.5,382" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="978" y="172" width="159" height="208" rx="7" fill="white" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="1057.5" y="201" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" font-weight="700" fill="#263238">SMSP 3</text>
+<text x="1057.5" y="238" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Warp Scheduler</text>
+<text x="1057.5" y="270" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Register File</text>
+<text x="1057.5" y="306" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">FP / INT / LSU</text>
+<text x="1057.5" y="343" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Tensor Core 等</text>
+<polyline points="1057.5,417 1057.5,382" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="456" y="421" width="681" height="106" rx="7" fill="#e1f3ef" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="796" y="455" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="22" font-weight="700" fill="#263238">统一 L1 / Shared 存储资源：256 KiB</text>
+<text x="796" y="486" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" font-weight="400" fill="#263238">普通 load 可经 L1；Shared 由软件管理，按 bank 组织</text>
+<text x="796" y="513" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">Shared 每 SM 最多 228 KiB；WGMMA 可直接读取 Shared operand</text>
+<polyline points="346,374 400,374 400,452 454,452" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="394" y="349" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" font-weight="400" fill="#263238">load</text>
+<polyline points="346,417 390,417 390,561 700,561 700,529" fill="none" stroke="#52606d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<text x="755" y="568" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">TMA：L2 → Shared，省去显式寄存器中转</text>
+<text x="42" y="639" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" font-weight="400" fill="#263238">发射指令 ≠ 指令完成。普通 load 的结果要返回寄存器；TMA/WGMMA 还需要各自的完成协议。</text>
+<text x="42" y="672" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#607080">来源：NVIDIA H100 白皮书、Hopper Tuning Guide、PTX；布局为本文重绘。</text>
+</svg>

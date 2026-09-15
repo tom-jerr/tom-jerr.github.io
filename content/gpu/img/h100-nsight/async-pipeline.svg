@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="660" viewBox="0 0 1200 660" role="img" aria-labelledby="title desc">
+<title id="title">从立即等待到双缓冲流水</title><desc id="desc">上半部每次搬运后立即等待并计算；下半部让下一个 tile 的搬运与当前 tile 的计算重叠，只有消费者读完后才能复用 buffer。时间长度仅示意。</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#52606d"/></marker></defs>
+<rect width="1200" height="660" fill="white"/>
+<text x="40" y="43" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="26" font-weight="700" fill="#263238">异步 API 只有和独立工作重叠，才能隐藏等待</text>
+<text x="40" y="74" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" font-weight="400" fill="#607080">时间轴仅表示依赖与重叠，不代表 H100 实测 cycle 或加速比。</text>
+<text x="40" y="124" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="21" font-weight="700" fill="#263238">每轮立即等待</text>
+<rect x="175" y="148" width="165" height="50" rx="7" fill="#e9eefb" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="257.5" y="180" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" font-weight="600" fill="#263238">TMA tile 0</text>
+<rect x="365" y="148" width="205" height="50" rx="7" fill="#e1f3ef" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="467.5" y="180" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" font-weight="600" fill="#263238">MMA tile 0</text>
+<rect x="595" y="148" width="165" height="50" rx="7" fill="#e9eefb" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="677.5" y="180" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" font-weight="600" fill="#263238">TMA tile 1</text>
+<rect x="785" y="148" width="205" height="50" rx="7" fill="#e1f3ef" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="887.5" y="180" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" font-weight="600" fill="#263238">MMA tile 1</text>
+<polyline points="340,173 363,173" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="570,173 593,173" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="760,173 783,173" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="180" y="229" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" font-weight="400" fill="#263238">copy 完成后才能读；MMA 读完之后才能覆写同一缓冲区。</text>
+<text x="40" y="298" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="21" font-weight="700" fill="#263238">两个 Shared slot</text>
+<text x="42" y="354" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" font-weight="700" fill="#263238">TMA</text>
+<text x="42" y="441" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" font-weight="700" fill="#263238">Tensor Core</text>
+<rect x="175" y="325" width="165" height="50" rx="7" fill="#e9eefb" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="257.5" y="357" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" font-weight="600" fill="#263238">tile 0 → slot 0</text>
+<rect x="365" y="325" width="165" height="50" rx="7" fill="#e9eefb" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="447.5" y="357" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" font-weight="600" fill="#263238">tile 1 → slot 1</text>
+<rect x="620" y="325" width="165" height="50" rx="7" fill="#e9eefb" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="702.5" y="357" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" font-weight="600" fill="#263238">tile 2 → slot 0</text>
+<rect x="365" y="412" width="230" height="50" rx="7" fill="#e1f3ef" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="480.0" y="444" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" font-weight="600" fill="#263238">MMA tile 0</text>
+<rect x="620" y="412" width="230" height="50" rx="7" fill="#e1f3ef" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="735.0" y="444" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" font-weight="600" fill="#263238">MMA tile 1</text>
+<rect x="875" y="412" width="230" height="50" rx="7" fill="#e1f3ef" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="990.0" y="444" text-anchor="middle" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" font-weight="600" fill="#263238">MMA tile 2</text>
+<polyline points="340,351 352,351 352,437 363,437" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="530,375 530,394 610,394 610,437 618,437" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="785,375 785,394 865,394 865,437 873,437" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="595,437 607,437 607,350 618,350" fill="none" stroke="#52606d" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<text x="790" y="351" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" font-weight="400" fill="#263238">← slot 0 复用前，tile 0 的读取已完成</text>
+<polyline points="176,491 1126,491" fill="none" stroke="#52606d" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1127" y="519" text-anchor="end" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" font-weight="400" fill="#263238">时间</text>
+<rect x="40" y="545" width="1120" height="77" rx="7" fill="#fafbfc" stroke="#b3bec7" stroke-width="1.4"/>
+<text x="60" y="574" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" font-weight="600" fill="#263238">两种完成条件：ready = 数据已经写好；reusable = 消费者已经不再读取。</text>
+<text x="60" y="603" text-anchor="start" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" font-weight="400" fill="#263238">生产者提前搬下一块；消费者只等待当前块；group 深度、Shared stage 数和寄存器预算共同约束流水。</text>
+</svg>

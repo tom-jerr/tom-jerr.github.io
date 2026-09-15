@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="625" viewBox="0 0 1120 625" role="img" aria-labelledby="title desc">
+<title id="title">Host 如何得到 top-k 的 K：relay 可见性与历史搜索</title><desc id="desc">三槽 pinned host ring 默认两步滞后；query 完成后按请求槽位读取，generation 失效取 ones，成本搜索只返回数量 K。</desc>
+<style>text{font-family:Inter, Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif;fill:#172033}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#172033"/></marker></defs>
+<rect width="1120" height="625" fill="white"/>
+<text x="32" y="39" font-size="26" style="fill:#172033" text-anchor="start" font-weight="700">Host 如何得到 top-k 的 K：relay 可见性与历史搜索</text>
+<text x="32" y="78" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">ConfidenceRelay 搬运预测；HostConfidenceBudgetPlanner 补足 lag 并选预算；GPU 决定当前赢家。</text>
+<path d="M272,167 L299,167" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M544,167 L571,167" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M816,167 L843,167" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="32" y="111" width="240" height="112" rx="10" fill="#E2F5F1" stroke="#138A7E" stroke-width="1.5"/>
+<text x="152.0" y="143" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">GPU publish</text>
+<text x="152.0" y="173" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">scatter 当前 confidence</text>
+<text x="152.0" y="198" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">记录 publish_ready</text>
+<rect x="304" y="111" width="240" height="112" rx="10" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="424.0" y="143" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">专用 D2H stream</text>
+<text x="424.0" y="173" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">wait_event → async copy</text>
+<text x="424.0" y="198" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">issue_ring_copy + copy_done</text>
+<rect x="576" y="111" width="240" height="112" rx="10" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="696.0" y="143" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">Host 非阻塞读取</text>
+<text x="696.0" y="173" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">slot = (ring_pos − 2) % 3</text>
+<text x="696.0" y="198" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">copy_done.query()</text>
+<text x="696" y="218" font-size="16" style="fill:#637083" text-anchor="middle" font-weight="400">ConfidenceRelay.resolve()</text>
+<rect x="848" y="111" width="240" height="112" rx="10" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="968.0" y="143" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">历史请求行</text>
+<text x="968.0" y="173" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">按 req_pool_indices 取行</text>
+<text x="968.0" y="198" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">携带 generation 快照</text>
+<text x="32" y="276" font-size="21" style="fill:#172033" text-anchor="start" font-weight="650">默认 ring depth = 3，relay lag = 2</text>
+<text x="32" y="311" font-size="20" style="fill:#172033" text-anchor="start" font-weight="400">发布 c0：pos=1 → None</text>
+<text x="32" y="345" font-size="20" style="fill:#172033" text-anchor="start" font-weight="400">发布 c1：pos=2 → 读 c0</text>
+<text x="32" y="379" font-size="20" style="fill:#172033" text-anchor="start" font-weight="400">发布 c2：pos=3 → 读 c1</text>
+<text x="389" y="311" font-size="20" style="fill:#172033" text-anchor="start" font-weight="400">query 未完成 → None</text>
+<text x="389" y="345" font-size="20" style="fill:#172033" text-anchor="start" font-weight="400">预算不可用 → 布局回退</text>
+<text x="389" y="379" font-size="20" style="fill:#172033" text-anchor="start" font-weight="400">不在这里等待当前 GPU</text>
+<path d="M968,223 L968,405 L152,405 L152,435" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M272,491 L299,491" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M544,491 L571,491" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M816,491 L843,491" fill="none" stroke="#172033" stroke-width="1.6" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="32" y="435" width="240" height="112" rx="10" fill="#F3F5F8" stroke="#CAD3E1" stroke-width="1.5"/>
+<text x="152.0" y="467" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">可选 host carry</text>
+<text x="152.0" y="497" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">长度 max(lag − relay, 0)</text>
+<text x="152.0" y="522" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">默认 overlap：无需追加</text>
+<text x="152" y="542" font-size="16" style="fill:#637083" text-anchor="middle" font-weight="400">_shift_to_lag()</text>
+<rect x="304" y="435" width="240" height="112" rx="10" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="424.0" y="467" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">generation 校验</text>
+<text x="424.0" y="497" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">匹配 → cumprod(history)</text>
+<text x="424.0" y="522" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">失效 → survival 全 1</text>
+<text x="424" y="542" font-size="16" style="fill:#637083" text-anchor="middle" font-weight="400">_two_steps_prior_survival()</text>
+<rect x="576" y="435" width="240" height="112" rx="10" fill="#FFF2D6" stroke="#B47815" stroke-width="1.5"/>
+<text x="696.0" y="467" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">历史收益 × SPS</text>
+<text x="696.0" y="497" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">展平过滤排序 → 前缀和</text>
+<text x="696.0" y="522" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">argmax(τ̂ × SPS) → K</text>
+<text x="696" y="542" font-size="16" style="fill:#637083" text-anchor="middle" font-weight="400">compute_verify_token_budget()</text>
+<rect x="848" y="435" width="240" height="112" rx="10" fill="#EEE9FF" stroke="#7656D8" stroke-width="1.5"/>
+<text x="968.0" y="467" font-size="22" style="fill:#172033" text-anchor="middle" font-weight="650">当前 GPU top-K</text>
+<text x="968.0" y="497" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">使用本轮 survival</text>
+<text x="968.0" y="522" font-size="19" style="fill:#172033" text-anchor="middle" font-weight="400">重新决定请求 / 位置归属</text>
+<text x="968" y="542" font-size="16" style="fill:#637083" text-anchor="middle" font-weight="400">ScheduleVerifyLensTopk.execute()</text>
+<text x="32" y="593" font-size="19" style="fill:#637083" text-anchor="start" font-weight="400">K 是额外草稿数；默认 target 总行数为 R + K。历史排序索引不会作为当前分配结果传递。</text>
+</svg>
