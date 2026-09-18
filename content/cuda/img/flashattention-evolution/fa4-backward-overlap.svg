@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1340" height="540" viewBox="0 0 1340 540" role="img" aria-labelledby="title desc">
+<title id="title">FA4 backward overlap</title><desc id="desc">1-CTA 主循环：S_j、dK_(j-1)、dQ_(j-1)、dP_j、dV_j；softmax 重算与上一迭代的梯度 MMA 重叠。</desc>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 Z" fill="#637381"/></marker></defs>
+<rect width="1340" height="540" fill="white"/>
+<text x="32" y="39" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="26" text-anchor="start" font-weight="700" fill="#263238">FA4 backward · 用上一轮的梯度 MMA 覆盖本轮 softmax</text>
+<text x="32" y="69" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="start" font-weight="400" fill="#586975">1-CTA 稳态的逻辑调度；j 表示固定 KV tile 下扫描的 Q tile。2-CTA 的 dP / dQ 顺序另有调整。</text>
+<text x="185" y="163" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="end" font-weight="700" fill="#263238">Tensor Core</text>
+<path d="M210 181 L1280 181" fill="none" stroke="#637381" stroke-width="1.3" stroke-dasharray="4 5"/>
+<text x="185" y="276" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="end" font-weight="700" fill="#263238">标量 / MUFU</text>
+<path d="M210 294 L1280 294" fill="none" stroke="#637381" stroke-width="1.3" stroke-dasharray="4 5"/>
+<rect x="218" y="133" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="267.0" y="161" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">Sⱼ</text>
+<rect x="321" y="133" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="370.0" y="161" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">dKⱼ₋₁</text>
+<rect x="424" y="133" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="473.0" y="161" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">dQⱼ₋₁</text>
+<rect x="527" y="133" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="576.0" y="161" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">dPⱼ</text>
+<rect x="630" y="133" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="679.0" y="161" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">dVⱼ</text>
+<rect x="733" y="133" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="782.0" y="161" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">Sⱼ₊₁</text>
+<rect x="836" y="133" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="885.0" y="161" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">dKⱼ</text>
+<rect x="939" y="133" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="988.0" y="161" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">dQⱼ</text>
+<rect x="1042" y="133" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="1091.0" y="161" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">dPⱼ₊₁</text>
+<rect x="1145" y="133" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="1194.0" y="161" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">dVⱼ₊₁</text>
+<rect x="321" y="246" width="201" height="44" rx="6" fill="#fff0cc" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="421.5" y="274" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">exp(Sⱼ − LSE) → Pⱼ</text>
+<rect x="630" y="246" width="98" height="44" rx="6" fill="#fff0cc" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="679.0" y="274" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">dSⱼ</text>
+<rect x="836" y="246" width="201" height="44" rx="6" fill="#fff0cc" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="936.5" y="274" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">exp(Sⱼ₊₁ − LSE) → Pⱼ₊₁</text>
+<rect x="1145" y="246" width="98" height="44" rx="6" fill="#fff0cc" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="1194.0" y="274" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">dSⱼ₊₁</text>
+<path d="M318 177 L318 243" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path d="M627 177 L627 243" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path d="M833 177 L833 243" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path d="M1142 177 L1142 243" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<path d="M218 329 L1280 329" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="1280" y="353" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" text-anchor="end" font-weight="400" fill="#586975">逻辑时间 →（非实测比例）</text>
+<text x="32" y="397" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="20" text-anchor="start" font-weight="400" fill="#263238">TMEM 长期保留：dK、dV；轮转区：S / P，以及 dP / dS / dQ。</text>
+<text x="32" y="434" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="start" font-weight="400" fill="#263238">覆盖旧名字之前，必须完成读取 / staging / reduction；图中不展开这些 buffer 交接。</text>
+<text x="32" y="483" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="start" font-weight="400" fill="#586975">prologue 先产生第一轮 P、dP、dS；tail 排空最后的 dK / dQ。不能直接删掉首尾。</text>
+</svg>

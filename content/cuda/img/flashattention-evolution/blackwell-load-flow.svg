@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="440" viewBox="0 0 1440 440" role="img" aria-labelledby="title desc">
+<title id="title">Blackwell SM100 · TMA load：保留 G2S 路径，扩展 CTA-pair 完成通知</title><desc id="desc">普通 1-CTA load 仍类似 Hopper；图下重点说明 .cta_group::2，不把它画成自动搬两份数据。 .cta_group::2：load 的 complete_tx 可通知 destination CTA 或其 peer CTA 中的 mbarrier。</desc>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 Z" fill="#637381"/></marker></defs>
+<rect width="1440" height="440" fill="white"/>
+<text x="32" y="39" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="26" text-anchor="start" font-weight="700" fill="#263238">Blackwell SM100 · TMA load：保留 G2S 路径，扩展 CTA-pair 完成通知</text>
+<text x="32" y="69" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="start" font-weight="400" fill="#586975">普通 1-CTA load 仍类似 Hopper；图下重点说明 .cta_group::2，不把它画成自动搬两份数据。</text>
+<rect x="159" y="96" width="570" height="43" rx="6" fill="#f4f5f7" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="444" y="123" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">一个 producer thread → cp.async.bulk.tensor</text>
+<path d="M444 139 L444 176" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)" stroke-dasharray="4 5"/>
+<rect x="40" y="180" width="256" height="84" rx="6" fill="#f4f5f7" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="168" y="211" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="middle" font-weight="700" fill="#263238">HBM / L2</text>
+<text x="168" y="244" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">global tensor</text>
+<path d="M297 221 L313 221" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="305" y="286" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" text-anchor="middle" font-weight="400" fill="#263238">TMA 取数</text>
+<rect x="316" y="180" width="256" height="84" rx="6" fill="#e1f3ef" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="444" y="211" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="middle" font-weight="700" fill="#263238">TMA 搬运单元</text>
+<text x="444" y="244" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">tensor map + coordinates</text>
+<path d="M573 221 L589 221" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="581" y="286" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" text-anchor="middle" font-weight="400" fill="#263238">仍然先写 SMEM</text>
+<rect x="592" y="180" width="256" height="84" rx="6" fill="#e1f3ef" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="720" y="211" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="middle" font-weight="700" fill="#263238">Shared Memory</text>
+<text x="720" y="244" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">选定 destination CTA</text>
+<path d="M849 221 L865 221" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="857" y="286" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" text-anchor="middle" font-weight="400" fill="#263238">等待需要的 operand</text>
+<rect x="868" y="180" width="256" height="84" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="996" y="211" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="middle" font-weight="700" fill="#263238">第 5 代 Tensor Core</text>
+<text x="996" y="244" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">tcgen05.mma / CTA pair</text>
+<path d="M1125 221 L1141 221" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="1133" y="286" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" text-anchor="middle" font-weight="400" fill="#263238">MMA 写入 TMEM</text>
+<rect x="1144" y="180" width="256" height="84" rx="6" fill="#e1f3ef" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="1272" y="211" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="middle" font-weight="700" fill="#263238">Tensor Memory</text>
+<text x="1272" y="244" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">MMA 的输出</text>
+<text x="40" y="335" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="start" font-weight="400" fill="#263238">.cta_group::2：load 的 complete_tx 可通知 destination CTA 或其 peer CTA 中的 mbarrier。</text>
+<text x="40" y="381" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="start" font-weight="400" fill="#263238">例如数据写 CTA1 的 SMEM，完成信号交给 CTA0 的 barrier；consumer 须等齐全部所需事务。</text>
+<text x="40" y="416" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" text-anchor="start" font-weight="400" fill="#586975">TMA load ≠ global→TMEM；cta_group::2 ≠ multicast；tcgen05.cp 是另一条 SMEM→TMEM 指令。</text>
+</svg>

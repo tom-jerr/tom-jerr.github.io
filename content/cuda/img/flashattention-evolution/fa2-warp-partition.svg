@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="480" viewBox="0 0 1240 480" role="img" aria-labelledby="title desc">
+<title id="title">FA2 sliced-Q ownership</title><desc id="desc">左侧不同 warp 产生同一输出行的部分和；右侧不同 warp 拥有不同输出行。</desc>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 Z" fill="#637381"/></marker></defs>
+<rect width="1240" height="480" fill="white"/>
+<text x="32" y="39" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="26" text-anchor="start" font-weight="700" fill="#263238">FA2 · 把输出行的所有权交给一个 warp</text>
+<text x="32" y="69" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="start" font-weight="400" fill="#586975">这里只画两个 warp；sliced-K 指 KV token 方向的分工，不是 QK 点积的 head-dimension split-K。</text>
+<text x="32" y="116" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="22" text-anchor="start" font-weight="700" fill="#263238">sliced-K：同一批 Q，拆开 KV</text>
+<text x="650" y="116" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="22" text-anchor="start" font-weight="700" fill="#263238">sliced-Q：拆开 Q，共用 KV</text>
+<rect x="32" y="147" width="240" height="62" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="152" y="173" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="middle" font-weight="400" fill="#263238">warp 0：Q × K0ᵀ</text>
+<text x="152" y="197" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" text-anchor="middle" font-weight="400" fill="#263238">P0 × V0 → partial O</text>
+<path d="M274 178 L365 245" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<rect x="650" y="147" width="253" height="62" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="776" y="173" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="middle" font-weight="400" fill="#263238">warp 0：Q0 × Kᵀ</text>
+<text x="776" y="197" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" text-anchor="middle" font-weight="400" fill="#263238">P0 × V → O0</text>
+<path d="M906 178 L957 178" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<rect x="962" y="147" width="240" height="62" rx="6" fill="#e1f3ef" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="1082" y="184" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="middle" font-weight="400" fill="#263238">独立输出 Q0 对应的行</text>
+<rect x="32" y="245" width="240" height="62" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="152" y="271" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="middle" font-weight="400" fill="#263238">warp 1：Q × K1ᵀ</text>
+<text x="152" y="295" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" text-anchor="middle" font-weight="400" fill="#263238">P1 × V1 → partial O</text>
+<path d="M274 276 L365 245" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<rect x="650" y="245" width="253" height="62" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="776" y="271" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="middle" font-weight="400" fill="#263238">warp 1：Q1 × Kᵀ</text>
+<text x="776" y="295" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" text-anchor="middle" font-weight="400" fill="#263238">P1 × V → O1</text>
+<path d="M906 276 L957 276" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<rect x="962" y="245" width="240" height="62" rx="6" fill="#e1f3ef" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="1082" y="282" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="19" text-anchor="middle" font-weight="400" fill="#263238">独立输出 Q1 对应的行</text>
+<rect x="370" y="196" width="226" height="99" rx="6" fill="#f6e4ed" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="483" y="228" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="21" text-anchor="middle" font-weight="400" fill="#263238">SMEM 交换</text>
+<text x="483" y="258" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" text-anchor="middle" font-weight="400" fill="#263238">同步 / 合并 partial O</text>
+<text x="483" y="282" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">（同一输出行）</text>
+<text x="32" y="368" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="20" text-anchor="start" font-weight="400" fill="#263238">左：多个 warp 参与同一输出行，需要在片上合并贡献。</text>
+<text x="32" y="405" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="20" text-anchor="start" font-weight="400" fill="#263238">右：不同输出行互不归约；warp 内仍可能为 rowmax / rowsum 做 shuffle。</text>
+<text x="32" y="447" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" text-anchor="start" font-weight="400" fill="#586975">图示 ownership，而非完整指令布局；收益来自减少跨 warp 通信，不是消除所有同步。</text>
+</svg>

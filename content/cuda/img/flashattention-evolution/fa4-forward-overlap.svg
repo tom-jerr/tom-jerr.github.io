@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1340" height="710" viewBox="0 0 1340 710" role="img" aria-labelledby="title desc">
+<title id="title">FA4 forward overlap</title><desc id="desc">L/H 为两个独立 query tile。MMA、softmax、correction 通过 TMEM 和 barrier 交接；O 校正必须在对应 PV 之前完成。</desc>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7 Z" fill="#637381"/></marker></defs>
+<rect width="1340" height="710" fill="white"/>
+<text x="32" y="39" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="26" text-anchor="start" font-weight="700" fill="#263238">FA4 · TMEM 把 MMA、softmax 与输出校正分开</text>
+<text x="32" y="69" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="start" font-weight="400" fill="#586975">L / H 各是一个 128-row Q tile；j 是 KV tile。仅表示合法依赖，省略 P 分段提交及边界阶段。</text>
+<text x="185" y="138" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="end" font-weight="700" fill="#263238">TMA</text>
+<path d="M210 156 L1280 156" fill="none" stroke="#637381" stroke-width="1.3" stroke-dasharray="4 5"/>
+<text x="185" y="225" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="end" font-weight="700" fill="#263238">Tensor Core</text>
+<path d="M210 243 L1280 243" fill="none" stroke="#637381" stroke-width="1.3" stroke-dasharray="4 5"/>
+<text x="185" y="323" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="end" font-weight="700" fill="#263238">softmax L</text>
+<path d="M210 341 L1280 341" fill="none" stroke="#637381" stroke-width="1.3" stroke-dasharray="4 5"/>
+<text x="185" y="411" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="end" font-weight="700" fill="#263238">softmax H</text>
+<path d="M210 429 L1280 429" fill="none" stroke="#637381" stroke-width="1.3" stroke-dasharray="4 5"/>
+<text x="185" y="512" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="end" font-weight="700" fill="#263238">correction</text>
+<path d="M210 530 L1280 530" fill="none" stroke="#637381" stroke-width="1.3" stroke-dasharray="4 5"/>
+<rect x="218" y="108" width="201" height="44" rx="6" fill="#e1f3ef" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="318.5" y="136" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">预取 K/Vⱼ₊₁</text>
+<rect x="630" y="108" width="201" height="44" rx="6" fill="#e1f3ef" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="730.5" y="136" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">预取 K/Vⱼ₊₂</text>
+<rect x="218" y="195" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="267.0" y="223" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">QKᴸⱼ</text>
+<rect x="321" y="195" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="370.0" y="223" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">QKᴴⱼ</text>
+<rect x="527" y="195" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="576.0" y="223" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">PVᴸⱼ</text>
+<rect x="630" y="195" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="679.0" y="223" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">QKᴸⱼ₊₁</text>
+<rect x="733" y="195" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="782.0" y="223" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">PVᴴⱼ</text>
+<rect x="836" y="195" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="885.0" y="223" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">QKᴴⱼ₊₁</text>
+<rect x="939" y="195" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="988.0" y="223" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">PVᴸⱼ₊₁</text>
+<rect x="1042" y="195" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="1091.0" y="223" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">QKᴸⱼ₊₂</text>
+<rect x="1145" y="195" width="98" height="44" rx="6" fill="#e9eefb" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="1194.0" y="223" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="16" text-anchor="middle" font-weight="400" fill="#263238">PVᴴⱼ₊₁</text>
+<rect x="321" y="293" width="201" height="44" rx="6" fill="#fff0cc" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="421.5" y="321" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">Sᴸⱼ → Pᴸⱼ</text>
+<rect x="733" y="293" width="201" height="44" rx="6" fill="#fff0cc" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="833.5" y="321" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">Sᴸⱼ₊₁ → Pᴸⱼ₊₁</text>
+<rect x="527" y="381" width="201" height="44" rx="6" fill="#fff0cc" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="627.5" y="409" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">Sᴴⱼ → Pᴴⱼ</text>
+<rect x="939" y="381" width="201" height="44" rx="6" fill="#fff0cc" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="1039.5" y="409" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="middle" font-weight="400" fill="#263238">Sᴴⱼ₊₁ → Pᴴⱼ₊₁</text>
+<rect x="424" y="482" width="98" height="44" rx="6" fill="#f6e4ed" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="473.0" y="510" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" text-anchor="middle" font-weight="400" fill="#263238">αᴸⱼ Oᴸ</text>
+<rect x="630" y="482" width="98" height="44" rx="6" fill="#f6e4ed" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="679.0" y="510" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" text-anchor="middle" font-weight="400" fill="#263238">αᴴⱼ Oᴴ</text>
+<rect x="836" y="482" width="98" height="44" rx="6" fill="#f6e4ed" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="885.0" y="510" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" text-anchor="middle" font-weight="400" fill="#263238">αᴸⱼ₊₁ Oᴸ</text>
+<rect x="1042" y="482" width="98" height="44" rx="6" fill="#f6e4ed" stroke="#a7b3bd" stroke-width="1.2"/>
+<text x="1091.0" y="510" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" text-anchor="middle" font-weight="400" fill="#263238">αᴴⱼ₊₁ Oᴴ</text>
+<path d="M318 239 L318 290" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="330" y="271" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" text-anchor="start" font-weight="400" fill="#263238">S ready</text>
+<path d="M527 482 L527 241" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)" stroke-dasharray="4 5"/>
+<text x="540" y="456" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="17" text-anchor="start" font-weight="400" fill="#263238">P ready 且 O rescaled</text>
+<path d="M218 572 L1280 572" fill="none" stroke="#637381" stroke-width="1.3" marker-end="url(#arrow)"/>
+<text x="1280" y="596" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="15" text-anchor="end" font-weight="400" fill="#586975">逻辑时间 →（非实测比例）</text>
+<text x="32" y="635" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="20" text-anchor="start" font-weight="400" fill="#263238">两个 softmax 组错开指数计算；correction 可与另一 Q tile 的 MMA / softmax 重叠。</text>
+<text x="32" y="674" font-family="'Microsoft YaHei','Noto Sans CJK SC',Arial,sans-serif" font-size="18" text-anchor="start" font-weight="400" fill="#586975">同一 O 的 rescale 与 PV 写回仍互斥。TMEM 提供交接位置，不会自动解除数据依赖。</text>
+</svg>
