@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1620" height="1040" viewBox="0 0 1620 1040" role="img" aria-labelledby="title desc">
+<title id="title">MiniInfer depth-1 overlap schedule</title>
+<desc id="desc">Step N+1 is planned and launched before step N&#x27;s tokens come back; the only blocking point is commit, and the release fence advances with it.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1620" height="1040" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">RUNTIME SCHEDULE · IN_FLIGHT_DEPTH = 1</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">先 launch 下一步，再读回上一步的 token</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">横向是时间；同一 CUDA stream 内 h2d → forward → sample → scatter 顺序执行。示意图，不按比例</text>
+<rect x="64" y="250" width="1536" height="120" rx="14" fill="#EEE9FF" stroke="#7656D8" stroke-width="1" opacity="1.0"/>
+<text x="84" y="284" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="750" text-anchor="start">CPU · 控制面</text>
+<line x1="260" y1="346" x2="1560" y2="346" stroke="#CAD3E1" stroke-width="2" stroke-linecap="round"/>
+<rect x="64" y="430" width="1536" height="120" rx="14" fill="#FDE9E7" stroke="#E45756" stroke-width="1" opacity="1.0"/>
+<text x="84" y="464" fill="#E45756" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="750" text-anchor="start">CUDA stream</text>
+<line x1="260" y1="526" x2="1560" y2="526" stroke="#CAD3E1" stroke-width="2" stroke-linecap="round"/>
+<rect x="64" y="620" width="1536" height="120" rx="14" fill="#E4F4EA" stroke="#2E8B57" stroke-width="1" opacity="1.0"/>
+<text x="84" y="654" fill="#2E8B57" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="750" text-anchor="start">event / 页栅栏</text>
+<line x1="260" y1="716" x2="1560" y2="716" stroke="#CAD3E1" stroke-width="2" stroke-linecap="round"/>
+<rect x="280" y="272" width="108" height="56" rx="10" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="334" y="306" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">plan N</text>
+<rect x="392" y="272" width="118" height="56" rx="10" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="451" y="306" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">launch N</text>
+<rect x="534" y="272" width="118" height="56" rx="10" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="593" y="306" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">plan N+1</text>
+<rect x="656" y="272" width="128" height="56" rx="10" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="720" y="306" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">launch N+1</text>
+<rect x="816" y="272" width="148" height="56" rx="10" fill="#FFF2D6" stroke="#C47B10" stroke-width="2" opacity="1.0"/>
+<text x="890" y="298" fill="#C47B10" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">commit N</text>
+<text x="890" y="318" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="12" font-weight="500" text-anchor="middle">等 result</text>
+<rect x="972" y="272" width="118" height="56" rx="10" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="1031" y="306" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">plan N+2</text>
+<rect x="1094" y="272" width="128" height="56" rx="10" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="1158" y="306" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">launch N+2</text>
+<rect x="1254" y="272" width="148" height="56" rx="10" fill="#FFF2D6" stroke="#C47B10" stroke-width="2" opacity="1.0"/>
+<text x="1328" y="298" fill="#C47B10" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">commit N+1</text>
+<text x="1328" y="318" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="12" font-weight="500" text-anchor="middle">等 result</text>
+<rect x="1410" y="272" width="120" height="56" rx="10" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="1470" y="306" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">plan N+3</text>
+<rect x="392" y="452" width="60" height="56" rx="10" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="422" y="486" fill="#2E8B57" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="13" font-weight="700" text-anchor="middle">h2d</text>
+<rect x="456" y="452" width="240" height="56" rx="10" fill="#FFFFFF" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="576" y="486" fill="#E45756" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">forward N</text>
+<rect x="700" y="452" width="60" height="56" rx="10" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="730" y="486" fill="#2E8B57" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="13" font-weight="700" text-anchor="middle">sample</text>
+<rect x="764" y="452" width="60" height="56" rx="10" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="794" y="486" fill="#2E8B57" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="13" font-weight="700" text-anchor="middle">scatter</text>
+<rect x="828" y="452" width="60" height="56" rx="10" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="858" y="486" fill="#2E8B57" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="13" font-weight="700" text-anchor="middle">h2d</text>
+<rect x="892" y="452" width="240" height="56" rx="10" fill="#FFFFFF" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="1012" y="486" fill="#E45756" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">forward N+1</text>
+<rect x="1136" y="452" width="60" height="56" rx="10" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="1166" y="486" fill="#2E8B57" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="13" font-weight="700" text-anchor="middle">sample</text>
+<rect x="1200" y="452" width="60" height="56" rx="10" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="1230" y="486" fill="#2E8B57" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="13" font-weight="700" text-anchor="middle">scatter</text>
+<rect x="1264" y="452" width="60" height="56" rx="10" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="1294" y="486" fill="#2E8B57" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="13" font-weight="700" text-anchor="middle">h2d</text>
+<rect x="1328" y="452" width="232" height="56" rx="10" fill="#FFFFFF" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="1444" y="486" fill="#E45756" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="700" text-anchor="middle">forward N+2</text>
+<line x1="452" y1="644" x2="452" y2="672" stroke="#C47B10" stroke-width="3" stroke-linecap="round"/>
+<text x="452" y="628" fill="#C47B10" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="13" font-weight="650" text-anchor="middle">h2d N done</text>
+<line x1="824" y1="644" x2="824" y2="672" stroke="#2E8B57" stroke-width="3" stroke-linecap="round"/>
+<text x="824" y="628" fill="#2E8B57" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="13" font-weight="650" text-anchor="middle">result N ready</text>
+<line x1="964" y1="644" x2="964" y2="672" stroke="#C47B10" stroke-width="3" stroke-linecap="round"/>
+<text x="964" y="696" fill="#C47B10" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="13" font-weight="650" text-anchor="middle">device_fence(N)</text>
+<line x1="1260" y1="644" x2="1260" y2="672" stroke="#2E8B57" stroke-width="3" stroke-linecap="round"/>
+<text x="1260" y="628" fill="#2E8B57" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="13" font-weight="650" text-anchor="middle">result N+1 ready</text>
+<line x1="824" y1="272" x2="824" y2="328" stroke="#2E8B57" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7"/>
+<path d="M 824 676 L 824 338" fill="none" stroke="#2E8B57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 7" marker-end="url(#arrow-ok)"/>
+<line x1="1260" y1="272" x2="1260" y2="328" stroke="#2E8B57" stroke-width="2" stroke-linecap="round" stroke-dasharray="8 7"/>
+<path d="M 1260 676 L 1260 338" fill="none" stroke="#2E8B57" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 7" marker-end="url(#arrow-ok)"/>
+<path d="M 452 676 L 452 700 L 1012 700 L 1012 432" fill="none" stroke="#637083" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 7" marker-end="url(#arrow-muted)"/>
+<text x="84" y="582" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="14" font-weight="500" text-anchor="start">同一条 stream 的顺序：h2d N → forward N → sample N → scatter N（写 future_map）→ h2d N+1 → forward N+1（gather 读回）→ …</text>
+<text x="84" y="714" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="13" font-weight="500" text-anchor="start">arena 环：plan N+2 复用槽 N 前需 h2d N 事件置位；图中早已置位，没有等待。</text>
+<text x="816" y="714" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="13" font-weight="500" text-anchor="start">commit N：816 到达 → 等 result N → 964 返回并回执 device_fence(N)</text>
+<rect x="280" y="760" width="620" height="96" rx="12" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="300" y="792" fill="#2E8B57" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="750" text-anchor="start">页释放栅栏</text>
+<text x="300" y="820" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="13" font-weight="500" text-anchor="start">plan N+1 期间驱逐的页挂在 frontier N；commit N 调 device_fence(N) 后它们才回到 free list</text>
+<text x="300" y="842" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="13" font-weight="500" text-anchor="start">kv.rs:158 note_device_fence → release_now → generation++</text>
+<rect x="940" y="760" width="590" height="96" rx="12" fill="#FFF2D6" stroke="#C47B10" stroke-width="2" opacity="1.0"/>
+<text x="960" y="792" fill="#C47B10" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="750" text-anchor="start">页不足时的反应路径</text>
+<text x="960" y="820" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="13" font-weight="500" text-anchor="start">Engine.step 抛 KvOutOfPages → 驱动先 commit 最老的一批（推进栅栏）→ 重试 plan</text>
+<text x="960" y="842" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="13" font-weight="500" text-anchor="start">_drain_pipelined · rust_control_plane.py:543</text>
+<text x="84" y="900" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="500" text-anchor="start">已发出（issue）</text>
+<rect x="214" y="886" width="40" height="18" rx="6" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="268" y="900" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="500" text-anchor="start">CPU 控制面动作</text>
+<rect x="430" y="886" width="40" height="18" rx="6" fill="#FFFFFF" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="484" y="900" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="500" text-anchor="start">GPU 计算</text>
+<rect x="600" y="886" width="40" height="18" rx="6" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="654" y="900" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="500" text-anchor="start">future_map / 栅栏事件</text>
+<rect x="856" y="886" width="40" height="18" rx="6" fill="#FFF2D6" stroke="#C47B10" stroke-width="2" opacity="1.0"/>
+<text x="910" y="900" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="500" text-anchor="start">阻塞等待</text>
+<text x="84" y="966" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="start">读法：CPU 在 forward N 还在执行时就完成了 plan N+1 并发出 launch N+1；</text>
+<text x="84" y="996" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="start">commit N 只等 result N，一旦拿到就回执页栅栏。event 行只画 gate 了可见动作的事件。</text>
+</svg>

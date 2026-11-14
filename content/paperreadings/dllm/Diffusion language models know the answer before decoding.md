@@ -6,7 +6,7 @@ update:
 tags:
 
 - LLMInference
-
+- Paper Notes
 ---
 # DIFFUSION LANGUAGE MODELS KNOW THE ANSWER  BEFORE DECODING
 香港理工大学、达特茅斯学院、Google DeepMind 等组织发表

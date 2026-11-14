@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1450" height="735" viewBox="0 0 1450 735" role="img" aria-label="DSV4 的并行组：PP 跨 stage，CP / EP 在 stage 内复用 ranks">
+  <title>DSV4 的并行组：PP 跨 stage，CP / EP 在 stage 内复用 ranks</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#54677c" />
+    </marker>
+    <style>text{font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",Arial,sans-serif}</style>
+  </defs>
+  <rect x="0" y="0" width="1450" height="735" fill="white" />
+  <text x="35" y="34" fill="#17212e" font-size="25" font-weight="650" text-anchor="start" dominant-baseline="middle">DSV4 的并行组：PP 跨 stage，CP / EP 在 stage 内复用 ranks</text>
+  <text x="35" y="77" fill="#526171" font-size="19" font-weight="400" text-anchor="start" dominant-baseline="middle">结构示例 PP=2、--tp=4：8 GPU；开启 prefill CP 后 Attention TP=1、CP=4</text>
+  <rect x="35" y="115" width="655" height="240" rx="11" fill="none" stroke="#aeb8c5" stroke-width="1.4" />
+  <text x="53" y="140" fill="#526171" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">PP stage 0</text>
+  <rect x="57" y="170" width="140" height="105" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="127.0" y="195.5" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">global rank 0</text>
+  <text x="127.0" y="222.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">CP slot 0</text>
+  <text x="127.0" y="249.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">t0, t4, …</text>
+  <rect x="215" y="170" width="140" height="105" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="285.0" y="195.5" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">global rank 1</text>
+  <text x="285.0" y="222.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">CP slot 1</text>
+  <text x="285.0" y="249.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">t1, t5, …</text>
+  <rect x="373" y="170" width="140" height="105" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="443.0" y="195.5" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">global rank 2</text>
+  <text x="443.0" y="222.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">CP slot 2</text>
+  <text x="443.0" y="249.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">t2, t6, …</text>
+  <rect x="531" y="170" width="140" height="105" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="601.0" y="195.5" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">global rank 3</text>
+  <text x="601.0" y="222.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">CP slot 3</text>
+  <text x="601.0" y="249.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">t3, t7, …</text>
+  <text x="60" y="316" fill="#17212e" font-size="17" font-weight="400" text-anchor="start" dominant-baseline="middle">每个 CP rank 都有本 stage 的完整 KV；EP 后端覆盖本组4 ranks</text>
+  <rect x="755" y="115" width="655" height="240" rx="11" fill="none" stroke="#aeb8c5" stroke-width="1.4" />
+  <text x="773" y="140" fill="#526171" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">PP stage 1</text>
+  <rect x="777" y="170" width="140" height="105" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="847.0" y="195.5" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">global rank 4</text>
+  <text x="847.0" y="222.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">CP slot 0</text>
+  <text x="847.0" y="249.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">t0, t4, …</text>
+  <rect x="935" y="170" width="140" height="105" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1005.0" y="195.5" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">global rank 5</text>
+  <text x="1005.0" y="222.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">CP slot 1</text>
+  <text x="1005.0" y="249.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">t1, t5, …</text>
+  <rect x="1093" y="170" width="140" height="105" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1163.0" y="195.5" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">global rank 6</text>
+  <text x="1163.0" y="222.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">CP slot 2</text>
+  <text x="1163.0" y="249.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">t2, t6, …</text>
+  <rect x="1251" y="170" width="140" height="105" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1321.0" y="195.5" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">global rank 7</text>
+  <text x="1321.0" y="222.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">CP slot 3</text>
+  <text x="1321.0" y="249.5" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">t3, t7, …</text>
+  <text x="780" y="316" fill="#17212e" font-size="17" font-weight="400" text-anchor="start" dominant-baseline="middle">每个 CP rank 都有本 stage 的完整 KV；EP 后端覆盖本组4 ranks</text>
+  <polyline points="690,230 755,230" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <text x="722" y="190" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">PP</text>
+  <text x="35" y="392" fill="#17212e" font-size="19" font-weight="400" text-anchor="start" dominant-baseline="middle">PP group：(0,4)、(1,5)、(2,6)、(3,7)；传递对应 slot 的 [Tlocal,4D] 残差</text>
+  <rect x="35" y="430" width="655" height="235" rx="11" fill="none" stroke="#aeb8c5" stroke-width="1.4" />
+  <text x="53" y="455" fill="#526171" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">CP + TP-MoE（moe-a2a-backend=none）</text>
+  <rect x="55" y="490" width="180" height="75" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="145.0" y="514.0" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">本地 token 输入</text>
+  <text x="145.0" y="541.0" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">约 T/4 行</text>
+  <rect x="270" y="490" width="185" height="75" rx="9" fill="#f5f7fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="362.5" y="514.0" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">All-gather</text>
+  <text x="362.5" y="541.0" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">按 rank 拼接</text>
+  <rect x="490" y="490" width="175" height="75" rx="9" fill="#fff3db" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="577.5" y="514.0" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">TP-sharded experts</text>
+  <text x="577.5" y="541.0" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">所有专家各1/4宽</text>
+  <polyline points="235,527 270,527" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="455,527 490,527" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <text x="65" y="613" fill="#17212e" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">SUM reduce-scatter → 还原本 rank 的 token 输出</text>
+  <rect x="755" y="430" width="655" height="235" rx="11" fill="none" stroke="#aeb8c5" stroke-width="1.4" />
+  <text x="773" y="455" fill="#526171" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">CP + EP-MoE（DeepEP / MegaMoE）</text>
+  <rect x="775" y="490" width="175" height="75" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="862.5" y="514.0" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">本地 token 输入</text>
+  <text x="862.5" y="541.0" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">约 T/4 行</text>
+  <rect x="985" y="490" width="195" height="75" rx="9" fill="#f5f7fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1082.5" y="514.0" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">按 top-k Dispatch</text>
+  <text x="1082.5" y="541.0" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">跨 ranks 路由</text>
+  <rect x="1215" y="490" width="175" height="75" rx="9" fill="#fff3db" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1302.5" y="514.0" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">完整本地 experts</text>
+  <text x="1302.5" y="541.0" fill="#17212e" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">专家集合按 rank 分</text>
+  <polyline points="950,527 985,527" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="1180,527 1215,527" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <text x="785" y="613" fill="#17212e" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Combine → 回到 token 源 rank；EP=4，不再额外 ×4 GPU</text>
+  <text x="35" y="704" fill="#526171" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">PP+CP 是源码结构示例；官方 CP 测试为 PP=1。部署组合仍需完整正确性与性能验证。</text>
+</svg>

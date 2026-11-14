@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="670" viewBox="0 0 1440 670" role="img" aria-label="DeepSeek-V4：逻辑 KV 条目、物理页与压缩状态">
+  <title>DeepSeek-V4：逻辑 KV 条目、物理页与压缩状态</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#54677c" />
+    </marker>
+    <style>text{font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",Arial,sans-serif}</style>
+  </defs>
+  <rect x="0" y="0" width="1440" height="670" fill="white" />
+  <text x="35" y="34" fill="#17212e" font-size="25" font-weight="650" text-anchor="start" dominant-baseline="middle">DeepSeek-V4：逻辑 KV 条目、物理页与压缩状态</text>
+  <rect x="30" y="75" width="825" height="240" rx="11" fill="none" stroke="#aeb8c5" stroke-width="1.4" />
+  <text x="48" y="100" fill="#526171" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">共享 KV latent：512 维，不乘 K/V ×2 或 Query head 数</text>
+  <rect x="55" y="160" width="445" height="90" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="277.5" y="191.5" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">448D NoPE / FP8</text>
+  <text x="277.5" y="218.5" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">448 B</text>
+  <rect x="500" y="160" width="200" height="90" rx="9" fill="#e9f5ef" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="600.0" y="191.5" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">64D RoPE / BF16</text>
+  <text x="600.0" y="218.5" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">128 B</text>
+  <rect x="700" y="160" width="130" height="90" rx="9" fill="#fff3db" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="765.0" y="191.5" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">Scale + pad</text>
+  <text x="765.0" y="218.5" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">7 + 1 B</text>
+  <text x="55" y="280" fill="#17212e" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">逻辑条目：448 + 128 + 7 + 1 = 584 B</text>
+  <rect x="880" y="75" width="525" height="240" rx="11" fill="none" stroke="#aeb8c5" stroke-width="1.4" />
+  <text x="898" y="100" fill="#526171" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">物理页按 576 B 对齐</text>
+  <text x="900" y="135" fill="#17212e" font-size="20" font-weight="400" text-anchor="start" dominant-baseline="middle">SWA：256 条 / 页 → 585 B / 条</text>
+  <text x="900" y="182" fill="#17212e" font-size="20" font-weight="400" text-anchor="start" dominant-baseline="middle">C4：64 条 / 页 → 585 B / 条</text>
+  <text x="900" y="229" fill="#17212e" font-size="20" font-weight="400" text-anchor="start" dominant-baseline="middle">C128：2 条 / 页 → 864 B / 条</text>
+  <text x="900" y="278" fill="#526171" font-size="17" font-weight="400" text-anchor="start" dominant-baseline="middle">ceil(page_size ×584 /576) ×576</text>
+  <rect x="30" y="345" width="680" height="270" rx="11" fill="none" stroke="#aeb8c5" stroke-width="1.4" />
+  <text x="48" y="370" fill="#526171" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">序列压缩改变条目数量</text>
+  <rect x="55" y="400" width="245" height="80" rx="9" fill="#e9f5ef" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="177.5" y="426.5" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">C4：当前4 + 前块4</text>
+  <text x="177.5" y="453.5" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">逐维 softmax(score + APE)</text>
+  <rect x="400" y="400" width="275" height="80" rx="9" fill="#e9f5ef" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="537.5" y="426.5" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">每4新 token 写1条</text>
+  <text x="537.5" y="453.5" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">Core 512D + index K 128D</text>
+  <polyline points="300,440 400,440" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <rect x="55" y="510" width="245" height="75" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="177.5" y="534.0" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">C128：当前128</text>
+  <text x="177.5" y="561.0" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">逐维 softmax(score + APE)</text>
+  <rect x="400" y="510" width="275" height="75" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="537.5" y="534.0" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">每128 token 写1条</text>
+  <text x="537.5" y="561.0" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">Core 512D；无 Indexer</text>
+  <polyline points="300,547 400,547" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <rect x="740" y="345" width="665" height="270" rx="11" fill="none" stroke="#aeb8c5" stroke-width="1.4" />
+  <text x="758" y="370" fill="#526171" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">其他独立收费的状态</text>
+  <text x="765" y="406" fill="#17212e" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Indexer K：FP8 132 B / 条；FP4 实际 68 B / 条</text>
+  <text x="765" y="449" fill="#17212e" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">C4 ring：Core / Indexer 各自保存 KV + score</text>
+  <text x="765" y="492" fill="#17212e" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">C128 ring：按请求预留未完成 block 的状态</text>
+  <text x="765" y="535" fill="#17212e" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">压缩状态默认 FP32；不属于 584 B 的最终 KV</text>
+  <text x="765" y="578" fill="#526171" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">该图限定 V4 paged FlashMLA 布局</text>
+  <text x="35" y="642" fill="#526171" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">压缩率降低历史条目数；量化降低每条宽度；页对齐、SWA 和状态池决定真实容量。</text>
+</svg>

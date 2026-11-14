@@ -1,0 +1,836 @@
+{
+  "DeepGEMM/deep_gemm/include/deep_gemm/impls/sm100_fp8_fp4_mega_moe.cuh": {
+    "repository": "deepseek-ai/DeepGEMM",
+    "commit": "057ca5964aae0879ff2e0eb71ee05a3cb0ba3df7",
+    "source_path": "deep_gemm/include/deep_gemm/impls/sm100_fp8_fp4_mega_moe.cuh",
+    "original_blob_sha": "b4cd36da7da158a15c04ca38af8b5dbe12125300",
+    "original_sha256": "9d577f200e482fb2deed3e9d8a8b6ec0f71d15df2782d4b8f0a5321102ccc970",
+    "original_lines": 1528,
+    "annotation_blocks": 85,
+    "line_map": {
+      "21": {
+        "comment_line": 24,
+        "code_line": 25
+      },
+      "40": {
+        "comment_line": 44,
+        "code_line": 45
+      },
+      "49": {
+        "comment_line": 54,
+        "code_line": 55
+      },
+      "84": {
+        "comment_line": 90,
+        "code_line": 91
+      },
+      "95": {
+        "comment_line": 102,
+        "code_line": 103
+      },
+      "124": {
+        "comment_line": 132,
+        "code_line": 133
+      },
+      "136": {
+        "comment_line": 145,
+        "code_line": 146
+      },
+      "144": {
+        "comment_line": 154,
+        "code_line": 155
+      },
+      "152": {
+        "comment_line": 163,
+        "code_line": 164
+      },
+      "158": {
+        "comment_line": 170,
+        "code_line": 171
+      },
+      "183": {
+        "comment_line": 196,
+        "code_line": 197
+      },
+      "187": {
+        "comment_line": 201,
+        "code_line": 202
+      },
+      "196": {
+        "comment_line": 211,
+        "code_line": 212
+      },
+      "209": {
+        "comment_line": 225,
+        "code_line": 226
+      },
+      "240": {
+        "comment_line": 257,
+        "code_line": 258
+      },
+      "288": {
+        "comment_line": 306,
+        "code_line": 307
+      },
+      "291": {
+        "comment_line": 310,
+        "code_line": 311
+      },
+      "306": {
+        "comment_line": 326,
+        "code_line": 327
+      },
+      "326": {
+        "comment_line": 347,
+        "code_line": 348
+      },
+      "337": {
+        "comment_line": 359,
+        "code_line": 360
+      },
+      "341": {
+        "comment_line": 364,
+        "code_line": 365
+      },
+      "349": {
+        "comment_line": 373,
+        "code_line": 374
+      },
+      "368": {
+        "comment_line": 393,
+        "code_line": 394
+      },
+      "374": {
+        "comment_line": 400,
+        "code_line": 401
+      },
+      "383": {
+        "comment_line": 410,
+        "code_line": 411
+      },
+      "392": {
+        "comment_line": 420,
+        "code_line": 421
+      },
+      "398": {
+        "comment_line": 427,
+        "code_line": 428
+      },
+      "400": {
+        "comment_line": 430,
+        "code_line": 431
+      },
+      "430": {
+        "comment_line": 461,
+        "code_line": 462
+      },
+      "433": {
+        "comment_line": 465,
+        "code_line": 466
+      },
+      "449": {
+        "comment_line": 482,
+        "code_line": 483
+      },
+      "480": {
+        "comment_line": 514,
+        "code_line": 515
+      },
+      "530": {
+        "comment_line": 565,
+        "code_line": 566
+      },
+      "540": {
+        "comment_line": 576,
+        "code_line": 577
+      },
+      "544": {
+        "comment_line": 581,
+        "code_line": 582
+      },
+      "552": {
+        "comment_line": 590,
+        "code_line": 591
+      },
+      "555": {
+        "comment_line": 594,
+        "code_line": 595
+      },
+      "578": {
+        "comment_line": 618,
+        "code_line": 619
+      },
+      "583": {
+        "comment_line": 624,
+        "code_line": 625
+      },
+      "602": {
+        "comment_line": 644,
+        "code_line": 645
+      },
+      "610": {
+        "comment_line": 653,
+        "code_line": 654
+      },
+      "621": {
+        "comment_line": 665,
+        "code_line": 666
+      },
+      "671": {
+        "comment_line": 716,
+        "code_line": 717
+      },
+      "690": {
+        "comment_line": 736,
+        "code_line": 737
+      },
+      "712": {
+        "comment_line": 759,
+        "code_line": 760
+      },
+      "723": {
+        "comment_line": 771,
+        "code_line": 772
+      },
+      "728": {
+        "comment_line": 777,
+        "code_line": 778
+      },
+      "741": {
+        "comment_line": 791,
+        "code_line": 792
+      },
+      "756": {
+        "comment_line": 807,
+        "code_line": 808
+      },
+      "803": {
+        "comment_line": 855,
+        "code_line": 856
+      },
+      "819": {
+        "comment_line": 872,
+        "code_line": 873
+      },
+      "852": {
+        "comment_line": 906,
+        "code_line": 907
+      },
+      "862": {
+        "comment_line": 917,
+        "code_line": 918
+      },
+      "885": {
+        "comment_line": 941,
+        "code_line": 942
+      },
+      "909": {
+        "comment_line": 966,
+        "code_line": 967
+      },
+      "927": {
+        "comment_line": 985,
+        "code_line": 986
+      },
+      "939": {
+        "comment_line": 998,
+        "code_line": 999
+      },
+      "946": {
+        "comment_line": 1006,
+        "code_line": 1007
+      },
+      "982": {
+        "comment_line": 1043,
+        "code_line": 1044
+      },
+      "1000": {
+        "comment_line": 1062,
+        "code_line": 1063
+      },
+      "1006": {
+        "comment_line": 1069,
+        "code_line": 1070
+      },
+      "1058": {
+        "comment_line": 1122,
+        "code_line": 1123
+      },
+      "1066": {
+        "comment_line": 1131,
+        "code_line": 1132
+      },
+      "1108": {
+        "comment_line": 1174,
+        "code_line": 1175
+      },
+      "1137": {
+        "comment_line": 1204,
+        "code_line": 1205
+      },
+      "1172": {
+        "comment_line": 1240,
+        "code_line": 1241
+      },
+      "1193": {
+        "comment_line": 1262,
+        "code_line": 1263
+      },
+      "1222": {
+        "comment_line": 1292,
+        "code_line": 1293
+      },
+      "1237": {
+        "comment_line": 1308,
+        "code_line": 1309
+      },
+      "1254": {
+        "comment_line": 1326,
+        "code_line": 1327
+      },
+      "1273": {
+        "comment_line": 1346,
+        "code_line": 1347
+      },
+      "1281": {
+        "comment_line": 1355,
+        "code_line": 1356
+      },
+      "1332": {
+        "comment_line": 1407,
+        "code_line": 1408
+      },
+      "1345": {
+        "comment_line": 1421,
+        "code_line": 1422
+      },
+      "1355": {
+        "comment_line": 1432,
+        "code_line": 1433
+      },
+      "1365": {
+        "comment_line": 1443,
+        "code_line": 1444
+      },
+      "1405": {
+        "comment_line": 1484,
+        "code_line": 1485
+      },
+      "1411": {
+        "comment_line": 1491,
+        "code_line": 1492
+      },
+      "1421": {
+        "comment_line": 1502,
+        "code_line": 1503
+      },
+      "1430": {
+        "comment_line": 1512,
+        "code_line": 1513
+      },
+      "1436": {
+        "comment_line": 1519,
+        "code_line": 1520
+      },
+      "1445": {
+        "comment_line": 1529,
+        "code_line": 1530
+      },
+      "1471": {
+        "comment_line": 1556,
+        "code_line": 1557
+      },
+      "1511": {
+        "comment_line": 1597,
+        "code_line": 1598
+      },
+      "1522": {
+        "comment_line": 1609,
+        "code_line": 1610
+      }
+    }
+  },
+  "DeepGEMM/deep_gemm/include/deep_gemm/scheduler/mega_moe.cuh": {
+    "repository": "deepseek-ai/DeepGEMM",
+    "commit": "057ca5964aae0879ff2e0eb71ee05a3cb0ba3df7",
+    "source_path": "deep_gemm/include/deep_gemm/scheduler/mega_moe.cuh",
+    "original_blob_sha": "3e85515512aac88697cfd6a522799d8d2d5725fd",
+    "original_sha256": "1bf76529e321bd546216ba700ac5e8ca2f321b40486d134ef8465e223b117573",
+    "original_lines": 481,
+    "annotation_blocks": 31,
+    "line_map": {
+      "15": {
+        "comment_line": 18,
+        "code_line": 19
+      },
+      "23": {
+        "comment_line": 27,
+        "code_line": 28
+      },
+      "28": {
+        "comment_line": 33,
+        "code_line": 34
+      },
+      "47": {
+        "comment_line": 53,
+        "code_line": 54
+      },
+      "69": {
+        "comment_line": 76,
+        "code_line": 77
+      },
+      "82": {
+        "comment_line": 90,
+        "code_line": 91
+      },
+      "91": {
+        "comment_line": 100,
+        "code_line": 101
+      },
+      "127": {
+        "comment_line": 137,
+        "code_line": 138
+      },
+      "140": {
+        "comment_line": 151,
+        "code_line": 152
+      },
+      "144": {
+        "comment_line": 156,
+        "code_line": 157
+      },
+      "153": {
+        "comment_line": 166,
+        "code_line": 167
+      },
+      "156": {
+        "comment_line": 170,
+        "code_line": 171
+      },
+      "160": {
+        "comment_line": 175,
+        "code_line": 176
+      },
+      "197": {
+        "comment_line": 213,
+        "code_line": 214
+      },
+      "205": {
+        "comment_line": 222,
+        "code_line": 223
+      },
+      "219": {
+        "comment_line": 237,
+        "code_line": 238
+      },
+      "223": {
+        "comment_line": 242,
+        "code_line": 243
+      },
+      "248": {
+        "comment_line": 268,
+        "code_line": 269
+      },
+      "255": {
+        "comment_line": 276,
+        "code_line": 277
+      },
+      "271": {
+        "comment_line": 293,
+        "code_line": 294
+      },
+      "286": {
+        "comment_line": 309,
+        "code_line": 310
+      },
+      "301": {
+        "comment_line": 325,
+        "code_line": 326
+      },
+      "309": {
+        "comment_line": 334,
+        "code_line": 335
+      },
+      "344": {
+        "comment_line": 370,
+        "code_line": 371
+      },
+      "351": {
+        "comment_line": 378,
+        "code_line": 379
+      },
+      "372": {
+        "comment_line": 400,
+        "code_line": 401
+      },
+      "398": {
+        "comment_line": 427,
+        "code_line": 428
+      },
+      "409": {
+        "comment_line": 439,
+        "code_line": 440
+      },
+      "438": {
+        "comment_line": 469,
+        "code_line": 470
+      },
+      "457": {
+        "comment_line": 489,
+        "code_line": 490
+      },
+      "473": {
+        "comment_line": 506,
+        "code_line": 507
+      }
+    }
+  },
+  "DeepGEMM/deep_gemm/include/deep_gemm/layout/mega_moe.cuh": {
+    "repository": "deepseek-ai/DeepGEMM",
+    "commit": "057ca5964aae0879ff2e0eb71ee05a3cb0ba3df7",
+    "source_path": "deep_gemm/include/deep_gemm/layout/mega_moe.cuh",
+    "original_blob_sha": "7993b062895f7a329ae14b6bf4392b10a142591a",
+    "original_sha256": "53008d96b7eeaeec35af54e1400a9a3149625bc39b385611fe544b08c5084b50",
+    "original_lines": 459,
+    "annotation_blocks": 18,
+    "line_map": {
+      "13": {
+        "comment_line": 16,
+        "code_line": 17
+      },
+      "19": {
+        "comment_line": 23,
+        "code_line": 24
+      },
+      "30": {
+        "comment_line": 35,
+        "code_line": 36
+      },
+      "42": {
+        "comment_line": 48,
+        "code_line": 49
+      },
+      "54": {
+        "comment_line": 61,
+        "code_line": 62
+      },
+      "66": {
+        "comment_line": 74,
+        "code_line": 75
+      },
+      "77": {
+        "comment_line": 86,
+        "code_line": 87
+      },
+      "82": {
+        "comment_line": 92,
+        "code_line": 93
+      },
+      "100": {
+        "comment_line": 111,
+        "code_line": 112
+      },
+      "128": {
+        "comment_line": 140,
+        "code_line": 141
+      },
+      "169": {
+        "comment_line": 182,
+        "code_line": 183
+      },
+      "242": {
+        "comment_line": 256,
+        "code_line": 257
+      },
+      "248": {
+        "comment_line": 263,
+        "code_line": 264
+      },
+      "287": {
+        "comment_line": 303,
+        "code_line": 304
+      },
+      "345": {
+        "comment_line": 362,
+        "code_line": 363
+      },
+      "393": {
+        "comment_line": 411,
+        "code_line": 412
+      },
+      "414": {
+        "comment_line": 433,
+        "code_line": 434
+      },
+      "426": {
+        "comment_line": 446,
+        "code_line": 447
+      }
+    }
+  },
+  "DeepGEMM/deep_gemm/include/deep_gemm/comm/barrier.cuh": {
+    "repository": "deepseek-ai/DeepGEMM",
+    "commit": "057ca5964aae0879ff2e0eb71ee05a3cb0ba3df7",
+    "source_path": "deep_gemm/include/deep_gemm/comm/barrier.cuh",
+    "original_blob_sha": "ff683442be6594f1fc28b8df9d278fd64e942a1e",
+    "original_sha256": "ef2906925dc5ab5178df4ba6a9a41da74270cebecd892d5a7a01dbdeab5dfd69",
+    "original_lines": 94,
+    "annotation_blocks": 8,
+    "line_map": {
+      "11": {
+        "comment_line": 14,
+        "code_line": 15
+      },
+      "26": {
+        "comment_line": 30,
+        "code_line": 31
+      },
+      "33": {
+        "comment_line": 38,
+        "code_line": 39
+      },
+      "38": {
+        "comment_line": 44,
+        "code_line": 45
+      },
+      "53": {
+        "comment_line": 60,
+        "code_line": 61
+      },
+      "66": {
+        "comment_line": 74,
+        "code_line": 75
+      },
+      "73": {
+        "comment_line": 82,
+        "code_line": 83
+      },
+      "89": {
+        "comment_line": 99,
+        "code_line": 100
+      }
+    }
+  },
+  "DeepGEMM/deep_gemm/include/deep_gemm/layout/sym_buffer.cuh": {
+    "repository": "deepseek-ai/DeepGEMM",
+    "commit": "057ca5964aae0879ff2e0eb71ee05a3cb0ba3df7",
+    "source_path": "deep_gemm/include/deep_gemm/layout/sym_buffer.cuh",
+    "original_blob_sha": "bc9dc61c8ce0b00158207b3650ae3efe88b4131e",
+    "original_sha256": "b157512fd62a20bf09a8fab489d4dc209751d0560c1343829e78374dbf6578cb",
+    "original_lines": 44,
+    "annotation_blocks": 3,
+    "line_map": {
+      "10": {
+        "comment_line": 13,
+        "code_line": 14
+      },
+      "20": {
+        "comment_line": 24,
+        "code_line": 25
+      },
+      "34": {
+        "comment_line": 39,
+        "code_line": 40
+      }
+    }
+  },
+  "DeepGEMM/deep_gemm/include/deep_gemm/ptx/ld_st.cuh": {
+    "repository": "deepseek-ai/DeepGEMM",
+    "commit": "057ca5964aae0879ff2e0eb71ee05a3cb0ba3df7",
+    "source_path": "deep_gemm/include/deep_gemm/ptx/ld_st.cuh",
+    "original_blob_sha": "7fcde7d80bff774e3d102207dd294762bdb2eacf",
+    "original_sha256": "912e9f9a83d9c8fccebe1b9905487cb3ad3052fff84f63cff1da2834c84377ac",
+    "original_lines": 387,
+    "annotation_blocks": 8,
+    "line_map": {
+      "267": {
+        "comment_line": 270,
+        "code_line": 271
+      },
+      "273": {
+        "comment_line": 277,
+        "code_line": 278
+      },
+      "312": {
+        "comment_line": 317,
+        "code_line": 318
+      },
+      "328": {
+        "comment_line": 334,
+        "code_line": 335
+      },
+      "332": {
+        "comment_line": 339,
+        "code_line": 340
+      },
+      "336": {
+        "comment_line": 344,
+        "code_line": 345
+      },
+      "344": {
+        "comment_line": 353,
+        "code_line": 354
+      },
+      "360": {
+        "comment_line": 370,
+        "code_line": 371
+      }
+    }
+  },
+  "DeepGEMM/csrc/jit_kernels/heuristics/mega_moe.hpp": {
+    "repository": "deepseek-ai/DeepGEMM",
+    "commit": "057ca5964aae0879ff2e0eb71ee05a3cb0ba3df7",
+    "source_path": "csrc/jit_kernels/heuristics/mega_moe.hpp",
+    "original_blob_sha": "660223eb73b08365accbdb76d8a6b7d1c61d9414",
+    "original_sha256": "24961c1f738a504b7f965d9513059b7f400d466746ed4251844a0a221a0ca11e",
+    "original_lines": 265,
+    "annotation_blocks": 8,
+    "line_map": {
+      "65": {
+        "comment_line": 68,
+        "code_line": 69
+      },
+      "86": {
+        "comment_line": 90,
+        "code_line": 91
+      },
+      "116": {
+        "comment_line": 121,
+        "code_line": 122
+      },
+      "133": {
+        "comment_line": 139,
+        "code_line": 140
+      },
+      "203": {
+        "comment_line": 210,
+        "code_line": 211
+      },
+      "219": {
+        "comment_line": 227,
+        "code_line": 228
+      },
+      "223": {
+        "comment_line": 232,
+        "code_line": 233
+      },
+      "251": {
+        "comment_line": 261,
+        "code_line": 262
+      }
+    }
+  },
+  "DeepGEMM/csrc/apis/mega_moe.hpp": {
+    "repository": "deepseek-ai/DeepGEMM",
+    "commit": "057ca5964aae0879ff2e0eb71ee05a3cb0ba3df7",
+    "source_path": "csrc/apis/mega_moe.hpp",
+    "original_blob_sha": "81d682be961692d5812976ccc5b6e8332dec29cc",
+    "original_sha256": "b52f852760daf2e3a54c20920b8d5dc2f88320daa05c9b0ca21331108c8625c7",
+    "original_lines": 400,
+    "annotation_blocks": 7,
+    "line_map": {
+      "17": {
+        "comment_line": 20,
+        "code_line": 21
+      },
+      "45": {
+        "comment_line": 49,
+        "code_line": 50
+      },
+      "68": {
+        "comment_line": 73,
+        "code_line": 74
+      },
+      "95": {
+        "comment_line": 101,
+        "code_line": 102
+      },
+      "174": {
+        "comment_line": 181,
+        "code_line": 182
+      },
+      "237": {
+        "comment_line": 245,
+        "code_line": 246
+      },
+      "255": {
+        "comment_line": 264,
+        "code_line": 265
+      }
+    }
+  },
+  "DeepGEMM/deep_gemm/include/deep_gemm/common/math.cuh": {
+    "repository": "deepseek-ai/DeepGEMM",
+    "commit": "057ca5964aae0879ff2e0eb71ee05a3cb0ba3df7",
+    "source_path": "deep_gemm/include/deep_gemm/common/math.cuh",
+    "original_blob_sha": "9d8e78137d966ae2f9f997dccc32d707d59b8e6b",
+    "original_sha256": "576e9db1a1889087f77b3f74d74d011bf452f16c0e5c030bdd661e961c074ddc",
+    "original_lines": 236,
+    "annotation_blocks": 3,
+    "line_map": {
+      "111": {
+        "comment_line": 114,
+        "code_line": 115
+      },
+      "123": {
+        "comment_line": 127,
+        "code_line": 128
+      },
+      "137": {
+        "comment_line": 142,
+        "code_line": 143
+      }
+    }
+  },
+  "SGLang/python/sglang/kernels/jit/csrc/deepseek_v4/mega_moe_pre_dispatch.cuh": {
+    "repository": "sgl-project/sglang",
+    "commit": "f47d89564dc2479be8e2e866a2b17f149318758e",
+    "source_path": "python/sglang/kernels/jit/csrc/deepseek_v4/mega_moe_pre_dispatch.cuh",
+    "original_blob_sha": "9bd130ee471ff02e26956ad7ebe448f1aadc1f2d",
+    "original_sha256": "c2dfbe19a09f2af7b3293d39999881d35e3fe80704fabaea30e00edccf1039c8",
+    "original_lines": 300,
+    "annotation_blocks": 10,
+    "line_map": {
+      "25": {
+        "comment_line": 28,
+        "code_line": 29
+      },
+      "50": {
+        "comment_line": 54,
+        "code_line": 55
+      },
+      "65": {
+        "comment_line": 70,
+        "code_line": 71
+      },
+      "73": {
+        "comment_line": 79,
+        "code_line": 80
+      },
+      "93": {
+        "comment_line": 100,
+        "code_line": 101
+      },
+      "109": {
+        "comment_line": 117,
+        "code_line": 118
+      },
+      "137": {
+        "comment_line": 146,
+        "code_line": 147
+      },
+      "143": {
+        "comment_line": 153,
+        "code_line": 154
+      },
+      "155": {
+        "comment_line": 166,
+        "code_line": 167
+      },
+      "158": {
+        "comment_line": 170,
+        "code_line": 171
+      }
+    }
+  }
+}

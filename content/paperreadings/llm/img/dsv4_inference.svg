@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1660" height="650" viewBox="0 0 1660 650" role="img" aria-label="DeepSeek V4 Flash backbone and C4 C128 attention execution order">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#54677c" />
+    </marker>
+  </defs>
+  <style>text{font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",Arial,sans-serif}</style>
+  <rect x="0" y="0" width="1660" height="650" fill="#ffffff" />
+  <text x="55" y="37" fill="#17212e" font-size="27" font-weight="700" text-anchor="start" dominant-baseline="middle">DeepSeek-V4-Flash：主干层序与单层执行顺序</text>
+  <text x="55" y="80" fill="#526171" font-size="18" font-weight="700" text-anchor="start" dominant-baseline="middle">43 个主干层</text>
+  <rect x="215" y="61" width="180" height="39" rx="7" fill="#f3f5f8" stroke="#9aa7b6" />
+  <text x="305" y="81" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">0–1  纯 SWA</text>
+  <rect x="409" y="61" width="880" height="39" rx="7" fill="#e8f1fa" stroke="#80a9cb" />
+  <text x="849" y="81" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">2–42 交错：C4 × 21 / C128 × 20</text>
+  <rect x="1303" y="61" width="300" height="39" rx="7" fill="#f3f5f8" stroke="#9aa7b6" />
+  <text x="1453" y="81" fill="#17212e" font-size="17" font-weight="650" text-anchor="middle" dominant-baseline="middle">另有 MTP ratio=0</text>
+  <text x="55" y="139" fill="#526171" font-size="19" font-weight="700" text-anchor="start" dominant-baseline="middle">Embedding ×4 后：每个主干 DecoderLayer</text>
+  <rect x="55" y="160" width="180" height="61" rx="12" fill="#f5f7f9" stroke="#778698" stroke-width="1.6" />
+  <text x="145.0" y="190.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">4 路残差流</text>
+  <rect x="259" y="160" width="180" height="61" rx="12" fill="#f5f7f9" stroke="#778698" stroke-width="1.6" />
+  <text x="349.0" y="190.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">mHC-pre (Attn)</text>
+  <line x1="238" y1="190" x2="254" y2="190" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <rect x="463" y="160" width="220" height="61" rx="12" fill="#eaf2fb" stroke="#778698" stroke-width="1.6" />
+  <text x="573.0" y="190.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">Norm + Attention</text>
+  <line x1="442" y1="190" x2="458" y2="190" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <rect x="707" y="160" width="180" height="61" rx="12" fill="#f5f7f9" stroke="#778698" stroke-width="1.6" />
+  <text x="797.0" y="190.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">mHC-post (Attn)</text>
+  <line x1="686" y1="190" x2="702" y2="190" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <rect x="911" y="160" width="180" height="61" rx="12" fill="#f5f7f9" stroke="#778698" stroke-width="1.6" />
+  <text x="1001.0" y="190.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">mHC-pre (FFN)</text>
+  <line x1="890" y1="190" x2="906" y2="190" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <rect x="1115" y="160" width="180" height="61" rx="12" fill="#f5f7f9" stroke="#778698" stroke-width="1.6" />
+  <text x="1205.0" y="190.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">Norm + MoE</text>
+  <line x1="1094" y1="190" x2="1110" y2="190" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <rect x="1319" y="160" width="235" height="61" rx="12" fill="#f5f7f9" stroke="#778698" stroke-width="1.6" />
+  <text x="1436.5" y="190.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">mHC-post (FFN)</text>
+  <line x1="1298" y1="190" x2="1314" y2="190" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <line x1="573" y1="222" x2="573" y2="264" stroke="#80a9cb" stroke-width="2" stroke-dasharray="5 5" />
+  <text x="1554" y="246" fill="#526171" font-size="16" font-weight="400" text-anchor="end" dominant-baseline="middle">末层 → hc_head → norm → lm_head</text>
+  <text x="55" y="272" fill="#526171" font-size="19" font-weight="700" text-anchor="start" dominant-baseline="middle">Attention 内部：默认单流路径</text>
+  <text x="65" y="354" fill="#2871aa" font-size="21" font-weight="700" text-anchor="start" dominant-baseline="middle">C4 / CSA</text>
+  <rect x="205" y="315" width="206" height="75" rx="12" fill="#eaf2fb" stroke="#80a9cb" stroke-width="1.6" />
+  <text x="308.0" y="339.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">Q + SWA KV</text>
+  <text x="308.0" y="369.5" fill="#526171" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">写 128-token 窗口</text>
+  <rect x="440" y="315" width="280" height="75" rx="12" fill="#eaf2fb" stroke="#80a9cb" stroke-width="1.6" />
+  <text x="580.0" y="339.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">Indexer compressor</text>
+  <text x="580.0" y="369.5" fill="#526171" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">index K → score → top-k</text>
+  <line x1="415" y1="352" x2="434" y2="352" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <rect x="749" y="315" width="275" height="75" rx="12" fill="#eaf2fb" stroke="#80a9cb" stroke-width="1.6" />
+  <text x="886.5" y="339.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">Core compressor</text>
+  <text x="886.5" y="369.5" fill="#526171" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">4:1 overlap → C4 KV</text>
+  <line x1="724" y1="352" x2="743" y2="352" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" stroke-dasharray="5 4" />
+  <rect x="1053" y="315" width="270" height="75" rx="12" fill="#eaf2fb" stroke="#80a9cb" stroke-width="1.6" />
+  <text x="1188.0" y="339.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">稀疏 MQA + SWA</text>
+  <text x="1188.0" y="369.5" fill="#526171" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">Flash top-k 512</text>
+  <line x1="1028" y1="352" x2="1047" y2="352" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <rect x="1352" y="315" width="245" height="75" rx="12" fill="#eaf2fb" stroke="#80a9cb" stroke-width="1.6" />
+  <text x="1474.5" y="339.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">Grouped O</text>
+  <text x="1474.5" y="369.5" fill="#526171" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">投影回 hidden</text>
+  <line x1="1327" y1="352" x2="1346" y2="352" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <text x="65" y="505" fill="#397759" font-size="21" font-weight="700" text-anchor="start" dominant-baseline="middle">C128 / HCA</text>
+  <text x="578" y="447" fill="#397759" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">不经过 Indexer</text>
+  <rect x="205" y="466" width="206" height="75" rx="12" fill="#eaf5ee" stroke="#7dad8e" stroke-width="1.6" />
+  <text x="308.0" y="490.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">Q + SWA KV</text>
+  <text x="308.0" y="520.5" fill="#526171" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">写 128-token 窗口</text>
+  <rect x="749" y="466" width="275" height="75" rx="12" fill="#eaf5ee" stroke="#7dad8e" stroke-width="1.6" />
+  <text x="886.5" y="490.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">Core compressor</text>
+  <text x="886.5" y="520.5" fill="#526171" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">128:1 → C128 KV</text>
+  <line x1="415" y1="503" x2="743" y2="503" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <rect x="1053" y="466" width="270" height="75" rx="12" fill="#eaf5ee" stroke="#7dad8e" stroke-width="1.6" />
+  <text x="1188.0" y="490.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">密集 MQA + SWA</text>
+  <text x="1188.0" y="520.5" fill="#526171" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">读取已完成的块</text>
+  <line x1="1028" y1="503" x2="1047" y2="503" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <rect x="1352" y="466" width="245" height="75" rx="12" fill="#eaf5ee" stroke="#7dad8e" stroke-width="1.6" />
+  <text x="1474.5" y="490.5" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">Grouped O</text>
+  <text x="1474.5" y="520.5" fill="#526171" font-size="15" font-weight="400" text-anchor="middle" dominant-baseline="middle">投影回 hidden</text>
+  <line x1="1327" y1="503" x2="1346" y2="503" stroke="#54677c" stroke-width="2.4" marker-end="url(#arrow)" />
+  <line x1="55" y1="575" x2="1603" y2="575" stroke="#d8dee5" />
+  <text x="55" y="603" fill="#526171" font-size="17" font-weight="400" text-anchor="start" dominant-baseline="middle">虚线仅表示默认单流提交次序；Indexer top-k 与 Core C4 KV 均在 MQA 前就绪，多流实现可重叠。</text>
+  <text x="55" y="629" fill="#526171" font-size="17" font-weight="400" text-anchor="start" dominant-baseline="middle">mHC 包裹 Attention 与 MoE 子层；C4/C128 是不同层，不在一个层内串行执行。</text>
+</svg>

@@ -24,3 +24,4 @@ myidea/
 
 # Reproducible PNG previews; the articles use the SVG versions.
 /content/cuda/img/cute-fa2-case/*.png
+draft

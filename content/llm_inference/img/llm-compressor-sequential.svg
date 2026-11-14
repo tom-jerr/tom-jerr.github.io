@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="710" viewBox="0 0 1500 710" role="img" aria-labelledby="title desc">
+<title id="title">Sequential calibration pipeline</title>
+<desc id="desc">For each traced subgraph, calibrate with hooks, update parameters at the sequential event, then optionally propagate compressed outputs to the next subgraph.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1500" height="710" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">EXECUTION ORDER</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">SequentialPipeline：校准前向与可选传播</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">图中第二次前向由 propagate_error 或误差记录触发；下一层输入是否更新由 propagate_error 决定</text>
+<line x1="304" y1="260" x2="350" y2="260" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="586" y1="260" x2="632" y2="260" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="868" y1="260" x2="914" y2="260" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="1150" y1="260" x2="1196" y2="260" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<rect x="70" y="205" width="234" height="120" rx="12" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="90" y="240" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">onload 当前 subgraph</text>
+<text x="90" y="274" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">权重进入计算设备</text>
+<rect x="352" y="205" width="234" height="120" rx="12" fill="#FFF2D6" stroke="#C47B10" stroke-width="2" opacity="1.0"/>
+<text x="372" y="240" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">校准前向</text>
+<text x="372" y="274" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">hooks 收集 activation / H</text>
+<rect x="634" y="205" width="234" height="120" rx="12" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="654" y="240" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">SEQ_END event</text>
+<text x="654" y="274" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">消费统计，改写权重</text>
+<rect x="916" y="205" width="234" height="120" rx="12" fill="#FDE9E7" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="936" y="240" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">传播前向（可选）</text>
+<text x="936" y="274" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">关闭 hooks，运行压缩层</text>
+<rect x="1198" y="205" width="234" height="120" rx="12" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="1218" y="240" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">下一 subgraph</text>
+<text x="1218" y="274" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">读取更新后的输入</text>
+<rect x="70" y="412" width="1362" height="164" rx="14" fill="#FFFFFF" stroke="#CAD3E1" stroke-width="2" opacity="1.0"/>
+<text x="94" y="454" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="22" font-weight="700" text-anchor="start">IntermediatesCache · CPU / 指定 offload device</text>
+<text x="94" y="494" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="500" text-anchor="start">保存 batch 和跨 subgraph 激活；当前层按需 fetch，消费后更新 / 删除</text>
+<path d="M 187 412 V 330" fill="none" stroke="#2F6FE4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 7" marker-end="url(#arrow-cpu)"/>
+<path d="M 1033 330 V 412" fill="none" stroke="#E45756" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 7" marker-end="url(#arrow-gpu)"/>
+<text x="94" y="544" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="500" text-anchor="start">propagate_error=True：写入压缩后输出    False：写入未压缩输出</text>
+<text x="70" y="637" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="19" font-weight="650" text-anchor="start">外层：CALIBRATION_EPOCH_START → 逐 subgraph 处理 → CALIBRATION_EPOCH_END</text>
+</svg>

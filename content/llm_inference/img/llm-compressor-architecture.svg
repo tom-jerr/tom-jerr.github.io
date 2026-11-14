@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="730" viewBox="0 0 1500 730" role="img" aria-labelledby="title desc">
+<title id="title">llm-compressor architecture</title>
+<desc id="desc">Two entrypoints converge on compressed-tensors checkpoints; only oneshot uses model definitions and modifier calibration.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1500" height="730" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">ARCHITECTURE</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">算法、执行路径与部署格式分开看</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">蓝色：需要模型定义的 oneshot；绿色：直接处理 safetensors 的 model_free_ptq</text>
+<path d="M 322 256 H 394" fill="none" stroke="#2F6FE4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-cpu)"/>
+<path d="M 322 512 H 1102 V 440 H 1170" fill="none" stroke="#138A7E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-store)"/>
+<path d="M 712 256 H 776" fill="none" stroke="#2F6FE4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-cpu)"/>
+<path d="M 1098 256 H 1170" fill="none" stroke="#2F6FE4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow-cpu)"/>
+<path d="M 1318 326 V 434" fill="none" stroke="#172033" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="64" y="184" width="258" height="142" rx="12" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="84" y="219" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">oneshot</text>
+<text x="84" y="253" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">HF model + recipe + dataset</text>
+<rect x="394" y="184" width="318" height="142" rx="12" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="414" y="219" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">CompressionSession</text>
+<text x="414" y="253" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">recipe / lifecycle / events</text>
+<rect x="776" y="184" width="322" height="142" rx="12" fill="#FFF2D6" stroke="#C47B10" stroke-width="2" opacity="1.0"/>
+<text x="796" y="219" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">CalibrationPipeline</text>
+<text x="796" y="253" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">independent / sequential / datafree</text>
+<rect x="1170" y="184" width="266" height="142" rx="12" fill="#FDE9E7" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="1190" y="219" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">Modifier</text>
+<text x="1190" y="253" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">hooks / observer / 改写权重</text>
+<rect x="64" y="440" width="258" height="142" rx="12" fill="#E2F5F1" stroke="#138A7E" stroke-width="2" opacity="1.0"/>
+<text x="84" y="475" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">model_free_ptq</text>
+<text x="84" y="509" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">safetensors / data-free</text>
+<rect x="1170" y="440" width="266" height="142" rx="12" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="1190" y="475" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">compressed-tensors</text>
+<text x="1190" y="509" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">权重 + qparams + config</text>
+<line x1="1303" y1="582" x2="1303" y2="634" stroke="#2E8B57" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-ok)"/>
+<text x="1303" y="677" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="20" font-weight="700" text-anchor="middle">vLLM 加载 → 运行时量化实现</text>
+<text x="64" y="625" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="500" text-anchor="start">model_free_ptq 不创建完整 HF Module；不执行 GPTQ / AWQ 等需要校准数据的算法。</text>
+</svg>

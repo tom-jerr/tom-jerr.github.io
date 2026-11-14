@@ -69,7 +69,9 @@ export const RecentCards: QuartzComponent = (props) => {
     .filter(
       (f) =>
         isArticle(f) &&
-        ["cuda", "gpu", "llm_inference", "sglang", "notes"].includes(f.slug!.split("/")[0]),
+        ["cuda", "gpu", "llm_inference", "sglang", "notes", "paperreadings"].includes(
+          f.slug!.split("/")[0],
+        ),
     )
     .sort(byDateAndAlphabetical())
     .slice(0, 8)

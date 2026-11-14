@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1450" height="770" viewBox="0 0 1450 770" role="img" aria-label="DeepSeek-V4：模型主干、mHC 与 Attention 的包裹关系">
+  <title>DeepSeek-V4：模型主干、mHC 与 Attention 的包裹关系</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#54677c" />
+    </marker>
+    <style>text{font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",Arial,sans-serif}</style>
+  </defs>
+  <rect x="0" y="0" width="1450" height="770" fill="white" />
+  <text x="35" y="34" fill="#17212e" font-size="25" font-weight="650" text-anchor="start" dominant-baseline="middle">DeepSeek-V4：模型主干、mHC 与 Attention 的包裹关系</text>
+  <rect x="30" y="70" width="310" height="655" rx="11" fill="none" stroke="#aeb8c5" stroke-width="1.4" />
+  <text x="48" y="95" fill="#526171" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">模型入口 / 输出</text>
+  <rect x="55" y="125" width="260" height="65" rx="9" fill="#f5f7fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="185.0" y="144.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">Embedding 表 [V,D]</text>
+  <text x="185.0" y="171.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">查表 → [T,D]</text>
+  <rect x="55" y="245" width="260" height="65" rx="9" fill="#f1ebfa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="185.0" y="264.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">hc_broadcast</text>
+  <text x="185.0" y="291.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">复制 → [T,4,D]</text>
+  <rect x="55" y="420" width="260" height="65" rx="9" fill="#f5f7fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="185.0" y="439.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">DecoderLayer × L</text>
+  <text x="185.0" y="466.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">始终维护四路残差</text>
+  <rect x="55" y="570" width="260" height="65" rx="9" fill="#f1ebfa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="185.0" y="589.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">hc_head → Norm</text>
+  <text x="185.0" y="616.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">[T,4,D] → [T,D]</text>
+  <rect x="55" y="665" width="260" height="65" rx="9" fill="#f5f7fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="185.0" y="697.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">lm_head → logits</text>
+  <polyline points="185,190 185,245" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="185,310 185,420" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="185,485 185,570" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="185,635 185,665" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <rect x="375" y="70" width="1035" height="655" rx="11" fill="none" stroke="#aeb8c5" stroke-width="1.4" />
+  <text x="393" y="95" fill="#526171" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">一个 DecoderLayer：Attention 与 MoE 各自有 mHC pre / post</text>
+  <rect x="420" y="130" width="205" height="65" rx="9" fill="#f1ebfa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="522.5" y="162.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">mHC-pre (Attn)</text>
+  <rect x="665" y="130" width="230" height="65" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="780.0" y="162.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">Norm + Attention</text>
+  <rect x="935" y="130" width="245" height="65" rx="9" fill="#f1ebfa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1057.5" y="162.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">mHC-post (Attn)</text>
+  <rect x="420" y="270" width="205" height="65" rx="9" fill="#f1ebfa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="522.5" y="302.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">mHC-pre (FFN)</text>
+  <rect x="665" y="270" width="230" height="65" rx="9" fill="#fff3db" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="780.0" y="302.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">Norm + MoE</text>
+  <rect x="935" y="270" width="245" height="65" rx="9" fill="#f1ebfa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1057.5" y="302.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">mHC-post (FFN)</text>
+  <polyline points="625,162 665,162" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="895,162 935,162" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="1180,162 1230,162 1230,240 395,240 395,302 420,302" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="625,302 665,302" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="895,302 935,302" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <text x="440" y="365" fill="#526171" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">pre 合成 D 维子层输入；post 混合原残差并写回四路</text>
+  <rect x="420" y="405" width="390" height="105" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="615.0" y="430.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">Attention：共享 K/V MQA</text>
+  <text x="615.0" y="457.5" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">SWA + C4/CSA 或 C128/HCA</text>
+  <text x="615.0" y="484.5" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">Q heads 不复制 KV latent</text>
+  <rect x="865" y="405" width="490" height="105" rx="9" fill="#fff3db" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1110.0" y="430.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">MoE：路由专家 + 共享专家</text>
+  <text x="1110.0" y="457.5" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">Flash：256 routed / top-6</text>
+  <text x="1110.0" y="484.5" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">Pro：384 routed / top-6</text>
+  <text x="420" y="556" fill="#17212e" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">Flash 43 层：0, 0, (4,128) ×20, 4</text>
+  <text x="420" y="597" fill="#17212e" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">Pro 61 层：128, 128, (4,128) ×29, 4</text>
+  <text x="420" y="639" fill="#526171" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">0 = 纯 SWA；4 / 128 = 对应压缩率，且都保留 SWA</text>
+  <text x="420" y="680" fill="#526171" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">原始 Flash / Pro 的额外 MTP 层不计入主干 L</text>
+</svg>

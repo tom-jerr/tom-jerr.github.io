@@ -1,181 +1,177 @@
 ---
-
 title: Speculative Decoding
-created: 2026-04-5
-update:
+created: 2026-04-05
+updated: 2026-10-07
 comments: true
 katex: true
+description: 对照 SGLang 源码梳理投机解码的候选生成、target 验证、采样与 KV/Mamba 状态提交，区分 EAGLE 和 DFlash 2 的实现路径。
 tags:
-
 - LLMInference
-
 ---
+
 # Speculative Decoding
 
+> [!NOTE]
+> 下文的 SGLang 实现以 2026-10-07 的源码快照 [`ba77d30256bf`](https://github.com/sgl-project/sglang/tree/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1) 为准。经典拒绝采样公式与 SGLang 的具体采样分支分别讨论；不同算法和设备后端不能直接共用一条执行路径。
+
+## Motivation
+
+设 target 已经执行了前缀 $x_{1:t}$，对应 KV 和 hidden states 都已存在，并从最后一个位置的分布中采样出 $x_{t+1}$。将这个刚生成的 token 记为 anchor $a$。
+
+此时系统的状态是：
+
+```text
+已执行 target：    A B C
+已生成但尚未执行：      D   ← anchor
+希望 draft 预测：        E F G H
+
+已有 target feature：h_A h_B h_C
+尚无 target feature：            h_D h_E h_F ...
+```
+
+**anchor 已确定，但 target 尚未以它为输入执行 forward。** 这个一位偏移贯穿 EAGLE 的特征递推、DFlash 的训练 mask 和验证后的 KV 提交。
+
+统一记号如下，避免把不同论文里的 $K$、$\gamma$、block size 混在一起。
+
+| 记号                  | 本文含义                                          |
+| --------------------- | ------------------------------------------------- |
+| $a=x_{t+1}$           | 上轮 target 生成、这一轮要处理的 anchor           |
+| $m$                   | 本轮新提出的 draft token 数，不包含 anchor        |
+| $B=m+1$               | 线性 target verify 的输入长度：anchor 加草稿      |
+| $r$                   | 实际接受的 draft 前缀长度，$0\le r\le m$          |
+| $\tau=\mathbb E[r+1]$ | 平均每轮新输出 token 数，包含 correction/bonus    |
+| $K$                   | DFlash 2 每个位置保留的候选数，与 block size 不同 |
+
+target 验证的输入是 `[a, d1, ..., dm]`。因果 attention 允许一次得到所有位置的条件分布：anchor 那一行预测 `d1`，`d1` 那一行预测 `d2`，依此类推。第一个不匹配或被拒绝的位置使后缀作废；若所有草稿都通过，则再从最后一行采样 bonus。
+
+因此，**全部接受时是 $m+1$ 个新输出，而不是接受 $m-1$ 个再补一个**。到达 EOS 或输出长度上限时，面向用户的输出还会被截断。
+
+### Lossless 保证
+
+对随机 proposal，令 $q_j$ 为 draft 在实际已选前缀下使用的条件分布，$p_j$ 为 target 在同一前缀下的分布。对 $d_j\sim q_j$，经典拒绝采样使用：
+
+$$
+\alpha_j(d_j)=\min\left(1,\frac{p_j(d_j)}{q_j(d_j)}\right).
+$$
+
+拒绝后从残差分布采样：
+
+$$
+p'_j(v)=\frac{[p_j(v)-q_j(v)]_+}{\sum_u[p_j(u)-q_j(u)]_+}.
+$$
+
+接受分支提供的概率质量是 $\min(p_j(v),q_j(v))$，拒绝分支补上 $[p_j(v)-q_j(v)]_+$，两者之和恰好为 $p_j(v)$。这里不要求 $q=p$；两者越接近，通常接受率越高，但不接近首先损失的是速度。[原始 speculative decoding 论文](https://arxiv.org/abs/2211.17192)给出了这一分布保持机制。
+
+- Greedy 验证比较 target argmax 和候选 token，在相同数值与 tie-breaking 条件下保持 greedy 输出。
+- 使用 $p/q$ 拒绝采样时，验证端要求**实际 proposal 分布**。经过 DSpark correction 或 DFlash 2 selector 后，不能继续把未经修改的 unary softmax 当成 $q$；target-only 验证另有不读取原始 $q$ 的算法。
+- 分布相同不意味着同一个随机种子下逐 token 相同；并行路径对随机数的消费顺序可能不同。
+
+
+### 优化目标
+
+单请求稳态下，可以用下面的近似理解收益：
+
+$$
+T_{\text{token}}
+\approx\frac{T_d+T_v+T_{\text{state}}+T_{\text{sched}}}{\tau}.
+$$
+
+$T_d$ 是 drafting，$T_v$ 是 target verification，另外两项包含 KV 提交、draft 状态刷新、采样和调度开销。这是把一轮成本除以有效输出数的摊销模型，不能把其中某一项默认视为零。
+
+若无投机时每个 token 成本为 $T_{\text{AR}}$，收益条件是：
+
+$$
+T_d+T_v+T_{\text{state}}+T_{\text{sched}}<\tau T_{\text{AR}}.
+$$
+
+小 batch 下，合并多个位置有机会摊薄权重读取和执行开销；高并发下，target 已经忙于服务大量请求，**验证低质量后缀会与其他请求竞争容量。**
 
 ## Draft
-- 负责便宜地提一个多步候选树
 
+draft 负责提出候选，候选形状取决于算法。EAGLE/EAGLE-2 逐步展开 token，其中 `topk>1` 可形成树；DFlash 用一次 masked block forward 并行预测；DSpark 在并行 backbone 后用 Markov head 引入块内依赖；DFlash 2 则在并行预测的候选集合上选择一条路径。不能把它们都称为“多步候选树”，也不能假定每种 drafter 都读取 target 的多层 feature。
+
+### DFlash 2：先并行评分，再沿一条路径选择
+
+设块内有 $m=B-1$ 个待预测位置。drafter 一次前向产生隐藏状态 $h_j$；[`compute_candidates()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/models/dflash.py#L1231) 通过 LM head 在每个位置取得候选集 $\mathcal C_j$ 及其 unary logits $U_j$。对于位置 $j>1$ 的相邻候选，selector 计算：
+
+$$
+S_j(a,b)=U_j(b)+\left\langle A(a)\odot H(h_j),B(b)\right\rangle,
+\quad a\in\mathcal C_{j-1},\ b\in\mathcal C_j.
+$$
+
+$A$、$B$ 是 checkpoint 中的前驱和后继 codebook，$H$ 是一次线性投影。候选 ID、unary logits 和各位置的隐藏状态在选路径前已经确定，因此 [`build_lattice()` / `_score_edges()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/models/dflash.py#L1046) 能并行算出每个位置的 $K\times K$ 转移分数。把两组候选嵌入堆叠为 $A_{j-1},B_j\in\mathbb R^{K\times d}$，可写成：
+
+$$
+\mathbf S_j=\bigl(A_{j-1}\odot H(h_j)\bigr)B_j^\top
++\mathbf 1\mathbf u_j^\top\in\mathbb R^{K\times K}.
+$$
+
+**首个待预测位置是特例：前驱固定为 anchor。** 源码把 anchor ID 复制到该位置的 $K$ 个前驱槽，所以首个 $K\times K$ 矩阵的各行相同。之后的前驱才来自上一位置的 top-K；源码实现的 lattice 形状为 `[batch, m, K, K]`。
+
+![DFlash 2 的候选 lattice 与路径选择](img/dflash2.png)
+
+最后，[`sample_path()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/models/dflash.py#L1140) 从 anchor 行开始，每步只读取已选前驱对应的一行，再做 argmax 或按该行 softmax 逆 CDF 采样。它是**逐步条件选择**，不是对整条路径分数求和的全局最优搜索。随机采样时，代码还返回实际走过各行的条件分布 `q_rows`，供后续验证使用；评分可并行，沿路径的索引依赖仍是串行的，不能仅凭矩阵很小就断言这部分端到端开销“极低”。
+
+top-K selector 只能在候选集合内改进选择，无法找回未进入 top-K 的正确 token；候选提取仍需处理 LM head 的词表 logits。这个边界也是 [DFlash 2 增加局部卷积](https://inco.ai/blog/dflash2/)改善后部位置候选覆盖的原因。
 
 ## Verify
-Target Model 在每一轮验证时的逻辑输入由两部分构成：
 
-* **已验证的前缀 (Verified Prefix):** 即截至上一轮已确认正确的 Token 序列，记为 $x_{<n}$。这部分通常已经存在于 KV Cache 中。
-* **本轮候选 Token / Tree (Draft Proposals):** 由 Draft Model 生成的 $k$ 个候选 Token $\{x_n, x_{n+1}, \dots, x_{n+k}\}$，或者是树状结构的候选节点。
+target 验证时，已执行的前缀由 KV cache 提供；本轮 `input_ids` 是 verify block/tree，**其中包含尚未执行的 anchor 根节点**。EAGLE 的 [`build_eagle_verify_input()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/eagle_worker_common.py#L366) 把上一轮的 `bonus_tokens` 作为根传给建树函数；[`eagle_prepare_for_verify()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/eagle_utils.py#L522) 再令 `batch.input_ids = verify_input.draft_token`。所以这里的 `draft_token` 是包含根的 verify 输入名称，并不等于“本轮新提出的 token”。
 
-对于 Draft Model 提出的线性序列，Target Model 计算的是每个位置基于前序所有内容的条件概率：
-
-$$
-P(x_1 \mid \text{prefix}), \quad P(x_2 \mid \text{prefix}, x_1), \quad P(x_3 \mid \text{prefix}, x_1, x_2), \dots
-$$
-
-> [!IMPORTANT]
-> 但工程实现里，重新喂给模型的 input_ids 只有本轮 draft_token；verified prefix 不会再作为一整段 token 重新输入，而是通过已有 KV cache 参与 attention。
+对线性 `[a,d_1,\ldots,d_m]`，因果 attention 的各行分别给出 $p(d_1\mid\text{prefix},a)$、$p(d_2\mid\text{prefix},a,d_1)$ 等条件分布；最后一行用于全部通过时采样下一轮 anchor。EAGLE 树则用 tree mask 限制节点只能看到自己的祖先，`retrieve_next_token`、`retrieve_next_sibling` 和 `accept_index` 用于沿接受路径遍历。DFlash 的 [`DFlashVerifyInput`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/dflash_info.py#L24) 明确是 `topk=1` 的线性 verify。两种路径都不会把已缓存的前缀整段重新喂入 target。
 
 
 ## Sampling Method
-### 拒绝采样（Rejection Sampling）
-- 如果 target 觉得这个 token 比 draft 还更可能 $$p(x)>q(x)$$，那 draft 反而“保守”，直接接收不会引入偏差（甚至能提高接收率），所以必接收。
-- 如果 target 觉得这个 token 没 draft 说的那么可能（$$p(x)<q(x)$$），那 draft 过度相信了这个 token。为了不让它把输出分布推偏，就要按比例接收——接收概率设成 p/q，恰好把 draft 过量的概率质量抵消掉。
 
-主要的算法循环
-- Produce k draft tokens using the draft model q. Evaluate their likelihoods under p, which produces k+1 logits. For each token:
-  - If $p(x)>q(x)$, accept the token and continue. 
-  - Otherwise, accept the token with probability $\frac{p(x)}{q(x)}$. If accepted, move onto the next draft token.
-- On the first rejection, sample a token from the modified distribution $p’(x)=norm(max(0,p(x)−q(x)))$ and exit.
-- If no tokens are rejected, sample an additional token from $p(x)$
-  > [!IMPORTANT]
-  > remember we get k+1 logits!
+### 经典 $p/q$ 拒绝采样
 
+前文的 $\alpha=\min(1,p/q)$ 与 $[p-q]_+$ 是**使用实际 draft proposal 分布 $q$** 的算法：沿候选路径依次判定，首次拒绝时从残差分布抽取 correction；若全部接受，使用 target 最后一行抽取 bonus。对于 $p(x)\ge q(x)$ 的候选，接受概率为 1；对于 $p(x)<q(x)$，接受概率为 $p(x)/q(x)$。这解释了 lossless 性质，也解释了为什么改变 proposal 后必须同步改变验证用的 $q$。
 
-### Typical Sampling
-- 类似 Medusa 的采样方法，sglang 工程上对 eagle 的采样也是类似的方式
+SGLang 的 [`eagle_sample()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/eagle_utils.py#L738) 明确分支：greedy 用 `verify_tree_greedy_func`；启用 `speculative_use_rejection_sampling` 时，用 `chain_speculative_sampling_triton` 并检查 `draft_probs` 与 target 词表维度一致；其余支持的非贪心路径用 `tree_speculative_sampling_target_only`。所以不能把这三种验证统称为“EAGLE 的 typical sampling”。设备后端也会影响可用分支。
 
-**Motivation**
-- 拒绝采样在温度升高时效率会明显变差，而真实应用里我们往往只想更有创造性，不一定非得做到分布严格等价
+### SGLang 的 target-only tree sampling
 
-**Process**
-以 Medusa 的树候选 + 一次并行验证为背景，Typical Acceptance 的验证/选择大致是：
-1. 生成候选：Medusa heads 为不同未来位置给出 top-k，组成若干条候选路径（tree branches）。
-2. 并行算目标模型 logits：通过 tree attention，一次 forward 得到这些候选路径上各位置的目标模型分布 $$p_{orig}(x_{n+k}∣x_{1:n+k−1})>min(ϵ,δ⋅e−H(p_{orig}(⋅∣x_{1:n+k−1})))$$
-3. 对每条候选路径从前往后检查：
-  - 第 1 个 token：论文为了保证每步至少推进 1 token，对第一个 token 用 greedy 并无条件接受（或等价地强行通过）。
-  - 从第 2 个 token 开始：逐 token 计算阈值 $\min(\epsilon, \delta e^{-H})$，若该 token 的 $p_{\text{orig}}$ 大于阈值则接受，否则在此截断。
-4. 选择最长被接受前缀：在所有候选路径里，选通过长度最长的那条前缀作为本轮输出（然后进入下一轮 decoding）。
+target-only 分支在 Python 侧把 `draft_probs` 初始化为零，并非把原始 draft softmax 当作 $q$。[CUDA kernel](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/kernels/jit/include/sgl_kernel/speculative/sampling.cuh#L64) 沿树从根向下查看同层 sibling：累积候选的 target 概率 `prob_acc`，满足 `coin < prob_acc / threshold_acc` 或单项概率达到 `threshold_single` 时接受；未接受的 sibling 会把其 target 概率写进工作用的 `draft_probs` buffer。路径停止后，kernel 从当前 target 分布扣除这些已排除 sibling 的概率质量，再采一个终结 token；若整条路径通过，直接用最后一行 target 分布采 bonus。
 
-> [!NOTE]
->对比严格 speculative sampling：后者一旦某位置拒绝，后续 token 全丢弃，并且要按 residual 分布重采样以保证分布不变；Typical Acceptance 则是超过阈值就接受，不做严格的分布校正。
+这里 kernel 中的 `draft_probs` **是被写入的排除质量缓冲区**，不能按变量名把它解释为 drafter 的原始 proposal 分布，也不能把最后的 `relu(target_probs - draft_probs)` 直接解释为经典 $[p-q]_+$。将 `threshold_single` 或 `threshold_acc` 调离 1 还会改变接受规则，不能仅凭“有残差采样”就声称任何阈值配置都严格保持 target 分布。
 
+### DFlash 2 的随机路径
 
-### SGLang 工程化 Tree Sampling
-不像拒绝分布采样需要 draft probs，SGLang 的实现里，tree_speculative_sampling_target_only() 只需要 target_probs 就够了。
-同时在失败后需要拒绝分布采样，保证最后分布回到 target。它的核心逻辑是：
- - 当前 draft token 在 target 看来概率足够高，即 target_probs[i] > threshold-single，直接接受
- - 按树的层次从根往下走。在当前层 siblings 之间累计 prob_acc。满足 coin <= prob_acc / threshold_acc时接受该 draft token。
- - 如果某一层没有继续接受，就从 relu(target_probs - draft_probs) 这部分剩余 target 质量里再采一个最终 token。
-     - 再用 uniform_samples_for_final_sampling 采样
-     - U 是采样阈值已经是 coin * total_mass，范围在 [0, total_mass)
-       ```shell
-       sampled_id = argmin i such that CDF(i) > u
-       where u ~ Uniform(0, total_mass)
-       ```
- - 而是“尽量沿 draft 树接受，但保证最终分布回到 target”
+DFlash 2 的 selector 按实际已选前驱返回每一步的 `q_rows`。[`_selector_sampling_accept()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/dflash_worker_v2.py#L1455) 将这些仅覆盖 top-K 候选的概率散射到完整词表维度，再传给 `accept_sampling()`。因此，“一开始无需知道前驱”只适用于**并行建好所有边分数**；真正采样的条件 $q_j$ 必须由已经选出的前驱决定。
 
 ## 完整流程
-### Prefill Phase
-- 先跑 target 的 extend，再把 target 的 hidden states 和 next token 喂给 draft 做一次 draft_extend，把 draft 状态“对齐”到当前前缀。
-- draft_extend 主要在构造 forward batch，然后调用 draft model 进行前向推理，然后得到 logits 的 hidden_states，并用 logits 得到 topk_p/topk_index 这些后续 draft 轮次要用的状态。
 
-### Decode Phase
-- 如果已经进入 decode，就走完整的 speculative round：draft() -> verify() -> forward_draft_extend_after_decode()
-- KV Cache 申请
-  - Draft 对每个 req 申请 num_step * topk 个 KV 槽，保证每条分支都能有足够的 KV 空间；但实际使用时，只有被 verify 接受的分支会真正占用这些槽，未接受的分支占用的槽会在 verify 后被释放掉。
-  - Verify 盛情的是 draft_token_num 个 KV 槽，专门给这轮 draft tree 的 token 用；而 verified prefix 相关的 KV 已经在之前的 decode 轮次里申请好了，并且会一直保留到 decode 结束。
-- V2 的 KV Cache 释放
-  - 当前 v2 主路径里，未接受的 speculative slot 通常不是像 v1 那样每轮立即 free 掉，而是留在这个 req 的“已分配但未提交”窗口里，后面继续覆盖复用。也就是说，v2 更偏向：
-    - kv_committed_len：真正已经被 target verify 接受的长度
-    - kv_allocated_len：这个请求已经预留好的物理窗口长度
-  - 下一轮再通过 req_to_token_pool 重新映射、覆盖这些 slot。batch.out_cache_loc 是临时视图，不是所有权本身
+### EAGLE V2：从 Prefill 到 Draft
 
-**Draft Phase**
-1. 先由上一轮留下的 EagleDraftInput 作为 draft 的起点。
-     - 这里面最关键的是三样：verified_id、hidden_states、topk_p/topk_index。
-     - 它们来自上一轮 target verify 后进行 draft extend 后的结果，是这轮 draft 展树的种子。
+Prefill 先由 target extend 得到可供 drafter 使用的 hidden states 与已采样的 anchor，随后运行 draft extend，建立 draft KV 和下一轮候选种子。进入 decode 后，[`forward_batch_generation()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/eagle_worker_v2.py#L1323) 的常规顺序是 `draft()` → `verify()` → `_draft_extend_for_decode()`；流水并行、零步 drafting 等分支另有调度处理。
 
-2. draft() 先做预处理，给整棵 speculative tree 预分配 cache 位置。
-     - 这一步会根据 speculative_num_steps、topk、page_size 给所有分支预留 KV 槽；topk>1 时还会处理“复制最后 partial page”这类工程细节。
-     - 分配 KV Cache 会过量分配，每个 req 分配 speculative_num_steps * self.topk 个槽，保证每条分支都能有足够的 KV 空间；但实际使用时，只有被 verify 接受的分支会真正占用这些槽，未接受的分支占用的槽会在 verify 后被释放掉。
+1. `EagleDraftInput` 带着上一轮产生的 `bonus_tokens`、hidden states 和 top-K 种子进入 [`draft()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/eagle_worker_v2.py#L598)。这里的 `bonus_tokens` 是已输出、尚未由 target 执行的当前 anchor。
+2. [`draft_forward()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/eagle_worker_v2.py#L674) 逐步展开。对于 `topk>1`，每步用父节点累计分数与新候选概率选出下一层；[`organize_draft_results()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/eagle_worker_v2.py#L847) 保留预算内的节点，不把完整满树交给 target。
+3. 建树函数把 **anchor 作为根** 拼入 verify 输入，同时生成 `positions`、tree mask 和 `retrieve_*` 索引。`topk=1` 且满足后端条件时，代码可走专门的 `build_chain_tree()` 快路径；不能把 `build_tree_kernel_efficient()` 当成唯一入口。
 
-3. draft_forward() 按步展开候选树。
-     - 每一步都要执行 draft model 的前向推理，得到当前层所有候选节点的 hidden_states 和 logits，然后用 logits 得到下一步的 topk_p/topk_index，继续展开树。
-     - 第 0 步：直接取当前 topk_p/topk_index 作为第一层候选。
-     - 后续步：把上一层累计分数和当前步 top-k 概率相乘，再从所有展开分支里选新的 top-k，继续向下滚动。
-     - draft 并不会把整棵满树都交给 target。organize_draft_results() 会把每一步收集到的分数和 token 合起来，最终只保留 num_draft_tokens - 1 个得分最高的 draft 节点；再把当前已验证 token 作为根拼进去，然后去构建 draft tree 和对应的 tree mask。
+### KV 预留与接受路径
 
-4. build_tree_kernel_efficient() 把这批候选变成 target verify 需要的结构化输入。
-它会产出：
+此前“每轮恰好分配 `num_steps × topk` 个槽，未接受的当轮立刻释放”的说法与当前 V2 不符。[`get_alloc_len_per_decode()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/mem_cache/allocation_sizing.py#L27) 先取 `max(topk × num_steps, num_draft_tokens)`，`page_size>1` 且树分支有 draft KV 时还按最坏页占用扩大；[`get_alloc_reserve_per_decode()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/mem_cache/allocation_sizing.py#L60) 再取两倍，吸收 overlap 下提交长度落后一轮的窗口。实际新增页数还取决于之前已预留多少空间。
 
-     - draft_token: 后续真正送入 verify 的 token 序列，不包含 verified token
-     - positions
-     - custom_mask/tree mask
-     - retrive_index / retrive_next_token / retrive_next_sibling
+`kv_committed_len` 表示 target 验证后确认的长度，`kv_allocated_len` 表示请求已占有的物理窗口上界。[`alloc_for_spec_decode()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/mem_cache/allocation.py#L739) 扩大后者并更新 `req_to_token_pool`；未接受的 verify/draft 槽可留在已分配窗口中由后续轮次覆盖。`batch.out_cache_loc` 只是当次 forward 使用的槽位视图。树的已接受路径需要移动到每请求连续的前部时，[`_finalize_accept_tree_path()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/eagle_worker_common.py#L478) 执行 KV 与 hidden/predict 的整理；链式 `topk=1` 不需要这一步。
 
-**Verify Phase**
+### Verify 与 Draft Extend
 
-- verify() 先把 batch 切到 TARGET_VERIFY 模式，然后调用 prepare_for_verify()
-- 这里有个很关键的实现细节：batch.input_ids = self.draft_token。重新喂给 target 的“新 token”只有这轮 draft tree；已验证前缀不会重新作为 token 序列整段输入，而是通过已有 KV cache 参与 attention。
-- 同时，prepare_for_verify() 会按 batch.seq_lens -> batch.seq_lens + draft_token_num 给这些 draft token 分配 KV 位置，并把它们写进 req_to_token_pool。
-    - 于是 target verify 的 attention 逻辑上看到的是：verified prefix KV + 本轮 draft tree KV。
+[`run_eagle_verify()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/eagle_worker_common.py#L532) 先以 `TARGET_VERIFY` 执行 target forward，再按上一节的 greedy、target-only 或 rejection 分支得到 `accept_index`、接受长度和下一轮 anchor。**接受长度包含最后的 correction/bonus 输出；target 本轮真正算过 KV 的，是旧 anchor 与被接受草稿对应的输入行。** 新采出的 correction/bonus 已输出给用户，但还没有以它自身为输入执行 target forward，不能误认为已经有它的 target KV。
 
+随后 `_draft_extend_for_decode()` 沿本轮确认的路径推进 drafter，使下一轮从正确的前缀继续。EAGLE 需要 target 验证产生的 feature 与新 anchor 的 token 信息，`EagleDraftInput` 把这些状态带入下轮；这一步的成本应计入前文的 $T_{\text{state}}$。DFlash 使用自己的 block draft 状态与 worker，不走这条 EAGLE 专属的 `topk_p/topk_index` 递推链。
 
-**Tree Sampling**
-- 贪心场景：
-    - verify_tree_greedy 会从树根开始，逐层拿 target 在“当前已接受节点位置”的 argmax，去当前层兄弟节点里找是否有匹配的 draft token。
-    - 找到就接受，继续往下一层。找不到就停止，并把当前节点的 target argmax 作为最后输出 token。
-    - 所以它本质上是在树里找“一条和 target 真正预测一致的最长路径”。
-- 非贪心采样场景：
-    - spec_info.verify() 会先对 target logits 做 temperature / top-k / top-p，得到每个 draft 节点位置上的 target_probs，然后交给 tree_speculative_sampling_target_only()。
+如果是 greedy 树，`verify_tree_greedy_func` 在当前节点的 children 中寻找与 target argmax 相同的候选；找不到就以 target argmax 结束本轮。这个描述只适用于 greedy 分支；随机验证还有独立的概率与阈值处理。
 
-    - 当前 draft token 在 target 看来概率足够高，直接接受
-    - 按树的层次从根往下走。在当前层 siblings 之间累计 prob_acc。满足 coin <= prob_acc / threshold_acc时接受该 draft token。
-    - 如果某一层没有继续接受，就从 relu(target_probs - draft_probs) 这部分剩余 target 质量里再采一个最终 token。
-        - 再用 uniform_samples_for_final_sampling 采样
-        - U 是采样阈值已经是 coin * total_mass，范围在 [0, total_mass)
-          ```shell
-          sampled_id = argmin i such that CDF(i) > u
-          where u ~ Uniform(0, total_mass)
-          ```
-    - 而是尽量沿 draft 树接受，但保证最终分布回到 target
-
-
-**Draft Extend**
-1. verify 完成后，SGLang 会真正把接受的 token 写入 req.output_ids，更新 grammar、kv_committed_len、seq_lens
-     - 释放未接受分支占掉的 KV 槽；topk>1 时还会做 cache compaction，把保留下来的 accepted path 挪到连续位置。
-2. verify 得到的 prefict 构造 forward batch，draft 模型沿着这次真正接受的 token 序列做一次 extend，重新得到下一轮要用的 topk_p/topk_index/hidden_states。
-
-3. 构造下一次的 EagleDraftInput，主要是把这轮 verify 接受的 token(最后一个被验证成功的 token) 以及得到的 topk_p/topk_index/hidden_states。这一步非常关键，它让 draft 始终跟 target 已确认的前缀同步。
-
-> [!IMPORTANT]
-> 这里是因为 EAGLE 本身的性质决定的，它需要 target model 的 feature 和 sample 后的 token 作为 draft model 的输入来预测 draft token，所以每次 draft->verify->sampling 之后，我们都需要再次推进 draft，即用 target model 刚刚得到的所有 token 的 hidden_state 以及采样得到的 bonus token 来恢复 KV Cache 以供下一轮 draft 使用。
 ## 工程细节 SGLang
-### Mamba Cache Problem
-- 普通 Transformer 在 speculative verify 后，只需要把接受的 token 写回 target KV cache 就够了。
-- 但 Mamba / hybrid GDN 还维护 conv_states 和 ssm_states。这些状态不按 token 存，而是按请求的当前状态槽位存，所以 **verify 后必须把被接受那一步的状态也同步回去**。
-  
-**Process**
-- 为此，`prepare_for_v2_verify()` 现在会额外准备 `batch.mamba_track_indices`。这不是工作态 slot，而是 prefix-cache 用的持久跟踪 slot。
-- 接着 verify forward 跑完后，`_mamba_verify_update()` 根据 accept_length/accept_index 算出两组 step。
-  - 第一组是 accepted_steps，表示每个请求真正接受到的最后一步，要把这一步的 Mamba 状态写回当前请求工作态的 `mamba_cache_indices`。
-  - 第二组是 mamba_steps_to_track，表示如果这次 verify 跨过了一个 mamba track interval，那么还要把跨点那一步的状态额外写回 `mamba_track_indices`，供后面 radix prefix cache 保存。
-- 最终真正做回写的是 hybridlinearattn 后端的 `update_mamba_state_after_mtp_verify()`。
-  - 实际上是两次 scatter 操作
-    - 一次把 accepted_steps scatter 到 mamba_cache_indices，让请求工作态追上真正接受的那一步。
-    - 一次把 mamba_steps_to_track scatter 到 mamba_track_indices，让 prefix-cache 的 snapshot 落在正确的 tracking 点上。
 
-**Important** 
-- Mamba cache 不是单纯 token->KV 的映射，而是序列状态快照。
-- speculative verify 会先算出一串候选，再只接受其中一部分；真正该缓存的 Mamba state，不一定是 verify 最后一步，而是 accepted 路径里跨过 track interval 的那一步。
-- verify 路径和 extend 路径用的 tracking 语义不一样，所以这里只保留 mamba_track_indices，并显式把 mamba_track_mask、mamba_track_seqlens 置空；否则会把 extend 阶段遗留的 metadata 误带进 verify
+### Mamba Cache Problem
+
+Transformer 的 target 状态主要按 token 保存在 KV 槽中；Mamba/GDN 等混合模型还维护随请求推进的卷积和 SSM 状态。verify 会计算多个候选节点，却只提交其中一条接受路径，因此这些序列状态必须与接受位置同步，不能直接取 verify 计算的最后一步。
+
+当前源码中的入口不是原文写的 `prepare_for_v2_verify()` 与 `_mamba_verify_update()`。EAGLE 的 `eagle_prepare_for_verify()`、DFlash 的 `DFlashVerifyInput.prepare_for_verify()` 都调用 [`prepare_mamba_track_for_verify()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/spec_utils.py#L841)：按需重建 `mamba_track_indices`，并清空可能来自 extend 阶段的 `mamba_track_mask` 与 `mamba_track_seqlens`，避免 verify forward 使用过期的 tracking 元数据。
+
+验证完成后，[`commit_mamba_states_after_verify()`](https://github.com/sgl-project/sglang/blob/ba77d30256bfb1d1e0d53cd877c87f0b2e279ef1/python/sglang/srt/speculative/spec_utils.py#L933) 根据 `accept_index` 和接受长度确定最后被接受的 verify 步；启用 prefix-cache tracking 时，还确定跨过 track interval 的那一步。普通 hybrid attention 后端可调用 `update_mamba_state_after_mtp_verify()` 把这两处状态提交到工作槽与 tracking 槽。但 **ReplaySSM/GDN/KDA 已有独立的 ring 或 fold 提交分支**，不能再概括为“固定两次 scatter”。共同的不变量是：工作态对应接受路径末端，tracking snapshot 对应实际跨越的边界。
 
 
 

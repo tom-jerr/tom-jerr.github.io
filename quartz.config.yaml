@@ -233,7 +233,7 @@ plugins:
       condition: not-index
 
   - source: "@quartz-community/content-meta"
-    enabled: true
+    enabled: false
     layout:
       position: beforeBody
       priority: 20

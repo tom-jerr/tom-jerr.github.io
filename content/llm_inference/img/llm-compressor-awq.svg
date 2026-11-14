@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="670" viewBox="0 0 1320 670" role="img" aria-labelledby="title desc">
+<title id="title">AWQ reparameterization and quantization</title>
+<desc id="desc">A channel scale is searched using calibration activations, folded into the preceding smooth layer and following weight, then the latter is quantized.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1320" height="670" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">MECHANISM</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">AWQ：先保持函数等价，再改变权重量化误差</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">按输入通道缩放；搜索目标是校准样本上的 parent 输出重构误差</text>
+<text x="75" y="193" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="19" font-weight="650" text-anchor="start">原始浮点路径</text>
+<rect x="75" y="216" width="315" height="110" rx="12" fill="#FFFFFF" stroke="#CAD3E1" stroke-width="2" opacity="1.0"/>
+<text x="95" y="251" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">Smooth layer</text>
+<text x="95" y="285" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">输出 X</text>
+<rect x="505" y="216" width="315" height="110" rx="12" fill="#FFFFFF" stroke="#CAD3E1" stroke-width="2" opacity="1.0"/>
+<text x="525" y="251" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">Balance layer</text>
+<text x="525" y="285" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">权重 W</text>
+<rect x="935" y="216" width="305" height="110" rx="12" fill="#FFFFFF" stroke="#CAD3E1" stroke-width="2" opacity="1.0"/>
+<text x="955" y="251" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">输出</text>
+<text x="955" y="285" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">Y = X Wᵀ</text>
+<line x1="390" y1="271" x2="500" y2="271" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<line x1="820" y1="271" x2="930" y2="271" stroke="#172033" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow)"/>
+<text x="75" y="411" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="19" font-weight="700" text-anchor="start">AWQ 搜索后</text>
+<rect x="75" y="434" width="315" height="110" rx="12" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="95" y="469" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">Smooth layer ÷ s</text>
+<text x="95" y="503" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">输出 X / s</text>
+<rect x="505" y="434" width="315" height="110" rx="12" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="525" y="469" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">Balance layer × s</text>
+<text x="525" y="503" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">权重 W · s</text>
+<rect x="935" y="434" width="305" height="110" rx="12" fill="#E4F4EA" stroke="#2E8B57" stroke-width="2" opacity="1.0"/>
+<text x="955" y="469" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="700" text-anchor="start">再量化权重</text>
+<text x="955" y="503" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="500" text-anchor="start">Ŷ = (X / s) Q(W · s)ᵀ</text>
+<line x1="390" y1="489" x2="500" y2="489" stroke="#7656D8" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-control)"/>
+<line x1="820" y1="489" x2="930" y2="489" stroke="#2F6FE4" stroke-width="3" stroke-linecap="round" marker-end="url(#arrow-cpu)"/>
+<text x="75" y="608" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="19" font-weight="550" text-anchor="start">浮点时 (X / s)(W · s)ᵀ = XWᵀ；s 融入相邻参数，运行时无需单独执行 AWQ 搜索。</text>
+</svg>

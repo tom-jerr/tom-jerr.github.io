@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="700" viewBox="0 0 1480 700" role="img" aria-label="MegaMoE：在一个 kernel 内重叠 NVLink 通信与专家计算">
+  <title>MegaMoE：在一个 kernel 内重叠 NVLink 通信与专家计算</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#54677c" />
+    </marker>
+    <style>text{font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",Arial,sans-serif}</style>
+  </defs>
+  <rect x="0" y="0" width="1480" height="700" fill="white" />
+  <text x="35" y="34" fill="#17212e" font-size="25" font-weight="650" text-anchor="start" dominant-baseline="middle">MegaMoE：在一个 kernel 内重叠 NVLink 通信与专家计算</text>
+  <rect x="35" y="90" width="285" height="75" rx="9" fill="#f5f7fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="177.5" y="114.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">Router / HashTopK</text>
+  <text x="177.5" y="141.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">topk_ids + topk_weights</text>
+  <rect x="390" y="90" width="320" height="75" rx="9" fill="#fff3db" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="550.0" y="114.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">pre_dispatch</text>
+  <text x="550.0" y="141.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">量化激活、填 symmetric buffer</text>
+  <rect x="795" y="90" width="640" height="75" rx="9" fill="#f5f7fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1115.0" y="114.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">预先转换的 expert 权重</text>
+  <text x="1115.0" y="141.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">交错 gate/up；Scale 按 UTCCP 访问布局重排</text>
+  <polyline points="320,127 390,127" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <rect x="35" y="215" width="1400" height="380" rx="11" fill="none" stroke="#aeb8c5" stroke-width="1.4" />
+  <text x="53" y="240" fill="#526171" font-size="20" font-weight="650" text-anchor="start" dominant-baseline="middle">一个 MegaMoE launch：图中方块表示设备内角色与依赖，非独立 kernel</text>
+  <rect x="65" y="275" width="245" height="120" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="187.5" y="308.0" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">Dispatch / pull</text>
+  <text x="187.5" y="335.0" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">读源 rank token + scale</text>
+  <text x="187.5" y="362.0" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">写本地 expert ring</text>
+  <rect x="365" y="275" width="240" height="120" rx="9" fill="#e9f5ef" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="485.0" y="294.5" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">Linear 1 / Tensor Core</text>
+  <text x="485.0" y="321.5" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">gate + up → SwiGLU</text>
+  <text x="485.0" y="348.5" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">乘路由权重</text>
+  <text x="485.0" y="375.5" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">再量化为 FP8</text>
+  <rect x="665" y="275" width="240" height="120" rx="9" fill="#e9f5ef" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="785.0" y="308.0" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">Linear 2 / Tensor Core</text>
+  <text x="785.0" y="335.0" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">逐 K block 等 readiness</text>
+  <text x="785.0" y="362.0" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">down projection</text>
+  <rect x="965" y="275" width="245" height="120" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1087.5" y="294.5" fill="#17212e" font-size="18" font-weight="650" text-anchor="middle" dominant-baseline="middle">Write-back / Combine</text>
+  <text x="1087.5" y="321.5" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">写回源 rank 的 top-k 槽</text>
+  <text x="1087.5" y="348.5" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">等 peer 本轮写完</text>
+  <text x="1087.5" y="375.5" fill="#17212e" font-size="16" font-weight="400" text-anchor="middle" dominant-baseline="middle">FP32 求和 → BF16</text>
+  <polyline points="550,165 550,215" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="188,395 188,448 485,448 485,395" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="605,335 665,335" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="905,335 965,335" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <rect x="1260" y="305" width="145" height="60" rx="9" fill="#f1ebfa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1332.5" y="335.0" fill="#17212e" font-size="20" font-weight="650" text-anchor="middle" dominant-baseline="middle">BF16 y</text>
+  <polyline points="1210,335 1260,335" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="1435,127 1450,127 1450,260 485,260 485,275" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="785,260 785,275" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <text x="68" y="488" fill="#17212e" font-size="19" font-weight="400" text-anchor="start" dominant-baseline="middle">Dispatch 与 TMA / UMMA / epilogue 使用不同线程角色，可同时推进不同 tiles。</text>
+  <text x="68" y="530" fill="#17212e" font-size="19" font-weight="400" text-anchor="start" dominant-baseline="middle">计数器、readiness mask 和 barrier 确认生产者完成；消费者完成后才能复用 ring slot。</text>
+  <text x="68" y="571" fill="#526171" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">Router 与 pre_dispatch 位于 mega kernel 之前；共享专家是否融合取决于后端和权重格式。</text>
+  <text x="35" y="630" fill="#17212e" font-size="19" font-weight="400" text-anchor="start" dominant-baseline="middle">适用域：有 peer 访问的 NVLink EP 组；跨节点需另选通信路径。</text>
+  <text x="35" y="673" fill="#526171" font-size="19" font-weight="400" text-anchor="start" dominant-baseline="middle">容量：每 rank 的 prefill / decode / verify 行数都必须 ≤ 配置 cap；增大 cap 会增加 HBM workspace。</text>
+</svg>

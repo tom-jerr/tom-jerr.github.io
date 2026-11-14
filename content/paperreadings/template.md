@@ -1,32 +1,54 @@
 ---
 
-title: 3D Active Metric-Semantic SLAM 论文精读
-created: 2025-10-13
-update:
-comments: true
-katex: true
+title: "{{Paper Title}} 论文精读"
+# 创建实际笔记时填写 created: YYYY-MM-DD
+draft: true
 tags:
-
-- VINS
+  - Paper Notes
+zoteroKey: "{{Zotero Item Key}}"
+doi: "{{Verified DOI or leave blank}}"
+zoteroURI: "zotero://select/library/items/{{Zotero Item Key}}"
+description: "用一到两句话概括研究问题、核心机制和主要结论。"
 
 ---
 
-# 3D Active Metric-Semantic SLAM 论文精读
+# {{Paper Title}} 论文精读
 
-RA-L 2024
-作者信息：Yuezhan Tao, 宾西法尼亚大学的 GRASP 实验室，主要研究方向为机器人自主导航和 3D 重建以及将这些东西与 AI 和 LLM 融合
+## Bibliographic Information
 
-## Abstract
+- Authors:
+- Year / Venue:
+- DOI:
+- Zotero item key:
+- Zotero PDF:
 
-## Introduction 总体介绍
+## 1. Problem & Workload
 
-## Background
+## 2. Core Insight & Invariants
 
-## Method
+## 3. Failure Model & Limitations
 
-## Experiments/Evaluation/Results
+## 4. Abstraction, Ownership & Data Flow
 
-## Conclusion
+## 5. Evaluation
+
+- Hardware / software:
+- Workloads / datasets:
+- Baselines / metrics:
+- Main results:
+- Ablations:
+
+## 6. Trade-off
+
+## 7. Relationship to Other Work
+
+## 8. Relevance to My Research
+
+## 9. Evidence & Reading Questions
+
+- Important claims with verified source locations:
+- Questions to investigate:
+- Unknown or unverified details:
 
 ## My Summary
 

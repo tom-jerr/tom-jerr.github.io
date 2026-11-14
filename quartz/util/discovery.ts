@@ -3,7 +3,7 @@ import { FullSlug, FilePath, resolveRelative, slugifyFilePath } from "./path"
 import type { Root, Element } from "hast"
 
 export const folderColors = ["#6274d9", "#299b83", "#c18a32", "#ad68bd", "#d17463", "#419bb5"]
-const roots = ["cuda", "gpu", "llm_inference", "sglang", "notes"]
+const roots = ["cuda", "gpu", "llm_inference", "sglang", "notes", "paperreadings"]
 
 export function folderColor(folder: string) {
   const root = folder.split("/")[0]

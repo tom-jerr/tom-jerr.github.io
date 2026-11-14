@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="565" viewBox="0 0 1400 565" role="img" aria-label="C4 / CSA：独立的 Core 与 Indexer 压缩">
+  <title>C4 / CSA：独立的 Core 与 Indexer 压缩</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#54677c" />
+    </marker>
+    <style>text{font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",Arial,sans-serif}</style>
+  </defs>
+  <rect x="0" y="0" width="1400" height="565" fill="white" />
+  <text x="35" y="34" fill="#17212e" font-size="25" font-weight="650" text-anchor="start" dominant-baseline="middle">C4 / CSA：独立的 Core 与 Indexer 压缩</text>
+  <rect x="35" y="230" width="175" height="90" rx="9" fill="#f1ebfa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="122.5" y="261.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">Attention 输入</text>
+  <text x="122.5" y="288.5" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">x [T,D]</text>
+  <rect x="290" y="80" width="245" height="75" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="412.5" y="104.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">SWA KV 投影</text>
+  <text x="412.5" y="131.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">每 token 一条 512D</text>
+  <rect x="290" y="230" width="245" height="90" rx="9" fill="#e9f5ef" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="412.5" y="261.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">Core compressor</text>
+  <text x="412.5" y="288.5" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">C4：4 新 token → 1 条</text>
+  <rect x="630" y="80" width="275" height="75" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="767.5" y="104.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">本地 SWA KV cache</text>
+  <text x="767.5" y="131.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">最近 128 token</text>
+  <rect x="630" y="230" width="275" height="90" rx="9" fill="#e9f5ef" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="767.5" y="261.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">Core 压缩 KV cache</text>
+  <text x="767.5" y="288.5" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">512D；共享 K / V</text>
+  <rect x="1030" y="165" width="330" height="110" rx="9" fill="#e8f1fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1195.0" y="193.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">共享 K/V MQA</text>
+  <text x="1195.0" y="220.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">SWA + top-k C4 条目</text>
+  <text x="1195.0" y="247.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">然后 inverse RoPE + O 投影</text>
+  <polyline points="210,275 250,275 250,117 290,117" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="535,117 630,117" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="210,275 290,275" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="535,275 630,275" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="905,117 985,117 985,190 1030,190" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="905,275 985,275 985,248 1030,248" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <rect x="290" y="390" width="245" height="85" rx="9" fill="#fff3db" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="412.5" y="419.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">Indexer compressor</text>
+  <text x="412.5" y="446.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">C4；输出 128D index K</text>
+  <rect x="630" y="390" width="275" height="85" rx="9" fill="#fff3db" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="767.5" y="419.0" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">Indexer Q × 历史 index K</text>
+  <text x="767.5" y="446.0" fill="#17212e" font-size="17" font-weight="400" text-anchor="middle" dominant-baseline="middle">打分 → top-k 条目索引</text>
+  <polyline points="250,275 250,432 290,432" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="535,432 630,432" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+  <polyline points="770,390 770,320" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arrow)" />
+  <text x="1030" y="415" fill="#17212e" font-size="19" font-weight="400" text-anchor="start" dominant-baseline="middle">Flash top-k = 512</text>
+  <text x="1030" y="452" fill="#17212e" font-size="19" font-weight="400" text-anchor="start" dominant-baseline="middle">Pro top-k = 1024</text>
+  <text x="35" y="527" fill="#526171" font-size="18" font-weight="400" text-anchor="start" dominant-baseline="middle">实线：张量数据；虚线：选取索引。Indexer 不向 Core compressor 传递输入。</text>
+  <rect x="1030" y="65" width="330" height="65" rx="9" fill="#f5f7fa" stroke="#91a0b1" stroke-width="1.4" />
+  <text x="1195.0" y="97.5" fill="#17212e" font-size="19" font-weight="650" text-anchor="middle" dominant-baseline="middle">当前 token 的 Q</text>
+  <polyline points="1195,130 1195,165" fill="none" stroke="#54677c" stroke-width="2" stroke-dasharray="none" marker-end="url(#arrow)" />
+</svg>

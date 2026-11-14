@@ -6,13 +6,37 @@ import { FolderGraph } from "./quartz/components/FolderGraph"
 import { PageTypeDispatcher } from "./quartz/plugins/pageTypes/dispatcher"
 import { categories, categorySlug, isArticle } from "./quartz/util/discovery"
 import type { QuartzPageTypePluginInstance } from "./quartz/plugins/types"
+import { FrontmatterDateAliases } from "./quartz/plugins/transformers/frontmatterDates"
+import ArticleMeta from "./quartz/components/ArticleMeta"
 
 // Config loading also constructs the page dispatcher, so overrides must be
 // registered before it captures the layouts used by emitted pages.
 componentRegistry.setOptionOverrides("@quartz-community/explorer", explorerOptions)
 componentRegistry.setOptionOverrides("@quartz-community/recent-notes", recentNotesOptions)
 const config = await loadQuartzConfig()
+
+// The upstream date transformer understands `modified`, while this blog has
+// historically used `updated` (and occasionally `update`) in frontmatter.
+// Normalize the alias after frontmatter parsing and before date extraction.
+const dateTransformerIndex = config.plugins.transformers.findIndex(
+  (transformer) => transformer.name === "CreatedModifiedDate",
+)
+config.plugins.transformers.splice(
+  dateTransformerIndex >= 0 ? dateTransformerIndex : config.plugins.transformers.length,
+  0,
+  FrontmatterDateAliases(),
+)
+
 export const layout = await loadQuartzLayout()
+
+// ContentMeta is disabled in YAML. Insert the dual-date replacement at the
+// same priority slot, between ArticleTitle and TagList.
+const articleMeta = ArticleMeta()
+for (const section of [layout.defaults, layout.byPageType.content]) {
+  if (!section) continue
+  const beforeBody = section.beforeBody ?? []
+  section.beforeBody = [...beforeBody.slice(0, 2), articleMeta, ...beforeBody.slice(2)]
+}
 
 for (const section of [layout.defaults, ...Object.values(layout.byPageType)]) {
   if (section.left?.length) section.left = [...section.left, Taxonomy, RecentCards]

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1560" height="970" viewBox="0 0 1560 970" role="img" aria-labelledby="title desc">
+<title id="title">MiniInfer Rust seam architecture</title>
+<desc id="desc">Rust decides the plan and the page ledger; the Python data plane owns CUDA, the future input map and the release acknowledgements.</desc>
+<defs>
+<marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#172033"/></marker>
+<marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#637083"/></marker>
+<marker id="arrow-gpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#E45756"/></marker>
+<marker id="arrow-cpu" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2F6FE4"/></marker>
+<marker id="arrow-store" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#138A7E"/></marker>
+<marker id="arrow-control" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#7656D8"/></marker>
+<marker id="arrow-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#2E8B57"/></marker>
+<filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="4" stdDeviation="7" flood-color="#172033" flood-opacity="0.09"/></filter>
+</defs>
+<rect width="1560" height="970" fill="#F8FAFD"/>
+<text x="64" y="46" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="700" text-anchor="start">SYSTEM ARCHITECTURE</text>
+<text x="64" y="83" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="30" font-weight="750" text-anchor="start">一条接缝，两侧各自的权威</text>
+<text x="64" y="114" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="18" font-weight="450" text-anchor="start">紫色：Rust 控制面；黄色：仅主机内存的 pinned 接缝；蓝/绿：持有 CUDA 的数据面</text>
+<rect x="64" y="150" width="1432" height="236" rx="18" fill="#EEE9FF" stroke="#7656D8" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="88" y="186" fill="#7656D8" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="750" text-anchor="start">Rust 控制面 · 不创建 CUDA context</text>
+<text x="88" y="214" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="15" font-weight="500" text-anchor="start">miniinfer-engine/src · scheduler.rs / fsm.rs / kv.rs / py.rs</text>
+<rect x="96" y="240" width="300" height="118" rx="12" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="114" y="279" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="start"><tspan x="114" dy="0">Scheduler::step</tspan><tspan x="114" dy="26">退休只由步数决定（不读 token 值）</tspan><tspan x="114" dy="26">scheduler.rs:196</tspan></text>
+<rect x="420" y="240" width="320" height="118" rx="12" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="438" y="279" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="start"><tspan x="438" dy="0">KvPool 页账本</tspan><tspan x="438" dy="26">free / staged / fenced / frontier</tspan><tspan x="438" dy="26">kv.rs:158  note_device_fence</tspan></text>
+<rect x="764" y="240" width="300" height="118" rx="12" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="782" y="279" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="start"><tspan x="782" dy="0">PacketArena 写包</tspan><tspan x="782" dy="26">Rust 直写 pinned 字节</tspan><tspan x="782" dy="26">arena.rs · py.rs</tspan></text>
+<rect x="1088" y="240" width="380" height="118" rx="12" fill="#FFFFFF" stroke="#7656D8" stroke-width="2" opacity="1.0"/>
+<text x="1106" y="279" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="start"><tspan x="1106" dy="0">StepResult</tspan><tspan x="1106" dy="26">batch_id · free_pages · retired · preempted</tspan><tspan x="1106" dy="26">py.rs:32</tspan></text>
+<rect x="64" y="420" width="1432" height="196" rx="18" fill="#FFF2D6" stroke="#C47B10" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="88" y="456" fill="#C47B10" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="750" text-anchor="start">共享 pinned 接缝 · 只有主机字节、值、页号</text>
+<text x="88" y="484" fill="#637083" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="15" font-weight="500" text-anchor="start">每侧各持有 depth + 1 份槽位；重写前必须等对应拷贝完成</text>
+<rect x="96" y="508" width="430" height="92" rx="12" fill="#FFFFFF" stroke="#C47B10" stroke-width="2" opacity="1.0"/>
+<text x="114" y="536" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="start"><tspan x="114" dy="0">Arena 环（depth + 1 份）</tspan><tspan x="114" dy="24">plan 写入 → H2D 完成前禁止重写</tspan><tspan x="114" dy="24">_acquire_arena() · rust_control_plane.py:287</tspan></text>
+<rect x="560" y="508" width="440" height="92" rx="12" fill="#FFFFFF" stroke="#C47B10" stroke-width="2" opacity="1.0"/>
+<text x="578" y="536" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="start"><tspan x="578" dy="0">pinned staging（每槽一套）</tspan><tspan x="578" dy="24">input_ids / positions / out_cache_loc</tspan><tspan x="578" dy="24">seq_lens / block_table</tspan></text>
+<rect x="1034" y="508" width="434" height="92" rx="12" fill="#FFFFFF" stroke="#C47B10" stroke-width="2" opacity="1.0"/>
+<text x="1052" y="536" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="start"><tspan x="1052" dy="0">ResultSlot 环（depth + 1 份）</tspan><tspan x="1052" dy="24">pinned int64 + CUDA event</tspan><tspan x="1052" dy="24">commit 才 synchronize / query</tspan></text>
+<rect x="64" y="650" width="1432" height="226" rx="18" fill="#E8F0FF" stroke="#2F6FE4" stroke-width="2" opacity="1.0" filter="url(#shadow)"/>
+<text x="88" y="686" fill="#2F6FE4" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="21" font-weight="750" text-anchor="start">Python / PyTorch 数据面 · 独占 CUDA context 与全部显存</text>
+<text x="88" y="714" fill="#637083" font-family="JetBrains Mono, Cascadia Code, Consolas, monospace" font-size="15" font-weight="500" text-anchor="start">miniinfer/engine/rust_control_plane.py</text>
+<rect x="96" y="738" width="330" height="118" rx="12" fill="#FFFFFF" stroke="#2F6FE4" stroke-width="2" opacity="1.0"/>
+<text x="114" y="777" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="start"><tspan x="114" dy="0">RustControlPlane</tspan><tspan x="114" dy="26">plan → launch → commit</tspan><tspan x="114" dy="26">不做任何调度决策</tspan></text>
+<rect x="462" y="738" width="330" height="118" rx="12" fill="#FFFFFF" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="480" y="777" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="start"><tspan x="480" dy="0">ModelRunner.forward</tspan><tspan x="480" dy="26">读 native_block_table 与 KV buffer</tspan><tspan x="480" dy="26">eager：内部仍同步</tspan></text>
+<rect x="828" y="738" width="330" height="118" rx="12" fill="#FFFFFF" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="846" y="777" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="start"><tspan x="846" dy="0">future_input_map</tspan><tspan x="846" dy="26">device int64[slots]</tspan><tspan x="846" dy="26">scatter N → gather N+1</tspan></text>
+<rect x="1194" y="738" width="274" height="118" rx="12" fill="#FFFFFF" stroke="#E45756" stroke-width="2" opacity="1.0"/>
+<text x="1212" y="777" fill="#172033" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="600" text-anchor="start"><tspan x="1212" dy="0">Sampler → 结果槽</tspan><tspan x="1212" dy="26">采样 + 异步 D2H</tspan><tspan x="1212" dy="26">record(copy_event)</tspan></text>
+<path d="M 1462 390 L 1462 650" fill="none" stroke="#C47B10" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 1512 650 L 1512 390" fill="none" stroke="#2E8B57" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 7" marker-end="url(#arrow-ok)"/>
+<line x1="96" y1="916" x2="156" y2="916" stroke="#C47B10" stroke-width="3" stroke-linecap="round"/>
+<text x="172" y="922" fill="#C47B10" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="start">CacheAction::FreeDeviceKV{indices}：Rust 只发决策，页由数据面在设备侧释放</text>
+<line x1="96" y1="950" x2="156" y2="950" stroke="#2E8B57" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 7" marker-end="url(#arrow-ok)"/>
+<text x="172" y="956" fill="#2E8B57" font-family="Inter, Noto Sans SC, Microsoft YaHei, PingFang SC, sans-serif" font-size="16" font-weight="600" text-anchor="start">device_fence(batch_id)：数据面回执“该批设备工作已完成”，ledger 才把 staged 页放回 free list</text>
+</svg>

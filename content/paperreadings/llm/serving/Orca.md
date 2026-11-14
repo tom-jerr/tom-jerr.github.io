@@ -6,9 +6,8 @@ update:
 comments: true
 katex: true
 tags:
-
-- LLM
-
+  - LLMInference
+  - Paper Notes
 ---
 
 # Orca: A Distributed Serving System for Transformer-Based Generative Models
